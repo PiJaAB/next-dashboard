@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "testbed",
+  "version": "1.0.0",
+  "description": "Testbed for utilizing the packages in this repo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "author": "PiJa <it@pija.se>",
+  "license": "ISC"
+}
