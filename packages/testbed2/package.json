@@ -1,0 +1,61 @@
+{
+  "name": "react-native-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.19.0",
+    "dotenv-load": "^2.0.0",
+    "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
+    "express-favicon": "^2.0.1",
+    "express-urlrewrite": "^1.2.0",
+    "next": "9.1.1",
+    "next-cookies": "^2.0.1",
+    "next-env": "^1.1.0",
+    "nprogress": "^0.2.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon -w server server",
+    "debug": "nodemon --inspect -w server server",
+    "build": "next build",
+    "test": "jest",
+    "flow": "flow",
+    "lint": "prettier -c 'src/**/*.js' 'server/**/*.js' && eslint src server",
+    "eslint-check": "eslint --print-config 'src/**/*.js' | eslint-config-prettier-check"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "6.22.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-import-resolver-node": "^0.3.2",
+    "eslint-plugin-flowtype": "^3.12.2",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.14.3",
+    "flow-bin": "^0.104.0",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.19.1"
+  }
+}
