@@ -14,6 +14,10 @@ export type InitialPropsContext = {
   AppTree: () => React$Element<void>,
 };
 
+export type NextComponent<P> = React$ComponentType<P> & {
+  +getInitialProps?: (ctx: InitialPropsContext) => Promise<{}>,
+};
+
 export type RouterType = {
   route: string,
   pathname: string,

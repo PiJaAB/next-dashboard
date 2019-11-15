@@ -1,10 +1,11 @@
 // @flow
 
 import React from 'react';
-import withAuth from 'src/utils/withAuth';
+import withDashboard from 'src/utils/withDashboard';
+import DashboardLayout from 'src/components/DashboardLayout';
 
-function Test(): React$Element<'div'> {
-  return <div>Hello Authenticated user</div>;
+function Test(): React$Element<typeof DashboardLayout> {
+  return <DashboardLayout>Hello Authenticated user</DashboardLayout>;
 }
 
-export default withAuth<{}>(Test);
+export default withDashboard<{}>(Test);
