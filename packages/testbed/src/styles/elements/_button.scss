@@ -1,0 +1,39 @@
+button,
+.button,
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
+  display: inline-block;
+  margin: 0 0 20px;
+  padding: 10px 20px;
+  // outline: none;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $white;
+  // letter-spacing: 0.125em;
+  // text-decoration: none;
+  // text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    color: $white;
+    text-decoration: none;
+  }
+  &:hover,
+  &:active {
+    opacity: 0.9375;
+  }
+  &:active {
+    opacity: 0.875;
+  }
+  // &:disabled {
+  //   cursor: not-allowed;
+  // }
+  &:last-child {
+    margin-bottom: 0;
+  }
+  // html[data-whatinput='mouse'] & {
+  //   outline: none;
+  // }
+}
