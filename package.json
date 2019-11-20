@@ -2,6 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "dev": "lerna run --parallel dev:pkg",
     "new": "lerna create",
     "lerna": "lerna",
     "wizard": "node -e \"require('lerna-wizard')({commandChoiceFilter:({value:v})=>!['ls','updated','create','init'].includes(v)}).catch(e=>{console.error(e);process.exit(1)})\""

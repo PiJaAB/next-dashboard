@@ -1,0 +1,70 @@
+{
+  "name": "@pija-ab/react-dashboard",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Linn Dahlgren <linn.dahlgren@pija.se>",
+  "homepage": "https://github.com/PiJaAB/react-dashboard#readme",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/entry.js",
+  "directories": {
+    "dist": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist",
+    "dist/components/DashboardLayout.js"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PiJaAB/react-dashboard.git"
+  },
+  "scripts": {
+    "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
+    "dev:pkg": "yarn run -s dev",
+    "build": "yarn build:babel && yarn build:flow",
+    "build:silent": "yarn run -s build:babel && yarn run -s build:flow",
+    "build:babel": "babel src -d dist",
+    "build:flow": "flow-copy-source src dist",
+    "prepack": "yarn build",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/PiJaAB/react-dashboard/issues"
+  },
+  "peerDependencies": {
+    "next": "^9.1.1",
+    "react": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "6.22.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-import-resolver-node": "^0.3.2",
+    "eslint-plugin-flowtype": "^3.12.2",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.14.3",
+    "flow-bin": "^0.107.0",
+    "flow-copy-source": "^2.0.8",
+    "next": "^9.1.1",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.19.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs2": "^7.7.2"
+  }
+}

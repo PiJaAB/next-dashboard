@@ -5,7 +5,7 @@
 .*/node_modules/.*
 
 [include]
-<PROJECT_ROOT>/../
+
 [libs]
 
 [lints]
