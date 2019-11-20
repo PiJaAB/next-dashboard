@@ -23,12 +23,12 @@ select {
   outline: none;
   border: none;
   border-radius: 100px;
-  background-color: $background-color;
+  @include var('background-color', 'background');
   &::placeholder {
-    color: rgba($text-color, 0.5);
+    @include var('color', 'text-rgb', 'rgba', 0.5);
   }
   &:focus {
-    background-color: darken($background-color, 1.5625%);
+    @include var('background-color', 'background-dark');
   }
   &:last-child {
     margin-bottom: 0;

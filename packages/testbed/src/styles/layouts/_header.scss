@@ -4,6 +4,6 @@
   left: 0;
   width: 100%;
   padding: 20px 0;
-  background-color: $white;
+  @include var('background-color', 'primary-alt');
   z-index: 100;
 }
