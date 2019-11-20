@@ -1,0 +1,13 @@
+.site-header-profile,
+.site-header-contact {
+  display: flex;
+  align-items: center;
+}
+.site-header-profile-image,
+.site-header-contact-image {
+  height: 40px;
+  width: 40px;
+  margin: 0 10px 0 0;
+  border-radius: 50%;
+  @include var('background-color', 'primary-rgb', 'rgba', 0.25);
+}
