@@ -1,12 +1,18 @@
-@import 'variables';
-
 @import 'libraries/normalize';
 
+@import 'mixins/var';
+@import 'mixins/hexToRgb';
 @import 'mixins/font-face';
 @import 'mixins/breakpoint';
 @import 'mixins/visually-hidden';
 
+@import 'variables';
+
+@import 'themes/dark';
+
 @import 'base/resets';
+
+@import 'fonts/inter';
 
 @import 'elements/elements';
 @import 'elements/headings';
@@ -31,5 +37,3 @@
 
 @import 'base/margin-bottom';
 @import 'base/helpers';
-
-@import 'fonts/inter';

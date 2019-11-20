@@ -9,15 +9,15 @@ input[type='reset'] {
   // outline: none;
   border: none;
   border-radius: 5px;
-  background-color: $primary-color;
-  color: $white;
+  @include var('background-color', 'primary');
+  @include var('color', 'white');
   // letter-spacing: 0.125em;
   // text-decoration: none;
   // text-transform: uppercase;
   text-align: center;
   cursor: pointer;
   &:hover {
-    color: $white;
+    @include var('color', 'white');
     text-decoration: none;
   }
   &:hover,

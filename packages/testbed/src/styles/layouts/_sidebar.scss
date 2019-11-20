@@ -6,7 +6,7 @@
   height: 100%;
   width: calc(100% - 80px);
   padding: 20px;
-  background-color: $white;
+  @include var('background-color', 'primary-alt');
   z-index: 100;
   @include breakpoint(medium) {
     width: 160px;

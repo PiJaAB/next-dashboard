@@ -1,3 +1,17 @@
+:root {
+  --primary-color:         #{map-get($colors, 'primary')};
+  --primary-rgb-color:     #{map-get($colors, 'primary-rgb')};
+  --secondary-color:       #{map-get($colors, 'secondary')};
+  --primary-alt-color:     #{map-get($colors, 'primary-alt')};
+  --secondary-alt-color:   #{map-get($colors, 'secondary-alt')};
+  --black-color:           #{map-get($colors, 'black')};
+  --white-color:           #{map-get($colors, 'white')};
+  --background-color:      #{map-get($colors, 'background')};
+  --background-dark-color: #{map-get($colors, 'background-dark')};
+  --text-color:            #{map-get($colors, 'text')};
+  --text-rgb-color:        #{map-get($colors, 'text-rgb')}
+}
+
 html {
   font-size: 62.5%;
   overflow-x: hidden;
@@ -5,8 +19,8 @@ html {
 }
 
 body {
-  background-color: $background-color;
-  color: $text-color;
+  @include var('background-color', 'background');
+  @include var('color', 'text');
   font-family: $font-family-sans-serif;
   font-size: $font-size;
   font-weight: $font-weight;
@@ -14,6 +28,19 @@ body {
   line-height: $line-height;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  &.body_theme-dark {
+    --primary-color:         #{map-get($colors-dark, 'primary')};
+    --primary-rgb-color:     #{map-get($colors-dark, 'primary-rgb')};
+    --secondary-color:       #{map-get($colors-dark, 'secondary')};
+    --primary-alt-color:     #{map-get($colors-dark, 'primary-alt')};
+    --secondary-alt-color:   #{map-get($colors-dark, 'secondary-alt')};
+    --black-color:           #{map-get($colors-dark, 'black')};
+    --white-color:           #{map-get($colors-dark, 'white')};
+    --background-color:      #{map-get($colors-dark, 'background')};
+    --background-dark-color: #{map-get($colors-dark, 'background-dark')};
+    --text-color:            #{map-get($colors-dark, 'text')};
+    --text-rgb-color:        #{map-get($colors-dark, 'text-rgb')}
+  }
 }
 
 *,
@@ -54,17 +81,17 @@ label,
 .label {
   display: block;
   margin: 0 0 20px;
-  color: rgba($text-color, 0.75);
+  @include var('color', 'text-rgb', 'rgba', 0.75);
   &:last-child {
     margin-bottom: 0;
   }
 }
 
 a {
-  color: $primary-color;
+  @include var('color', 'primary');
   text-decoration: none;
   &:hover {
-    color: $primary-color;
+    @include var('color', 'primary');
     text-decoration: underline;
   }
   &:active {

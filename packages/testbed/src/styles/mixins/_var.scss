@@ -1,0 +1,9 @@
+@mixin var($property, $value, $function: false, $argument: false) {
+  @if ($function and $argument) {
+    #{$property}: #{$function}#{'('}#{map-get($colors, $value)}, $argument#{')'};
+    #{$property}: #{$function}#{'('}#{var(--#{$value}-color)}, $argument#{')'};
+  } @else {
+    #{$property}: map-get($colors, $value);
+    #{$property}: var(--#{$value}-color);
+  }
+}
