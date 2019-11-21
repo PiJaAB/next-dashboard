@@ -5,15 +5,17 @@ import SiteHeaderContact from '../SiteHeaderContact';
 import SiteHeaderProfile from '../SiteHeaderProfile';
 
 type Props = {
-  toggleSidebar: () => void,
+  toggleSidebarActive: () => void,
 };
 
-const Header = ({ toggleSidebar }: Props) => (
+const Header = ({ toggleSidebarActive }: Props) => (
   <header className="site-header">
     <div className="container container-unlimited">
       <div className="grid align-items-center">
         <div className="cell flex-basis-auto">
-          <button type="button" onClick={toggleSidebar}>Sidebar</button>
+          <button type="button" onClick={toggleSidebarActive}>
+            <span className="fa fa-exchange-alt" />
+          </button>
         </div>
         <div className="cell flex-basis-auto">
           Dashboard
