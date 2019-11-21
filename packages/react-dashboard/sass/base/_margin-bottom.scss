@@ -1,0 +1,18 @@
+.margin-bottom {
+  margin-bottom: #{map-get($grid-sizes, $grid-default-size)}px;
+}
+
+@each $breakpoint in map-keys($breakpoints) {
+  $breakpoint-class: if($breakpoint == small, '', '-#{$breakpoint}');
+  $breakpoint-param: if($breakpoint == small, false, $breakpoint);
+
+  @include breakpoint($breakpoint-param) {
+
+    @each $grid-size in map-keys($grid-sizes) {
+      .margin-bottom-#{$grid-size}#{$breakpoint-class} {
+        margin-bottom: #{(map-get($grid-sizes, $grid-size))}px;
+      }
+    }
+
+  }
+}

@@ -1,6 +1,10 @@
 // @flow
 
-import { createDashboardHOC, type Config } from '@pija-ab/react-dashboard';
+import {
+  createDashboardHOC,
+  DashboardContext,
+  type Config,
+} from '@pija-ab/react-dashboard';
 import ErrorComp from 'src/pages/_error';
 
 let authenticated = false;
@@ -27,10 +31,10 @@ const config: Config = {
   errorComponent: ErrorComp,
 };
 
-const { withDashboard, Context } = createDashboardHOC<typeof dataProvider>(
+const withDashboard = createDashboardHOC<typeof dataProvider>(
   dataProvider,
   config,
 );
-const { Provider, Consumer } = Context;
+const { Provider, Consumer } = DashboardContext;
 export default withDashboard;
-export { Context, Provider, Consumer };
+export { DashboardContext as Context, Provider, Consumer };

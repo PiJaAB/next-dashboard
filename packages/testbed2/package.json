@@ -20,7 +20,7 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon -w server server",
-    "dev:pkg": "nodemon -w server -w node_modules/@pija-ab/react-dashboard server",
+    "dev:pkg": "yarn run -s start",
     "debug": "nodemon --inspect -w server server",
     "build": "next build",
     "test": "jest",

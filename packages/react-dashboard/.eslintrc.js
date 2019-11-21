@@ -39,6 +39,7 @@ module.exports = {
       ],
       'react/forbid-prop-types': ['off', { forbid: [] }],
       'jsx-a11y/anchor-is-valid': ['off'],
+      'spaced-comment': ['off'],
       'react/prefer-stateless-function': ['error', { ignorePureComponents: true }],
       'react/default-props-match-prop-types': ['off'],
       'flowtype/array-style-complex-type': ['error', 'shorthand'],
@@ -72,12 +73,5 @@ module.exports = {
       window: false,
       fetch: false,
       catch: false
-    },
-    settings: {
-      'import/resolver': {
-        node: {
-          moduleDirectory: ['node_modules', '.']
-        }
-      }
     }
   }

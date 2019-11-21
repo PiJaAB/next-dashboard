@@ -1,33 +1,19 @@
 // @flow
 
 import React from 'react';
-import type { InitialPropsContext, NextComponent } from 'src/utils/nextTypes';
-import displayNameOf from 'src/utils/displayNameOf';
 import Router from 'next/router';
 
-export type DataProvider = {
-  update<T>(key: string, data: T, extra: { [string]: mixed }): Promise<void>,
-  data: {
-    [string]:
-      | {
-          status: 'success',
-          value: mixed,
-        }
-      | {
-          status: 'error',
-          error: Error,
-        }
-      | {
-          status: 'loading',
-        },
-  },
-  isAuthenticated(): Promise<boolean> | boolean,
-};
+import type { InitialPropsContext, NextComponent } from './nextTypes';
+import displayNameOf from './displayNameOf';
+import type { DataProvider } from './types';
+import createDashboardContext, {
+  type DashboardContext as DashboardContextType,
+} from './createDashboardContext';
 
 export type Config = {
   unauthedRoute?: string,
   needAuthDefault: boolean,
-  errorComponent?: NextComponent<{}>,
+  errorComponent?: NextComponent<any>,
 };
 
 type WrappedProps<P> =
@@ -49,7 +35,7 @@ type WrappedFuncComp<P> = {
         }>,
       >
     | React$Element<
-        React$ComponentType<{}> & {
+        React$ComponentType<{ children?: React$Node }> & {
           +getInitialProps?: (ctx: InitialPropsContext) => Promise<{}>,
         },
       >,
@@ -67,13 +53,15 @@ function makeStatusError(
   return err;
 }
 
-export const DashboardContext = React.createContext<DataProvider | void>();
-DashboardContext.displayName = 'DataProvider';
+export const DashboardContext = React.createContext<DashboardContextType<DataProvider> | void>();
+
+DashboardContext.displayName = 'DashboardContext';
 
 export default function createDashboardHOC<D: DataProvider>(
   dataProvider: D,
   { needAuthDefault, unauthedRoute, errorComponent: ErrorComp }: Config,
 ): <U: {}>(Comp: NextComponent<U>, needAuth?: boolean) => NextComponent<U> {
+  const context = createDashboardContext<D>(dataProvider);
   function withDashboard<P: {}>(
     Comp: NextComponent<P>,
     needAuth?: boolean,
@@ -89,7 +77,7 @@ export default function createDashboardHOC<D: DataProvider>(
       }
       const { __RENDER_ERROR__: _, ...rest } = props;
       return (
-        <DashboardContext.Provider value={dataProvider}>
+        <DashboardContext.Provider value={context}>
           <Comp {...rest} />
         </DashboardContext.Provider>
       );

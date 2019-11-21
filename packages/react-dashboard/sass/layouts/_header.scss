@@ -1,0 +1,9 @@
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 0;
+  @include var('background-color', 'primary-alt');
+  z-index: 100;
+}

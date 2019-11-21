@@ -1,7 +1,10 @@
 // @flow
 
-import createDashboardHOC, { type Config } from './utils/createDashboardHOC';
+import createDashboardHOC, {
+  type Config,
+  DashboardContext,
+} from './utils/createDashboardHOC';
 
 export type { Config };
-export { createDashboardHOC };
+export { createDashboardHOC, DashboardContext };
 export * from './components';
