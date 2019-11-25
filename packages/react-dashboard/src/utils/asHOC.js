@@ -1,9 +1,8 @@
 // @flow
 import React from 'react';
-import type { ComponentType } from 'react';
 
-import type { InitialPropsContext, NextComponent } from 'src/utils/nextTypes';
-import displayNameOf from 'src/utils/displayNameOf';
+import type { InitialPropsContext, NextComponent } from './nextTypes';
+import displayNameOf from './displayNameOf';
 
 type InitialProps = {};
 
@@ -20,7 +19,7 @@ type WithoutChildren<P: {}> = $Diff<P, HasChild>;
 export default <T: HasChild, U: {}>(
   ProviderComp: NextComponent<T>,
   providerProps: WithoutChildren<T>,
-) => (Comp: ComponentType<U>) => {
+) => (Comp: NextComponent<U>) => {
   if (ProviderComp == null) {
     throw new Error(
       `Can't create asHOC(${String(ProviderComp)})(${displayNameOf(
@@ -38,11 +37,13 @@ export default <T: HasChild, U: {}>(
   funcComp.getInitialProps = async (
     ctx: InitialPropsContext,
   ): Promise<InitialProps> => {
-    return (
-      (ProviderComp.getInitialProps
+    return {
+      ...((ProviderComp.getInitialProps
         ? await ProviderComp.getInitialProps(ctx)
-        : null) || {}
-    );
+        : null) || {}),
+      ...((Comp.getInitialProps ? await Comp.getInitialProps(ctx) : null) ||
+        {}),
+    };
   };
 
   const WrappedComp: NextComponent<U> = funcComp;

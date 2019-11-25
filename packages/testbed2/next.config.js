@@ -1,10 +1,11 @@
 /* eslint-disable flowtype/require-parameter-type,flowtype/require-valid-file-annotation,flowtype/require-return-type */
 require('dotenv-load')();
 const nextEnv = require('next-env');
+const withSass = require('@zeit/next-sass');
 
 const withNextEnv = nextEnv();
 
-module.exports = withNextEnv({
+module.exports = withSass(withNextEnv({
   dir: './src',
   webpack(config) {
     return {
@@ -19,10 +20,10 @@ module.exports = withNextEnv({
           {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$/,
             use: {
-              loader: 'url-loader',
+              loader: 'file-loader',
               options: {
-                limit: 100000,
                 name: '[name].[ext]',
+                outputPath: 'public/assets',
               },
             },
           },
@@ -30,4 +31,4 @@ module.exports = withNextEnv({
       },
     };
   },
-});
+}));

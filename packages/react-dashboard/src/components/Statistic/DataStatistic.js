@@ -1,7 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { DashboardContext } from '../../utils/createDashboardHOC';
-import type { DataProvider } from '../../utils/types';
+import DashboardContext, {
+  type DashboardContextType,
+} from '../../utils/dashboardContext';
 import { refineToPrimitive } from '../../utils/dataRefiners';
 import Statistic from './Statistic';
 
@@ -14,7 +15,7 @@ type Props = {
 };
 
 export default class DataStatistic extends PureComponent<Props> {
-  context: DataProvider;
+  context: DashboardContextType;
 
   static defaultProps = {
     label: undefined,

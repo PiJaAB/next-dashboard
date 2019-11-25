@@ -50,6 +50,7 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-flow-strip-types": "6.22.0",
+    "copy": "^0.3.2",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.4.0",
@@ -63,11 +64,12 @@
     "flow-copy-source": "^2.0.8",
     "next": "^9.1.1",
     "nodemon": "^1.19.4",
-    "prettier": "^1.19.1",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "prettier": "^1.19.1"
   },
   "dependencies": {
-    "@babel/runtime-corejs2": "^7.7.2"
+    "@babel/runtime-corejs2": "^7.7.2",
+    "atob": "^2.1.2",
+    "btoa": "^1.2.1",
+    "next-cookies": "^2.0.2"
   }
 }

@@ -14,6 +14,8 @@ export type InitialPropsContext = {
   AppTree: () => React$Element<void>,
 };
 
+export type ExtendedPropsContext<E: {}> = InitialPropsContext & E;
+
 export type NextComponent<P: {}> = React$ComponentType<P> & {
   +getInitialProps?: (ctx: InitialPropsContext) => Promise<{}>,
 };

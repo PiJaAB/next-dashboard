@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { DashboardContext } from '../../utils/createDashboardHOC';
+import DashboardContext from '../../utils/dashboardContext';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';

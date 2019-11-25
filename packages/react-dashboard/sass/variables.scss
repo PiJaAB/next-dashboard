@@ -1,19 +1,19 @@
-$font-size:  1.4rem;
-$font-weight:   400;
-$font-style: normal;
-$line-height: 1.375;
+$font-size:  1.4rem !default;
+$font-weight:   400 !default;
+$font-style: normal !default;
+$line-height: 1.375 !default;
 
-// $margin:  20px;
-// $padding: 20px;
+// $margin:  20px !default;
+// $padding: 20px !default;
 
-$page-width-extra-narrow: 450px;
-$page-width-narrow:       675px;
-$page-width:              900px;
-$page-width-wide:        1000px;
-$page-width-extra-wide:  1440px;
+$page-width-extra-narrow: 450px !default;
+$page-width-narrow:       675px !default;
+$page-width:              900px !default;
+$page-width-wide:        1000px !default;
+$page-width-extra-wide:  1440px !default;
 
-$grid-columns:        12;
-$grid-default-size: 'x2';
+$grid-columns:        12 !default;
+$grid-default-size: 'x2' !default;
 $grid-sizes: (
   'x0':    0,
   'x1':   10,
@@ -28,7 +28,7 @@ $grid-sizes: (
   // 'x12': 120,
   // 'x14': 140,
   'x16': 160,
-);
+) !default;
 
 
 $breakpoint-sizes: (
@@ -36,32 +36,32 @@ $breakpoint-sizes: (
   'medium':       640px,
   'large':       1024px,
   // 'extra-large': 1440px,
-);
+) !default;
 // $breakpoint-vertical-sizes: (
 //   'small':          0px,
 //   'medium':       640px,
 //   'large':        640px + (1024px - 640px) / 2,
 //   'extra-large': 1024px,
-// );
+// ) !default;
 $breakpoints: (
   'small':       ( min-width: map-get($breakpoint-sizes,       'small') ),
   'medium':      ( min-width: map-get($breakpoint-sizes,      'medium') ),
   'large':       ( min-width: map-get($breakpoint-sizes,       'large') ),
   // 'extra-large': ( min-width: map-get($breakpoint-sizes, 'extra-large') ),
-);
+) !default;
 
-$primary-color:         #4880ff;
-$secondary-color:       #202224;
+$primary-color:         #4880ff !default;
+$secondary-color:       #202224 !default;
 
-$primary-alt-color:     #ffffff;
-$secondary-alt-color:   #f5f6fa;
+$primary-alt-color:     #ffffff !default;
+$secondary-alt-color:   #f5f6fa !default;
 
-$black:                 #000000;
-$white:                 #ffffff;
+$black:                 #000000 !default;
+$white:                 #ffffff !default;
 
-$background-color:      $secondary-alt-color;
-$background-dark-color: darken($background-color, 1.5625%);
-$text-color:            $secondary-color;
+$background-color:      $secondary-alt-color !default;
+$background-dark-color: darken($background-color, 1.5625%) !default;
+$text-color:            $secondary-color !default;
 
 $colors: (
   'primary':            $primary-color,
@@ -75,10 +75,10 @@ $colors: (
   'background-dark':    $background-dark-color,
   'text':               $text-color,
   'text-rgb':           hexToRgb($text-color),
-);
+) !default;
 
-$primary-font-family:   'Inter';
+$primary-font-family: '' !default;
 
-$font-family-sans-serif: $primary-font-family, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
-$font-family-serif:      Georgia, Cambria, "Times New Roman", Times, serif;
-$font-family-monospace:  Consolas, 'Liberation Mono', Courier, monospace;
+$font-family-sans-serif: $primary-font-family, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif !default;
+$font-family-serif:      Georgia, Cambria, "Times New Roman", Times, serif !default;
+$font-family-monospace:  Consolas, 'Liberation Mono', Courier, monospace !default;

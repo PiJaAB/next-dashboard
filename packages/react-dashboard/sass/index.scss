@@ -2,7 +2,6 @@
 
 @import 'mixins/var';
 @import 'mixins/hexToRgb';
-@import 'mixins/font-face';
 @import 'mixins/breakpoint';
 @import 'mixins/visually-hidden';
 
@@ -11,8 +10,6 @@
 @import 'themes/dark';
 
 @import 'base/resets';
-
-@import 'fonts/inter';
 
 @import 'elements/elements';
 @import 'elements/headings';

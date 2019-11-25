@@ -6,6 +6,9 @@ import Head from 'next/head';
 import NProgress from 'nprogress';
 import { Title } from 'src/components/SEO';
 
+// import '@pija-ab/react-dashboard/sass/index.scss';
+import '../styles/index.scss';
+
 function getTitleFromComponent(
   component: React$ComponentType<mixed> & { title?: string | (() => string) },
 ): ?string | string[] {

@@ -1,5 +1,4 @@
 // @flow
-
 export type DataType =
   | {
       status: 'success',
@@ -16,6 +15,5 @@ export type DataType =
 
 export type DataProvider = {
   update<T>(key: string, data: T, extra: { [string]: mixed }): Promise<void>,
-  data: { [string]: DataType },
   isAuthenticated(): Promise<boolean> | boolean,
 };

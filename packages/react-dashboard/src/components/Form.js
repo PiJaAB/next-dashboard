@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import { DashboardContext } from '../utils/createDashboardHOC';
+import DashboardContext from '../utils/dashboardContext';
 import areEqualShallow from '../utils/areEqualShallow';
 
 export const ALL = Symbol('all');

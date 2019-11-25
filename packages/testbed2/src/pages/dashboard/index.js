@@ -3,9 +3,9 @@
 import React from 'react';
 import withDashboard from 'src/utils/withDashboard';
 import {
-  DashboardLayout,
   Statistic,
   PageContent,
+  DashboardLayout,
 } from '@pija-ab/react-dashboard';
 
 const Start = () => (
@@ -17,30 +17,53 @@ const Start = () => (
           <Statistic />
         </div>
         <div className="cell column-3">
-          <Statistic label="Quality" title="8,2" description="46% from last period" />
+          <Statistic
+            label="Quality"
+            value="8,2"
+            description="46% from last period"
+          />
         </div>
         <div className="cell column-3">
-          <Statistic label="Volume" title="7,5" description="15% from last period" />
+          <Statistic
+            label="Volume"
+            value="7,5"
+            description="15% from last period"
+          />
         </div>
         <div className="cell column-3">
-          <Statistic label="Leadership" title="7,5" description="55% from last period" />
+          <Statistic
+            label="Leadership"
+            value="7,5"
+            description="55% from last period"
+          />
         </div>
         <div className="cell column-4">
           <Statistic />
         </div>
         <div className="cell column-4">
-          <Statistic />
+          <Statistic value="7,5" />
         </div>
         <div className="cell column-4">
-          <Statistic />
+          <Statistic value="7,5" />
         </div>
         <div className="cell">
           <PageContent>
             <p>
-              Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Sed posuere consectetur est at lobortis. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Curabitur blandit tempus porttitor. Nullam id dolor id nibh ultricies vehicula ut id elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+              Integer posuere erat a ante venenatis dapibus posuere velit
+              aliquet. Maecenas faucibus mollis interdum. Sed posuere
+              consectetur est at lobortis. Fusce dapibus, tellus ac cursus
+              commodo, tortor mauris condimentum nibh, ut fermentum massa justo
+              sit amet risus. Curabitur blandit tempus porttitor. Nullam id
+              dolor id nibh ultricies vehicula ut id elit. Vivamus sagittis
+              lacus vel augue laoreet rutrum faucibus dolor auctor.
             </p>
             <p>
-              Maecenas faucibus mollis <a href="/awd">interdum</a>. Donec id elit non mi porta gravida at eget metus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Donec id elit non mi porta gravida at eget metus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              Maecenas faucibus mollis <a href="/awd">interdum</a>. Donec id
+              elit non mi porta gravida at eget metus. Aenean lacinia bibendum
+              nulla sed consectetur. Etiam porta sem malesuada magna mollis
+              euismod. Integer posuere erat a ante venenatis dapibus posuere
+              velit aliquet. Donec id elit non mi porta gravida at eget metus.
+              Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
             </p>
           </PageContent>
         </div>
@@ -49,4 +72,4 @@ const Start = () => (
   </DashboardLayout>
 );
 
-export default withDashboard<{}>(Start);
+export default withDashboard<{}>(Start, false);
