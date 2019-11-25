@@ -7,9 +7,10 @@ type Props = {
   sidebarActive: boolean,
   sidebarCompact: boolean,
   toggleSidebarCompact: () => void,
+  toggleTheme: () => void,
 };
 
-const Sidebar = ({ sidebarActive, sidebarCompact, toggleSidebarCompact }: Props) => {
+const Sidebar = ({ sidebarActive, sidebarCompact, toggleSidebarCompact, toggleTheme }: Props) => {
   const links = [
     {
       title: 'Overview',
@@ -60,8 +61,6 @@ const Sidebar = ({ sidebarActive, sidebarCompact, toggleSidebarCompact }: Props)
       icon: 'power-off',
     },
   ];
-
-  const toggleTheme = () => document.body.classList.toggle('body_theme-dark');
 
   return (
     <div
