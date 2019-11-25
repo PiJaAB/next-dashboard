@@ -7,9 +7,11 @@ import {
   PageContent,
   DashboardLayout,
 } from '@pija-ab/react-dashboard';
+import Nav from 'src/components/Nav';
 
 const Start = () => (
   <DashboardLayout>
+    <Nav />
     <div className="">
       <h1 className="page-title">Overview</h1>
       <div className="grid">

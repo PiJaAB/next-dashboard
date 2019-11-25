@@ -1,16 +1,16 @@
 body {
   &_resizing {
-    .site-content {
+    .dashboard-content {
       transition: none;
     }
   }
-  .site_initial-load {
-    .site-content {
+  .dashboard_initial-load {
+    .dashboard-content {
       transition: none;
     }
   }
 }
-.site-content {
+.dashboard-content {
   flex: 1 0 auto;
   padding: (80px + 20px) 0 40px;
   @include var('background-color', 'secondary-alt');
@@ -22,9 +22,9 @@ body {
     padding: (80px + 40px) 0 80px;
   }
 }
-.site-sidebar {
+.dashboard-sidebar {
   &_active {
-    +.site-content {
+    +.dashboard-content {
       @include breakpoint(medium) {
         padding-left: 160px;
       }
@@ -32,8 +32,8 @@ body {
         padding-left: 240px;
       }
     }
-    &.site-sidebar_compact {
-      +.site-content {
+    &.dashboard-sidebar_compact {
+      +.dashboard-content {
         @include breakpoint(medium) {
           padding-left: 100px;
         }

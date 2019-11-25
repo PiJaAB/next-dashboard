@@ -6,10 +6,13 @@ import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import Nav, { PureNav } from '../Nav';
 
 export type Props = {
   children?: React$Node,
 };
+
+const themes = ['default', 'dark'];
 
 function DashboardLayout({
   children,
@@ -34,6 +37,7 @@ function DashboardLayout({
           'sidebarCompact',
           false,
         );
+        const theme = context.getState<string>('theme', themes[0]);
 
         const toggleSidebarActive = () => {
           context.setState<boolean>('sidebarActive', !sidebarActive);
@@ -43,15 +47,54 @@ function DashboardLayout({
           context.setState<boolean>('sidebarCompact', !sidebarCompact);
         };
 
+        const setTheme = (newTheme: string) => {
+          context.setState<string>('theme', newTheme);
+        };
+
+        const toggleTheme = () => {
+          setTheme(themes[(themes.indexOf(theme) + 1) % themes.length]);
+        };
+        let normalChildren: ?React$Node = [];
+        let navChildren: ?React$Node;
+        if (Array.isArray(children)) {
+          normalChildren = [];
+          navChildren = [];
+          children.forEach(child => {
+            if (!Array.isArray(normalChildren)) {
+              throw new TypeError('Expected normalChildren to be Array.');
+            }
+            if (!Array.isArray(navChildren)) {
+              throw new TypeError('Expected navChildren to be Array.');
+            }
+            if (typeof child !== 'object' || typeof child.type !== 'function') {
+              normalChildren.push(child);
+              return;
+            }
+            const { prototype } = child.type;
+            if (prototype instanceof Nav || prototype instanceof PureNav) {
+              navChildren.push(child);
+              return;
+            }
+            normalChildren.push(child);
+          });
+        } else {
+          normalChildren = children;
+        }
+
         return (
-          <div className="site site_initial-load">
+          <div
+            className={`dashboard dashboard_theme-${theme} dashboard_initial-load`}
+          >
             <Header toggleSidebarActive={toggleSidebarActive} />
             <Sidebar
               sidebarActive={sidebarActive}
               sidebarCompact={sidebarCompact}
               toggleSidebarCompact={toggleSidebarCompact}
-            />
-            <Content>{children}</Content>
+              toggleTheme={toggleTheme}
+            >
+              {navChildren}
+            </Sidebar>
+            <Content>{normalChildren}</Content>
             <Footer />
           </div>
         );

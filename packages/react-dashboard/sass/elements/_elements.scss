@@ -18,7 +18,7 @@ html {
   box-sizing: border-box;
 }
 
-body {
+.dashboard {
   @include var('background-color', 'background');
   @include var('color', 'text');
   font-family: $font-family-sans-serif;
@@ -28,7 +28,7 @@ body {
   line-height: $line-height;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  &.body_theme-dark {
+  &.dashboard_theme-dark {
     --primary-color:         #{map-get($colors-dark, 'primary')};
     --primary-rgb-color:     #{map-get($colors-dark, 'primary-rgb')};
     --secondary-color:       #{map-get($colors-dark, 'secondary')};

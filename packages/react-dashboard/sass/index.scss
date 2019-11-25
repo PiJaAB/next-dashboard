@@ -20,17 +20,15 @@
 @import 'base/container';
 @import 'base/common';
 
-@import 'layouts/site';
+@import 'layouts/dashboard';
 @import 'layouts/header';
 @import 'layouts/sidebar';
 @import 'layouts/content';
 @import 'layouts/footer';
 
-@import 'components/site-header-profile';
+@import 'components/dashboard-header-profile';
 @import 'components/page-content';
 @import 'components/statistic';
-
-@import 'pages/start';
 
 @import 'base/margin-bottom';
 @import 'base/helpers';

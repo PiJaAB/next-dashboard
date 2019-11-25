@@ -1,15 +1,15 @@
 // @flow
 import React from 'react';
 
-import SiteHeaderContact from '../SiteHeaderContact';
-import SiteHeaderProfile from '../SiteHeaderProfile';
+import DashHeaderContact from '../DashHeaderContact';
+import DashHeaderProfile from '../DashHeaderProfile';
 
 type Props = {
   toggleSidebarActive: () => void,
 };
 
 const Header = ({ toggleSidebarActive }: Props) => (
-  <header className="site-header">
+  <header className="dashboard-header">
     <div className="container container-unlimited">
       <div className="grid align-items-center">
         <div className="cell flex-basis-auto">
@@ -25,10 +25,10 @@ const Header = ({ toggleSidebarActive }: Props) => (
           <input type="text" placeholder="Search" />
         </div>
         <div className="cell flex-basis-auto" style={{ marginLeft: 'auto' }}>
-          <SiteHeaderContact />
+          <DashHeaderContact />
         </div>
         <div className="cell flex-basis-auto">
-          <SiteHeaderProfile />
+          <DashHeaderProfile />
         </div>
       </div>
     </div>

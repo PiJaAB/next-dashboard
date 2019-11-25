@@ -6,7 +6,7 @@ type Props = {
 };
 
 const Content = ({ children }: Props) => (
-  <div className="site-content">
+  <div className="dashboard-content">
     <div className="container">{children}</div>
   </div>
 );

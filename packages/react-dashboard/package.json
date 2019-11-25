@@ -62,7 +62,6 @@
     "eslint-plugin-react": "^7.14.3",
     "flow-bin": "^0.107.0",
     "flow-copy-source": "^2.0.8",
-    "next": "^9.1.1",
     "nodemon": "^1.19.4",
     "prettier": "^1.19.1"
   },
