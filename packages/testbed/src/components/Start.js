@@ -8,25 +8,25 @@ const Start = () => (
   <div className="">
     <h1 className="page-title">Overview</h1>
     <div className="grid">
-      <div className="cell column-3">
+      <div className="cell column-6-medium column-3-large">
         <Statistic />
       </div>
-      <div className="cell column-3">
+      <div className="cell column-6-medium column-3-large">
         <Statistic label="Quality" title="8,2" description="46% from last period" />
       </div>
-      <div className="cell column-3">
+      <div className="cell column-6-medium column-3-large">
         <Statistic label="Volume" title="7,5" description="15% from last period" />
       </div>
-      <div className="cell column-3">
+      <div className="cell column-6-medium column-3-large">
         <Statistic label="Leadership" title="7,5" description="55% from last period" />
       </div>
-      <div className="cell column-4">
+      <div className="cell column-6 column-4-medium">
         <Statistic />
       </div>
-      <div className="cell column-4">
+      <div className="cell column-6 column-4-medium">
         <Statistic />
       </div>
-      <div className="cell column-4">
+      <div className="cell column-6 column-4-medium">
         <Statistic />
       </div>
       <div className="cell">

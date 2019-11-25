@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
 
-import SiteHeaderContact from '../SiteHeaderContact';
-import SiteHeaderProfile from '../SiteHeaderProfile';
+import Search from '../Search';
+import Contact from '../Contact';
+import Profile from '../Profile';
 
 type Props = {
   toggleSidebarActive: () => void,
@@ -12,22 +13,22 @@ const Header = ({ toggleSidebarActive }: Props) => (
   <header className="site-header">
     <div className="container container-unlimited">
       <div className="grid align-items-center">
-        <div className="cell flex-basis-auto">
+        <div className="cell site-header-cell site-header-cell_sidebar">
           <button type="button" onClick={toggleSidebarActive}>
             <span className="fa fa-exchange-alt" />
           </button>
         </div>
-        <div className="cell flex-basis-auto">
-          Dashboard
+        <div className="cell site-header-cell site-header-cell_logo">
+          <a href="/" className="color-white">Dashboard</a>
         </div>
-        <div className="cell flex-basis-auto flex-grow-1" style={{ maxWidth: '500px' }}>
-          <input type="text" placeholder="Search" />
+        <div className="cell site-header-cell site-header-cell_search">
+          <Search />
         </div>
-        <div className="cell flex-basis-auto" style={{ marginLeft: 'auto' }}>
-          <SiteHeaderContact />
+        <div className="cell site-header-cell site-header-cell_contact">
+          <Contact />
         </div>
-        <div className="cell flex-basis-auto">
-          <SiteHeaderProfile />
+        <div className="cell site-header-cell site-header-cell_profile">
+          <Profile />
         </div>
       </div>
     </div>

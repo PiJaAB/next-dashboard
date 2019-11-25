@@ -1,10 +1,12 @@
 body {
-  &_resizing {
+  &.body_resizing {
     .site-content {
       transition: none;
     }
   }
-  .site_initial-load {
+}
+.site {
+  &_initial-load {
     .site-content {
       transition: none;
     }
@@ -26,7 +28,7 @@ body {
   &_active {
     +.site-content {
       @include breakpoint(medium) {
-        padding-left: 160px;
+        padding-left: 200px;
       }
       @include breakpoint(large) {
         padding-left: 240px;

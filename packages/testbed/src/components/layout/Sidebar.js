@@ -1,7 +1,8 @@
-// TODO: Icon font...
-
 // @flow
 import React from 'react';
+
+import Search from '../Search';
+import Profile from '../Profile';
 
 type Props = {
   sidebarActive: boolean,
@@ -11,7 +12,7 @@ type Props = {
 };
 
 const Sidebar = ({ sidebarActive, sidebarCompact, toggleSidebarCompact, toggleTheme }: Props) => {
-  const links = [
+  const main = [
     {
       title: 'Overview',
       path: '/Overview',
@@ -49,16 +50,29 @@ const Sidebar = ({ sidebarActive, sidebarCompact, toggleSidebarCompact, toggleTh
     },
   ];
 
-  const accountLinks = [
+  const account = [
     {
       title: 'Settings',
       path: '/Settings',
       icon: 'cog',
     },
     {
+      title: 'Theme',
+      click: toggleTheme,
+      icon: 'palette',
+    },
+    {
       title: 'Logout',
       path: '/Logout',
       icon: 'power-off',
+    },
+  ];
+
+  const other = [
+    {
+      title: 'Sidebar',
+      click: toggleSidebarCompact,
+      icon: 'exchange-alt',
     },
   ];
 
@@ -72,68 +86,59 @@ const Sidebar = ({ sidebarActive, sidebarCompact, toggleSidebarCompact, toggleTh
         .filter(className => className)
         .join(' ')}
     >
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
-      <nav className="site-sidebar-menu">
-        {links.map(({title, path, icon }) => (
-          <div
-            className={[
-              'site-sidebar-menu-item',
-              path === '/Overview' && 'site-sidebar-menu-item_active',
-            ]
-              .filter(className => className)
-              .join(' ')}
-              key={path}
-            >
-            <a
-              href={path}
-              className={[
-                'button',
-                'site-sidebar-menu-item-button',
-                path === '/Overview' && 'site-sidebar-menu-item-button_active',
-              ]
-                .filter(className => className)
-                .join(' ')}
-            >
-              <span className={`site-sidebar-menu-item-button-icon fa fa-${icon}`} />
-              <span className="site-sidebar-menu-item-button-text">{title}</span>
-            </a>
-          </div>
-        ))}
-        <div className="site-sidebar-menu-item-space" />
-        {accountLinks.map(({title, path, icon }) => (
-          <div
-            className={[
-              'site-sidebar-menu-item',
-              path === '/Overview' && 'site-sidebar-menu-item_active',
-            ]
-              .filter(className => className)
-              .join(' ')}
-              key={path}
-            >
-            <a
-              href={path}
-              className={[
-                'button',
-                'site-sidebar-menu-item-button',
-                path === '/Overview' && 'site-sidebar-menu-item-button_active',
-              ]
-                .filter(className => className)
-                .join(' ')}
-            >
-              <span className={`site-sidebar-menu-item-button-icon fa fa-${icon}`} />
-              <span className="site-sidebar-menu-item-button-text">{title}</span>
-            </a>
-          </div>
-        ))}
-        <div className="site-sidebar-menu-item-space" />
-        <button type="button" className="button" onClick={toggleTheme} style={{ width: '100%' }}>
-          <span className="fa fa-palette" />
-        </button>
-        <button type="button" className="button" onClick={toggleSidebarCompact} style={{ width: '100%' }}>
-          <span className="fa fa-exchange-alt" />
-        </button>
-      </nav>
+      <div className="site-sidebar-search">
+        <Search />
+      </div>
+      <SidebarMenu id="main" items={main} />
+      <SidebarMenu id="account" items={account} />
+      <SidebarMenu id="other" items={other} />
+      <div className="site-sidebar-profile">
+        <Profile />
+      </div>
     </div>
+  );
+};
+
+const SidebarMenu = ({ id, items }) => (
+  <nav
+    className={[
+      'site-sidebar-menu',
+      id && `site-sidebar-menu_${id}`,
+    ]
+      .filter(className => className)
+      .join(' ')}
+    >
+    {items.map(item => (
+      <div className="site-sidebar-menu-item" key={item.title}>
+        <SidebarMenuItemButton {...item} />
+      </div>
+    ))}
+  </nav>
+);
+
+const SidebarMenuItemButton = ({ title, path, click, icon }) => {
+  const Element = path ? 'a' : 'button';
+  const props = {};
+  if (Element === 'a') {
+    props.href = path;
+  } else if (Element === 'button') {
+    props.type = 'button';
+    props.onClick = click;
+  }
+  return (
+    <Element
+      {...props}
+      className={[
+        'button',
+        'site-sidebar-menu-item-button',
+        path === '/Overview' && 'site-sidebar-menu-item-button_active',
+      ]
+        .filter(className => className)
+        .join(' ')}
+    >
+      <span className={`site-sidebar-menu-item-button-icon fa fa-${icon}`} />
+      <span className="site-sidebar-menu-item-button-text">{title}</span>
+    </Element>
   );
 };
 

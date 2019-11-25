@@ -1,0 +1,15 @@
+.contact {
+  display: flex;
+  align-items: center;
+}
+.contact-image {
+  display: none;
+  height: 40px;
+  width: 40px;
+  margin: 0 10px 0 0;
+  border-radius: 50%;
+  @include var('background-color', 'primary-rgb', 'rgba', 0.25);
+  @include breakpoint(medium) {
+    display: block;
+  }
+}
