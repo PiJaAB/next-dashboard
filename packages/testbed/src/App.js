@@ -15,12 +15,41 @@ const App = () => {
   const [sidebarActive, setSidebarActive] = useState(false);
   const [sidebarCompact, setSidebarCompact] = useState(false);
 
+  const themes = ['default', 'dark'];
+
   const toggleSidebarActive = () => {
     setSidebarActive(!sidebarActive);
   };
 
   const toggleSidebarCompact = () => {
     setSidebarCompact(!sidebarCompact);
+  };
+
+  const setStoredTheme = theme => localStorage.theme = theme;
+  const getStoredTheme = () => localStorage.theme;
+  const addThemeBodyClass = () => document.body.classList.add(`body_theme-${getStoredTheme()}`);
+  const removeThemeBodyClass = () => document.body.classList.remove(`body_theme-${getStoredTheme()}`);
+
+  const setInitialTheme = () => {
+    const theme = getStoredTheme();
+    if (!theme || !themes.includes(theme)) setStoredTheme(themes[0]);
+    addThemeBodyClass();
+  };
+
+  const setTheme = theme => {
+    removeThemeBodyClass();
+    setStoredTheme(theme);
+    addThemeBodyClass();
+  };
+
+  const toggleTheme = () => {
+    const theme = getStoredTheme();
+    for (var i = 0; i < themes.length; i++) {
+      if (theme === themes[i]) {
+        if (i + i > themes.length - 1) setTheme(themes[0]);
+        else setTheme(themes[i + 1]);
+      }
+    }
   };
 
   const noTransition = () => {
@@ -33,15 +62,19 @@ const App = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      document.getElementsByClassName('site')[0].classList.remove('site_initial-load');
-    }, 10);
-    const onResize = () => {
-      noTransition();
-    };
+    setInitialTheme();
     if (window.innerWidth > 640) {
       setSidebarActive(true);
     }
+
+    setTimeout(() => {
+      document.getElementsByClassName('site')[0].classList.remove('site_initial-load');
+    }, 10);
+
+    const onResize = () => {
+      noTransition();
+    };
+
     window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('resize', onResize);
@@ -55,6 +88,7 @@ const App = () => {
         sidebarActive={sidebarActive}
         sidebarCompact={sidebarCompact}
         toggleSidebarCompact={toggleSidebarCompact}
+        toggleTheme={toggleTheme}
       />
       <Content>
         <Start />
