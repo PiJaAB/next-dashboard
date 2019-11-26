@@ -1,0 +1,33 @@
+.page-table {
+    border-radius: 10px;
+    @include var('background-color', 'primary-alt');
+    overflow: hidden;
+    .responsive-table-head {
+      @include var('border-color', 'text-rgb', 'rgba', 0.125);
+    }
+    thead {
+      @include var('background-color', 'tertiary-alt');
+    }
+    tbody {
+      >tr {
+        border-bottom: 1px solid;
+        @include var('border-color', 'text-rgb', 'rgba', 0.125);
+        &:last-child {
+          border: none;
+        }
+      }
+    }
+    th, td {
+      padding: 10px;
+      &:first-child {
+        padding-left: 20px;
+      }
+      &:last-child {
+        padding-right: 20px;
+      }
+    }
+    th {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  }

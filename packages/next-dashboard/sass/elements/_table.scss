@@ -1,0 +1,53 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 5px;
+    &:first-child {
+      padding-left: 10px;
+    }
+    &:last-child {
+      padding-left: 10px;
+    }
+  }
+  th {
+    font-weight: inherit;
+    text-align: left;
+  }
+  
+  .responsive-table {
+    display: flex;
+    white-space: nowrap;
+  }
+  .responsive-table-head,
+  .responsive-table-body {
+    overflow-x: auto;
+  }
+  .responsive-table-head {
+    flex: 0 0 33.33333%;
+    max-width: 33.33333%;
+    border-right: 1px solid;
+    @include var('border-color', 'primary-rgb', 'rgba', 0.25);
+    @include breakpoint(medium) {
+      flex: 0 0 25%;
+      max-width: 25%;
+    }
+    @include breakpoint(large) {
+      flex: 0 0 20%;
+      max-width: 20%;
+    }
+  }
+  .responsive-table-body {
+    flex: 0 0 66.66667%;
+    max-width: 66.66667%;
+    @include breakpoint(medium) {
+      flex: 0 0 75%;
+      max-width: 75%;
+    }
+    @include breakpoint(large) {
+      flex: 0 0 80%;
+      max-width: 80%;
+    }
+  }

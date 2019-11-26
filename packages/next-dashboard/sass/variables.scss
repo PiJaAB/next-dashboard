@@ -55,6 +55,7 @@ $secondary-color:       #202224 !default;
 
 $primary-alt-color:     #ffffff !default;
 $secondary-alt-color:   #f5f6fa !default;
+$tertiary-alt-color:    #fafafa !default;
 
 $black:                 #000000 !default;
 $white:                 #ffffff !default;
@@ -72,6 +73,7 @@ $colors: (
   'secondary':          $secondary-color,
   'primary-alt':        $primary-alt-color,
   'secondary-alt':      $secondary-alt-color,
+  'tertiary-alt':       $tertiary-alt-color,
   'black':              $black,
   'white':              $white,
   'background':         $background-color,

@@ -6,8 +6,183 @@ import {
   Statistic,
   PageContent,
   DashboardLayout,
+  PageTable,
 } from '@pija-ab/next-dashboard';
 import Nav from 'src/components/Nav';
+
+const columns = [
+  {
+    title: 'Servicegroup',
+    field: 'servicegroup',
+  },
+  {
+    title: 'Current Queue',
+    field: 'currentqueue',
+  },
+  {
+    title: 'Available',
+    field: 'available',
+  },
+  {
+    title: 'Busy',
+    field: 'busy',
+  },
+  {
+    title: 'Busy Other',
+    field: 'busyother',
+  },
+  {
+    title: 'Unavailable',
+    field: 'unavailable',
+  },
+  {
+    title: 'Logged On',
+    field: 'loggedon',
+  },
+  {
+    title: 'Longest Queue (s)',
+    field: 'longestqueue',
+  },
+  {
+    title: 'Estimated Queue (s)',
+    field: 'estimatedqueue',
+  },
+];
+
+const data = [
+  {
+    servicegroup: 'Kundärende',
+    currentqueue: 0,
+    available: 1,
+    busy: 1,
+    busyother: 2,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Websupport',
+    currentqueue: 0,
+    available: 0,
+    busy: 0,
+    busyother: 0,
+    unavailable: 0,
+    loggedon: 0,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Lösenord',
+    currentqueue: 0,
+    available: 1,
+    busy: 0,
+    busyother: 3,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Omval',
+    currentqueue: 0,
+    available: 0,
+    busy: 0,
+    busyother: 0,
+    unavailable: 0,
+    loggedon: 0,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Kundär. Prio',
+    currentqueue: 0,
+    available: 1,
+    busy: 0,
+    busyother: 3,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'AGS',
+    currentqueue: 0,
+    available: 1,
+    busy: 0,
+    busyother: 3,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Fora_Kundärende_Eng',
+    currentqueue: 0,
+    available: 1,
+    busy: 0,
+    busyother: 3,
+    unavailable: 3,
+    loggedon: 7,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Fora_FTG',
+    currentqueue: 0,
+    available: 1,
+    busy: 1,
+    busyother: 2,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Fora_Fackforbund',
+    currentqueue: 0,
+    available: 1,
+    busy: 0,
+    busyother: 3,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Fora_Anstalld',
+    currentqueue: 0,
+    available: 1,
+    busy: 0,
+    busyother: 3,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Fora_FTG_Fakt',
+    currentqueue: 0,
+    available: 1,
+    busy: 1,
+    busyother: 2,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+  {
+    servicegroup: 'Fora_FTG_FA',
+    currentqueue: 0,
+    available: 1,
+    busy: 0,
+    busyother: 3,
+    unavailable: 4,
+    loggedon: 8,
+    longestqueue: 0,
+    estimatedqueue: 0,
+  },
+];
 
 const Start = () => (
   <DashboardLayout>
@@ -68,6 +243,14 @@ const Start = () => (
               Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
             </p>
           </PageContent>
+        </div>
+        <div className="cell">
+          <PageTable
+            columns={columns}
+            data={data}
+            columnKeyExtractor={({ field }) => field}
+            dataKeyExtractor={({ servicegroup }) => servicegroup}
+          />
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ $secondary-color-dark:       #ffffff;
 
 $primary-alt-color-dark:     #273142;
 $secondary-alt-color-dark:   #1b2431;
+$tertiary-alt-color-dark:    #323d4e;
 
 $background-color-dark:      $secondary-alt-color-dark;
 $background-dark-color-dark: darken($background-color-dark, 1.5625%);
@@ -14,6 +15,7 @@ $colors-dark: (
   'secondary':               $secondary-color-dark,
   'primary-alt':             $primary-alt-color-dark,
   'secondary-alt':           $secondary-alt-color-dark,
+  'tertiary-alt':            $tertiary-alt-color-dark,
   'black':                   $black,
   'white':                   $white,
   'background':              $background-color-dark,

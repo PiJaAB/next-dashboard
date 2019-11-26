@@ -1,15 +1,16 @@
-$primary-color-dark:         #4880ff;
-$secondary-color-dark:       #ffffff;
+$primary-color-dark:         #4880ff !default;
+$secondary-color-dark:       #ffffff !default;
 
-$primary-alt-color-dark:     #273142;
-$secondary-alt-color-dark:   #1b2431;
+$primary-alt-color-dark:     #273142 !default;
+$secondary-alt-color-dark:   #1b2431 !default;
+$tertiary-alt-color-dark:    #323d4e !default;
 
-$background-color-dark:      $secondary-alt-color-dark;
-$background-dark-color-dark: darken($background-color-dark, 1.5625%);
-$text-color-dark:            $secondary-color-dark;
+$background-color-dark:      $secondary-alt-color-dark !default;
+$background-dark-color-dark: darken($background-color-dark, 1.5625%) !default;
+$text-color-dark:            $secondary-color-dark !default;
 
-$error-color-dark:          #461d21;
-$warning-color-dark:        #5f4700;
+$error-color-dark:          #461d21 !default;
+$warning-color-dark:        #5f4700 !default;
 
 $colors-dark: (
   'primary':                 $primary-color-dark,
@@ -17,6 +18,7 @@ $colors-dark: (
   'secondary':               $secondary-color-dark,
   'primary-alt':             $primary-alt-color-dark,
   'secondary-alt':           $secondary-alt-color-dark,
+  'tertiary-alt':            $tertiary-alt-color-dark,
   'black':                   $black,
   'white':                   $white,
   'background':              $background-color-dark,
@@ -25,4 +27,4 @@ $colors-dark: (
   'text-rgb':                hexToRgb($text-color-dark),
   'error':                   $error-color-dark,
   'warning':                 $warning-color-dark,
-);
+) !default;
