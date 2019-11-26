@@ -1,9 +1,9 @@
 {
   "name": "nextjs-testbed",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@pija-ab/react-dashboard": "^0.0.0",
+    "@pija-ab/react-dashboard": "^0.0.1",
     "axios": "^0.19.0",
     "dotenv-load": "^2.0.0",
     "express": "^4.17.1",
