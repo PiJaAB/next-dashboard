@@ -28,7 +28,7 @@ export default class Statistic extends PureComponent<Props> {
           .filter(c => c)
           .join(' ')}
       >
-        <div className="margin-bottom-x1">
+        <div className="label margin-bottom-x1">
           {label != null ? label : <>&nbsp;</>}
         </div>
         <h2 className="margin-bottom-x1">
