@@ -40,6 +40,7 @@
   },
   "peerDependencies": {
     "next": "^9.1.1",
+    "next-cookies": "^2.0.2",
     "react": "^16.8.6"
   },
   "devDependencies": {
@@ -68,7 +69,6 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.7.2",
     "atob": "^2.1.2",
-    "btoa": "^1.2.1",
-    "next-cookies": "^2.0.2"
+    "btoa": "^1.2.1"
   }
 }
