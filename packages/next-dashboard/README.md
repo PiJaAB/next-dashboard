@@ -1,11 +1,11 @@
-# `react-dashboard`
+# `next-dashboard`
 
 > TODO: description
 
 ## Usage
 
 ```
-const reactDashboard = require('react-dashboard');
+const nextDashboard = require('next-dashboard');
 
 // TODO: DEMONSTRATE API
 ```

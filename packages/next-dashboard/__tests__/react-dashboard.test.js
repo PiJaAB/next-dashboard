@@ -1,7 +1,7 @@
 'use strict';
 
-const reactDashboard = require('..');
+const nextDashboard = require('..');
 
-describe('react-dashboard', () => {
+describe('next-dashboard', () => {
     it('needs tests');
 });

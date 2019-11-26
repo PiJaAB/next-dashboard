@@ -1,5 +1,5 @@
 # Don't lint flow types from dependencies
 /flow-typed/**/*.js
-/packages/react-dashboard/dist/**/*
+/packages/next-dashboard/dist/**/*
 /*.js
-/packages/react-dashboard/exposers/**/*.js
+/packages/next-dashboard/exposers/**/*.js

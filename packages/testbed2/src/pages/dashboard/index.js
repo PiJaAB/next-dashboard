@@ -6,7 +6,7 @@ import {
   Statistic,
   PageContent,
   DashboardLayout,
-} from '@pija-ab/react-dashboard';
+} from '@pija-ab/next-dashboard';
 import Nav from 'src/components/Nav';
 
 const Start = () => (

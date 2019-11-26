@@ -7,7 +7,7 @@ import {
   NavEntry,
   ThemeSelector,
   CompactButton,
-} from '@pija-ab/react-dashboard';
+} from '@pija-ab/next-dashboard';
 
 type Props = {};
 

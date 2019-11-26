@@ -6,7 +6,7 @@ import Head from 'next/head';
 import NProgress from 'nprogress';
 import { Title } from 'src/components/SEO';
 
-// import '@pija-ab/react-dashboard/sass/index.scss';
+// import '@pija-ab/next-dashboard/sass/index.scss';
 import '../styles/index.scss';
 
 function getTitleFromComponent(
