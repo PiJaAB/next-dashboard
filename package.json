@@ -2,12 +2,17 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "setup": "scripts/setup.sh",
+    "reset": "scripts/reset.sh",
+    "bootstrap": "lerna bootstrap",
+    "dev": "nodemon -w packages/testbed2/server -w packages/react-dashboard/src -x \"lerna run --stream dev:pkg\"",
     "new": "lerna create",
     "lerna": "lerna",
     "wizard": "node -e \"require('lerna-wizard')({commandChoiceFilter:({value:v})=>!['ls','updated','create','init'].includes(v)}).catch(e=>{console.error(e);process.exit(1)})\""
   },
   "devDependencies": {
     "lerna": "^3.18.4",
-    "lerna-wizard": "^1.1.1"
+    "lerna-wizard": "^1.1.1",
+    "nodemon": "^1.19.4"
   }
 }

@@ -1,0 +1,28 @@
+$primary-color-dark:         #4880ff;
+$secondary-color-dark:       #ffffff;
+
+$primary-alt-color-dark:     #273142;
+$secondary-alt-color-dark:   #1b2431;
+
+$background-color-dark:      $secondary-alt-color-dark;
+$background-dark-color-dark: darken($background-color-dark, 1.5625%);
+$text-color-dark:            $secondary-color-dark;
+
+$error-color-dark:          #461d21;
+$warning-color-dark:        #5f4700;
+
+$colors-dark: (
+  'primary':                 $primary-color-dark,
+  'primary-rgb':             hexToRgb($primary-color-dark),
+  'secondary':               $secondary-color-dark,
+  'primary-alt':             $primary-alt-color-dark,
+  'secondary-alt':           $secondary-alt-color-dark,
+  'black':                   $black,
+  'white':                   $white,
+  'background':              $background-color-dark,
+  'background-dark':         $background-dark-color-dark,
+  'text':                    $text-color-dark,
+  'text-rgb':                hexToRgb($text-color-dark),
+  'error':                   $error-color-dark,
+  'warning':                 $warning-color-dark,
+);
