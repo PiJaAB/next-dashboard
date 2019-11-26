@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "setup": "./setup.sh",
     "bootstrap": "lerna bootstrap",
     "dev": "nodemon -w packages/testbed2/server -w packages/react-dashboard/src -x \"lerna run --stream dev:pkg\"",
     "new": "lerna create",
