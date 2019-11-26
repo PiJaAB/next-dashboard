@@ -1,5 +1,6 @@
 // TODO: Initial load and resize classes...
 // TODO: Save sidebar and color state in storage...
+// TODO: Icon font...
 
 import React, { useState, useEffect } from 'react';
 
@@ -83,6 +84,7 @@ const App = () => {
 
   return (
     <div className="site site_initial-load">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
       <Header toggleSidebarActive={toggleSidebarActive} />
       <Sidebar
         sidebarActive={sidebarActive}

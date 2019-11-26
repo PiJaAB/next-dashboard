@@ -4,13 +4,24 @@ import React from 'react';
 
 type Props = {
   children: React$Node,
+  id?: string,
 };
 
-export default function NavEntry({ children }: Props): React$Node {
+export default function NavEntry({ children, id }: Props): React$Node {
   return (
-    <>
+    <nav
+      className={[
+        'dashboard-sidebar-menu',
+        id && `dashboard-sidebar-menu_${id}`,
+      ]
+        .filter(c => c)
+        .join(' ')}
+    >
       {children}
-      <div className="dashboard-sidebar-menu-item-space" />
-    </>
+    </nav>
   );
 }
+
+NavEntry.defaultProps = {
+  id: undefined,
+};

@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import type { DataProvider, DataType } from './types';
+import type { DataProvider, DataType, Theme } from './types';
 
 export type DashboardContextType = {
   ...DataProvider,
@@ -8,6 +8,8 @@ export type DashboardContextType = {
   setState: <T>(key: string, value: T) => void,
   data: { [string]: DataType },
   registerError(err: Error): void,
+  theme: Theme,
+  themes: Theme[],
 };
 
 const DashboardContext = React.createContext<DashboardContextType | void>();

@@ -5,6 +5,8 @@ import {
   PureNav as DashNav,
   NavSection,
   NavEntry,
+  ThemeSelector,
+  CompactButton,
 } from '@pija-ab/react-dashboard';
 
 type Props = {};
@@ -13,7 +15,7 @@ export default class Nav extends DashNav<Props> {
   render() {
     return (
       <>
-        <NavSection>
+        <NavSection id="main">
           <NavEntry href="/dashboard" icon="home">
             Overview
           </NavEntry>
@@ -36,13 +38,17 @@ export default class Nav extends DashNav<Props> {
             Realtime
           </NavEntry>
         </NavSection>
-        <NavSection>
+        <NavSection id="account">
           <NavEntry href="/dashboard/settings" icon="cog">
             Settings
           </NavEntry>
+          <ThemeSelector />
           <NavEntry href="/dashboard/logout" icon="power-off">
             Logout
           </NavEntry>
+        </NavSection>
+        <NavSection id="other">
+          <CompactButton />
         </NavSection>
       </>
     );

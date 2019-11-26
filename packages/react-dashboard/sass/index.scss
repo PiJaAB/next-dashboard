@@ -1,7 +1,8 @@
 @import 'libraries/normalize';
 
 @import 'mixins/var';
-@import 'mixins/hexToRgb';
+@import 'mixins/hex-to-rgb';
+@import 'mixins/font-face';
 @import 'mixins/breakpoint';
 @import 'mixins/visually-hidden';
 
@@ -10,6 +11,8 @@
 @import 'themes/dark';
 
 @import 'base/resets';
+
+@import 'fonts/inter';
 
 @import 'elements/elements';
 @import 'elements/headings';
@@ -26,10 +29,12 @@
 @import 'layouts/content';
 @import 'layouts/footer';
 
-@import 'components/dashboard-header-profile';
+@import 'components/contact';
+@import 'components/profile';
 @import 'components/page-content';
 @import 'components/statistic';
 @import 'components/sitemessages';
 
 @import 'base/margin-bottom';
 @import 'base/helpers';
+

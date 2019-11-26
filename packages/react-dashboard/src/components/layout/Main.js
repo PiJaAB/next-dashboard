@@ -13,8 +13,6 @@ export type Props = {
   children?: React$Node,
 };
 
-const themes = ['default', 'dark'];
-
 function DashboardLayout({
   children,
 }: Props): React$Element<typeof DashboardContext.Consumer> {
@@ -38,23 +36,12 @@ function DashboardLayout({
           'sidebarCompact',
           false,
         );
-        const theme = context.getState<string>('theme', themes[0]);
+        const theme = context.theme.class;
 
         const toggleSidebarActive = () => {
           context.setState<boolean>('sidebarActive', !sidebarActive);
         };
 
-        const toggleSidebarCompact = () => {
-          context.setState<boolean>('sidebarCompact', !sidebarCompact);
-        };
-
-        const setTheme = (newTheme: string) => {
-          context.setState<string>('theme', newTheme);
-        };
-
-        const toggleTheme = () => {
-          setTheme(themes[(themes.indexOf(theme) + 1) % themes.length]);
-        };
         let normalChildren: ?React$Node = [];
         let navChildren: ?React$Node;
         if (Array.isArray(children)) {
@@ -90,8 +77,6 @@ function DashboardLayout({
             <Sidebar
               sidebarActive={sidebarActive}
               sidebarCompact={sidebarCompact}
-              toggleSidebarCompact={toggleSidebarCompact}
-              toggleTheme={toggleTheme}
             >
               {navChildren}
             </Sidebar>

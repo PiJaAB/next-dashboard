@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
-import type { DataProvider, DataType } from './types';
+import type { DataProvider, DataType, Theme } from './types';
 import displayNameOf from './displayNameOf';
 
 import { getInitialState, persist } from './persistentState';
@@ -42,11 +42,17 @@ export type Config = {
   unauthedRoute?: string,
   needAuthDefault: boolean,
   errorComponent?: NextComponent<any>,
+  themes?: Theme[],
 };
 
 export default function createDashboardHOC<D: DataProvider>(
   dataProvider: D,
-  { needAuthDefault, unauthedRoute, errorComponent: ErrorComp }: Config,
+  {
+    needAuthDefault,
+    unauthedRoute,
+    errorComponent: ErrorComp,
+    themes: confThemes,
+  }: Config,
 ): <U: {}>(Comp: NextComponent<U>, needAuth?: boolean) => NextComponent<U> {
   function withDashboard<P: {}>(
     Comp: NextComponent<P>,
@@ -54,7 +60,10 @@ export default function createDashboardHOC<D: DataProvider>(
   ): NextComponent<P> {
     // eslint-disable-next-line no-param-reassign
     needAuth = needAuth == null ? needAuthDefault : needAuth;
-
+    const themes: Theme[] = confThemes || [
+      { name: 'Light', class: 'default' },
+      { name: 'Dark', class: 'dark' },
+    ];
     class WrappedComp extends PureComponent<WrappedProps<P>, State> {
       state: State;
 
@@ -150,11 +159,18 @@ export default function createDashboardHOC<D: DataProvider>(
           }
           return null;
         }
+        const { persistentState } = state;
+        const theme: Theme = themes.find(
+          t => t.class === persistentState.theme,
+        ) ||
+          themes[0] || { name: 'Default', class: 'default' };
         const { __RENDER_ERROR__: _, ...rest } = props;
         const context = {
           ...dataProvider,
           getState: this.getPersistentState,
           setState: this.setPersistentState,
+          themes,
+          theme,
           data: state.data,
         };
         return (

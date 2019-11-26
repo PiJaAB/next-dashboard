@@ -1,10 +1,12 @@
 body {
-  &_resizing {
+  &.body_resizing {
     .dashboard-sidebar {
       transition: none;
     }
   }
-  .dashboard_initial-load {
+}
+.dashboard {
+  &_initial-load {
     .dashboard-sidebar {
       transition: none;
     }
@@ -15,16 +17,19 @@ body {
   position: fixed;
   top: 80px;
   left: 0;
-  height: 100%;
+  height: calc(100% - 80px);
   width: calc(100% - 80px);
   padding: 20px;
+  border-top: 1px solid;
+  @include var('border-color', 'primary');
   @include var('background-color', 'primary-alt');
   z-index: 100;
   overflow: hidden;
+  overflow-y: auto;
   transform: translateX(-100%);
   transition: width 0.25s ease, transform 0.25s ease;
   @include breakpoint(medium) {
-    width: 160px;
+    width: 200px;
   }
   @include breakpoint(large) {
     width: 240px;
@@ -36,6 +41,11 @@ body {
     width: 100px;
     .dashboard-sidebar-menu-item-button-text {
       opacity: 0;
+    }
+    .dashboard-sidebar-profile {
+      .profile-content {
+        opacity: 0;
+      }
     }
   }
 }
@@ -49,10 +59,13 @@ body {
 }
 .dashboard-sidebar-menu-item-button {
   display: block;
+  width: 100%;
   background-color: transparent;
   @include var('color', 'text');
   text-align: left;
+  // text-overflow: ellipsis;
   white-space: nowrap;
+  // overflow: hidden;
   &:hover {
     @include var('background-color', 'primary');
     @include var('color', 'white');
@@ -76,15 +89,31 @@ body {
   }
 }
 .dashboard-sidebar-menu-item-button-icon {
-  text-align: center;
-  width: 1em;
+  width: 20px;
   margin: 0 10px 0 0;
+  text-align: center;
 }
 .dashboard-sidebar-menu-item-button-text {
   transition: opacity 0.25s ease;
 }
 
-.dashboard-sidebar-menu-item-space {
-  height: 40px;
-  margin: -10px 0 0;
+.dashboard-sidebar-search {
+  margin: 0 0 20px;
+  @include breakpoint(medium) {
+    display: none;
+  }
+}
+.dashboard-sidebar-menu {
+  margin: 0 0 40px;
+  &:last-child {
+    margin: 0;
+  }
+}
+.dashboard-sidebar-profile {
+  @include breakpoint(large) {
+    display: none;
+  }
+  .profile-content {
+    transition: opacity 0.25s ease;
+  }
 }

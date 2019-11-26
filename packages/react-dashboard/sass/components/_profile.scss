@@ -1,10 +1,9 @@
-.dashboard-header-profile,
-.dashboard-header-contact {
+.profile {
   display: flex;
   align-items: center;
 }
-.dashboard-header-profile-image,
-.dashboard-header-contact-image {
+.profile-image {
+  flex: 0 0 auto;
   height: 40px;
   width: 40px;
   margin: 0 10px 0 0;

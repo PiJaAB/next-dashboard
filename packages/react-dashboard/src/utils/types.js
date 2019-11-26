@@ -32,3 +32,8 @@ export interface IDataProvider {
   addDataListener(listener: (data: { [string]: DataType }) => void): void;
   removeDataListener(listener: (data: { [string]: DataType }) => void): void;
 }
+
+export type Theme = {
+  name: string,
+  class: string,
+};

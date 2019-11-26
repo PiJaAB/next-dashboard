@@ -1,10 +1,12 @@
 body {
-  &_resizing {
+  &.body_resizing {
     .dashboard-content {
       transition: none;
     }
   }
-  .dashboard_initial-load {
+}
+.dashboard {
+  &_initial-load {
     .dashboard-content {
       transition: none;
     }
@@ -26,7 +28,7 @@ body {
   &_active {
     +.dashboard-content {
       @include breakpoint(medium) {
-        padding-left: 160px;
+        padding-left: 200px;
       }
       @include breakpoint(large) {
         padding-left: 240px;

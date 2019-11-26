@@ -1,7 +1,7 @@
 @import 'libraries/normalize';
 
 @import 'mixins/var';
-@import 'mixins/hexToRgb';
+@import 'mixins/hex-to-rgb';
 @import 'mixins/font-face';
 @import 'mixins/breakpoint';
 @import 'mixins/visually-hidden';
@@ -29,7 +29,8 @@
 @import 'layouts/content';
 @import 'layouts/footer';
 
-@import 'components/site-header-profile';
+@import 'components/contact';
+@import 'components/profile';
 @import 'components/page-content';
 @import 'components/statistic';
 

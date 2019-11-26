@@ -1,23 +1,17 @@
-// TODO: Icon font...
-
 // @flow
 import React from 'react';
+import Head from 'next/head';
+
+import Search from '../Search';
+import Profile from '../Profile';
 
 type Props = {
   sidebarActive: boolean,
   sidebarCompact: boolean,
-  toggleSidebarCompact: () => void,
-  toggleTheme: () => void,
   children?: React$Node,
 };
 
-const Sidebar = ({
-  sidebarActive,
-  sidebarCompact,
-  toggleSidebarCompact,
-  toggleTheme,
-  children,
-}: Props) => {
+const Sidebar = ({ sidebarActive, sidebarCompact, children }: Props) => {
   return (
     <div
       className={[
@@ -28,30 +22,19 @@ const Sidebar = ({
         .filter(className => className)
         .join(' ')}
     >
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-      />
-      <nav className="dashboard-sidebar-menu">
-        {children}
-        <div className="dashboard-sidebar-menu-item-space" />
-        <button
-          type="button"
-          className="button"
-          onClick={toggleTheme}
-          style={{ width: '100%' }}
-        >
-          <span className="fa fa-palette" />
-        </button>
-        <button
-          type="button"
-          className="button"
-          onClick={toggleSidebarCompact}
-          style={{ width: '100%' }}
-        >
-          <span className="fa fa-exchange-alt" />
-        </button>
-      </nav>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        />
+      </Head>
+      <div className="dashboard-sidebar-search">
+        <Search />
+      </div>
+      {children}
+      <div className="dashboard-sidebar-profile">
+        <Profile />
+      </div>
     </div>
   );
 };
