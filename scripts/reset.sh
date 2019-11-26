@@ -15,6 +15,6 @@ do
     cd packages/$TESTBED/node_modules/$i
     yarn unlink
     cd $DIR
-    cd packages/react-dashboard/
+    cd packages/$PACKAGE/
     rm -rf node_modules/$i
 done
