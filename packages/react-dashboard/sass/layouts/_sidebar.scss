@@ -70,6 +70,13 @@ body {
     @include var('background-color', 'primary');
     @include var('color', 'white');
   }
+  &:hover,
+  &:active {
+    opacity: 1;
+  }
+  &:active {
+    opacity: 0.875;
+  }
   &:after {
     content: '';
     display: none;

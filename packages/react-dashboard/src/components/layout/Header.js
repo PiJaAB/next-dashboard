@@ -8,22 +8,33 @@ import Profile from '../Profile';
 
 type Props = {
   toggleSidebarActive: () => void,
+  sidebarActive: boolean,
 };
 
 // TODO: dashboard home url config
 
-const Header = ({ toggleSidebarActive }: Props) => (
+const Header = ({ toggleSidebarActive, sidebarActive }: Props) => (
   <header className="dashboard-header">
     <div className="container container-unlimited">
       <div className="grid align-items-center">
         <div className="cell dashboard-header-cell dashboard-header-cell_sidebar">
-          <button type="button" onClick={toggleSidebarActive}>
-            <span className="fa fa-exchange-alt" />
+          <button
+            type="button"
+            className="dashboard-header-sidebar-button"
+            onClick={toggleSidebarActive}
+          >
+            <span
+              className={[
+                'dashboard-sidebar-button-icon',
+                'fa',
+                sidebarActive ? 'fa-times' : 'fa-bars',
+              ].join(' ')}
+            />
           </button>
         </div>
         <div className="cell dashboard-header-cell dashboard-header-cell_logo">
           <Link href="/dashboard">
-            <a>Dashboard</a>
+            <a className="color-text">Dashboard</a>
           </Link>
         </div>
         <div className="cell dashboard-header-cell dashboard-header-cell_search">

@@ -62,3 +62,27 @@
     }
   }
 }
+
+.dashboard-header-sidebar-button {
+  display: block;
+  position: relative;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  background-color: transparent;
+  @include var('color', 'text');
+  &:hover,
+  &:active {
+    @include var('color', 'primary');
+    opacity: 1;
+  }
+  &:active {
+    opacity: 0.875;
+  }
+}
+.dashboard-header-sidebar-button-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

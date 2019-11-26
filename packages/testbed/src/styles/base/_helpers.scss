@@ -18,6 +18,9 @@
     .color-white#{$breakpoint-class} {
       color: $white;
     }
+    .color-text#{$breakpoint-class} {
+      @include var('color', 'text');
+    }
 
     .display-block#{$breakpoint-class} {
       display: block;
