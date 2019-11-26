@@ -85,7 +85,10 @@ const App = () => {
   return (
     <div className="site site_initial-load">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
-      <Header toggleSidebarActive={toggleSidebarActive} />
+      <Header
+        sidebarActive={sidebarActive}
+        toggleSidebarActive={toggleSidebarActive}
+      />
       <Sidebar
         sidebarActive={sidebarActive}
         sidebarCompact={sidebarCompact}
