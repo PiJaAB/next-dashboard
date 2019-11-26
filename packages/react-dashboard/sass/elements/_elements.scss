@@ -4,6 +4,7 @@
   --secondary-color:       #{map-get($colors, 'secondary')};
   --primary-alt-color:     #{map-get($colors, 'primary-alt')};
   --secondary-alt-color:   #{map-get($colors, 'secondary-alt')};
+  --tertiary-alt-color:    #{map-get($colors, 'tertiary-alt')};
   --black-color:           #{map-get($colors, 'black')};
   --white-color:           #{map-get($colors, 'white')};
   --background-color:      #{map-get($colors, 'background')};
@@ -36,6 +37,7 @@ html {
     --secondary-color:       #{map-get($colors-dark, 'secondary')};
     --primary-alt-color:     #{map-get($colors-dark, 'primary-alt')};
     --secondary-alt-color:   #{map-get($colors-dark, 'secondary-alt')};
+    --tertiary-alt-color:    #{map-get($colors-dark, 'tertiary-alt')};
     --black-color:           #{map-get($colors-dark, 'black')};
     --white-color:           #{map-get($colors-dark, 'white')};
     --background-color:      #{map-get($colors-dark, 'background')};
