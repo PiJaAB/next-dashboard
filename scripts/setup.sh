@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# Setup variables
-PACKAGES=(react react-dom next next-cookies)
-TESTBED=testbed2
-
 # Ensure we're in the right path.
 cd "$( dirname "${BASH_SOURCE[0]}" )"
+source ./conf.sh
+cd ..
 DIR="$(pwd)"
 
 # Run bootstrap
