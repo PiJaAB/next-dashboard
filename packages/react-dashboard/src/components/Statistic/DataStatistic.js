@@ -3,12 +3,16 @@ import React, { PureComponent } from 'react';
 import DashboardContext, {
   type DashboardContextType,
 } from '../../utils/dashboardContext';
-import { refineToPrimitive } from '../../utils/dataRefiners';
+import {
+  refineDataToPrimitive,
+  refineToPrimitive,
+} from '../../utils/dataRefiners';
 import Statistic from './Statistic';
 
 type Props = {
   label?: string,
   id: string,
+  index?: number | string,
   description?: string,
   prefix?: string,
   suffix?: string,
@@ -18,6 +22,7 @@ export default class DataStatistic extends PureComponent<Props> {
   context: DashboardContextType;
 
   static defaultProps = {
+    index: undefined,
     label: undefined,
     description: undefined,
     prefix: '',
@@ -26,16 +31,53 @@ export default class DataStatistic extends PureComponent<Props> {
 
   static contextType = DashboardContext;
 
+  renderError(err?: Error) {
+    if (err) {
+      const { context } = this;
+      context.registerError(err);
+    }
+    const { description, label } = this.props;
+    return <Statistic value="Failed" description={description} label={label} />;
+  }
+
+  renderLoading() {
+    const { description, label } = this.props;
+    return (
+      <Statistic value="Loading..." description={description} label={label} />
+    );
+  }
+
   render() {
-    const { id, ...props } = this.props;
+    const { id, index, ...props } = this.props;
     if (!this.context) return null;
     const { data } = this.context;
     try {
-      const value = refineToPrimitive(data[id], 'string');
+      const entry = data[id];
+      if (entry == null) {
+        throw new Error(
+          'Could not find data entry. Did you register a datafetcher?',
+        );
+      }
+      if (entry.status === 'loading') {
+        this.renderLoading();
+      }
+      let value;
+      if (index == null) {
+        value = refineDataToPrimitive(entry, 'string');
+      } else if (typeof index === 'number') {
+        value = refineToPrimitive(
+          refineDataToPrimitive(entry, 'array')[index],
+          'string',
+        );
+      } else {
+        value = refineToPrimitive(
+          refineDataToPrimitive(entry, 'object')[index],
+          'string',
+        );
+      }
       return <Statistic value={value} {...props} />;
     } catch (err) {
-      console.error(err);
-      return <Statistic value={err.constructor.name} {...props} />;
+      return this.renderError(err);
     }
   }
 }

@@ -7,6 +7,7 @@ import Footer from './Footer';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Nav, { PureNav } from '../Nav';
+import SiteMessages from './SiteMessages';
 
 export type Props = {
   children?: React$Node,
@@ -94,7 +95,10 @@ function DashboardLayout({
             >
               {navChildren}
             </Sidebar>
-            <Content>{normalChildren}</Content>
+            <Content>
+              <SiteMessages />
+              {normalChildren}
+            </Content>
             <Footer />
           </div>
         );

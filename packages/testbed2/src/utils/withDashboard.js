@@ -15,9 +15,10 @@ const dataProvider = {
   },
   data: {},
   needAuthDefault: true,
-  isAuthenticated(): boolean {
+  isAuthorizedForRoute(): boolean {
     return authenticated;
   },
+  getCurrentData() { return {}; },
   auth(data: { username: string, password: string }): boolean {
     console.log(data);
     authenticated = true;

@@ -8,6 +8,9 @@ $background-color-dark:      $secondary-alt-color-dark;
 $background-dark-color-dark: darken($background-color-dark, 1.5625%);
 $text-color-dark:            $secondary-color-dark;
 
+$error-color-dark:          #461d21;
+$warning-color-dark:        #5f4700;
+
 $colors-dark: (
   'primary':                 $primary-color-dark,
   'primary-rgb':             hexToRgb($primary-color-dark),
@@ -20,4 +23,6 @@ $colors-dark: (
   'background-dark':         $background-dark-color-dark,
   'text':                    $text-color-dark,
   'text-rgb':                hexToRgb($text-color-dark),
+  'error':                   $error-color-dark,
+  'warning':                 $warning-color-dark,
 );

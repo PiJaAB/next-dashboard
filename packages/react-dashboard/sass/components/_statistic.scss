@@ -2,4 +2,13 @@
   padding: 20px;
   border-radius: 10px;
   @include var('background-color', 'primary-alt');
+  &.statistic-error {
+    @include var('background-color', 'error');
+  }
+  &.statistic-warning {
+    @include var('background-color', 'warning');
+  }
+  &.statistic-loading {
+    opacity: 0.3;
+  }
 }

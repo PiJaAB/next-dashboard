@@ -7,6 +7,7 @@ export type DashboardContextType = {
   getState<T>(key: string, defaultValue: T): T,
   setState: <T>(key: string, value: T) => void,
   data: { [string]: DataType },
+  registerError(err: Error): void,
 };
 
 const DashboardContext = React.createContext<DashboardContextType | void>();

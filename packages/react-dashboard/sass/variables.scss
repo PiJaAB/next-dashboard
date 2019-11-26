@@ -59,6 +59,9 @@ $secondary-alt-color:   #f5f6fa !default;
 $black:                 #000000 !default;
 $white:                 #ffffff !default;
 
+$error-color:           #dc3545 !default;
+$warning-color:         #f7da83 !default;
+
 $background-color:      $secondary-alt-color !default;
 $background-dark-color: darken($background-color, 1.5625%) !default;
 $text-color:            $secondary-color !default;
@@ -75,6 +78,8 @@ $colors: (
   'background-dark':    $background-dark-color,
   'text':               $text-color,
   'text-rgb':           hexToRgb($text-color),
+  'error':              $error-color,
+  'warning':            $warning-color,
 ) !default;
 
 $primary-font-family: '' !default;

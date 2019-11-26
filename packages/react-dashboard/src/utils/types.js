@@ -14,6 +14,21 @@ export type DataType =
   | void;
 
 export type DataProvider = {
-  update<T>(key: string, data: T, extra: { [string]: mixed }): Promise<void>,
-  isAuthenticated(): Promise<boolean> | boolean,
+  update<T>(key: string, data: T, extra?: mixed): Promise<void> | void,
+  getAuthData(): Promise<mixed> | mixed,
+  isAuthorizedForRoute(
+    href: string,
+    asPath: string,
+    query: { [string]: string | void },
+  ): Promise<boolean> | boolean,
+  getCurrentData(): { [string]: DataType },
 };
+
+export interface IDataProvider {
+  update: $PropertyType<DataProvider, 'update'>;
+  getAuthData: $PropertyType<DataProvider, 'getAuthData'>;
+  isAuthorizedForRoute: $PropertyType<DataProvider, 'isAuthorizedForRoute'>;
+  getCurrentData: $PropertyType<DataProvider, 'getCurrentData'>;
+  addDataListener(listener: (data: { [string]: DataType }) => void): void;
+  removeDataListener(listener: (data: { [string]: DataType }) => void): void;
+}

@@ -13,11 +13,13 @@ import DashboardContext from './dashboardContext';
 export type WrappedProps<P> =
   | (P & {
       __RENDER_ERROR__?: false,
-      __INITIAL_STATE__?: { [string]: any },
+      __INITIAL_STATE__: { [string]: any },
+      __INITIAL_DATA__: { [string]: DataType },
     })
   | {
       __RENDER_ERROR__: true,
-      __INITIAL_STATE__?: { [string]: any },
+      __INITIAL_STATE__: void,
+      __INITIAL_DATA__: void,
       errProps: {},
     };
 
@@ -61,16 +63,18 @@ export default function createDashboardHOC<D: DataProvider>(
       constructor(props: WrappedProps<P>) {
         super(props);
         // eslint-disable-next-line no-underscore-dangle
-        const { __INITIAL_STATE__ } = props;
+        const { __INITIAL_STATE__, __INITIAL_DATA__ } = props;
         this.state = {
           persistentState: __INITIAL_STATE__ || {},
-          data: {},
+          data: __INITIAL_DATA__ || {},
         };
       }
 
       static async getInitialProps(ctx: InitialPropsContext): Promise<{}> {
+        const { pathname, query, asPath } = ctx;
         const authenticated =
-          dataProvider && (await dataProvider.isAuthenticated());
+          dataProvider &&
+          (await dataProvider.isAuthorizedForRoute(pathname, asPath, query));
         if (needAuth && !authenticated) {
           const { res } = ctx;
           if (unauthedRoute) {
@@ -108,6 +112,7 @@ export default function createDashboardHOC<D: DataProvider>(
           ...((Comp.getInitialProps ? await Comp.getInitialProps(ctx) : null) ||
             {}),
           __INITIAL_STATE__: getInitialState(ctx),
+          __INITIAL_DATA__: dataProvider.getCurrentData(),
         };
       }
 

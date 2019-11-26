@@ -1,12 +1,13 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-type Props = {
+export type Props = {
   label?: string,
   value?: string,
   description?: string,
   prefix?: string,
   suffix?: string,
+  status?: string,
 };
 
 export default class Statistic extends PureComponent<Props> {
@@ -14,14 +15,19 @@ export default class Statistic extends PureComponent<Props> {
     label: undefined,
     value: undefined,
     description: undefined,
+    status: undefined,
     prefix: '',
     suffix: '',
   };
 
   render() {
-    const { label, description, value, prefix, suffix } = this.props;
+    const { label, description, value, prefix, suffix, status } = this.props;
     return (
-      <div className="statistic">
+      <div
+        className={['statistic', status != null && `statistics-${status}`]
+          .filter(c => c)
+          .join(' ')}
+      >
         <div className=".label margin-bottom-x1">
           {label != null ? label : <>&nbsp;</>}
         </div>
