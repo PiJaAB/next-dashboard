@@ -16,7 +16,7 @@ do
     yarn unlink
     yarn link
     cd $DIR
-    cd packages/react-dashboard/
+    cd packages/$PACKAGE/
     rm -rf node_modules/$i
     yarn link $i
 done

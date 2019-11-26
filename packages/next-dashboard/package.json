@@ -1,9 +1,9 @@
 {
-  "name": "@pija-ab/react-dashboard",
-  "version": "0.0.3",
+  "name": "@pija-ab/next-dashboard",
+  "version": "0.0.4",
   "description": "> TODO: description",
   "author": "Linn Dahlgren <linn.dahlgren@pija.se>",
-  "homepage": "https://github.com/PiJaAB/react-dashboard#readme",
+  "homepage": "https://github.com/PiJaAB/next-dashboard#readme",
   "license": "MIT",
   "type": "module",
   "main": "dist/entry.js",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PiJaAB/react-dashboard.git"
+    "url": "git+https://github.com/PiJaAB/next-dashboard.git"
   },
   "scripts": {
     "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
@@ -36,7 +36,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
-    "url": "https://github.com/PiJaAB/react-dashboard/issues"
+    "url": "https://github.com/PiJaAB/next-dashboard/issues"
   },
   "peerDependencies": {
     "next": "^9.1.1",

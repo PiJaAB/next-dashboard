@@ -4,7 +4,7 @@ import {
   createDashboardHOC,
   DashboardContext,
   type Config,
-} from '@pija-ab/react-dashboard';
+} from '@pija-ab/next-dashboard';
 import ErrorComp from 'src/pages/_error';
 
 let authenticated = false;

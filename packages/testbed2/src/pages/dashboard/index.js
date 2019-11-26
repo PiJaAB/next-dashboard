@@ -7,7 +7,7 @@ import {
   PageContent,
   DashboardLayout,
   PageTable,
-} from '@pija-ab/react-dashboard';
+} from '@pija-ab/next-dashboard';
 import Nav from 'src/components/Nav';
 
 const columns = [

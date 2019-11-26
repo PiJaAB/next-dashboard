@@ -5,7 +5,7 @@
     "setup": "scripts/setup.sh",
     "reset": "scripts/reset.sh",
     "bootstrap": "lerna bootstrap",
-    "dev": "nodemon -w packages/testbed2/server -w packages/react-dashboard/src -x \"lerna run --stream dev:pkg\"",
+    "dev": "nodemon -w packages/testbed2/server -w packages/next-dashboard/src -x \"lerna run --stream dev:pkg\"",
     "new": "lerna create",
     "lerna": "lerna",
     "wizard": "node -e \"require('lerna-wizard')({commandChoiceFilter:({value:v})=>!['ls','updated','create','init'].includes(v)}).catch(e=>{console.error(e);process.exit(1)})\""
