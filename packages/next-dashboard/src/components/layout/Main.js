@@ -70,9 +70,7 @@ function DashboardLayout({
         }
 
         return (
-          <div
-            className={`dashboard dashboard_theme-${theme} dashboard_initial-load`}
-          >
+          <div className={`dashboard dashboard_theme-${theme}`}>
             <Header
               sidebarActive={sidebarActive}
               toggleSidebarActive={toggleSidebarActive}

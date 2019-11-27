@@ -5,13 +5,6 @@ body {
     }
   }
 }
-.dashboard {
-  &_initial-load {
-    .dashboard-sidebar {
-      transition: none;
-    }
-  }
-}
 
 .dashboard-sidebar {
   position: fixed;
