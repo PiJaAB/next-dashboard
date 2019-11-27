@@ -1,6 +1,6 @@
 // @flow
+import React, { useEffect } from 'react';
 
-import React from 'react';
 import DashboardContext from '../../utils/dashboardContext';
 import Content from './Content';
 import Footer from './Footer';
@@ -16,6 +16,22 @@ export type Props = {
 function DashboardLayout({
   children,
 }: Props): React$Element<typeof DashboardContext.Consumer> {
+  const noTransition = () => {
+    const { body } = document;
+    if (!body) return;
+    body.classList.add('body_resizing');
+    setTimeout(() => {
+      body.classList.remove('body_resizing');
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', noTransition);
+    return () => {
+      window.removeEventListener('resize', noTransition);
+    };
+  }, []);
+
   return (
     <DashboardContext.Consumer>
       {context => {
