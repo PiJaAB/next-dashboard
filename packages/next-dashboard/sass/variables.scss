@@ -60,8 +60,8 @@ $tertiary-alt-color:    #fafafa !default;
 $black:                 #000000 !default;
 $white:                 #ffffff !default;
 
-$error-color:           #dc3545 !default;
-$warning-color:         #f7da83 !default;
+$error-color:           #ff4f4f !default;
+$warning-color:         orange  !default;
 
 $background-color:      $secondary-alt-color !default;
 $background-dark-color: darken($background-color, 1.5625%) !default;

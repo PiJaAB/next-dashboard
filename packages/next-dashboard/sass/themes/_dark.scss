@@ -9,8 +9,8 @@ $background-color-dark:      $secondary-alt-color-dark !default;
 $background-dark-color-dark: darken($background-color-dark, 1.5625%) !default;
 $text-color-dark:            $secondary-color-dark !default;
 
-$error-color-dark:          #461d21 !default;
-$warning-color-dark:        #5f4700 !default;
+$error-color-dark:          #ff4f4f !default;
+$warning-color-dark:        orange  !default;
 
 $colors-dark: (
   'primary':                 $primary-color-dark,

@@ -2,34 +2,45 @@
 import React from 'react';
 
 type Props = {
+  title: string,
   message: string,
   status?: 'info' | 'warning' | 'error',
   count?: number,
   dismiss?: () => void,
 };
 
-function SiteMessage({ message, status, count, dismiss }: Props): React$Node {
+function SiteMessage({
+  title,
+  message,
+  status,
+  count,
+  dismiss,
+}: Props): React$Node {
   return (
     <div
-      className={['sitemessage', status && `sitemessage-${status}`]
+      className={['site-message', status && `site-message_${status}`]
         .filter(c => c)
         .join(' ')}
     >
-      <div className="sitemessage-text">{message}</div>
-      {count && count > 1 && <div className="sitemessage-badge">x{count}</div>}
-      {dismiss ? (
-        <button type="button" className="sitemessage-count" onClick={dismiss()}>
-          X
-        </button>
-      ) : (
-        <button
-          type="button"
-          tabIndex="-1"
-          className="sitemessage-count"
-          style={{ visibility: 'hidden' }}
-        >
-          X
-        </button>
+      <div className="site-message-header">
+        <h2 className="h5-size margin-0">{title}</h2>
+        {count && count > 1 && (
+          <div className="site-message-count">x{count}</div>
+        )}
+      </div>
+      <div className="site-message-content">
+        <p>{message}</p>
+      </div>
+      {dismiss && (
+        <div className="site-message-footer">
+          <button
+            type="button"
+            className="site-message-button"
+            onClick={dismiss()}
+          >
+            Dismiss
+          </button>
+        </div>
       )}
     </div>
   );
