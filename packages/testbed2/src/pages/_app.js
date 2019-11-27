@@ -46,7 +46,7 @@ class MyApp extends App {
       ogUrl = router.asPath;
     }
     return (
-      <div className="site">
+      <>
         <Title siteName pageName={getTitleFromComponent(Component)} />
         <Head>
           <meta
@@ -79,7 +79,7 @@ class MyApp extends App {
           )}
         </Head>
         <Component {...pageProps} generateTitle={this.title} />
-      </div>
+      </>
     );
   }
 }
