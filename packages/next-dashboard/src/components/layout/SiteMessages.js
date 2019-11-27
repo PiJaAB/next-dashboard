@@ -5,7 +5,7 @@ import SiteMessage from '../SiteMessage';
 
 function SiteMessages(): React$Node {
   return (
-    <div className="sitemessages">
+    <div className="site-messages">
       {/*<noscript>*/}
       <SiteMessage
         count={2}

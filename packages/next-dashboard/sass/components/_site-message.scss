@@ -1,0 +1,64 @@
+.site-messages {
+  margin: 0 0 20px;
+  @include breakpoint(medium) {
+    margin: 0 0 30px;
+  }
+  @include breakpoint(large) {
+    margin: 0 0 40px;
+  }
+  &:last-child {
+    margin: 0;
+  }
+}
+.site-message {
+  position: relative;
+  margin: 0 0 20px;
+  padding: 20px;
+  border-radius: 10px;
+  @include var('background-color', 'primary-alt');
+  &:last-child {
+    margin: 0;
+  }
+  &_error,
+  &_warning {
+    padding: 19px;
+    border: 1px solid;
+  }
+  &_error {
+    @include var('border-color', 'error');
+  }
+  &_warning {
+    @include var('border-color', 'warning');
+  }
+}
+.site-message-header {
+  margin: 0 -20px 20px;
+  padding: 0 20px 20px;
+  border-bottom: 1px solid;
+  @include var('border-color', 'text-rgb', 'rgba', 0.125);
+}
+.site-message-count {
+  position: absolute;
+  top: 40px * -0.25;
+  right: 40px * -0.25;
+  height: 40px;
+  min-width: 40px;
+  padding: 10px;
+  border-radius: 20px;
+  @include var('background-color', 'primary');
+  @include var('color', 'white');
+  line-height: 20px;
+  text-align: center;
+}
+.site-message-footer {
+  margin: 20px -20px 0;
+  padding: 20px 20px 0;
+  border-top: 1px solid;
+  @include var('border-color', 'text-rgb', 'rgba', 0.125);
+}
+.site-message-button {
+  display: block;
+  width: 100%;
+  max-width: $page-width / 4;
+  margin: 0 auto;
+}
