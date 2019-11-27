@@ -5,7 +5,11 @@ const withSass = require('@zeit/next-sass');
 
 const withNextEnv = nextEnv();
 
-module.exports = withSass(withNextEnv({
+//note: please declare withTM as your last plugin (the "most nested" one).
+const withTM = require('next-transpile-modules');
+
+module.exports = withSass(withNextEnv(withTM({
+  transpileModules: ['@pija-ab/next-dashboard'],
   dir: './src',
   webpack(config) {
     return {
@@ -31,4 +35,4 @@ module.exports = withSass(withNextEnv({
       },
     };
   },
-}));
+})));

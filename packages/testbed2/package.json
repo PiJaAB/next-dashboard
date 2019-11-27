@@ -20,7 +20,7 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon -w server server",
-    "dev:pkg": "yarn run -s start",
+    "dev:pkg": "nodemon -w server server",
     "debug": "nodemon --inspect -w server server",
     "build": "next build",
     "test": "jest",
@@ -59,6 +59,7 @@
     "eslint-plugin-react": "^7.14.3",
     "file-loader": "^4.2.0",
     "flow-bin": "^0.107.0",
+    "next-transpile-modules": "^2.3.1",
     "node-sass": "^4.12.0",
     "nodemon": "^1.19.4",
     "prettier": "^1.19.1"

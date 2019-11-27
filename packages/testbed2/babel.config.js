@@ -9,8 +9,8 @@ module.exports = {
     "transform-flow-strip-types",
     ["module-resolver", {
       alias: {
-        src: "./src"
-      }
+        src: "./src",
+      },
     }]
   ]
 }

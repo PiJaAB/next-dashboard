@@ -6,5 +6,9 @@
     },
     "exclude": [
         "node_modules"
-    ]
+    ],
+    "paths": {
+        "@pija-ab/next-dashboard": ["@pija-ab/next-dashboard/src/entry"],
+        "@pija-ab/next-dashboard/sass/*": ["@pija-ab/next-dashboard/sass/*"]
+    }
 }
