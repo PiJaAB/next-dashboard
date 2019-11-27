@@ -5,13 +5,7 @@ body {
     }
   }
 }
-.dashboard {
-  &_initial-load {
-    .dashboard-content {
-      transition: none;
-    }
-  }
-}
+
 .dashboard-content {
   flex: 1 0 auto;
   padding: (80px + 20px) 0 40px;

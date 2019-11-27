@@ -22,7 +22,7 @@ export default function ThemeSelector({ children, icon }: Props): React$Node {
         const { setState, theme, themes } = ctx;
         return (
           <NavEntry
-            icon={icon || 'exchange-alt'}
+            icon={icon || 'palette'}
             onClick={() =>
               setState<string>('theme', rotateTheme(theme, themes))
             }
