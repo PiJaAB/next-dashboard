@@ -10,6 +10,7 @@ module.exports = {
     ["module-resolver", {
       alias: {
         src: "./src",
+        '@pija-ab/next-dashboard': "@pija-ab/next-dashboard/src/entry",
       },
     }]
   ]

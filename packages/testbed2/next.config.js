@@ -8,7 +8,7 @@ const withNextEnv = nextEnv();
 //note: please declare withTM as your last plugin (the "most nested" one).
 const withTM = require('next-transpile-modules');
 
-module.exports = withSass(withNextEnv(withTM({
+module.exports = withNextEnv(withTM(withSass({
   transpileModules: ['@pija-ab/next-dashboard'],
   dir: './src',
   webpack(config) {

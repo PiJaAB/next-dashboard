@@ -11,10 +11,6 @@
 
 # build artifacts
 /dist
-/*.js
-/*.js.flow
-!/.*.js
-!/prettier.config.js
 
 # misc
 .DS_Store
