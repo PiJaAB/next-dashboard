@@ -12,6 +12,9 @@
   >.container {
     flex: 0 0 100%;
   }
+  .dashboard-search {
+    max-width: $page-width / 2;
+  }
 }
 
 .dashboard-header-cell {
@@ -39,11 +42,6 @@
     display: none;
     @include breakpoint(medium) {
       display: block;
-    }
-    >input {
-      max-width: $page-width / 2;
-      padding: 10px 20px;
-      border-radius: 100px;
     }
   }
   &_contact {
