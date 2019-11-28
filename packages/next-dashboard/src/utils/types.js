@@ -37,3 +37,10 @@ export type Theme = {
   name: string,
   class: string,
 };
+
+export type SiteMessageType = {
+  title?: string,
+  message: string,
+  status?: 'info' | 'warning' | 'error',
+  count?: number,
+};

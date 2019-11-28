@@ -27,7 +27,7 @@
   },
   "scripts": {
     "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
-    "dev:pkg": "echo 'deprecated'",
+    "dev:pkg": "nodemon -w src -x \"yarn run -s build:silent\"",
     "build": "yarn build:babel && yarn build:flow",
     "build:silent": "yarn run -s build:babel && yarn run -s build:flow",
     "build:babel": "babel src -d dist",

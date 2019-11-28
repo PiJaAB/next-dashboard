@@ -1,8 +1,11 @@
 // @flow
 import React, { PureComponent } from 'react';
 import Router from 'next/router';
+import { DashboardLayout } from '@pija-ab/next-dashboard';
 
+import Title from 'src/components/DashboardTitle';
 import withDashboard, { Consumer } from 'src/utils/withDashboard';
+import Nav from 'src/components/LoginNav';
 
 type Props = {};
 
@@ -19,16 +22,23 @@ class Login extends PureComponent<Props> {
 
   render() {
     return (
-      <div>
-        Plz login tyvm
+      <DashboardLayout>
+        <Nav />
+        <Title title="Login" />
         <Consumer>
           {({ auth }) => (
-            <button type="button" onClick={() => this.login(auth)}>
-              login
-            </button>
+            <>
+              <label htmlFor="username">Username:</label>
+              <input id="username" />
+              <label htmlFor="password">Password:</label>
+              <input id="password" />
+              <button type="button" onClick={() => this.login(auth)}>
+                login
+              </button>
+            </>
           )}
         </Consumer>
-      </div>
+      </DashboardLayout>
     );
   }
 }
