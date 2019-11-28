@@ -1,7 +1,5 @@
 // @flow
-
 import React from 'react';
-import withDashboard from 'src/utils/withDashboard';
 import {
   Statistic,
   DataStatistic,
@@ -10,6 +8,7 @@ import {
   PageTable,
   PageChart,
 } from '@pija-ab/next-dashboard';
+import withDashboard from 'src/utils/withDashboard';
 import Nav from 'src/components/Nav';
 
 const columns = [

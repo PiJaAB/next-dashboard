@@ -19,10 +19,10 @@ select {
   // height: auto;
   width: 100%;
   margin: 0 0 20px;
-  padding: 10px 20px;
+  padding: 10px 15px;
   outline: none;
   border: none;
-  border-radius: 100px;
+  border-radius: 5px;
   @include var('background-color', 'background');
   &::placeholder {
     @include var('color', 'text-rgb', 'rgba', 0.5);

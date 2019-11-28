@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import Head from 'next/head';
 
 import Search from '../Search';
 import Profile from '../Profile';
@@ -22,12 +21,6 @@ const Sidebar = ({ sidebarActive, sidebarCompact, children }: Props) => {
         .filter(className => className)
         .join(' ')}
     >
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-        />
-      </Head>
       <div className="dashboard-sidebar-search">
         <Search />
       </div>

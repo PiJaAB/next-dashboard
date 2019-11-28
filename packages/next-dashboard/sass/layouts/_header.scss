@@ -42,6 +42,8 @@
     }
     >input {
       max-width: $page-width / 2;
+      padding: 10px 20px;
+      border-radius: 100px;
     }
   }
   &_contact {
