@@ -33,8 +33,10 @@ export default class DataStatistic extends PureComponent<Props> {
 
   renderError(err?: Error) {
     if (err) {
-      const { context } = this;
-      context.registerError(err);
+      setTimeout(() => {
+        const { context } = this;
+        context.registerSiteMessage(err);
+      }, 0);
     }
     const { description, label } = this.props;
     return <Statistic value="Failed" description={description} label={label} />;

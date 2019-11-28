@@ -1,10 +1,10 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
-import type { DataProvider, DataType, Theme } from './types';
+import type { DataProvider, DataType, Theme, SiteMessageType } from './types';
 import displayNameOf from './displayNameOf';
 
 import { getInitialState, persist } from './persistentState';
@@ -32,6 +32,7 @@ export type WrappedProps<P: {}> =
 type State = {
   data: { [string]: DataType },
   persistentState: { [string]: any },
+  siteMessages: SiteMessageType[],
 };
 
 function makeStatusError(
@@ -56,6 +57,16 @@ type ExtraCTX = {
   Comp: NextComponent<any>,
 };
 
+function compareSitemessages(
+  m1: SiteMessageType,
+  m2: SiteMessageType,
+): boolean {
+  if (m1.status !== m2.status) return false;
+  if (m1.title !== m2.title) return false;
+  if (m1.message !== m2.message) return false;
+  return true;
+}
+
 export default function createDashboardHOC<D: DataProvider>(
   dataProvider: D,
   {
@@ -73,7 +84,7 @@ export default function createDashboardHOC<D: DataProvider>(
     ...dataProvider,
     themes,
   };
-  class Dashboard<P: {}> extends PureComponent<WrappedProps<P>, State> {
+  class Dashboard<P: {}> extends Component<WrappedProps<P>, State> {
     state: State;
 
     constructor(props: WrappedProps<P>) {
@@ -83,6 +94,7 @@ export default function createDashboardHOC<D: DataProvider>(
       this.state = {
         persistentState: __INITIAL_STATE__ || {},
         data: __INITIAL_DATA__ || {},
+        siteMessages: context.siteMessages || [],
       };
     }
 
@@ -159,6 +171,54 @@ export default function createDashboardHOC<D: DataProvider>(
       });
     };
 
+    dismissSiteMessage: (siteMessage: SiteMessageType) => void = (
+      siteMessage: SiteMessageType,
+    ) => {
+      this.setState(state => {
+        const newMessages = state.siteMessages.filter(
+          m => !compareSitemessages(m, siteMessage),
+        );
+        return {
+          siteMessages: newMessages,
+        };
+      });
+    };
+
+    registerSiteMessage: (siteMessage: SiteMessageType | Error) => void = (
+      siteMessage: SiteMessageType | Error,
+    ) => {
+      if (siteMessage instanceof Error) {
+        return this.registerSiteMessage({
+          title: siteMessage.constructor.name,
+          status: 'error',
+          message: siteMessage.message,
+        });
+      }
+      this.setState(state => {
+        const existingMessage = state.siteMessages.find(m =>
+          compareSitemessages(m, siteMessage),
+        );
+        if (existingMessage) {
+          existingMessage.count =
+            existingMessage.count != null ? existingMessage.count : 1;
+          existingMessage.count += 1;
+          return {
+            siteMessages: [...state.siteMessages],
+          };
+        }
+        return {
+          siteMessages: [...state.siteMessages, siteMessage],
+        };
+      });
+
+      // Incase we want to return something
+      // later from this method, I returned
+      // the recursive call earlier. Eslint then
+      // complained about consistent returns
+      // hence `return undefined`
+      return undefined;
+    };
+
     render() {
       const { state, props } = this;
       // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
@@ -177,8 +237,11 @@ export default function createDashboardHOC<D: DataProvider>(
       const { __RENDER_ERROR__: _, __COMP__: Comp, ...rest } = props;
       context.getState = this.getPersistentState;
       context.setState = this.setPersistentState;
+      context.registerSiteMessage = this.registerSiteMessage;
+      context.dismissSiteMessage = this.dismissSiteMessage;
       context.theme = theme;
       context.data = state.data;
+      context.siteMessages = [...state.siteMessages];
       return (
         Comp != null && (
           <DashboardContext.Provider value={context}>
@@ -193,6 +256,16 @@ export default function createDashboardHOC<D: DataProvider>(
     Comp: NextComponent<P>,
     needAuth?: boolean,
   ): NextComponent<P> {
+    if (process.env.NODE_ENV === 'development') {
+      const { prototype } = (Comp: any) || {};
+      if (prototype && prototype instanceof React.PureComponent) {
+        console.warn(
+          `Please don't use PureComponent for dashboard root components, Use regular Component instead. Component: ${displayNameOf(
+            Comp,
+          )}`,
+        );
+      }
+    }
     // eslint-disable-next-line no-param-reassign
     const parsedNeedAuth = needAuth == null ? needAuthDefault : needAuth;
 

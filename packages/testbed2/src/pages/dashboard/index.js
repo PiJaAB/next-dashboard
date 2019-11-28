@@ -4,6 +4,7 @@ import React from 'react';
 import withDashboard from 'src/utils/withDashboard';
 import {
   Statistic,
+  DataStatistic,
   PageContent,
   DashboardLayout,
   PageTable,
@@ -192,14 +193,14 @@ const Start = () => (
       <h1 className="page-title">Overview</h1>
       <div className="grid">
         <div className="cell column-6-medium column-3-large">
-          <Statistic
+          <DataStatistic
             label="Quality"
             value="8,2"
             description="46% from last period"
           />
         </div>
         <div className="cell column-6-medium column-3-large">
-          <Statistic
+          <DataStatistic
             label="Quality"
             value="8,2"
             description="46% from last period"
@@ -227,18 +228,28 @@ const Start = () => (
             columns={columns}
             data={data}
             columnKeyExtractor={({ field }) => field}
-            dataKeyExtractor={({ servicegroup }) => servicegroup}
+            dataKeyExtractor={({ servicegroup }) => String(servicegroup)}
           />
         </div>
         <div className="cell">
           <PageContent>
             <h2 className="h4-size">Brief Facts about the Assignment</h2>
-            <p>Xzakt ska regelbundet förse Fora med den statistik som parterna överkommer, enligt avtal. Veckorapportering gälland: Ink, Besv, Tapp, Tapp%, Max Kö, Snitt Kö, Snitt Service, Snitt Clearical, AHT, Total handling och SLA%.</p>
+            <p>
+              Xzakt ska regelbundet förse Fora med den statistik som parterna
+              överkommer, enligt avtal. Veckorapportering gälland: Ink, Besv,
+              Tapp, Tapp%, Max Kö, Snitt Kö, Snitt Service, Snitt Clearical,
+              AHT, Total handling och SLA%.
+            </p>
             <h3 className="h5-size">Prognose Information</h3>
-            <p>Senaste utbildningen slutfördes 23/10 2017. Senaste 9:e ska prognos inkomma för kommande 3 månader.</p>
+            <p>
+              Senaste utbildningen slutfördes 23/10 2017. Senaste 9:e ska
+              prognos inkomma för kommande 3 månader.
+            </p>
             <ul>
-              <li>Månad 1 är 100% beställning, månad 2 är 70% beställning och månad 3 är 50% beställning.
-              SLA 90/300</li>
+              <li>
+                Månad 1 är 100% beställning, månad 2 är 70% beställning och
+                månad 3 är 50% beställning. SLA 90/300
+              </li>
               <li>Max tapp 10% (gäller ej tapp inom 5 sek)</li>
               <li>AHT 5 min</li>
               <li>Uppklarningsprocent 95%</li>
@@ -249,7 +260,10 @@ const Start = () => (
             <h3 className="h5-size">Contact Information</h3>
             <ul>
               <li>Ann Hägerlind Ekehov, ann.hagerlind.ekehov@fora.se</li>
-              <li>Moa Holmsten, Trafikledare/Kvalitet, 08-787 45 98, moa.holmsten@fora.se</li>
+              <li>
+                Moa Holmsten, Trafikledare/Kvalitet, 08-787 45 98,
+                moa.holmsten@fora.se
+              </li>
               <li>Bindia Chamat, Trafikledare, bindia.chamat@fora.se</li>
             </ul>
           </PageContent>

@@ -2,7 +2,7 @@
 import React from 'react';
 
 import {
-  PureNav as DashNav,
+  Nav as DashNav,
   NavSection,
   NavEntry,
   ThemeSelector,
@@ -43,7 +43,7 @@ export default class Nav extends DashNav<Props> {
             Settings
           </NavEntry>
           <ThemeSelector />
-          <NavEntry href="/dashboard/logout" icon="power-off">
+          <NavEntry href="/dashboard/login" icon="power-off">
             Logout
           </NavEntry>
         </NavSection>
