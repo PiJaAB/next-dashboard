@@ -188,7 +188,7 @@ const data = [
 const Start = () => (
   <DashboardLayout>
     <Nav />
-    <div className="">
+    <div>
       <h1 className="page-title">Overview</h1>
       <div className="grid">
         <div className="cell column-6-medium column-3-large">

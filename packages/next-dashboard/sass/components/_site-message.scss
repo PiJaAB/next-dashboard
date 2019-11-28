@@ -6,8 +6,10 @@
   @include breakpoint(large) {
     margin: 0 0 40px;
   }
-  &:last-child {
-    margin: 0;
+  &:not(.site-messages_no-script) {
+    &:last-child {
+      margin: 0;
+    }
   }
 }
 .site-message {
