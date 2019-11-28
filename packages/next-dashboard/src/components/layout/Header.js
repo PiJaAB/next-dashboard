@@ -34,7 +34,9 @@ const Header = ({ toggleSidebarActive, sidebarActive }: Props) => (
         </div>
         <div className="cell dashboard-header-cell dashboard-header-cell_logo">
           <Link href="/dashboard">
-            <a className="color-text">Dashboard</a>
+            <a className="dashboard-header-logo">
+              <img src="/images/logo.png" alt="XVision" />
+            </a>
           </Link>
         </div>
         <div className="cell dashboard-header-cell dashboard-header-cell_search">

@@ -26,12 +26,12 @@
   }
   &_logo {
     flex: 0 0 50%;
+    display: flex;
+    justify-content: center;
     max-width: 50%;
-    text-align: center;
     @include breakpoint(medium) {
       flex: 0 0 auto;
       max-width: 100%;
-      text-align: left;
     }
   }
   &_search {
@@ -87,4 +87,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.dashboard-header-logo {
+  display: block;
+  height: 40px;
+  >img {
+    height: 100%;
+    width: auto;
+  }
 }
