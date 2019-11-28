@@ -13,26 +13,32 @@ function siteMessageKey(m: SiteMessageType): string {
 
 function SiteMessages(): React$Node {
   return (
-    <div className="site-messages">
+    <>
       <noscript>
-        <SiteMessage
-          status="warning"
-          message="You need JavaScript enabled for this dashboard to function properly."
-        />
+        <div className="site-messages site-messages_no-script">
+          <SiteMessage
+            status="warning"
+            message="You need JavaScript enabled for this dashboard to function properly."
+          />
+        </div>
       </noscript>
       <DashboardContext.Consumer>
         {ctx =>
           ctx != null &&
-          ctx.siteMessages.map(siteMessage => (
-            <SiteMessage
-              key={siteMessageKey(siteMessage)}
-              {...siteMessage}
-              dismiss={() => ctx.dismissSiteMessage(siteMessage)}
-            />
-          ))
+          ctx.siteMessages.length > 0 && (
+            <div className="site-messages">
+              {ctx.siteMessages.map(siteMessage => (
+                <SiteMessage
+                  key={siteMessageKey(siteMessage)}
+                  {...siteMessage}
+                  dismiss={() => ctx.dismissSiteMessage(siteMessage)}
+                />
+              ))}
+            </div>
+          )
         }
       </DashboardContext.Consumer>
-    </div>
+    </>
   );
 }
 
