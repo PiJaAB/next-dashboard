@@ -37,7 +37,7 @@ function SiteMessage({
           <button
             type="button"
             className="site-message-button"
-            onClick={dismiss()}
+            onClick={dismiss}
           >
             Dismiss
           </button>

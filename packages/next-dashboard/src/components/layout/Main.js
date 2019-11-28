@@ -6,7 +6,7 @@ import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import Nav, { PureNav } from '../Nav';
+import Nav from '../Nav';
 import SiteMessages from './SiteMessages';
 
 export type Props = {
@@ -75,7 +75,7 @@ function DashboardLayout({
               return;
             }
             const { prototype } = child.type;
-            if (prototype instanceof Nav || prototype instanceof PureNav) {
+            if (prototype instanceof Nav) {
               navChildren.push(child);
               return;
             }

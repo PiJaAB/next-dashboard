@@ -4,6 +4,7 @@ import React from 'react';
 import withDashboard from 'src/utils/withDashboard';
 import {
   Statistic,
+  DataStatistic,
   PageContent,
   DashboardLayout,
   PageTable,
@@ -192,14 +193,14 @@ const Start = () => (
       <h1 className="page-title">Overview</h1>
       <div className="grid">
         <div className="cell column-6-medium column-3-large">
-          <Statistic
+          <DataStatistic
             label="Quality"
             value="8,2"
             description="46% from last period"
           />
         </div>
         <div className="cell column-6-medium column-3-large">
-          <Statistic
+          <DataStatistic
             label="Quality"
             value="8,2"
             description="46% from last period"

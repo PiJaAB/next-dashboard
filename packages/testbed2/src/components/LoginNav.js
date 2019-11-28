@@ -2,7 +2,7 @@
 import React from 'react';
 
 import {
-  PureNav as DashNav,
+  Nav as DashNav,
   NavSection,
   NavEntry,
   ThemeSelector,
