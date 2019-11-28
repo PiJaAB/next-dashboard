@@ -28,7 +28,8 @@ export type Props = {
 type TextAlignProps = { textAlign: string | void };
 
 const defaultRenderHead = ({ title }: Column) => title;
-const defaultRenderBody = (entry: Entry, { field }: Column) => entry[field];
+const defaultRenderBody = (entry: Entry, { field }: Column) =>
+  String(entry[field]);
 const defaultKeyExtractor = ({ key }: Entry | Column) => key;
 
 const ResponsiveTable = ({
