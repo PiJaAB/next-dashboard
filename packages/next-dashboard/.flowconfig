@@ -1,11 +1,12 @@
 
 [ignore]
-.*/exposers/.*
+<PROJECT_ROOT>/packages/next-dashboard/dist/.*
 
 [untyped]
 .*/node_modules/.*
 
 [include]
+../../
 
 [libs]
 
@@ -14,7 +15,6 @@
 [options]
 # note: both name_mapper and resolve_dirname can be specified multiple times
 module.system.node.resolve_dirname=node_modules
-module.name_mapper='^src/' -> '<PROJECT_ROOT>/src/'
 
 munge_underscores=true
 

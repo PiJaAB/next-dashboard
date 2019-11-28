@@ -20,10 +20,7 @@ const ResponsiveTable = ({
       <thead>
         <tr>
           {columns.map(column => (
-            <th
-              key={columnKeyExtractor(column)}
-              className={textAlign(column)}
-            >
+            <th key={columnKeyExtractor(column)} className={textAlign(column)}>
               {(column.renderHead || renderHead)(column)}
             </th>
           ))}
@@ -47,19 +44,12 @@ const ResponsiveTable = ({
   );
   return (
     <div
-      className={[
-        'responsive-table',
-        className,
-      ]
+      className={['responsive-table', className]
         .filter(className => className)
         .join(' ')}
-      >
-      <div className="responsive-table-head">
-        {table([columns[0]])}
-      </div>
-      <div className="responsive-table-body">
-        {table(columns.slice(1))}
-      </div>
+    >
+      <div className="responsive-table-head">{table([columns[0]])}</div>
+      <div className="responsive-table-body">{table(columns.slice(1))}</div>
     </div>
   );
 };

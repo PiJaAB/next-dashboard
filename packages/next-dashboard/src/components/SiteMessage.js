@@ -1,12 +1,10 @@
 // @flow
 import React from 'react';
 import capitalize from '../utils/capitalize';
+import type { SiteMessageType } from '../utils/types';
 
 type Props = {
-  title?: string,
-  message: string,
-  status?: 'info' | 'warning' | 'error',
-  count?: number,
+  ...SiteMessageType,
   dismiss?: () => void,
 };
 
@@ -24,7 +22,9 @@ function SiteMessage({
         .join(' ')}
     >
       <div className="site-message-header">
-        <h2 className="h5-size margin-0">{title || capitalize(status || 'info')}</h2>
+        <h2 className="h5-size margin-0">
+          {title || capitalize(status || 'info')}
+        </h2>
         {count && count > 1 && (
           <div className="site-message-count">x{count}</div>
         )}
