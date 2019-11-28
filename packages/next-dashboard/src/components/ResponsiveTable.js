@@ -1,26 +1,35 @@
 // @flow
 import React from 'react';
 
-type Props = {
-  className?: string,
-  columns: {
-    title: string,
-    field: string,
-  }[],
-  data: {}[],
-  renderHead?: ({}) => void,
-  renderBody?: ({}) => void,
-  columnKeyExtractor?: ({}) => void,
-  dataKeyExtractor?: ({}) => void,
+type Entry = {
+  key?: string,
+  [string]: mixed,
 };
 
-type TableProps = { columns: { title: string, field: string }[] };
+type Column = {
+  key?: string,
+  title: string,
+  field: string,
+  renderHead?: (column: Column) => ?React$Node,
+  renderBody?: (entry: Entry, column: Column) => ?React$Node,
+  textAlign?: string,
+};
 
-type TextAlignProps = { textAlign: string };
+export type Props = {
+  className?: string,
+  columns: Column[],
+  data: Entry[],
+  renderHead?: (column: Column) => ?React$Node,
+  renderBody?: (entry: Entry, column: Column) => ?React$Node,
+  columnKeyExtractor?: (column: Column) => string,
+  dataKeyExtractor?: (entry: Entry) => string,
+};
 
-const defaultRenderHead = ({ title }) => title;
-const defaultRenderBody = (entry, { field }) => entry[field];
-const defaultKeyExtractor = ({ key }) => key;
+type TextAlignProps = { textAlign: string | void };
+
+const defaultRenderHead = ({ title }: Column) => title;
+const defaultRenderBody = (entry: Entry, { field }: Column) => entry[field];
+const defaultKeyExtractor = ({ key }: Entry | Column) => key;
 
 const ResponsiveTable = ({
   className,
@@ -31,13 +40,17 @@ const ResponsiveTable = ({
   columnKeyExtractor = defaultKeyExtractor,
   dataKeyExtractor = defaultKeyExtractor,
 }: Props) => {
-  const textAlign = ({ textAlign }: TextAlignProps) => textAlign && `text-align-${textAlign}`;
-  const table = columns => (
+  const textAlignClass = (props: TextAlignProps) =>
+    props.textAlign && `text-align-${props.textAlign}`;
+  const table = (cols: Column[]) => (
     <table>
       <thead>
         <tr>
-          {columns.map(column => (
-            <th key={columnKeyExtractor(column)} className={textAlign(column)}>
+          {cols.map(column => (
+            <th
+              key={columnKeyExtractor(column)}
+              className={textAlignClass(column)}
+            >
               {(column.renderHead || renderHead)(column)}
             </th>
           ))}
@@ -46,10 +59,10 @@ const ResponsiveTable = ({
       <tbody>
         {data.map(entry => (
           <tr key={dataKeyExtractor(entry)}>
-            {columns.map(column => (
+            {cols.map(column => (
               <td
                 key={columnKeyExtractor(column)}
-                className={textAlign(column)}
+                className={textAlignClass(column)}
               >
                 {(column.renderBody || renderBody)(entry, column)}
               </td>
@@ -60,15 +73,19 @@ const ResponsiveTable = ({
     </table>
   );
   return (
-    <div
-      className={['responsive-table', className]
-        .filter(className => className)
-        .join(' ')}
-    >
+    <div className={['responsive-table', className].filter(c => c).join(' ')}>
       <div className="responsive-table-head">{table([columns[0]])}</div>
       <div className="responsive-table-body">{table(columns.slice(1))}</div>
     </div>
   );
+};
+
+ResponsiveTable.defaultProps = {
+  className: undefined,
+  renderHead: defaultRenderHead,
+  renderBody: defaultRenderBody,
+  columnKeyExtractor: defaultKeyExtractor,
+  dataKeyExtractor: defaultKeyExtractor,
 };
 
 export default ResponsiveTable;
