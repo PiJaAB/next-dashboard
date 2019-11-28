@@ -1,0 +1,49 @@
+.page-chart {
+  position: relative;
+  border-radius: 10px;
+  @include var('background-color', 'primary-alt');
+  &:after {
+    content: '';
+    display: block;
+    padding: 0 0 62.5%;
+  }
+}
+.page-chart-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+}
+
+
+.recharts-cartesian-grid {
+  line {
+    @include var('stroke', 'text-rgb', 'rgba', 0.125);
+  }
+}
+.recharts-cartesian-axis-line,
+.recharts-cartesian-axis-tick-line {
+  @include var('stroke', 'text-rgb', 'rgba', 0.125);
+}
+.recharts-tooltip-cursor {
+  @include var('stroke', 'text-rgb', 'rgba', 0.25);
+}
+.recharts-default-tooltip {
+  padding: 20px !important;
+  border: none !important;
+  border-radius: 10px;
+  @include var('background-color', 'background', false, false, !important);
+}
+.recharts-tooltip-item-list {
+  >li {
+    color: inherit !important;
+  }
+}
+.recharts-text {
+  @include var('fill', 'text');
+}
+.recharts-rectangle {
+  @include var('fill', 'primary');
+}
