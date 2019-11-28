@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import Router from 'next/router';
+import Link from 'next/link';
 import {
   DashboardLayout,
   PageContent,
@@ -38,9 +39,11 @@ class Login extends Component<Props> {
             <>
               <h1 className="page-title text-align-center">Login</h1>
               <PageContent>
-                <a href="/" className="login-logo">
-                  <img src="/images/logo.png" alt="XVision" />
-                </a>
+                <Link href="/dashboard">
+                  <a className="dashboard-login-logo">
+                    <img src="/images/logo.png" alt="XVision" />
+                  </a>
+                </Link>
                 <p className="margin-bottom-x4 text-align-center">
                   Please enter your email and password to continue.
                 </p>
