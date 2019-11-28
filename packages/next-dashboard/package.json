@@ -69,7 +69,8 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.7.2",
     "atob": "^2.1.2",
-    "btoa": "^1.2.1"
+    "btoa": "^1.2.1",
+    "recharts": "^1.8.5"
   },
   "gitHead": "aca5c077064ea0f0c30b98ef1ed199708faaa82b"
 }
