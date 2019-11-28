@@ -1,11 +1,11 @@
 .page-content {
-  padding: 20px 0;
+  padding: 20px;
   border-radius: 10px;
   @include var('background-color', 'primary-alt');
   @include breakpoint(medium) {
-    padding: 40px 0;
+    padding: 40px;
   }
   @include breakpoint(large) {
-    padding: 80px 0;
+    padding: 80px;
   }
 }

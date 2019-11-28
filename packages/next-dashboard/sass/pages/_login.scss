@@ -1,0 +1,43 @@
+.dashboard {
+  &_id-login {
+    position: relative; // ?
+    >.dashboard-content {
+      padding: 40px 0 80px;
+      @include breakpoint(medium) {
+        padding: 60px 0 120px;
+      }
+      @include breakpoint(large) {
+        padding: 80px 0 160px;
+      }
+    }
+    .page-content {
+      padding: 40px 20px;
+      @include breakpoint(medium) {
+        padding: 40px 30px;
+      }
+      @include breakpoint(large) {
+        padding: 40px;
+      }
+    }
+    .dashboard-sidebar-menu-item {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      .dashboard-sidebar-menu-item-button {
+        padding: 10px;
+      }
+      .dashboard-sidebar-menu-item-button-icon {
+        margin: 0;
+      }
+      .dashboard-sidebar-menu-item-button-text {
+        display: none;
+      }
+    }
+  }
+}
+
+.login-logo {
+  display: block;
+  width: 50%;
+  margin: 0 auto 40px;
+}

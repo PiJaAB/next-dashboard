@@ -1,5 +1,6 @@
 // @flow
 import React, { useEffect } from 'react';
+import Head from 'next/head';
 
 import DashboardContext from '../../utils/dashboardContext';
 import Content from './Content';
@@ -11,10 +12,25 @@ import SiteMessages from './SiteMessages';
 
 export type Props = {
   children?: React$Node,
+  id?: string,
+  contentContainerWidth?:
+    | 'extra-narrow'
+    | 'narrow'
+    | 'normal'
+    | 'wide'
+    | 'extra-wide',
+  header?: boolean,
+  sidebar?: boolean,
+  footer?: boolean,
 };
 
 function DashboardLayout({
   children,
+  id,
+  contentContainerWidth,
+  header,
+  sidebar,
+  footer,
 }: Props): React$Element<typeof DashboardContext.Consumer> {
   const noTransition = () => {
     const { body } = document;
@@ -86,22 +102,40 @@ function DashboardLayout({
         }
 
         return (
-          <div className={`dashboard dashboard_theme-${theme}`}>
-            <Header
-              sidebarActive={sidebarActive}
-              toggleSidebarActive={toggleSidebarActive}
-            />
-            <Sidebar
-              sidebarActive={sidebarActive}
-              sidebarCompact={sidebarCompact}
-            >
-              {navChildren}
-            </Sidebar>
-            <Content>
+          <div
+            className={[
+              'dashboard',
+              id && `dashboard_id-${id}`,
+              theme && `dashboard_theme-${theme}`,
+            ]
+              .filter(className => className)
+              .join(' ')}
+          >
+            <Head>
+              <link
+                rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+                />
+            </Head>
+            {header && (
+              <Header
+                sidebarActive={sidebarActive}
+                toggleSidebarActive={toggleSidebarActive}
+              />
+            )}
+            {sidebar && (
+              <Sidebar
+                sidebarActive={sidebarActive}
+                sidebarCompact={sidebarCompact}
+              >
+                {navChildren}
+              </Sidebar>
+            )}
+            <Content contentContainerWidth={contentContainerWidth}>
               <SiteMessages />
               {normalChildren}
             </Content>
-            <Footer />
+            {footer && <Footer />}
           </div>
         );
       }}
@@ -111,6 +145,11 @@ function DashboardLayout({
 
 DashboardLayout.defaultProps = {
   children: undefined,
+  id: undefined,
+  contentContainerWidth: undefined,
+  header: true,
+  sidebar: true,
+  footer: true,
 };
 
 export default DashboardLayout;

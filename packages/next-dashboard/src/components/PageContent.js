@@ -6,9 +6,7 @@ type Props = {
 };
 
 const PageContent = ({ children }: Props) => (
-  <div className="page-content">
-    <div className="container">{children}</div>
-  </div>
+  <div className="page-content">{children}</div>
 );
 
 PageContent.defaultProps = {
