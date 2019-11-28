@@ -1,6 +1,23 @@
 // @flow
 import React from 'react';
 
+type Props = {
+  className?: string,
+  columns: {
+    title: string,
+    field: string,
+  }[],
+  data: {}[],
+  renderHead?: ({}) => void,
+  renderBody?: ({}) => void,
+  columnKeyExtractor?: ({}) => void,
+  dataKeyExtractor?: ({}) => void,
+};
+
+type TableProps = { columns: { title: string, field: string }[] };
+
+type TextAlignProps = { textAlign: string };
+
 const defaultRenderHead = ({ title }) => title;
 const defaultRenderBody = (entry, { field }) => entry[field];
 const defaultKeyExtractor = ({ key }) => key;
@@ -13,8 +30,8 @@ const ResponsiveTable = ({
   renderBody = defaultRenderBody,
   columnKeyExtractor = defaultKeyExtractor,
   dataKeyExtractor = defaultKeyExtractor,
-}) => {
-  const textAlign = ({ textAlign }) => textAlign && `text-align-${textAlign}`;
+}: Props) => {
+  const textAlign = ({ textAlign }: TextAlignProps) => textAlign && `text-align-${textAlign}`;
   const table = columns => (
     <table>
       <thead>
