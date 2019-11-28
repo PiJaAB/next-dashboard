@@ -27,7 +27,7 @@
   },
   "scripts": {
     "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
-    "dev:pkg": "nodemon -w src -x \"yarn run -s build:silent\"",
+    "dev:pkg": "echo 'deprecated'",
     "build": "yarn build:babel && yarn build:flow",
     "build:silent": "yarn run -s build:babel && yarn run -s build:flow",
     "build:babel": "babel src -d dist",
@@ -47,6 +47,8 @@
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
     "babel-eslint": "^10.0.3",
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
