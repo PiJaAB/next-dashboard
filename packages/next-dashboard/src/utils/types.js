@@ -40,6 +40,7 @@ export interface IDataProvider {
     asPath: string,
     query: { [string]: string | void },
   ): Promise<boolean> | boolean;
+  +isAuthorized: boolean;
   getCurrentData(): { [string]: DataType };
 }
 

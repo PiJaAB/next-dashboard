@@ -21,8 +21,8 @@ export type WrappedProps<P: {}> =
     }
   | {
       __RENDER_ERROR__: true,
-      __INITIAL_STATE__: void,
-      __INITIAL_DATA__: void,
+      __INITIAL_STATE__: { [string]: any },
+      __INITIAL_DATA__: { [string]: DataType },
       __COMP__: void,
       __ERR_PROPS__: {},
     };
@@ -46,7 +46,10 @@ function makeStatusError(
 export type Config = {
   unauthedRoute?: string,
   needAuthDefault: boolean,
-  errorComponent?: NextComponent<any>,
+  error?: {
+    Component: NextComponent<any>,
+    withContext?: boolean,
+  },
   themes?: Theme[],
 };
 
@@ -70,7 +73,7 @@ export default function createDashboardHOC<D: IDataProvider>(
   {
     needAuthDefault,
     unauthedRoute,
-    errorComponent: ErrorComp,
+    error: errorConf,
     themes: confThemes,
   }: Config,
 ): <U: {}>(Comp: NextComponent<U>, needAuth?: boolean) => NextComponent<U> {
@@ -120,13 +123,15 @@ export default function createDashboardHOC<D: IDataProvider>(
           'Unauthorized, please log in.',
         );
 
-        if (ErrorComp) {
+        if (errorConf) {
           const errCtx = { ...ctx, err };
           const retProps = {
             errProps:
-              (ErrorComp.getInitialProps
-                ? await ErrorComp.getInitialProps(errCtx)
+              (errorConf.Component.getInitialProps
+                ? await errorConf.Component.getInitialProps(errCtx)
                 : null) || {},
+            __INITIAL_STATE__: getInitialState(ctx),
+            __INITIAL_DATA__: dataProvider.getCurrentData(),
             __RENDER_ERROR__: true,
           };
           return retProps;
@@ -240,6 +245,20 @@ export default function createDashboardHOC<D: IDataProvider>(
         theme,
         data: state.data,
       };
+      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
+      if (props.__RENDER_ERROR__) {
+        const { __ERR_PROPS__: errProps } = props;
+        if (errorConf) {
+          return errorConf.withContext ? (
+            <DashboardContext.Provider value={context}>
+              <errorConf.Component {...errProps} />
+            </DashboardContext.Provider>
+          ) : (
+            <errorConf.Component {...errProps} />
+          );
+        }
+        return null;
+      }
       return (
         Comp != null && (
           <DashboardContext.Provider value={context}>
@@ -269,19 +288,7 @@ export default function createDashboardHOC<D: IDataProvider>(
 
     function WrappedComp(
       props: P,
-    ): null | React$Element<
-      | React$AbstractComponent<WrappedProps<P>, Dashboard<P>>
-      | $NonMaybeType<typeof ErrorComp>,
-    > {
-      const actualProps: WrappedProps<P> = (props /*:any*/);
-      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
-      if (actualProps.__RENDER_ERROR__) {
-        const { __ERR_PROPS__: errProps } = actualProps;
-        if (ErrorComp) {
-          return <ErrorComp {...errProps} />;
-        }
-        return null;
-      }
+    ): React$Element<React$AbstractComponent<WrappedProps<P>, Dashboard<P>>> {
       const Dash: any = Dashboard;
       return <Dash {...props} __COMP__={Comp} />;
     }
