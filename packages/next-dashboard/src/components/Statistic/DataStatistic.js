@@ -35,7 +35,11 @@ export default class DataStatistic extends PureComponent<Props> {
     if (err) {
       setTimeout(() => {
         const { context } = this;
-        context.registerSiteMessage(err);
+        if (!context) {
+          console.error(err);
+        } else {
+          context.registerSiteMessage(err);
+        }
       }, 0);
     }
     const { description, label } = this.props;

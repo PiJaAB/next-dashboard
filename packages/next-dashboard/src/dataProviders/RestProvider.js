@@ -1,6 +1,6 @@
 // @flow
-
-import type { IDataProvider, DataType } from '../utils/types';
+import AbstractProvider from './AbstractProvider';
+import type { DataType } from '../utils/types';
 
 type Updators = {
   [string]:
@@ -8,7 +8,7 @@ type Updators = {
     | void,
 };
 
-export default class RestSource implements IDataProvider {
+export default class RestSource extends AbstractProvider {
   data: { [string]: DataType };
 
   updators: Updators = {};

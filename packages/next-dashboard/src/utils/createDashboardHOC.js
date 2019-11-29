@@ -4,13 +4,11 @@ import React, { Component } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
-import type { DataProvider, DataType, Theme, SiteMessageType } from './types';
+import type { IDataProvider, DataType, Theme, SiteMessageType } from './types';
 import displayNameOf from './displayNameOf';
 
 import { getInitialState, persist } from './persistentState';
-import DashboardContext, {
-  type DashboardContextType,
-} from './dashboardContext';
+import DashboardContext, { type IDashboardContext } from './dashboardContext';
 
 export type WrappedProps<P: {}> =
   | {
@@ -32,7 +30,7 @@ export type WrappedProps<P: {}> =
 type State = {
   data: { [string]: DataType },
   persistentState: { [string]: any },
-  siteMessages: SiteMessageType[],
+  siteMessages: $ReadOnlyArray<SiteMessageType>,
 };
 
 function makeStatusError(
@@ -67,7 +65,7 @@ function compareSitemessages(
   return true;
 }
 
-export default function createDashboardHOC<D: DataProvider>(
+export default function createDashboardHOC<D: IDataProvider>(
   dataProvider: D,
   {
     needAuthDefault,
@@ -80,10 +78,7 @@ export default function createDashboardHOC<D: DataProvider>(
     { name: 'Light', class: 'default' },
     { name: 'Dark', class: 'dark' },
   ];
-  const context: $Shape<DashboardContextType> = {
-    ...dataProvider,
-    themes,
-  };
+  let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
   class Dashboard<P: {}> extends Component<WrappedProps<P>, State> {
     state: State;
 
@@ -94,7 +89,7 @@ export default function createDashboardHOC<D: DataProvider>(
       this.state = {
         persistentState: __INITIAL_STATE__ || {},
         data: __INITIAL_DATA__ || {},
-        siteMessages: context.siteMessages || [],
+        siteMessages: siteMessages || [],
       };
     }
 
@@ -195,19 +190,26 @@ export default function createDashboardHOC<D: DataProvider>(
         });
       }
       this.setState(state => {
-        const existingMessage = state.siteMessages.find(m =>
+        const existingIndex = state.siteMessages.findIndex(m =>
           compareSitemessages(m, siteMessage),
         );
-        if (existingMessage) {
-          existingMessage.count =
-            existingMessage.count != null ? existingMessage.count : 1;
-          existingMessage.count += 1;
-          return {
-            siteMessages: [...state.siteMessages],
+        let newSiteMessages: SiteMessageType[];
+        if (existingIndex > -1) {
+          newSiteMessages = [...state.siteMessages];
+          const updatedMessage = {
+            ...state.siteMessages[existingIndex],
+            count:
+              (state.siteMessages[existingIndex].count != null
+                ? state.siteMessages[existingIndex].count
+                : 1) + 1,
           };
+          newSiteMessages[existingIndex] = updatedMessage;
+        } else {
+          newSiteMessages = [...state.siteMessages, siteMessage];
         }
+        siteMessages = newSiteMessages;
         return {
-          siteMessages: [...state.siteMessages, siteMessage],
+          siteMessages: newSiteMessages,
         };
       });
 
@@ -221,27 +223,23 @@ export default function createDashboardHOC<D: DataProvider>(
 
     render() {
       const { state, props } = this;
-      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
-      if (props.__RENDER_ERROR__) {
-        const { __ERR_PROPS__: errProps } = props;
-        if (ErrorComp) {
-          return <ErrorComp {...errProps} />;
-        }
-        return null;
-      }
       const { persistentState } = state;
       const theme: Theme = themes.find(
         t => t.class === persistentState.theme,
       ) ||
         themes[0] || { name: 'Default', class: 'default' };
       const { __RENDER_ERROR__: _, __COMP__: Comp, ...rest } = props;
-      context.getState = this.getPersistentState;
-      context.setState = this.setPersistentState;
-      context.registerSiteMessage = this.registerSiteMessage;
-      context.dismissSiteMessage = this.dismissSiteMessage;
-      context.theme = theme;
-      context.data = state.data;
-      context.siteMessages = [...state.siteMessages];
+      const context: IDashboardContext = {
+        ...dataProvider,
+        getState: this.getPersistentState,
+        setState: this.setPersistentState,
+        registerSiteMessage: this.registerSiteMessage,
+        dismissSiteMessage: this.dismissSiteMessage,
+        siteMessages: state.siteMessages,
+        themes,
+        theme,
+        data: state.data,
+      };
       return (
         Comp != null && (
           <DashboardContext.Provider value={context}>
@@ -271,7 +269,19 @@ export default function createDashboardHOC<D: DataProvider>(
 
     function WrappedComp(
       props: P,
-    ): React$Element<React$AbstractComponent<WrappedProps<P>, Dashboard<P>>> {
+    ): null | React$Element<
+      | React$AbstractComponent<WrappedProps<P>, Dashboard<P>>
+      | $NonMaybeType<typeof ErrorComp>,
+    > {
+      const actualProps: WrappedProps<P> = (props /*:any*/);
+      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
+      if (actualProps.__RENDER_ERROR__) {
+        const { __ERR_PROPS__: errProps } = actualProps;
+        if (ErrorComp) {
+          return <ErrorComp {...errProps} />;
+        }
+        return null;
+      }
       const Dash: any = Dashboard;
       return <Dash {...props} __COMP__={Comp} />;
     }
