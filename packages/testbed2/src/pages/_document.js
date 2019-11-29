@@ -2,6 +2,8 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
+// TODO: Correct value for the "theme-color"-meta tag?
+
 const BASE_URL = process.env.NEXT_STATIC_BASE_URL;
 
 class MyDocument extends Document {

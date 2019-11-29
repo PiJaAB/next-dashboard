@@ -7,7 +7,7 @@ type Props = {
   siteName?: string | string[] | true,
 };
 
-const DEFAULT_SITENAME = ['PiJa', 'Webb & Apputvecklare'];
+const DEFAULT_SITENAME = ['XVision', 'Dashboard'];
 
 function generatePageName(pageName: string | string[]): string {
   const res = Array.isArray(pageName) ? pageName : [pageName];

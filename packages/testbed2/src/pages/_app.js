@@ -52,22 +52,18 @@ class MyApp extends App {
           <meta
             key="meta-description"
             name="description"
-            content="Vi är en kreativ digitalbyrå som sitter i Gamla stan, Stockholm och kombinerar gamla anor med ny utveckling och design. Hör gärna av dig (08-519 70 510 eller info@pija.se) om du vill diskutera digitala grejer analogt."
+            content="XVision dashboard"
           />
-          <meta
-            key="meta-abstract"
-            name="abstract"
-            content="Vi är en kreativ digitalbyrå som sitter i Gamla stan, Stockholm och kombinerar gamla anor med ny utveckling och design."
-          />
+          <meta key="meta-abstract" name="abstract" content="Dashboard" />
           <meta
             key="meta-keywords"
             name="keywords"
-            content="Apputvecklare, Webbbyrå, Mobilebyrå, HTML5, Drupal, Webbstrategi, Design, Mobil"
+            content="XVision Dashboard"
           />
           <meta
             key="meta-og-image"
             name="og:image"
-            content="https://www.pija.se/images/logo.svg"
+            content="/images/logo.png"
           />
           <meta key="meta-og-type" name="og:type" content="article" />
           {ogUrl != null && (
