@@ -35,44 +35,50 @@ class Login extends Component<Props> {
       >
         <Title title="Login" />
         <Consumer>
-          {({ auth }) => (
-            <>
-              <h1 className="page-title text-align-center">Login</h1>
-              <PageContent>
-                <Link href="/dashboard">
-                  <a className="dashboard-login-logo">
-                    <img src="/images/logo.png" alt="XVision" />
-                  </a>
-                </Link>
-                <p className="margin-bottom-x4 text-align-center">
-                  Please enter your email and password to continue.
-                </p>
-                <form className="margin-bottom-x2">
-                  <div className="form-item">
-                    <label htmlFor="username">Email Address</label>
-                    <input type="text" id="username" />
-                  </div>
-                  <div className="form-item margin-bottom-x4">
-                    <label htmlFor="password">Password</label>
-                    <input type="password" id="password" />
-                  </div>
-                  <div className="form-item">
-                    <button
-                      className="form-button"
-                      type="button"
-                      onClick={() => this.login(auth)}
-                    >
-                      Log In
-                    </button>
-                  </div>
-                </form>
-                <p className="text-align-center">
-                  Don&apos;t have an account? <a href="#">Create Account!</a>
-                </p>
-              </PageContent>
-              <ThemeSelector />
-            </>
-          )}
+          {({ auth, theme }) => {
+            const themeClass = theme.class;
+            const logo = `logo${
+              themeClass !== 'default' ? `-${themeClass}` : ''
+            }.png`;
+            return (
+              <>
+                <h1 className="page-title text-align-center">Login</h1>
+                <PageContent>
+                  <Link href="/dashboard">
+                    <a className="dashboard-login-logo">
+                      <img src={`/images/${logo}`} alt="XVision" />
+                    </a>
+                  </Link>
+                  <p className="margin-bottom-x4 text-align-center">
+                    Please enter your email and password to continue.
+                  </p>
+                  <form className="margin-bottom-x2">
+                    <div className="form-item">
+                      <label htmlFor="username">Email Address</label>
+                      <input type="text" id="username" />
+                    </div>
+                    <div className="form-item margin-bottom-x4">
+                      <label htmlFor="password">Password</label>
+                      <input type="password" id="password" />
+                    </div>
+                    <div className="form-item">
+                      <button
+                        className="form-button"
+                        type="button"
+                        onClick={() => this.login(auth)}
+                      >
+                        Log In
+                      </button>
+                    </div>
+                  </form>
+                  <p className="text-align-center">
+                    Don&apos;t have an account? <a href="#">Create Account!</a>
+                  </p>
+                </PageContent>
+                <ThemeSelector />
+              </>
+            );
+          }}
         </Consumer>
       </DashboardLayout>
     );
