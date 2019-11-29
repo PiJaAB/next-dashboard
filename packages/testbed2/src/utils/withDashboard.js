@@ -5,7 +5,7 @@ import {
   DashboardContext,
   type Config,
 } from '@pija-ab/next-dashboard';
-import ErrorComp from 'src/pages/_error';
+import ErrorComp from 'src/components/Error';
 
 let authenticated = false;
 
@@ -29,7 +29,10 @@ const dataProvider = {
 const config: Config = {
   unauthedRoute: '/dashboard/login',
   needAuthDefault: true,
-  errorComponent: ErrorComp,
+  error: {
+    Component: ErrorComp,
+    withContext: true,
+  },
 };
 
 const withDashboard = createDashboardHOC<typeof dataProvider>(

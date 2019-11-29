@@ -18,8 +18,20 @@ type Props = {
   suffix?: string,
 };
 
+function cmpError(err1: ?Error, err2: ?Error): boolean {
+  console.log(err1, err2);
+  if (err1 === err2) return true;
+  if (!err1) return false;
+  if (!err2) return false;
+  if (err1.constructor !== err2.constructor) return false;
+  if (err1.message !== err2.message) return false;
+  return true;
+}
+
 export default class DataStatistic extends PureComponent<Props> {
   context: DashboardContextType;
+
+  lastError: ?Error = null;
 
   static defaultProps = {
     index: undefined,
@@ -32,10 +44,15 @@ export default class DataStatistic extends PureComponent<Props> {
   static contextType = DashboardContext;
 
   renderError(err?: Error) {
-    if (err) {
+    if (err && !cmpError(err, this.lastError)) {
+      this.lastError = err;
       setTimeout(() => {
         const { context } = this;
-        context.registerSiteMessage(err);
+        if (!context) {
+          console.error(err);
+        } else {
+          context.registerSiteMessage(err);
+        }
       }, 0);
     }
     const { description, label } = this.props;

@@ -4,13 +4,11 @@ import React, { Component } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
-import type { DataProvider, DataType, Theme, SiteMessageType } from './types';
+import type { IDataProvider, DataType, Theme, SiteMessageType } from './types';
 import displayNameOf from './displayNameOf';
 
 import { getInitialState, persist } from './persistentState';
-import DashboardContext, {
-  type DashboardContextType,
-} from './dashboardContext';
+import DashboardContext, { type IDashboardContext } from './dashboardContext';
 
 export type WrappedProps<P: {}> =
   | {
@@ -23,8 +21,8 @@ export type WrappedProps<P: {}> =
     }
   | {
       __RENDER_ERROR__: true,
-      __INITIAL_STATE__: void,
-      __INITIAL_DATA__: void,
+      __INITIAL_STATE__: { [string]: any },
+      __INITIAL_DATA__: { [string]: DataType },
       __COMP__: void,
       __ERR_PROPS__: {},
     };
@@ -32,7 +30,7 @@ export type WrappedProps<P: {}> =
 type State = {
   data: { [string]: DataType },
   persistentState: { [string]: any },
-  siteMessages: SiteMessageType[],
+  siteMessages: $ReadOnlyArray<SiteMessageType>,
 };
 
 function makeStatusError(
@@ -48,7 +46,10 @@ function makeStatusError(
 export type Config = {
   unauthedRoute?: string,
   needAuthDefault: boolean,
-  errorComponent?: NextComponent<any>,
+  error?: {
+    Component: NextComponent<any>,
+    withContext?: boolean,
+  },
   themes?: Theme[],
 };
 
@@ -67,12 +68,12 @@ function compareSitemessages(
   return true;
 }
 
-export default function createDashboardHOC<D: DataProvider>(
+export default function createDashboardHOC<D: IDataProvider>(
   dataProvider: D,
   {
     needAuthDefault,
     unauthedRoute,
-    errorComponent: ErrorComp,
+    error: errorConf,
     themes: confThemes,
   }: Config,
 ): <U: {}>(Comp: NextComponent<U>, needAuth?: boolean) => NextComponent<U> {
@@ -80,10 +81,7 @@ export default function createDashboardHOC<D: DataProvider>(
     { name: 'Light', class: 'default' },
     { name: 'Dark', class: 'dark' },
   ];
-  const context: $Shape<DashboardContextType> = {
-    ...dataProvider,
-    themes,
-  };
+  let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
   class Dashboard<P: {}> extends Component<WrappedProps<P>, State> {
     state: State;
 
@@ -94,7 +92,7 @@ export default function createDashboardHOC<D: DataProvider>(
       this.state = {
         persistentState: __INITIAL_STATE__ || {},
         data: __INITIAL_DATA__ || {},
-        siteMessages: context.siteMessages || [],
+        siteMessages: siteMessages || [],
       };
     }
 
@@ -125,13 +123,15 @@ export default function createDashboardHOC<D: DataProvider>(
           'Unauthorized, please log in.',
         );
 
-        if (ErrorComp) {
+        if (errorConf) {
           const errCtx = { ...ctx, err };
           const retProps = {
             errProps:
-              (ErrorComp.getInitialProps
-                ? await ErrorComp.getInitialProps(errCtx)
+              (errorConf.Component.getInitialProps
+                ? await errorConf.Component.getInitialProps(errCtx)
                 : null) || {},
+            __INITIAL_STATE__: getInitialState(ctx),
+            __INITIAL_DATA__: dataProvider.getCurrentData(),
             __RENDER_ERROR__: true,
           };
           return retProps;
@@ -195,19 +195,26 @@ export default function createDashboardHOC<D: DataProvider>(
         });
       }
       this.setState(state => {
-        const existingMessage = state.siteMessages.find(m =>
+        const existingIndex = state.siteMessages.findIndex(m =>
           compareSitemessages(m, siteMessage),
         );
-        if (existingMessage) {
-          existingMessage.count =
-            existingMessage.count != null ? existingMessage.count : 1;
-          existingMessage.count += 1;
-          return {
-            siteMessages: [...state.siteMessages],
+        let newSiteMessages: SiteMessageType[];
+        if (existingIndex > -1) {
+          newSiteMessages = [...state.siteMessages];
+          const updatedMessage = {
+            ...state.siteMessages[existingIndex],
+            count:
+              (state.siteMessages[existingIndex].count != null
+                ? state.siteMessages[existingIndex].count
+                : 1) + 1,
           };
+          newSiteMessages[existingIndex] = updatedMessage;
+        } else {
+          newSiteMessages = [...state.siteMessages, siteMessage];
         }
+        siteMessages = newSiteMessages;
         return {
-          siteMessages: [...state.siteMessages, siteMessage],
+          siteMessages: newSiteMessages,
         };
       });
 
@@ -221,27 +228,37 @@ export default function createDashboardHOC<D: DataProvider>(
 
     render() {
       const { state, props } = this;
-      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
-      if (props.__RENDER_ERROR__) {
-        const { __ERR_PROPS__: errProps } = props;
-        if (ErrorComp) {
-          return <ErrorComp {...errProps} />;
-        }
-        return null;
-      }
       const { persistentState } = state;
       const theme: Theme = themes.find(
         t => t.class === persistentState.theme,
       ) ||
         themes[0] || { name: 'Default', class: 'default' };
       const { __RENDER_ERROR__: _, __COMP__: Comp, ...rest } = props;
-      context.getState = this.getPersistentState;
-      context.setState = this.setPersistentState;
-      context.registerSiteMessage = this.registerSiteMessage;
-      context.dismissSiteMessage = this.dismissSiteMessage;
-      context.theme = theme;
-      context.data = state.data;
-      context.siteMessages = [...state.siteMessages];
+      const context: IDashboardContext = {
+        ...dataProvider,
+        getState: this.getPersistentState,
+        setState: this.setPersistentState,
+        registerSiteMessage: this.registerSiteMessage,
+        dismissSiteMessage: this.dismissSiteMessage,
+        siteMessages: state.siteMessages,
+        themes,
+        theme,
+        data: state.data,
+      };
+      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
+      if (props.__RENDER_ERROR__) {
+        const { __ERR_PROPS__: errProps } = props;
+        if (errorConf) {
+          return errorConf.withContext ? (
+            <DashboardContext.Provider value={context}>
+              <errorConf.Component {...errProps} />
+            </DashboardContext.Provider>
+          ) : (
+            <errorConf.Component {...errProps} />
+          );
+        }
+        return null;
+      }
       return (
         Comp != null && (
           <DashboardContext.Provider value={context}>

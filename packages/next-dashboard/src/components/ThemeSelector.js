@@ -8,7 +8,7 @@ import DashboardContext from '../utils/dashboardContext';
 
 type Props = { children?: React$Node, icon?: React$Node };
 
-function rotateTheme(cur: Theme, themes: Theme[]): string {
+function rotateTheme(cur: Theme, themes: $ReadOnlyArray<Theme>): string {
   return themes[
     (themes.findIndex(t => t.class === cur.class) + 1) % themes.length
   ].class;
