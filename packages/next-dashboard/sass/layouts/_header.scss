@@ -68,6 +68,7 @@
   position: relative;
   height: 40px;
   width: 40px;
+  margin: 0 -14px;
   padding: 0;
   background-color: transparent;
   @include var('color', 'text');
@@ -89,9 +90,5 @@
 
 .dashboard-header-logo {
   display: block;
-  height: 40px;
-  >img {
-    height: 100%;
-    width: auto;
-  }
+  width: 75px;
 }
