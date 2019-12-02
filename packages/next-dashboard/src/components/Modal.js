@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 type Props = {
-  id?: string,
+  id: string,
   active: boolean,
   close: () => void,
   status?: string,
@@ -61,7 +61,7 @@ const Modal = ({ ...props }: Props) => {
     <div
       className={[
         'modal-overlay',
-        id && `modal-overlay_id_${id}`,
+        `modal-overlay_id_${id}`,
         active && 'modal-overlay_active',
       ]
         .filter(className => className)
@@ -70,18 +70,25 @@ const Modal = ({ ...props }: Props) => {
       <div
         className={[
           'modal',
-          id && `modal_id_${id}`,
+          `modal_id_${id}`,
           width && `modal_width_${width}`,
           status && `modal_status_${status}`,
           active && 'modal_active',
         ]
           .filter(className => className)
           .join(' ')}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={`${id}-modal-label`}
         ref={modalRef}
       >
         {(title || header) && (
           <div className="modal-header">
-            {title && <h2 className="h5-size margin-0">{title}</h2>}
+            {title && (
+              <h2 id={`${id}-modal-label`} className="h5-size margin-0">
+                {title}
+              </h2>
+            )}
             {header}
           </div>
         )}
