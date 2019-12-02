@@ -136,6 +136,7 @@ function DashboardLayout({
               {normalChildren}
             </Content>
             {footer && <Footer />}
+            <div id="dashboard-modal-root" />
           </div>
         );
       }}
