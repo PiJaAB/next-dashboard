@@ -1,0 +1,93 @@
+// body {
+//   &.body_modal-active {
+//     overflow: hidden;
+//   }
+// }
+
+.modal-overlay {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  padding: 40px 20px;
+  background-color: rgba($black, 0.25);
+  opacity: 0;
+  overflow-y: auto;
+  visibility: hidden;
+  z-index: 1000;
+  transition: 0.125s ease opacity, 0s linear 0.125s visibility;
+  @include breakpoint(medium) {
+    padding: 60px 40px;
+  }
+  @include breakpoint(large) {
+    padding: 80px;
+  }
+  &_active {
+    opacity: 1;
+    visibility: visible;
+    transition: 0.125s ease opacity, 0s linear 0s visibility;
+  }
+}
+
+.modal {
+  flex: 0 0 100%;
+  position: relative;
+  max-width: $page-width;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 40px rgba($black, 0.25);
+  @include var('background-color', 'primary-alt');
+  // opacity: 0;
+  overflow: hidden;
+  // visibility: hidden;
+  // transition: 0.125s ease opacity, 0s linear 0.125s visibility;
+  &_width {
+    &_extra-wide {
+      max-width: $page-width-extra-wide;
+    }
+    &_wide {
+      max-width: $page-width-wide;
+    }
+    &_narrow {
+      max-width: $page-width-narrow;
+    }
+    &_extra-narrow {
+      max-width: $page-width-extra-narrow;
+    }
+  }
+  &_status {
+    &_error,
+    &_warning {
+      padding: 19px;
+      border: 1px solid;
+    }
+    &_error {
+      @include var('border-color', 'error');
+    }
+    &_warning {
+      @include var('border-color', 'warning');
+    }
+  }
+  &_active {
+    // opacity: 1;
+    // visibility: visible;
+    // transition: 0.125s ease opacity 0.125s, 0s linear 0s visibility;
+  }
+}
+.modal-header {
+  margin: 0 -20px 20px;
+  padding: 0 20px 20px;
+  border-bottom: 1px solid;
+  @include var('border-color', 'text-rgb', 'rgba', 0.125);
+}
+.modal-footer {
+  margin: 20px -20px 0;
+  padding: 20px 20px 0;
+  border-top: 1px solid;
+  @include var('border-color', 'text-rgb', 'rgba', 0.125);
+}
