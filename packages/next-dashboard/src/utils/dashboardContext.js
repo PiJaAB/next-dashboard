@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
-import type { IDataProvider, DataType, Theme, SiteMessageType } from './types';
+import type { DataType, Theme, SiteMessageType } from './types';
+import AbstractProvider from '../dataProviders/AbstractProvider';
 
-export interface IDashboardContext extends IDataProvider {
+export interface IDashboardContext<DP: AbstractProvider> {
+  dataProvider: DP;
   getState<T>(key: string, defaultValue: T): T;
   setState: <T>(key: string, value: T) => void;
   +data: { +[string]: DataType };
@@ -13,7 +15,7 @@ export interface IDashboardContext extends IDataProvider {
   +siteMessages: $ReadOnlyArray<SiteMessageType>;
 }
 
-export type DashboardContextType = IDashboardContext | void;
+export type DashboardContextType = IDashboardContext<AbstractProvider> | void;
 
 const DashboardContext = React.createContext<DashboardContextType>();
 DashboardContext.displayName = 'DashboardContext';

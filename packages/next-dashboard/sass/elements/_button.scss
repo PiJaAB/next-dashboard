@@ -38,4 +38,8 @@ input[type='reset'] {
   // html[data-whatinput='mouse'] & {
   //   outline: none;
   // }
+  &[disabled] {
+    opacity: 0.3;
+    cursor: wait;
+  }
 }

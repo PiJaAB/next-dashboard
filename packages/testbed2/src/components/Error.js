@@ -1,11 +1,10 @@
 // @flow
 import React, { Component } from 'react';
-import { DashboardLayout, PageContent , DashboardContext } from '@pija-ab/next-dashboard';
+import { PageContent, DashboardContext } from '@pija-ab/next-dashboard';
 
-import Nav from 'src/components/Nav';
-import LoginNav from 'src/components/LoginNav';
+import Layout from 'src/components/Layout';
+
 import { Title } from 'src/components/SEO';
-
 
 import type { InitialPropsContext } from 'src/utils/nextTypes';
 
@@ -36,11 +35,14 @@ class Page extends Component<Props> {
     return (
       <DashboardContext.Consumer>
         {ctx => (
-          <DashboardLayout>
+          <Layout
+            {...(ctx && ctx.dataProvider.isAuthenticated
+              ? {}
+              : { header: false, sidebar: false, footer: false })}
+          >
             <Title
               pageName={[String(statusCode) || Page.title, String(statusCode)]}
             />
-            {(ctx && ctx.isAuthorized) ? <Nav /> : <LoginNav />}
             <h1 className="page-title">
               {statusCode === 404 ? 'Page Not Found' : 'Error'}
             </h1>
@@ -54,7 +56,7 @@ class Page extends Component<Props> {
                 Go to <a href="#">Overview</a>.
               </p>
             </PageContent>
-          </DashboardLayout>
+          </Layout>
         )}
       </DashboardContext.Consumer>
     );

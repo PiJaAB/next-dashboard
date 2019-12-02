@@ -2,14 +2,12 @@
 import React from 'react';
 import {
   Statistic,
-  DataStatistic,
   PageContent,
-  DashboardLayout,
   PageTable,
   PageChart,
 } from '@pija-ab/next-dashboard';
+import Layout from 'src/components/Layout';
 import withDashboard from 'src/utils/withDashboard';
-import Nav from 'src/components/Nav';
 
 const columns = [
   {
@@ -186,20 +184,19 @@ const data = [
 ];
 
 const Start = () => (
-  <DashboardLayout>
-    <Nav />
+  <Layout>
     <div>
       <h1 className="page-title">Overview</h1>
       <div className="grid">
         <div className="cell column-6-medium column-3-large">
-          <DataStatistic
+          <Statistic
             label="Quality"
             value="8,2"
             description="46% from last period"
           />
         </div>
         <div className="cell column-6-medium column-3-large">
-          <DataStatistic
+          <Statistic
             label="Quality"
             value="8,2"
             description="46% from last period"
@@ -269,7 +266,7 @@ const Start = () => (
         </div>
       </div>
     </div>
-  </DashboardLayout>
+  </Layout>
 );
 
-export default withDashboard<{}>(Start, false);
+export default withDashboard<{}>(Start, true);

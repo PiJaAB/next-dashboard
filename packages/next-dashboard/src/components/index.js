@@ -1,7 +1,7 @@
 // @flow
 
 export * from './layout';
-export * from './Statistic';
+export { default as Statistic } from './Statistic';
 export { default as PageContent } from './PageContent';
 export { default as Contact } from './Contact';
 export { default as Profile } from './Profile';

@@ -20,8 +20,10 @@ module.exports = {
       ecmaVersion: 6
     },
     rules: {
+      'class-methods-use-this': [ 'off' ],
       'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
       'no-underscore-dangle': ['error', { allow: ['_id', '__typename'] }],
+      'no-unused-vars': ['error', { vars: 'all', args: 'after-used', 'argsIgnorePattern': '^_', ignoreRestSiblings: true }],
       'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx'] }],
       'react/jsx-one-expression-per-line': [ 'off' ],
       'jsx-a11y/label-has-for': [ 'error', {

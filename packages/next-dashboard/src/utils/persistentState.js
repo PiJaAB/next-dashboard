@@ -4,7 +4,7 @@ import cookies from 'next-cookies';
 
 import type { InitialPropsContext } from './nextTypes';
 
-export type State = { [string]: any };
+export type PersistentState = ?{ [string]: any };
 
 let btoa;
 let atob;
@@ -17,35 +17,44 @@ if (typeof window === 'undefined') {
   ({ btoa, atob } = window);
 }
 
-export function getInitialState(ctx: InitialPropsContext): State {
-  const { dashboardState: dashboardB64 } = cookies(ctx);
-  try {
-    const dashboardJson = atob(dashboardB64);
-    const dashboardState = JSON.parse(dashboardJson);
-    return dashboardState;
-  } catch (err) {
-    console.error(err);
-    return {};
-  }
-}
-
-let latestState = null;
-
-export function persist(state: State) {
-  if (typeof window === 'undefined' || !window.setTimeout) return;
-  if (!latestState) {
-    window.setTimeout(() => {
-      const curState = latestState;
-      latestState = null;
-      if (!curState) return;
+export default function createPersistentState(
+  cookieName: string,
+): {
+  getInitialState(ctx: InitialPropsContext): PersistentState,
+  persist(state: PersistentState): void,
+} {
+  let latestState = null;
+  return {
+    getInitialState(ctx: InitialPropsContext): PersistentState {
+      const { [cookieName]: dashboardB64 } = cookies(ctx);
+      if (!dashboardB64) return null;
       try {
-        window.document.cookie = `dashboardState=${escape(
-          btoa(JSON.stringify(curState)),
-        )}; path=/`;
+        const dashboardJson = atob(dashboardB64);
+        const dashboardState = JSON.parse(dashboardJson);
+        return dashboardState;
       } catch (err) {
         console.error(err);
+        return {};
       }
-    }, 100);
-  }
-  latestState = state;
+    },
+
+    persist(state: PersistentState) {
+      if (typeof window === 'undefined' || !window.setTimeout) return;
+      if (!latestState) {
+        window.setTimeout(() => {
+          const curState = latestState;
+          latestState = null;
+          if (!curState) return;
+          try {
+            window.document.cookie = `${cookieName}=${escape(
+              btoa(JSON.stringify(curState)),
+            )}; path=/`;
+          } catch (err) {
+            console.error(err);
+          }
+        }, 100);
+      }
+      latestState = state;
+    },
+  };
 }

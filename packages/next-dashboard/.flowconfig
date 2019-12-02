@@ -1,12 +1,13 @@
 
 [ignore]
-<PROJECT_ROOT>/packages/next-dashboard/dist/.*
+.*/dist/.*
+.*/testbed2/.*
 
 [untyped]
 .*/node_modules/.*
 
 [include]
-../../
+../../node_modules
 
 [libs]
 

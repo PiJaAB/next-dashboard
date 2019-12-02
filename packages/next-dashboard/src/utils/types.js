@@ -22,27 +22,24 @@ export type DataType =
   | {|
       +status: 'success',
       +value: mixed,
+      +updating?: boolean,
     |}
   | {|
       +status: 'error',
       +error: Error,
+      +errorLogged?: boolean,
     |}
   | {|
       +status: 'loading',
     |}
   | void;
 
-export interface IDataProvider {
-  update<T>(key: string, data: T, extra?: mixed): Promise<void> | void;
-  getAuthData(): Promise<mixed> | mixed;
-  isAuthorizedForRoute(
-    href: string,
-    asPath: string,
-    query: { [string]: string | void },
-  ): Promise<boolean> | boolean;
-  +isAuthorized: boolean;
-  getCurrentData(): { [string]: DataType };
-}
+export type Identity = {
+  displayName?: string,
+  subName?: string,
+  imgUrl?: string,
+  authenticated?: boolean,
+};
 
 export type Theme = {
   name: string,
@@ -54,4 +51,11 @@ export type SiteMessageType = {
   +message: string,
   +status?: 'info' | 'warning' | 'error',
   +count?: number,
+};
+
+export type Statuses = 'loading' | 'success' | 'error';
+
+export type DataProps<P: { status?: Statuses }> = {
+  ...$Diff<P, { status?: Statuses }>,
+  status: Statuses,
 };

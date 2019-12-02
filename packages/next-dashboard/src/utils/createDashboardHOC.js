@@ -4,10 +4,11 @@ import React, { Component } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
-import type { IDataProvider, DataType, Theme, SiteMessageType } from './types';
+import type { DataType, Theme, SiteMessageType } from './types';
 import displayNameOf from './displayNameOf';
+import AbstractProvider from '../dataProviders/AbstractProvider';
 
-import { getInitialState, persist } from './persistentState';
+import createPersistentState from './persistentState';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
 
 export type WrappedProps<P: {}> =
@@ -33,16 +34,6 @@ type State = {
   siteMessages: $ReadOnlyArray<SiteMessageType>,
 };
 
-function makeStatusError(
-  statusCode: number,
-  message?: string,
-): Error & { statusCode: number } {
-  // eslint-disable-next-line flowtype/no-weak-types
-  const err: any = new Error(message);
-  err.statusCode = statusCode;
-  return err;
-}
-
 export type Config = {
   unauthedRoute?: string,
   needAuthDefault: boolean,
@@ -58,6 +49,18 @@ type ExtraCTX = {
   Comp: NextComponent<any>,
 };
 
+const { getInitialState, persist } = createPersistentState('dashboardState');
+
+function makeStatusError(
+  statusCode: number,
+  message?: string,
+): Error & { statusCode: number } {
+  // eslint-disable-next-line flowtype/no-weak-types
+  const err: any = new Error(message);
+  err.statusCode = statusCode;
+  return err;
+}
+
 function compareSitemessages(
   m1: SiteMessageType,
   m2: SiteMessageType,
@@ -68,8 +71,8 @@ function compareSitemessages(
   return true;
 }
 
-export default function createDashboardHOC<D: IDataProvider>(
-  dataProvider: D,
+export default function createDashboardHOC(
+  dataProvider: AbstractProvider,
   {
     needAuthDefault,
     unauthedRoute,
@@ -146,6 +149,18 @@ export default function createDashboardHOC<D: IDataProvider>(
         __INITIAL_DATA__: dataProvider.getCurrentData(),
       };
     }
+
+    componentDidMount() {
+      dataProvider.on('data', this.onData);
+    }
+
+    componentWillUnmount() {
+      dataProvider.off('data', this.onData);
+    }
+
+    onData: (data: { +[string]: DataType }) => void = data => {
+      this.setState(state => ({ data: { ...state.data, ...data } }));
+    };
 
     getPersistentState: <T>(key: string, defaultValue: T) => T = (
       key,
@@ -234,8 +249,8 @@ export default function createDashboardHOC<D: IDataProvider>(
       ) ||
         themes[0] || { name: 'Default', class: 'default' };
       const { __RENDER_ERROR__: _, __COMP__: Comp, ...rest } = props;
-      const context: IDashboardContext = {
-        ...dataProvider,
+      const context: IDashboardContext<AbstractProvider> = {
+        dataProvider,
         getState: this.getPersistentState,
         setState: this.setPersistentState,
         registerSiteMessage: this.registerSiteMessage,
@@ -289,11 +304,28 @@ export default function createDashboardHOC<D: IDataProvider>(
     function WrappedComp(
       props: P,
     ): React$Element<React$AbstractComponent<WrappedProps<P>, Dashboard<P>>> {
+      if (
+        typeof window !== 'undefined' &&
+        !dataProvider.initialized &&
+        dataProvider.initialize
+      ) {
+        dataProvider.initialize({
+          asPath: Router.asPath,
+          query: Router.query,
+          pathname: Router.pathname,
+          AppTree() {
+            throw new Error("Can't generate AppTree in provider Init");
+          },
+        });
+      }
       const Dash: any = Dashboard;
       return <Dash {...props} __COMP__={Comp} />;
     }
 
-    WrappedComp.getInitialProps = (ctx: InitialPropsContext) => {
+    WrappedComp.getInitialProps = async (ctx: InitialPropsContext) => {
+      if (!dataProvider.initialized && dataProvider.initialize) {
+        await dataProvider.initialize(ctx);
+      }
       return Dashboard.getInitialProps(ctx, {
         needAuth: parsedNeedAuth,
         Comp,

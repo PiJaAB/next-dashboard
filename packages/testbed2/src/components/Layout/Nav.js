@@ -19,6 +19,9 @@ export default class Nav extends DashNav<Props> {
           <NavEntry href="/dashboard" icon="home">
             Overview
           </NavEntry>
+          <NavEntry href="/dashboard/datatest" icon="users">
+            Data Test
+          </NavEntry>
           <NavEntry href="/dashboard/resources" icon="users">
             Resources
           </NavEntry>
