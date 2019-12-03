@@ -152,10 +152,12 @@ export default function createDashboardHOC(
 
     componentDidMount() {
       dataProvider.on('data', this.onData);
+      dataProvider.on('error', this.registerSiteMessage);
     }
 
     componentWillUnmount() {
       dataProvider.off('data', this.onData);
+      dataProvider.on('error', this.registerSiteMessage);
     }
 
     onData: (data: { +[string]: DataType }) => void = data => {

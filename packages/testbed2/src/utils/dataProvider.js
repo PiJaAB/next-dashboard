@@ -96,7 +96,6 @@ const fetchers: PollingFetcher[] = [
       );
       return { overview };
     },
-    interval: 10,
   },
 ];
 

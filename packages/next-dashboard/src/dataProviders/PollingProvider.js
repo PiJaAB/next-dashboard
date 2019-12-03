@@ -97,7 +97,7 @@ export default class PollingProvider extends EventEmitter {
           if (this.activeFetchers.has(fetcher) && fetcher.interval != null) {
             setTimeout(() => {
               this.deferFetcher(fetcher);
-            }, fetcher.interval);
+            }, fetcher.interval * 1000);
           }
         }
       });
