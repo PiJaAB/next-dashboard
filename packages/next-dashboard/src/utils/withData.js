@@ -40,7 +40,6 @@ export default function withData<
       error,
       ...props
     }: ErrProps<Type, Stripped<Props>>): React$Node {
-      console.log('rendering error..?');
       return <Comp {...props} value={defaults.error(error)} status="error" />;
     }
   };

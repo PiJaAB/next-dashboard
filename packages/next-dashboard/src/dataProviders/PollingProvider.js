@@ -10,6 +10,12 @@ import {
 
 import type { InitialPropsContext } from '../utils/nextTypes';
 
+/**
+  Class that handles data subscription and polling for data.
+  Will run relevant PollingFetcher's registered by the
+  `addFetcher` method, when a component subscribes to data
+  that fetcher provides.
+*/
 export default class PollingProvider extends EventEmitter {
   constructor() {
     super();
@@ -21,10 +27,11 @@ export default class PollingProvider extends EventEmitter {
         ...curMut,
       }));
       listenerCache = [];
-      setTimeout(() => {
-        // eslint-disable-next-line no-cond-assign
-        this.emitData(mutation);
-      }, 0);
+      // At this point in time, the new event listener
+      // is not registered, so we need to wait until
+      // this function has returned to actually do the
+      // emit.
+      setTimeout(this.emitData, 0, mutation);
     });
     this.emitData = (newData: { [string]: DataType }) => {
       if (!this.emit('data', newData)) {
@@ -47,75 +54,57 @@ export default class PollingProvider extends EventEmitter {
         },
       });
     }
-    const fetchers = new Set<PollingFetcher>();
-    let timeout: ?TimeoutID = null;
-    function run() {
-      timeout = null;
-      const cache = [...fetchers];
-      fetchers.clear();
-      cache.forEach(async fetcher => {
+    this.startFetcher = async (fetcher: PollingFetcher) => {
+      if (!this.activeFetchers.has(fetcher)) {
+        return;
+      }
+      try {
+        const res = await fetcher.runner.call(this);
+        const ids: string[] = Array.isArray(fetcher.id)
+          ? fetcher.id
+          : [fetcher.id];
         if (!this.activeFetchers.has(fetcher)) {
           return;
         }
-        try {
-          const res = await fetcher.runner.call(this);
-          const ids: string[] = Array.isArray(fetcher.id)
-            ? fetcher.id
-            : [fetcher.id];
-          if (!this.activeFetchers.has(fetcher)) {
-            return;
-          }
-          this.mutate(
-            ids.reduce(
-              (mutation, id) =>
-                ({
-                  ...mutation,
-                  [id]: { status: 'success', value: res[id] },
-                }: { [string]: DataType }),
-              ({}: { [string]: DataType }),
-            ),
-          );
-        } catch (err) {
-          const ids: string[] = Array.isArray(fetcher.id)
-            ? fetcher.id
-            : [fetcher.id];
-          if (!this.activeFetchers.has(fetcher)) {
-            return;
-          }
-          this.mutate(
-            ids.reduce(
-              (mutation, id) =>
-                ({
-                  ...mutation,
-                  [id]: { status: 'error', error: err },
-                }: { [string]: DataType }),
-              ({}: { [string]: DataType }),
-            ),
-          );
-          this.emit('error', err);
-        } finally {
-          if (this.activeFetchers.has(fetcher) && fetcher.interval != null) {
-            setTimeout(() => {
-              this.deferFetcher(fetcher);
-            }, fetcher.interval * 1000);
-          }
+        this.mutate(
+          ids.reduce(
+            (mutation, id) =>
+              ({
+                ...mutation,
+                [id]: { status: 'success', value: res[id] },
+              }: { [string]: DataType }),
+            ({}: { [string]: DataType }),
+          ),
+        );
+      } catch (err) {
+        const ids: string[] = Array.isArray(fetcher.id)
+          ? fetcher.id
+          : [fetcher.id];
+        if (!this.activeFetchers.has(fetcher)) {
+          return;
         }
-      });
-    }
-    this.deferFetcher = (fetcher: PollingFetcher) => {
-      if (fetchers.has(fetcher)) {
-        return;
-      }
-      fetchers.add(fetcher);
-      if (timeout == null) {
-        timeout = setTimeout(() => {
-          run.call(this);
-        }, 5);
+        this.mutate(
+          ids.reduce(
+            (mutation, id) =>
+              ({
+                ...mutation,
+                [id]: { status: 'error', error: err },
+              }: { [string]: DataType }),
+            ({}: { [string]: DataType }),
+          ),
+        );
+        this.emit('error', err);
+      } finally {
+        if (this.activeFetchers.has(fetcher) && fetcher.interval != null) {
+          setTimeout(() => {
+            this.startFetcher(fetcher);
+          }, fetcher.interval * 1000);
+        }
       }
     };
   }
 
-  +deferFetcher: PollingFetcher => void;
+  +startFetcher: PollingFetcher => Promise<void>;
 
   addFetcher(fetcher: PollingFetcher | PollingFetcher[]) {
     const fetchers: PollingFetcher[] = Array.isArray(fetcher)
@@ -196,7 +185,7 @@ export default class PollingProvider extends EventEmitter {
     }
     if (this.activeFetchers.has(fetcher)) return;
     this.activeFetchers.add(fetcher);
-    this.deferFetcher(fetcher);
+    this.startFetcher(fetcher);
   }
 
   listen: (id: string) => void = id => {

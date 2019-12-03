@@ -35,7 +35,6 @@ type WrappedDefault<P: {}> = {
 };
 
 function cmpError(err1: ?Error, err2: ?Error): boolean {
-  console.log(err1, err2);
   if (err1 === err2) return true;
   if (!err1) return false;
   if (!err2) return false;
@@ -68,7 +67,7 @@ export default class DataComponent<
 
   componentDidMount() {
     if (!this.context) {
-      throw new Error('Attempted to mount DataCompenent without Context');
+      throw new Error('Attempted to mount DataComponent without Context');
     }
     const {
       dataProvider: { listen },
@@ -82,7 +81,7 @@ export default class DataComponent<
     const { id: oldId } = prevProps;
     if (newId !== oldId) {
       if (!this.context) {
-        throw new Error('Attempted to mount DataCompenent without Context');
+        throw new Error('Attempted to mount DataComponent without Context');
       }
       const {
         dataProvider: { listen, unListen },
@@ -94,7 +93,7 @@ export default class DataComponent<
 
   componentWillUnmount() {
     if (!this.context) {
-      throw new Error('Attempted to mount DataCompenent without Context');
+      throw new Error('Attempted to mount DataComponent without Context');
     }
     const {
       dataProvider: { unListen },
@@ -110,9 +109,12 @@ export default class DataComponent<
   handleError(err: Error) {
     if (err && !cmpError(err, this.lastError)) {
       this.lastError = err;
+      // context.registerSiteMessage triggers a state-change in the tree
+      // This will result in a sad React.
       setTimeout(() => {
         const { context } = this;
         if (!context) {
+          // eslint-disable-next-line no-console
           console.error(err);
         } else {
           context.registerSiteMessage(err);

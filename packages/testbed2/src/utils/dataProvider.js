@@ -18,16 +18,6 @@ type XzaktIdentity = {
   customerId: string,
 };
 
-/*
-  Remember after weekend:
-  Usernames are case insensitive, API does not give a source-of-truth for usernames.
-  we do get a customerName, uncertain what relation that has to username
-  customerName: FORA
-  username: FORA_user1
-
-
-*/
-
 function getLastMonth(): { from: string, to: string, dayCount: number } {
   const date = new Date();
   date.setDate(0);

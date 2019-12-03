@@ -37,7 +37,7 @@ export default class Modal extends PureComponent<Props, State> {
   };
 
   componentDidMount() {
-    // Because modals are JS only and we don't want to
+    // Because modals are client-side only and we don't want to
     // render anything until we're sure we're running
     // in a browser and are already hydrated.
 
