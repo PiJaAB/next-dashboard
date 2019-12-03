@@ -8,7 +8,9 @@ input[type='reset'] {
   display: inline-block;
   margin: 0 0 20px;
   padding: 10px 20px;
-  outline: none;
+  &:not(.no-button) {
+    outline: none;
+  }
   border: none;
   border-radius: 5px;
   @include var('background-color', 'primary');
@@ -41,5 +43,12 @@ input[type='reset'] {
   &[disabled] {
     opacity: 0.3;
     cursor: wait;
+  }
+  &.no-button{
+    display: inline;
+    margin: 0;
+    border-radius: 0;
+    background: none;
+    @include var('color', 'text');
   }
 }

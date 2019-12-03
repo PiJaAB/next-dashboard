@@ -6,7 +6,7 @@ import Router from 'next/router';
 import type { NextComponent, InitialPropsContext } from './nextTypes';
 import type { DataType, Theme, SiteMessageType } from './types';
 import displayNameOf from './displayNameOf';
-import AbstractProvider from '../dataProviders/AbstractProvider';
+import PollingProvider from '../dataProviders/PollingProvider';
 
 import createPersistentState from './persistentState';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
@@ -72,7 +72,7 @@ function compareSitemessages(
 }
 
 export default function createDashboardHOC(
-  dataProvider: AbstractProvider,
+  dataProvider: PollingProvider,
   {
     needAuthDefault,
     unauthedRoute,
@@ -249,7 +249,7 @@ export default function createDashboardHOC(
       ) ||
         themes[0] || { name: 'Default', class: 'default' };
       const { __RENDER_ERROR__: _, __COMP__: Comp, ...rest } = props;
-      const context: IDashboardContext<AbstractProvider> = {
+      const context: IDashboardContext<PollingProvider> = {
         dataProvider,
         getState: this.getPersistentState,
         setState: this.setPersistentState,

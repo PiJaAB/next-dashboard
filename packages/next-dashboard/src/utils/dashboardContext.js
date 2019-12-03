@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import type { DataType, Theme, SiteMessageType } from './types';
-import AbstractProvider from '../dataProviders/AbstractProvider';
+import PollingProvider from '../dataProviders/PollingProvider';
 
-export interface IDashboardContext<DP: AbstractProvider> {
+export interface IDashboardContext<DP: PollingProvider> {
   dataProvider: DP;
   getState<T>(key: string, defaultValue: T): T;
   setState: <T>(key: string, value: T) => void;
@@ -15,7 +15,7 @@ export interface IDashboardContext<DP: AbstractProvider> {
   +siteMessages: $ReadOnlyArray<SiteMessageType>;
 }
 
-export type DashboardContextType = IDashboardContext<AbstractProvider> | void;
+export type DashboardContextType = IDashboardContext<PollingProvider> | void;
 
 const DashboardContext = React.createContext<DashboardContextType>();
 DashboardContext.displayName = 'DashboardContext';

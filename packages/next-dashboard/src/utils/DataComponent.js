@@ -135,7 +135,6 @@ export default class DataComponent<
         return this.renderLoading(props);
       }
       if (entry.status === 'error') {
-        this.handleError(entry.error);
         return this.renderError({ ...props, error: entry.error });
       }
       let value;

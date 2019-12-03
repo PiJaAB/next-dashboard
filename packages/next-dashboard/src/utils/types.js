@@ -27,7 +27,6 @@ export type DataType =
   | {|
       +status: 'error',
       +error: Error,
-      +errorLogged?: boolean,
     |}
   | {|
       +status: 'loading',
@@ -58,4 +57,10 @@ export type Statuses = 'loading' | 'success' | 'error';
 export type DataProps<P: { status?: Statuses }> = {
   ...$Diff<P, { status?: Statuses }>,
   status: Statuses,
+};
+
+export type PollingFetcher = {
+  id: string | string[],
+  runner(): Promise<{ +[string]: mixed }> | { +[string]: mixed },
+  interval?: number,
 };

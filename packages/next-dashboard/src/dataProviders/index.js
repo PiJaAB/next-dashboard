@@ -1,4 +1,4 @@
 // @flow
 
 // eslint-disable-next-line import/prefer-default-export
-export { default as AbstractProvider } from './AbstractProvider';
+export { default as PollingProvider } from './PollingProvider';

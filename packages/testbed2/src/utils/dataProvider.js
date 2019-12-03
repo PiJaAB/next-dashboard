@@ -1,8 +1,9 @@
 // @flow
 import {
-  AbstractProvider,
+  PollingProvider,
   createPersistentState,
   type Identity,
+  type PollingFetcher,
 } from '@pija-ab/next-dashboard';
 
 import type { InitialPropsContext } from 'src/utils/nextTypes';
@@ -43,14 +44,6 @@ function getLastMonth(): { from: string, to: string, dayCount: number } {
   return { to, from, dayCount };
 }
 
-type DataFetcher = {
-  id: string | string[],
-  // eslint-disable-next-line no-use-before-define
-  runner(XzaktProvider): Promise<void> | void,
-  interval?: number,
-  maxAge?: number,
-};
-
 type Scores = {
   Period: string,
   Volume: number,
@@ -83,51 +76,31 @@ function overviewSort({ periodScores, ...overview }: Overview): Overview {
   };
 }
 
-const fetchers: DataFetcher[] = [
+const fetchers: PollingFetcher[] = [
   {
     id: 'overview',
-    // eslint-disable-next-line no-use-before-define
-    async runner(self: XzaktProvider) {
+    async runner(): Promise<{ overview: Overview }> {
+      const self = (this /*:XzaktProvider*/);
       const { identity } = self;
       if (!identity) {
-        self.mutate({
-          leadership: {
-            status: 'error',
-            error: new Error('Missing identity for data fetching'),
-          },
-        });
-        return;
+        throw new Error('Error fetching overview, not authenticated');
       }
       const { customerId } = identity;
       const { from, to } = getLastMonth();
-      try {
-        const overview = overviewSort(
-          (
-            await self.axios.get(
-              `/Xvision/OverviewScoresGraph/${customerId}/${from}/${to}/1`,
-            )
-          ).data,
-        );
-        self.mutate({
-          overview: {
-            status: 'success',
-            value: overview,
-          },
-        });
-      } catch (err) {
-        self.mutate({
-          leadership: {
-            status: 'error',
-            error: err,
-          },
-        });
-      }
+      const overview = overviewSort(
+        (
+          await self.axios.get(
+            `/Xvision/OverviewScoresGraph/${customerId}/${from}/${to}/1`,
+          )
+        ).data,
+      );
+      return { overview };
     },
     interval: 10,
   },
 ];
 
-export default class XzaktProvider extends AbstractProvider {
+export default class XzaktProvider extends PollingProvider {
   axios = Axios.create({
     baseURL: 'https://api.xzakt.com/api/',
   });
@@ -141,27 +114,8 @@ export default class XzaktProvider extends AbstractProvider {
 
   constructor() {
     super();
-    this.on('listen', this.newListener);
-    this.on('unListen', id => console.log('UNLISTEN:', id));
+    this.addFetcher(fetchers);
   }
-
-  newListener: string => void = id => {
-    const fetcher = fetchers.find(curFetcher =>
-      typeof curFetcher.id === 'object'
-        ? curFetcher.id.includes(id)
-        : id === curFetcher.id,
-    );
-    if (!fetcher) {
-      this.mutate({
-        [id]: {
-          error: new Error(`No datafetcher registered for id '${id}'`),
-          status: 'error',
-        },
-      });
-    } else {
-      fetcher.runner(this);
-    }
-  };
 
   getIdentity(): ?Identity {
     if (this.identity == null) return null;
