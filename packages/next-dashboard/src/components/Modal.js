@@ -40,22 +40,35 @@ const Modal = ({ ...props }: Props) => {
   const modalRef = useRef();
 
   const click = (event: MouseEvent) => {
+    if (!active) return;
     const { current: modalRefEle } = modalRef;
     if (!(modalRefEle && modalRefEle.contains(event.target))) close();
   };
 
   const escape = (event: KeyboardEvent) => {
+    if (!active) return;
     if (event.keyCode === 27) close();
   };
 
+  const atTop = () => {
+    const { documentElement } = document;
+    if (!documentElement) return;
+    if (active) {
+      documentElement.classList.add('html_modal-active');
+    } else {
+      documentElement.classList.remove('html_modal-active');
+    }
+  };
+
   useEffect(() => {
+    atTop();
     document.addEventListener('mousedown', click);
-    window.addEventListener('keydown', escape);
+    document.addEventListener('keydown', escape);
     return () => {
       document.removeEventListener('mousedown', click);
-      window.removeEventListener('keydown', escape);
+      document.removeEventListener('keydown', escape);
     };
-  }, []);
+  }, [active]);
 
   return ReactDOM.createPortal(
     <div

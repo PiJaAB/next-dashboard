@@ -1,8 +1,8 @@
-// body {
-//   &.body_modal-active {
-//     overflow: hidden;
-//   }
-// }
+html {
+  &.html_modal-active {
+    overflow: hidden;
+  }
+}
 
 .modal-overlay {
   display: flex;
