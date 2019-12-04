@@ -1,3 +1,5 @@
+// TODO: Fix initial "at-top" body class.
+
 // @flow
 import React, { useEffect } from 'react';
 import Head from 'next/head';
@@ -32,6 +34,16 @@ function DashboardLayout({
   sidebar,
   footer,
 }: Props): React$Element<typeof DashboardContext.Consumer> {
+  const atTop = () => {
+    const { body } = document;
+    if (!body) return;
+    if (window.scrollY <= 0) {
+      body.classList.add('body_at-top');
+    } else {
+      body.classList.remove('body_at-top');
+    }
+  };
+
   const noTransition = () => {
     const { body } = document;
     if (!body) return;
@@ -42,8 +54,11 @@ function DashboardLayout({
   };
 
   useEffect(() => {
+    atTop();
+    window.addEventListener('scroll', atTop);
     window.addEventListener('resize', noTransition);
     return () => {
+      window.removeEventListener('scroll', atTop);
       window.removeEventListener('resize', noTransition);
     };
   }, []);
