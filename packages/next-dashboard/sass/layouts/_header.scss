@@ -1,3 +1,16 @@
+body {
+  &.body_resizing {
+    .dashboard-header {
+      transition: none;
+    }
+  }
+  &.body_at-top {
+    .dashboard-header {
+      box-shadow: none;
+    }
+  }
+}
+
 .dashboard-header {
   display: flex;
   align-items: center;
@@ -7,8 +20,10 @@
   height: 80px;
   width: 100%;
   padding: 20px 0;
+  box-shadow: 0 0 20px rgba($black, 0.125);
   @include var('background-color', 'primary-alt');
   z-index: 100;
+  transition: box-shadow 0.25s ease;
   >.container {
     flex: 0 0 100%;
   }
