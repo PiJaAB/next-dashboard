@@ -82,16 +82,17 @@ const Modal = ({ ...props }: Props) => {
         aria-labelledby={`${id}-modal-label`}
         ref={modalRef}
       >
-        {(title || header) && (
-          <div className="modal-header">
-            {title && (
-              <h2 id={`${id}-modal-label`} className="h5-size margin-0">
-                {title}
-              </h2>
-            )}
-            {header}
-          </div>
-        )}
+        <div className="modal-header">
+          {title && (
+            <h2 id={`${id}-modal-label`} className="h5-size modal-header-title">
+              {title}
+            </h2>
+          )}
+          <button type="button" className="modal-header-button" onClick={close}>
+            <span className="fa fa-times" />
+          </button>
+          {header}
+        </div>
         <div className="modal-content">
           {content}
           {children}
