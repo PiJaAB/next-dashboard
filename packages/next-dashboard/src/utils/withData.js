@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
-import DataComponent, {
-  type ErrProps,
-  type LoadingProps,
-} from './DataComponent';
-import type { Statuses } from './types';
+
+import type { Statuses, DataExtra, DataPath, DataType } from './types';
+
+import displayNameOf from './displayNameOf';
+import useData from './useData';
 
 type Conf<T> = {
   refiner: mixed => T,
@@ -14,7 +14,17 @@ type Conf<T> = {
   },
 };
 
-type Stripped<P: { status: Statuses }> = $Diff<P, { status: Statuses }>;
+type Stripped<T, P: { status: Statuses, value: T }> = {
+  ...$Diff<P, { status: Statuses, value: T }>,
+  dataSource: string,
+  path?: DataPath,
+  extra?: DataExtra,
+};
+
+const defaultProps = {
+  path: undefined,
+  extra: undefined,
+};
 
 export default function withData<
   Type,
@@ -22,25 +32,31 @@ export default function withData<
 >(
   Comp: React$ComponentType<Props>,
   { refiner, defaults }: Conf<Type>,
-): Class<DataComponent<Type, Stripped<Props>>> {
-  return class WrappedData extends DataComponent<Type, Stripped<Props>> {
-    constructor() {
-      super(refiner);
+): React$ComponentType<Stripped<Type, Props>> {
+  function WrappedComp(
+    props: Stripped<Type, Props>,
+  ): React$Element<typeof Comp> {
+    const { dataSource, path, extra, ...restProps } = props;
+    const data: DataType<> = useData(dataSource, path, extra);
+    if (data.status === 'success') {
+      return (
+        <Comp status="success" value={refiner(data.value)} {...restProps} />
+      );
     }
+    if (data.status === 'error') {
+      return (
+        <Comp
+          status="error"
+          value={defaults.error(data.error)}
+          {...restProps}
+        />
+      );
+    }
+    return <Comp status="loading" value={defaults.loading()} {...restProps} />;
+  }
 
-    renderSuccess(props: Stripped<Props>): React$Node {
-      return <Comp {...props} status="success" />;
-    }
+  WrappedComp.defaultProps = defaultProps;
+  WrappedComp.displayName = `withData(${displayNameOf(Comp)})`;
 
-    renderLoading(props: LoadingProps<Type, Stripped<Props>>): React$Node {
-      return <Comp {...props} value={defaults.loading()} status="loading" />;
-    }
-
-    renderError({
-      error,
-      ...props
-    }: ErrProps<Type, Stripped<Props>>): React$Node {
-      return <Comp {...props} value={defaults.error(error)} status="error" />;
-    }
-  };
+  return WrappedComp;
 }

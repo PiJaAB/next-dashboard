@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
@@ -11,42 +11,53 @@ import PollingProvider from '../dataProviders/PollingProvider';
 import createPersistentState from './persistentState';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
 
-export type WrappedProps<P: {}> =
+type InitialNormProps<I> = {
+  ...I,
+  __ERRORED__: false,
+  __INITIAL_STATE__: { [string]: any },
+  __INITIAL_DATA__: { +[string]: ?DataType<> },
+  __ERR_PROPS__: void,
+};
+
+type InitialErrProps = {
+  __ERRORED__: true,
+  __INITIAL_STATE__: { [string]: any },
+  __INITIAL_DATA__: { +[string]: ?DataType<> },
+  __ERR_PROPS__: {} | void,
+};
+
+type InitialUnified<I> = {
+  ...I,
+  __ERRORED__: boolean,
+  __INITIAL_STATE__: { [string]: any } | void,
+  __INITIAL_DATA__: { +[string]: ?DataType<> } | void,
+  __ERR_PROPS__: {} | void,
+};
+
+type InitialProps<I> = InitialErrProps | InitialNormProps<I>;
+
+type WrappedUnified<P: {}, I> = {
+  ...P,
+  ...InitialUnified<I>,
+};
+
+export type WrappedProps<P: {}, I> =
   | {
       ...P,
-      __RENDER_ERROR__: false | void,
-      __INITIAL_STATE__: { [string]: any },
-      __INITIAL_DATA__: { [string]: DataType },
-      __COMP__: NextComponent<P>,
-      __ERR_PROPS__: void,
+      ...InitialNormProps<I>,
     }
-  | {
-      __RENDER_ERROR__: true,
-      __INITIAL_STATE__: { [string]: any },
-      __INITIAL_DATA__: { [string]: DataType },
-      __COMP__: void,
-      __ERR_PROPS__: {},
-    };
-
-type State = {
-  data: { [string]: DataType },
-  persistentState: { [string]: any },
-  siteMessages: $ReadOnlyArray<SiteMessageType>,
-};
+  | InitialErrProps;
 
 export type Config = {
   unauthedRoute?: string,
   needAuthDefault: boolean,
   error?: {
-    Component: NextComponent<any>,
+    Component:
+      | (React$ComponentType<any> & { +getInitialProps: void })
+      | NextComponent<any>,
     withContext?: boolean,
   },
   themes?: Theme[],
-};
-
-type ExtraCTX = {
-  needAuth: boolean,
-  Comp: NextComponent<any>,
 };
 
 const { getInitialState, persist } = createPersistentState('dashboardState');
@@ -79,220 +90,28 @@ export default function createDashboardHOC(
     error: errorConf,
     themes: confThemes,
   }: Config,
-): <U: {}>(Comp: NextComponent<U>, needAuth?: boolean) => NextComponent<U> {
+): <U: {}, Q: {} = {}>(
+  Comp: NextComponent<U, Q>,
+  needAuth?: boolean,
+) => NextComponent<WrappedUnified<U, Q>, InitialUnified<Q>> {
   const themes: Theme[] = confThemes || [
     { name: 'Light', class: 'default' },
     { name: 'Dark', class: 'dark' },
   ];
   let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
-  class Dashboard<P: {}> extends Component<WrappedProps<P>, State> {
-    state: State;
 
-    constructor(props: WrappedProps<P>) {
-      super(props);
-      // eslint-disable-next-line no-underscore-dangle
-      const { __INITIAL_STATE__, __INITIAL_DATA__ } = props;
-      this.state = {
-        persistentState: __INITIAL_STATE__ || {},
-        data: __INITIAL_DATA__ || {},
-        siteMessages: siteMessages || [],
-      };
-    }
-
-    static async getInitialProps(
-      ctx: InitialPropsContext,
-      { needAuth, Comp }: ExtraCTX,
-    ): Promise<{}> {
-      const { pathname, query, asPath } = ctx;
-      const authenticated =
-        dataProvider &&
-        (await dataProvider.isAuthorizedForRoute(pathname, asPath, query));
-      if (needAuth && !authenticated) {
-        const { res } = ctx;
-        if (unauthedRoute) {
-          if (res) {
-            res.writeHead(302, { Location: unauthedRoute });
-            res.end();
-            return {};
-          }
-          Router.push(unauthedRoute);
-          return {};
-        }
-
-        const statusCode = 401;
-        if (res) res.statusCode = 401;
-        const err: Error & { statusCode: number } = makeStatusError(
-          statusCode,
-          'Unauthorized, please log in.',
-        );
-
-        if (errorConf) {
-          const errCtx = { ...ctx, err };
-          const retProps = {
-            errProps:
-              (errorConf.Component.getInitialProps
-                ? await errorConf.Component.getInitialProps(errCtx)
-                : null) || {},
-            __INITIAL_STATE__: getInitialState(ctx),
-            __INITIAL_DATA__: dataProvider.getCurrentData(),
-            __RENDER_ERROR__: true,
-          };
-          return retProps;
-        }
-        throw err;
-      }
-
-      return {
-        ...((Comp.getInitialProps ? await Comp.getInitialProps(ctx) : null) ||
-          {}),
-        __INITIAL_STATE__: getInitialState(ctx),
-        __INITIAL_DATA__: dataProvider.getCurrentData(),
-      };
-    }
-
-    componentDidMount() {
-      dataProvider.on('data', this.onData);
-      dataProvider.on('error', this.registerSiteMessage);
-    }
-
-    componentWillUnmount() {
-      dataProvider.off('data', this.onData);
-      dataProvider.on('error', this.registerSiteMessage);
-    }
-
-    onData: (data: { +[string]: DataType }) => void = data => {
-      this.setState(state => ({ data: { ...state.data, ...data } }));
-    };
-
-    getPersistentState: <T>(key: string, defaultValue: T) => T = (
-      key,
-      defaultValue,
-    ) => {
-      const { persistentState } = this.state;
-      if (typeof persistentState[key] !== 'undefined')
-        return persistentState[key];
-      return (defaultValue /*:any */);
-    };
-
-    setPersistentState: <T>(key: string, value: T) => void = (key, value) => {
-      this.setState(curState => {
-        if (curState.persistentState[key] === value) return {};
-        const newPersistentState = {
-          ...curState.persistentState,
-          [key]: value,
-        };
-        persist(newPersistentState);
-        return {
-          persistentState: newPersistentState,
-        };
-      });
-    };
-
-    dismissSiteMessage: (siteMessage: SiteMessageType) => void = (
-      siteMessage: SiteMessageType,
-    ) => {
-      this.setState(state => {
-        const newMessages = state.siteMessages.filter(
-          m => !compareSitemessages(m, siteMessage),
-        );
-        return {
-          siteMessages: newMessages,
-        };
-      });
-    };
-
-    registerSiteMessage: (siteMessage: SiteMessageType | Error) => void = (
-      siteMessage: SiteMessageType | Error,
-    ) => {
-      if (siteMessage instanceof Error) {
-        return this.registerSiteMessage({
-          title: siteMessage.constructor.name,
-          status: 'error',
-          message: siteMessage.message,
-        });
-      }
-      this.setState(state => {
-        const existingIndex = state.siteMessages.findIndex(m =>
-          compareSitemessages(m, siteMessage),
-        );
-        let newSiteMessages: SiteMessageType[];
-        if (existingIndex > -1) {
-          newSiteMessages = [...state.siteMessages];
-          const updatedMessage = {
-            ...state.siteMessages[existingIndex],
-            count:
-              (state.siteMessages[existingIndex].count != null
-                ? state.siteMessages[existingIndex].count
-                : 1) + 1,
-          };
-          newSiteMessages[existingIndex] = updatedMessage;
-        } else {
-          newSiteMessages = [...state.siteMessages, siteMessage];
-        }
-        siteMessages = newSiteMessages;
-        return {
-          siteMessages: newSiteMessages,
-        };
-      });
-
-      // Incase we want to return something
-      // later from this method, I returned
-      // the recursive call earlier. Eslint then
-      // complained about consistent returns
-      // hence `return undefined`
-      return undefined;
-    };
-
-    render() {
-      const { state, props } = this;
-      const { persistentState } = state;
-      const theme: Theme = themes.find(
-        t => t.class === persistentState.theme,
-      ) ||
-        themes[0] || { name: 'Default', class: 'default' };
-      const { __RENDER_ERROR__: _, __COMP__: Comp, ...rest } = props;
-      const context: IDashboardContext<PollingProvider> = {
-        dataProvider,
-        getState: this.getPersistentState,
-        setState: this.setPersistentState,
-        registerSiteMessage: this.registerSiteMessage,
-        dismissSiteMessage: this.dismissSiteMessage,
-        siteMessages: state.siteMessages,
-        themes,
-        theme,
-        data: state.data,
-      };
-      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
-      if (props.__RENDER_ERROR__) {
-        const { __ERR_PROPS__: errProps } = props;
-        if (errorConf) {
-          return errorConf.withContext ? (
-            <DashboardContext.Provider value={context}>
-              <errorConf.Component {...errProps} />
-            </DashboardContext.Provider>
-          ) : (
-            <errorConf.Component {...errProps} />
-          );
-        }
-        return null;
-      }
-      return (
-        Comp != null && (
-          <DashboardContext.Provider value={context}>
-            <Comp {...rest} />
-          </DashboardContext.Provider>
-        )
-      );
-    }
-  }
-
-  function withDashboard<P: {}>(
-    Comp: NextComponent<P>,
+  function withDashboard<P: {}, I: {} = {}>(
+    Comp:
+      | (React$ComponentType<P> & { +getInitialProps: void })
+      | NextComponent<P, I>,
     needAuth?: boolean,
-  ): NextComponent<P> {
+  ):
+    | NextComponent<WrappedUnified<P, I>, InitialUnified<I>>
+    | NextComponent<WrappedUnified<P, {}>, InitialUnified<{}>> {
     if (process.env.NODE_ENV === 'development') {
       const { prototype } = (Comp: any) || {};
       if (prototype && prototype instanceof React.PureComponent) {
+        // eslint-disable-next-line no-console
         console.warn(
           `Please don't use PureComponent for dashboard root components, Use regular Component instead. Component: ${displayNameOf(
             Comp,
@@ -303,9 +122,7 @@ export default function createDashboardHOC(
     // eslint-disable-next-line no-param-reassign
     const parsedNeedAuth = needAuth == null ? needAuthDefault : needAuth;
 
-    function WrappedComp(
-      props: P,
-    ): React$Element<React$AbstractComponent<WrappedProps<P>, Dashboard<P>>> {
+    function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
       if (
         typeof window !== 'undefined' &&
         !dataProvider.initialized &&
@@ -320,22 +137,216 @@ export default function createDashboardHOC(
           },
         });
       }
-      const Dash: any = Dashboard;
-      return <Dash {...props} __COMP__={Comp} />;
+      const { __INITIAL_STATE__, __INITIAL_DATA__, ...props } = fullProps;
+      const [persistentState, updatePersistentState] = useState(
+        __INITIAL_STATE__,
+      );
+      const [localSiteMessages, setLocalSiteMessages] = useState(siteMessages);
+      const [data, setData] = useState(__INITIAL_DATA__);
+
+      function getPersistentState<T>(key: string, defaultValue: T): T {
+        if (typeof persistentState[key] !== 'undefined')
+          return persistentState[key];
+        return defaultValue;
+      }
+
+      function setPersistentState<T>(key: string, value: T) {
+        updatePersistentState(curState => {
+          if (curState[key] === value) return curState;
+          const newPersistentState = {
+            ...curState,
+            [key]: value,
+          };
+          persist(newPersistentState);
+          return newPersistentState;
+        });
+      }
+
+      function registerSiteMessage(siteMessage: SiteMessageType | Error) {
+        if (siteMessage instanceof Error) {
+          registerSiteMessage({
+            title: siteMessage.constructor.name,
+            status: 'error',
+            message: siteMessage.message,
+          });
+          return;
+        }
+        const siteMessageAdder: (
+          $ReadOnlyArray<SiteMessageType>,
+        ) => $ReadOnlyArray<SiteMessageType> = curSiteMessages => {
+          const existingIndex = curSiteMessages.findIndex(m =>
+            compareSitemessages(m, siteMessage),
+          );
+          let newSiteMessages: SiteMessageType[];
+          if (existingIndex > -1) {
+            newSiteMessages = [...curSiteMessages];
+            const updatedMessage = {
+              ...curSiteMessages[existingIndex],
+              count:
+                (curSiteMessages[existingIndex].count != null
+                  ? curSiteMessages[existingIndex].count
+                  : 1) + 1,
+            };
+            newSiteMessages[existingIndex] = updatedMessage;
+          } else {
+            newSiteMessages = [...curSiteMessages, siteMessage];
+          }
+          siteMessages = newSiteMessages;
+          return newSiteMessages;
+        };
+
+        setLocalSiteMessages(siteMessageAdder);
+      }
+
+      function dismissSiteMessage(siteMessage: SiteMessageType) {
+        const siteMessageDismisser: (
+          $ReadOnlyArray<SiteMessageType>,
+        ) => $ReadOnlyArray<SiteMessageType> = curSiteMessages => {
+          const newMessages = curSiteMessages.filter(
+            m => !compareSitemessages(m, siteMessage),
+          );
+          return newMessages;
+        };
+        setLocalSiteMessages(siteMessageDismisser);
+      }
+
+      function onData(newData: { +[string]: ?DataType<> }) {
+        setData(d => ({ ...d, ...newData }));
+      }
+
+      useEffect(() => {
+        dataProvider.on('data', onData);
+        dataProvider.on('error', registerSiteMessage);
+        return () => {
+          dataProvider.off('data', onData);
+          dataProvider.off('error', registerSiteMessage);
+        };
+      });
+
+      const theme: Theme = themes.find(
+        t => t.class === persistentState.theme,
+      ) ||
+        themes[0] || { name: 'Default', class: 'default' };
+      const context: IDashboardContext<PollingProvider> = {
+        dataProvider,
+        getState: getPersistentState,
+        setState: setPersistentState,
+        registerSiteMessage,
+        dismissSiteMessage,
+        siteMessages: localSiteMessages,
+        themes,
+        theme,
+        data,
+      };
+      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
+      if (props.__ERRORED__) {
+        const { __ERR_PROPS__: errProps } = props;
+        if (errorConf) {
+          return errorConf.withContext ? (
+            <DashboardContext.Provider value={context}>
+              <errorConf.Component {...errProps} />
+            </DashboardContext.Provider>
+          ) : (
+            <errorConf.Component {...errProps} />
+          );
+        }
+        return null;
+      }
+      const { __ERRORED__: _, ...rest } = props;
+      return (
+        Comp != null && (
+          <DashboardContext.Provider value={context}>
+            <Comp {...rest} />
+          </DashboardContext.Provider>
+        )
+      );
     }
 
-    WrappedComp.getInitialProps = async (ctx: InitialPropsContext) => {
+    const getInitialProps: InitialPropsContext => Promise<
+      InitialProps<$Shape<I> | {}>,
+    > = async ctx => {
       if (!dataProvider.initialized && dataProvider.initialize) {
-        await dataProvider.initialize(ctx);
+        dataProvider.initialize(ctx);
       }
-      return Dashboard.getInitialProps(ctx, {
-        needAuth: parsedNeedAuth,
-        Comp,
-      });
+      const { pathname, query, asPath } = ctx;
+      const authenticated =
+        dataProvider &&
+        (await dataProvider.isAuthorizedForRoute(pathname, asPath, query));
+      if (parsedNeedAuth && !authenticated) {
+        const { res } = ctx;
+        if (unauthedRoute) {
+          if (res) {
+            res.writeHead(302, { Location: unauthedRoute });
+            res.end();
+            return {
+              __ERR_PROPS__:
+                (errorConf &&
+                typeof errorConf.Component.getInitialProps === 'function'
+                  ? await errorConf.Component.getInitialProps(ctx)
+                  : null) || {},
+              __INITIAL_STATE__: getInitialState(ctx) || {},
+              __INITIAL_DATA__: dataProvider.getCurrentData(),
+              __ERRORED__: true,
+            };
+          }
+          Router.push(unauthedRoute);
+          return {
+            __ERR_PROPS__:
+              (errorConf &&
+              typeof errorConf.Component.getInitialProps === 'function'
+                ? await errorConf.Component.getInitialProps(ctx)
+                : null) || {},
+            __INITIAL_STATE__: getInitialState(ctx) || {},
+            __INITIAL_DATA__: dataProvider.getCurrentData(),
+            __ERRORED__: true,
+          };
+        }
+
+        const statusCode = 401;
+        if (res) res.statusCode = 401;
+        const err: Error & { statusCode: number } = makeStatusError(
+          statusCode,
+          'Unauthorized, please log in.',
+        );
+
+        if (errorConf) {
+          const errCtx = { ...ctx, err };
+          return {
+            __ERR_PROPS__:
+              (typeof errorConf.Component.getInitialProps === 'function'
+                ? await errorConf.Component.getInitialProps(errCtx)
+                : null) || {},
+            __INITIAL_STATE__: getInitialState(ctx) || {},
+            __INITIAL_DATA__: dataProvider.getCurrentData(),
+            __ERRORED__: true,
+          };
+        }
+        throw err;
+      }
+
+      if (Comp.getInitialProps) {
+        const CompInit = await Comp.getInitialProps(ctx);
+        return ({
+          ...CompInit,
+          __ERRORED__: false,
+          __INITIAL_STATE__: getInitialState(ctx) || {},
+          __INITIAL_DATA__: dataProvider.getCurrentData() || {},
+          __ERR_PROPS__: undefined,
+        }: InitialNormProps<I>);
+      }
+      return ({
+        __ERRORED__: false,
+        __INITIAL_STATE__: getInitialState(ctx) || {},
+        __INITIAL_DATA__: dataProvider.getCurrentData(),
+        __ERR_PROPS__: undefined,
+      }: InitialNormProps<{}>);
     };
+
+    WrappedComp.getInitialProps = getInitialProps;
 
     WrappedComp.displayName = `withDashboard(${displayNameOf(Comp)})`;
 
+    // $FlowIssue I give up on typing for now, have been sitting with it for a while now...
     return WrappedComp;
   }
 

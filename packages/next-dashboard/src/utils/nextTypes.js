@@ -16,8 +16,8 @@ export type InitialPropsContext = {
 
 export type ExtendedPropsContext<E: {}> = InitialPropsContext & E;
 
-export type NextComponent<P: {}> = React$ComponentType<P> & {
-  +getInitialProps?: (ctx: InitialPropsContext) => Promise<{}>,
+export type NextComponent<P: {}, I: {} = {}> = React$ComponentType<P & I> & {
+  +getInitialProps?: (ctx: InitialPropsContext) => Promise<I> | I,
 };
 
 export type RouterType = {

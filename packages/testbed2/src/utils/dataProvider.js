@@ -18,20 +18,19 @@ type XzaktIdentity = {
   customerId: string,
 };
 
-function getLastMonth(): { from: string, to: string, dayCount: number } {
+function getOverviewParams(): { from: string, to: string } {
   const date = new Date();
   date.setDate(0);
-  const dayCount = date.getDate();
   const to = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
     2,
     '0',
-  )}-${String(date.getDate()).padStart(2, '0')}`;
-  date.setDate(1);
+  )}`;
+  date.setDate(0);
   const from = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
     2,
     '0',
-  )}-${String(date.getDate()).padStart(2, '0')}`;
-  return { to, from, dayCount };
+  )}`;
+  return { to, from };
 }
 
 type Scores = {
@@ -69,22 +68,21 @@ function overviewSort({ periodScores, ...overview }: Overview): Overview {
 const fetchers: PollingFetcher[] = [
   {
     id: 'overview',
-    async runner(): Promise<{ overview: Overview }> {
+    async runner(): Promise<Overview> {
       const self = (this /*:XzaktProvider*/);
       const { identity } = self;
       if (!identity) {
         throw new Error('Error fetching overview, not authenticated');
       }
       const { customerId } = identity;
-      const { from, to } = getLastMonth();
-      const overview = overviewSort(
+      const { from, to } = getOverviewParams();
+      return overviewSort(
         (
           await self.axios.get(
-            `/Xvision/OverviewScoresGraph/${customerId}/${from}/${to}/1`,
+            `/Xvision/OverviewScoresGraph/${customerId}/${from}/${to}/2`,
           )
         ).data,
       );
-      return { overview };
     },
   },
 ];

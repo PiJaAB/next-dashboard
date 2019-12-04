@@ -7,7 +7,7 @@ export interface IDashboardContext<DP: PollingProvider> {
   dataProvider: DP;
   getState<T>(key: string, defaultValue: T): T;
   setState: <T>(key: string, value: T) => void;
-  +data: { +[string]: DataType };
+  +data: { +[string]: ?DataType<> };
   registerSiteMessage(siteMessages: Error | SiteMessageType): void;
   dismissSiteMessage(siteMessages: SiteMessageType): void;
   +theme: Theme;

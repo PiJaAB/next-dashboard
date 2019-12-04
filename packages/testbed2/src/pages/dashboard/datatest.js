@@ -12,32 +12,32 @@ const Start = () => (
         <div className="cell column-6-medium column-3-large">
           <Statistic.WithData
             label="Resources"
-            id="overview"
-            index={['totalScore', 'Resources']}
+            dataSource="overview"
+            path={['periodScores', 0, 'Resources']}
             description="23% from last period"
           />
         </div>
         <div className="cell column-6-medium column-3-large">
           <Statistic.WithData
             label="Quality"
-            id="overview"
-            index={['totalScore', 'Quality']}
+            dataSource="overview"
+            path={['periodScores', 0, 'Quality']}
             description="46% from last period"
           />
         </div>
         <div className="cell column-6-medium column-3-large">
           <Statistic.WithData
             label="Volume"
-            id="overview"
-            index={['totalScore', 'Volume']}
+            dataSource="overview"
+            path={['periodScores', 0, 'Volume']}
             description="15% from last period"
           />
         </div>
         <div className="cell column-6-medium column-3-large">
           <Statistic.WithData
             label="Leadership"
-            id="overview"
-            index={['totalScore', 'Leadership']}
+            dataSource="overview"
+            path={['periodScores', 0, 'Leadership']}
             description="55% from last period"
           />
         </div>

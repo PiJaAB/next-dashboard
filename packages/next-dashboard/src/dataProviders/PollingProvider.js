@@ -6,9 +6,55 @@ import {
   NotImplementedError,
   type Identity,
   type PollingFetcher,
+  type DataExtra,
 } from '../utils/types';
 
 import type { InitialPropsContext } from '../utils/nextTypes';
+
+import generateDataKey from '../utils/generateDataKey';
+
+function wrapExtra(
+  func: $PropertyType<PollingFetcher, 'runner'>,
+  extra: DataExtra,
+): $PropertyType<PollingFetcher, 'runner'> {
+  return function runner(): $Call<
+    $PropertyType<PollingFetcher, 'runner'>,
+    DataExtra,
+  > {
+    return func.call(this, extra);
+  };
+}
+
+class FetcherMap {
+  set: Set<PollingFetcher> = new Set();
+
+  map: Map<string, PollingFetcher> = new Map();
+
+  has(fetcher: PollingFetcher | string, extra?: DataExtra): boolean {
+    if (typeof fetcher === 'object') {
+      if (extra == null) return this.set.has(fetcher);
+      return this.map.has(generateDataKey(fetcher.id, extra));
+    }
+    return this.map.has(generateDataKey(fetcher, extra));
+  }
+
+  add(fetcher: PollingFetcher, extra?: DataExtra) {
+    this.set.add(fetcher);
+    this.map.set(generateDataKey(fetcher.id, extra), fetcher);
+  }
+
+  delete(fetcher: PollingFetcher | string, extra?: DataExtra) {
+    if (typeof fetcher === 'object') {
+      this.set.delete(fetcher);
+      this.map.delete(generateDataKey(fetcher.id, extra));
+    } else {
+      const key = generateDataKey(fetcher, extra);
+      const fetcherObj = this.map.get(key);
+      this.map.delete(key);
+      if (fetcherObj) this.set.delete(fetcherObj);
+    }
+  }
+}
 
 /**
   Class that handles data subscription and polling for data.
@@ -19,7 +65,10 @@ import type { InitialPropsContext } from '../utils/nextTypes';
 export default class PollingProvider extends EventEmitter {
   constructor() {
     super();
-    let listenerCache: { [string]: DataType }[] = [];
+
+    // Workaround for a race condition. Re-emit data
+    // once a listener is registered if noone was before
+    let listenerCache: { +[string]: ?DataType<> }[] = [];
     this.on('newListener', event => {
       if (event !== 'data' || !listenerCache.length) return;
       const mutation = listenerCache.reduce((accMut, curMut) => ({
@@ -33,20 +82,27 @@ export default class PollingProvider extends EventEmitter {
       // emit.
       setTimeout(this.emitData, 0, mutation);
     });
-    this.emitData = (newData: { [string]: DataType }) => {
+
+    // Make sure a context is actually listening for data updates
+    // and if not, cache the entries for re-emitting once a new
+    // listener is registered.
+    this.emitData = (newData: { +[string]: ?DataType<> }) => {
       if (!this.emit('data', newData)) {
         listenerCache.push(newData);
       }
     };
+
+    // Bit of magic code. Due to how next works, it's hard to tell if the initialize
+    // method has been called yet or not and we only want to actually initialize once.
     if (!this.initialize) {
       this.initialized = true;
     } else {
       let initialized = false;
-      const { initialize } = this;
-      this.initialize = (ctx: InitialPropsContext) => {
+      const { initialize: oldInitialize } = this;
+      this.initialize = function initialize(ctx: InitialPropsContext) {
         if (initialized) return;
         initialized = true;
-        initialize.call(this, ctx);
+        oldInitialize.call(this, ctx);
       };
       Object.defineProperty(this, ('initialized': string), {
         get(): boolean {
@@ -54,57 +110,36 @@ export default class PollingProvider extends EventEmitter {
         },
       });
     }
-    this.startFetcher = async (fetcher: PollingFetcher) => {
+  }
+
+  async startFetcher(fetcher: PollingFetcher) {
+    if (!this.activeFetchers.has(fetcher)) {
+      return;
+    }
+    try {
+      const res = await fetcher.runner.call(this);
       if (!this.activeFetchers.has(fetcher)) {
         return;
       }
-      try {
-        const res = await fetcher.runner.call(this);
-        const ids: string[] = Array.isArray(fetcher.id)
-          ? fetcher.id
-          : [fetcher.id];
-        if (!this.activeFetchers.has(fetcher)) {
-          return;
-        }
-        this.mutate(
-          ids.reduce(
-            (mutation, id) =>
-              ({
-                ...mutation,
-                [id]: { status: 'success', value: res[id] },
-              }: { [string]: DataType }),
-            ({}: { [string]: DataType }),
-          ),
-        );
-      } catch (err) {
-        const ids: string[] = Array.isArray(fetcher.id)
-          ? fetcher.id
-          : [fetcher.id];
-        if (!this.activeFetchers.has(fetcher)) {
-          return;
-        }
-        this.mutate(
-          ids.reduce(
-            (mutation, id) =>
-              ({
-                ...mutation,
-                [id]: { status: 'error', error: err },
-              }: { [string]: DataType }),
-            ({}: { [string]: DataType }),
-          ),
-        );
-        this.emit('error', err);
-      } finally {
-        if (this.activeFetchers.has(fetcher) && fetcher.interval != null) {
-          setTimeout(() => {
-            this.startFetcher(fetcher);
-          }, fetcher.interval * 1000);
-        }
+      this.mutate({
+        [fetcher.id]: { status: 'success', value: res },
+      });
+    } catch (err) {
+      if (!this.activeFetchers.has(fetcher)) {
+        return;
       }
-    };
+      this.mutate({
+        [fetcher.id]: { status: 'error', error: err },
+      });
+      this.emit('error', err);
+    } finally {
+      if (this.activeFetchers.has(fetcher) && fetcher.interval != null) {
+        setTimeout(() => {
+          this.startFetcher(fetcher);
+        }, fetcher.interval * 1000);
+      }
+    }
   }
-
-  +startFetcher: PollingFetcher => Promise<void>;
 
   addFetcher(fetcher: PollingFetcher | PollingFetcher[]) {
     const fetchers: PollingFetcher[] = Array.isArray(fetcher)
@@ -119,11 +154,11 @@ export default class PollingProvider extends EventEmitter {
 
   fetchers: PollingFetcher[] = [];
 
-  activeFetchers: Set<PollingFetcher> = new Set();
+  activeFetchers: FetcherMap = new FetcherMap();
 
   listenersSet = new Set<string>();
 
-  data: { [string]: DataType } = {};
+  data: { [string]: ?DataType<> } = {};
 
   +initialized: boolean;
 
@@ -133,10 +168,10 @@ export default class PollingProvider extends EventEmitter {
 
   +stop: ?(id: string) => void;
 
-  +emitData: (newData: { [string]: DataType }) => void;
+  +emitData: (newData: { +[string]: ?DataType<> }) => void;
 
-  mutate(newData: { [string]: DataType }) {
-    const entries: [string, DataType][] = (Object.entries(newData) /*:any*/);
+  mutate(newData: { +[string]: ?DataType<> }) {
+    const entries: [string, ?DataType<>][] = (Object.entries(newData) /*:any*/);
     entries.forEach(([key, entry]) => {
       this.data[key] = entry;
     });
@@ -147,29 +182,9 @@ export default class PollingProvider extends EventEmitter {
     return [...this.listenersSet];
   }
 
-  removeFetcherIfNotUsable(id: string) {
-    const fetcher = [...this.activeFetchers].find(f => {
-      if (Array.isArray(f.id)) {
-        return f.id.includes(id);
-      }
-      return f.id === id;
-    });
-    if (!fetcher) return;
-    const ids: string[] = Array.isArray(fetcher.id) ? fetcher.id : [fetcher.id];
-    const used = ids.find(cid => this.listenersSet.has(cid)) != null;
-    if (!used) {
-      this.activeFetchers.delete(fetcher);
-      this.mutate(
-        ids.reduce((mutation, cid) => ({ ...mutation, [cid]: undefined }), {}),
-      );
-    }
-  }
-
-  addFetcherIfNotAdded(id: string) {
-    const fetcher = this.fetchers.find(f => {
-      if (Array.isArray(f.id)) {
-        return f.id.includes(id);
-      }
+  addFetcherIfNotAdded(id: string, extra?: DataExtra) {
+    if (this.activeFetchers.has(id, extra)) return;
+    let fetcher: PollingFetcher | void = this.fetchers.find(f => {
       return f.id === id;
     });
     if (!fetcher) {
@@ -183,28 +198,40 @@ export default class PollingProvider extends EventEmitter {
       });
       return;
     }
-    if (this.activeFetchers.has(fetcher)) return;
-    this.activeFetchers.add(fetcher);
+    if (extra != null) {
+      const { runner, ...rest } = fetcher;
+      fetcher = ({
+        ...rest,
+        runner: wrapExtra(runner, extra),
+      }: PollingFetcher);
+    }
+    this.activeFetchers.add(fetcher, extra);
     this.startFetcher(fetcher);
   }
 
-  listen: (id: string) => void = id => {
-    const curListeners = Math.max(this.activeListeners[id] || 0, 0);
-    this.activeListeners[id] = curListeners + 1;
-    if (!this.listenersSet.has(id)) {
-      this.listenersSet.add(id);
-      this.addFetcherIfNotAdded(id);
-      this.emit('listen', id);
+  listen: (dataSource: string, extra?: DataExtra) => void = (
+    dataSource,
+    extra,
+  ) => {
+    const curListeners = Math.max(this.activeListeners[dataSource] || 0, 0);
+    this.activeListeners[dataSource] = curListeners + 1;
+    if (!this.listenersSet.has(dataSource)) {
+      this.listenersSet.add(dataSource);
+      this.addFetcherIfNotAdded(dataSource);
+      this.emit('listen', dataSource, extra);
     }
   };
 
-  unListen: (id: string) => void = id => {
-    const curListeners = this.activeListeners[id] || 0;
-    this.activeListeners[id] = Math.max(curListeners - 1, 0);
-    if (this.activeListeners[id] === 0) {
-      this.listenersSet.delete(id);
-      this.removeFetcherIfNotUsable(id);
-      this.emit('unListen', id);
+  unListen: (dataSource: string, extra?: DataExtra) => void = (
+    dataSource,
+    extra,
+  ) => {
+    const curListeners = this.activeListeners[dataSource] || 0;
+    this.activeListeners[dataSource] = Math.max(curListeners - 1, 0);
+    if (this.activeListeners[dataSource] === 0) {
+      this.listenersSet.delete(dataSource);
+      this.activeFetchers.delete(dataSource, extra);
+      this.emit('unListen', dataSource, extra);
     }
   };
 
@@ -228,7 +255,7 @@ export default class PollingProvider extends EventEmitter {
     return Boolean(this.getIdentity());
   }
 
-  getCurrentData(): { +[string]: DataType } {
+  getCurrentData(): { +[string]: ?DataType<> } {
     return this.data;
   }
 }

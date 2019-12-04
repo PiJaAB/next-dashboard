@@ -1,8 +1,16 @@
 // TODO: Disable body scroll.
 
 // @flow
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+
+const useInitialFlag = () => {
+  const [initial, setInitial] = useState(true);
+  useEffect(() => {
+    setInitial(false);
+  }, []);
+  return initial;
+};
 
 type Props = {
   id: string,
@@ -18,6 +26,7 @@ type Props = {
 };
 
 const Modal = ({ ...props }: Props) => {
+  const initial = useInitialFlag();
   if (typeof window === 'undefined') return null;
 
   const modalRoot = document.getElementById('dashboard-modal-root');
@@ -77,6 +86,7 @@ const Modal = ({ ...props }: Props) => {
     };
   }, [active]);
 
+  if (initial) return null;
   return ReactDOM.createPortal(
     <div
       className={[

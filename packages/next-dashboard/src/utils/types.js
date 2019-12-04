@@ -18,20 +18,25 @@ export class NotImplementedError extends Error {
   name = 'NotImplementedError';
 }
 
-export type DataType =
-  | {|
-      +status: 'success',
-      +value: mixed,
-      +updating?: boolean,
-    |}
-  | {|
-      +status: 'error',
-      +error: Error,
-    |}
-  | {|
-      +status: 'loading',
-    |}
-  | void;
+export type SuccessDataType<T = mixed> = {|
+  +status: 'success',
+  +value: T,
+  +updating?: boolean,
+|};
+
+export type ErrorDataType = {|
+  +status: 'error',
+  +error: Error,
+|};
+
+export type LoadingDataType = {|
+  +status: 'loading',
+|};
+
+export type DataType<T = mixed> =
+  | SuccessDataType<T>
+  | ErrorDataType
+  | LoadingDataType;
 
 export type Identity = {
   displayName?: string,
@@ -59,8 +64,21 @@ export type DataProps<P: { status?: Statuses }> = {
   status: Statuses,
 };
 
+export type DataExtra =
+  | {
+      +[string]: ?DataExtra,
+    }
+  | $ReadOnlyArray<DataExtra>
+  | number
+  | string
+  | boolean;
+
 export type PollingFetcher = {
-  id: string | string[],
-  runner(): Promise<{ +[string]: mixed }> | { +[string]: mixed },
+  id: string,
+  runner(extra?: DataExtra): Promise<mixed> | mixed,
   interval?: number,
 };
+
+export type PathFragment = string | number | (string | number)[];
+
+export type DataPath = { +[string]: PathFragment } | PathFragment;

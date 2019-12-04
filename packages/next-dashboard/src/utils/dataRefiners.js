@@ -1,7 +1,7 @@
 // @flow
 import type { DataType } from './types';
 
-export function refineToValue(data: DataType): mixed {
+export function refineToValue(data: DataType<>): mixed {
   if (data == null) throw new RangeError('Data is undefined');
   if (data.status !== 'success') return data.status;
   return data.value;
@@ -12,13 +12,13 @@ type Obj = {|
 |};
 
 type RefineDataToPrimitiveFn = {
-  (DataType, 'string'): string,
-  (DataType, 'number'): number,
-  (DataType, 'printable'): string | number,
-  (DataType, 'boolean'): boolean,
-  (DataType, 'object'): Obj,
-  (DataType, 'array'): $ReadOnlyArray<mixed>,
-  (DataType, 'undefined'): void,
+  (DataType<>, 'string'): string,
+  (DataType<>, 'number'): number,
+  (DataType<>, 'printable'): string | number,
+  (DataType<>, 'boolean'): boolean,
+  (DataType<>, 'object'): Obj,
+  (DataType<>, 'array'): $ReadOnlyArray<mixed>,
+  (DataType<>, 'undefined'): void,
 };
 type RefineToPrimitiveFn = {
   (mixed, 'string'): string,
