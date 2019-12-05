@@ -1,9 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import { refineToPrimitive } from '../utils/dataRefiners';
-import withData from '../utils/withData';
-import type { Statuses, DataProps } from '../utils/types';
+import type { Statuses } from '../utils/types';
 
 export type Props = {
   label?: string,
@@ -24,14 +22,6 @@ export const defaultProps = {
 
 export default class Statistic extends PureComponent<Props> {
   static defaultProps = defaultProps;
-
-  static WithData = withData<string | number, DataProps<Props>>(Statistic, {
-    refiner: val => refineToPrimitive(val, 'printable'),
-    defaults: {
-      error: () => 'ERROR!',
-      loading: () => 'Loading...',
-    },
-  });
 
   render() {
     const { label, description, value, prefix, suffix, status } = this.props;

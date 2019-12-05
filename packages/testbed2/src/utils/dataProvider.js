@@ -33,18 +33,22 @@ function getOverviewParams(): { from: string, to: string } {
   return { to, from };
 }
 
-type Scores = {
-  Period: string,
+export type Scores = {|
   Volume: number,
   Quality: number,
   Resources: number,
   Leadership: number,
   Average: number,
-};
+|};
+
+export type ScoresObj = {|
+  Period: string,
+  ...Scores,
+|};
 
 type Overview = {
-  periodScores: Scores[],
-  totalScore: Scores,
+  periodScores: ScoresObj[],
+  totalScore: ScoresObj,
 };
 
 function overviewSort({ periodScores, ...overview }: Overview): Overview {
@@ -87,7 +91,15 @@ const fetchers: PollingFetcher[] = [
   },
 ];
 
-export default class XzaktProvider extends PollingProvider {
+export type Data = {
+  overview: Overview,
+};
+
+type Fetch = {
+  ApiToken: string,
+  AuthUsername: string,
+};
+export default class XzaktProvider extends PollingProvider<Data> {
   axios = Axios.create({
     baseURL: 'https://api.xzakt.com/api/',
   });
@@ -131,22 +143,22 @@ export default class XzaktProvider extends PollingProvider {
 
   async auth(username: string, password: string): Promise<boolean> {
     const { axios } = this;
-    const token: string = (
+    const { ApiToken, AuthUsername }: Fetch = (
       await axios.post('Token/Fetch', {
         username,
         password,
       })
-    ).data.ApiToken;
+    ).data;
     const { customerName, CustNo }: { customerName: string, CustNo: string } = (
       await axios.get('Xvision/CustInfo', {
         headers: {
-          AccessToken: token,
+          AccessToken: ApiToken,
         },
       })
     ).data;
     this.setIdentity({
-      username,
-      accessToken: token,
+      username: AuthUsername,
+      accessToken: ApiToken,
       customer: customerName,
       customerId: CustNo,
     });

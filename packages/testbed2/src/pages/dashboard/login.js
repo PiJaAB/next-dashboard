@@ -33,6 +33,8 @@ class Login extends Component<Props, State> {
 
   login = async ({ dataProvider }: $NonMaybeType<DashboardContextType>) => {
     const { username, password } = this.state;
+    console.log(Router.query);
+    const { attemptedURI } = Router.query;
     this.setState({
       loading: true,
     });
@@ -41,7 +43,7 @@ class Login extends Component<Props, State> {
         this.setState({
           password: '',
         });
-        Router.push('/dashboard');
+        Router.push(attemptedURI || '/dashboard');
       } else {
         this.setState({
           error: 'Invalid credentials',

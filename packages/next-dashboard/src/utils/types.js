@@ -82,3 +82,7 @@ export type PollingFetcher = {
 export type PathFragment = string | number | (string | number)[];
 
 export type DataPath = { +[string]: PathFragment } | PathFragment;
+
+export type DataMapper = <T>(T) => DataType<T>;
+
+export type MappedData<D> = $ObjMap<D, DataMapper>;

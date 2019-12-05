@@ -1,13 +1,12 @@
 
 [ignore]
+.*/.next/.*
 .*/dist/.*
-.*/testbed2/.*
 
 [untyped]
 .*/node_modules/.*
 
 [include]
-../../node_modules
 
 [libs]
 
@@ -16,6 +15,9 @@
 [options]
 # note: both name_mapper and resolve_dirname can be specified multiple times
 module.system.node.resolve_dirname=node_modules
+module.name_mapper='^src\(.*\)$' -> '<PROJECT_ROOT>/packages/testbed2/src\1'
+module.name_mapper='^@pija-ab/next-dashboard/\(.*\)$' -> '<PROJECT_ROOT>/packages/next-dashboard/\1'
+module.name_mapper='^@pija-ab/next-dashboard$' -> '<PROJECT_ROOT>/packages/next-dashboard/src/entry'
 
 munge_underscores=true
 

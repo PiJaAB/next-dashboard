@@ -11,11 +11,11 @@ type Props = {
 };
 export default function Layout({
   children,
+  sidebar,
   ...props
 }: Props): React$Element<typeof DashboardLayout> {
   return (
-    <DashboardLayout {...props}>
-      <Nav />
+    <DashboardLayout {...props} sidebar={sidebar && <Nav />}>
       {children}
     </DashboardLayout>
   );
@@ -23,6 +23,6 @@ export default function Layout({
 
 Layout.defaultProps = {
   header: undefined,
-  sidebar: undefined,
+  sidebar: true,
   footer: undefined,
 };

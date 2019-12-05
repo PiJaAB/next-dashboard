@@ -19,6 +19,7 @@ if (typeof window === 'undefined') {
 
 export default function createPersistentState(
   cookieName: string,
+  version?: number,
 ): {
   getInitialState(ctx: InitialPropsContext): PersistentState,
   persist(state: PersistentState): void,
@@ -31,7 +32,8 @@ export default function createPersistentState(
       try {
         const dashboardJson = atob(dashboardB64);
         const dashboardState = JSON.parse(dashboardJson);
-        return dashboardState;
+        if (dashboardState.version !== version) return {};
+        return dashboardState.data;
       } catch (err) {
         console.error(err);
         return {};
@@ -47,7 +49,7 @@ export default function createPersistentState(
           if (!curState) return;
           try {
             window.document.cookie = `${cookieName}=${escape(
-              btoa(JSON.stringify(curState)),
+              btoa(JSON.stringify({ version, data: curState })),
             )}; path=/`;
           } catch (err) {
             console.error(err);

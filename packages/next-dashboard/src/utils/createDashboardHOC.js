@@ -4,49 +4,49 @@ import React, { useState, useEffect } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
-import type { DataType, Theme, SiteMessageType } from './types';
+import type { MappedData, DataType, Theme, SiteMessageType } from './types';
 import displayNameOf from './displayNameOf';
 import PollingProvider from '../dataProviders/PollingProvider';
 
 import createPersistentState from './persistentState';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
 
-type InitialNormProps<I> = {
+type InitialNormProps<I, D> = {
   ...I,
   __ERRORED__: false,
   __INITIAL_STATE__: { [string]: any },
-  __INITIAL_DATA__: { +[string]: ?DataType<> },
+  __INITIAL_DATA__: MappedData<D>,
   __ERR_PROPS__: void,
 };
 
-type InitialErrProps = {
+type InitialErrProps<D> = {
   __ERRORED__: true,
   __INITIAL_STATE__: { [string]: any },
-  __INITIAL_DATA__: { +[string]: ?DataType<> },
+  __INITIAL_DATA__: MappedData<D>,
   __ERR_PROPS__: {} | void,
 };
 
-type InitialUnified<I> = {
+type InitialUnified<I, D> = {
   ...I,
   __ERRORED__: boolean,
   __INITIAL_STATE__: { [string]: any } | void,
-  __INITIAL_DATA__: { +[string]: ?DataType<> } | void,
+  __INITIAL_DATA__: MappedData<D> | void,
   __ERR_PROPS__: {} | void,
 };
 
-type InitialProps<I> = InitialErrProps | InitialNormProps<I>;
+type InitialProps<I, D> = InitialErrProps<D> | InitialNormProps<I, D>;
 
-type WrappedUnified<P: {}, I> = {
+type WrappedUnified<P: {}, I, D> = {
   ...P,
-  ...InitialUnified<I>,
+  ...InitialUnified<I, D>,
 };
 
-export type WrappedProps<P: {}, I> =
+export type WrappedProps<P: {}, I, D> =
   | {
       ...P,
-      ...InitialNormProps<I>,
+      ...InitialNormProps<I, D>,
     }
-  | InitialErrProps;
+  | InitialErrProps<D>;
 
 export type Config = {
   unauthedRoute?: string,
@@ -82,8 +82,8 @@ function compareSitemessages(
   return true;
 }
 
-export default function createDashboardHOC(
-  dataProvider: PollingProvider,
+export default function createDashboardHOC<Data: {}>(
+  dataProvider: PollingProvider<Data>,
   {
     needAuthDefault,
     unauthedRoute,
@@ -93,7 +93,7 @@ export default function createDashboardHOC(
 ): <U: {}, Q: {} = {}>(
   Comp: NextComponent<U, Q>,
   needAuth?: boolean,
-) => NextComponent<WrappedUnified<U, Q>, InitialUnified<Q>> {
+) => NextComponent<WrappedUnified<U, Q, Data>, InitialUnified<Q, Data>> {
   const themes: Theme[] = confThemes || [
     { name: 'Light', class: 'default' },
     { name: 'Dark', class: 'dark' },
@@ -106,8 +106,8 @@ export default function createDashboardHOC(
       | NextComponent<P, I>,
     needAuth?: boolean,
   ):
-    | NextComponent<WrappedUnified<P, I>, InitialUnified<I>>
-    | NextComponent<WrappedUnified<P, {}>, InitialUnified<{}>> {
+    | NextComponent<WrappedUnified<P, I, Data>, InitialUnified<I, Data>>
+    | NextComponent<WrappedUnified<P, {}, Data>, InitialUnified<{}, Data>> {
     if (process.env.NODE_ENV === 'development') {
       const { prototype } = (Comp: any) || {};
       if (prototype && prototype instanceof React.PureComponent) {
@@ -122,7 +122,7 @@ export default function createDashboardHOC(
     // eslint-disable-next-line no-param-reassign
     const parsedNeedAuth = needAuth == null ? needAuthDefault : needAuth;
 
-    function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
+    function WrappedComp(fullProps: WrappedProps<P, I, Data>): React$Node {
       if (
         typeof window !== 'undefined' &&
         !dataProvider.initialized &&
@@ -227,7 +227,7 @@ export default function createDashboardHOC(
         t => t.class === persistentState.theme,
       ) ||
         themes[0] || { name: 'Default', class: 'default' };
-      const context: IDashboardContext<PollingProvider> = {
+      const context: IDashboardContext<Data, PollingProvider<Data>> = {
         dataProvider,
         getState: getPersistentState,
         setState: setPersistentState,
@@ -263,7 +263,7 @@ export default function createDashboardHOC(
     }
 
     const getInitialProps: InitialPropsContext => Promise<
-      InitialProps<$Shape<I> | {}>,
+      InitialProps<$Shape<I> | {}, Data>,
     > = async ctx => {
       if (!dataProvider.initialized && dataProvider.initialize) {
         dataProvider.initialize(ctx);
@@ -276,7 +276,11 @@ export default function createDashboardHOC(
         const { res } = ctx;
         if (unauthedRoute) {
           if (res) {
-            res.writeHead(302, { Location: unauthedRoute });
+            res.writeHead(302, {
+              Location: `${unauthedRoute}?attemptedURI=${encodeURIComponent(
+                asPath,
+              )}`,
+            });
             res.end();
             return {
               __ERR_PROPS__:
@@ -289,7 +293,7 @@ export default function createDashboardHOC(
               __ERRORED__: true,
             };
           }
-          Router.push(unauthedRoute);
+          Router.push({ pathname: unauthedRoute, query: { attemptedURI: asPath } });
           return {
             __ERR_PROPS__:
               (errorConf &&
@@ -332,14 +336,14 @@ export default function createDashboardHOC(
           __INITIAL_STATE__: getInitialState(ctx) || {},
           __INITIAL_DATA__: dataProvider.getCurrentData() || {},
           __ERR_PROPS__: undefined,
-        }: InitialNormProps<I>);
+        }: InitialNormProps<I, Data>);
       }
       return ({
         __ERRORED__: false,
         __INITIAL_STATE__: getInitialState(ctx) || {},
         __INITIAL_DATA__: dataProvider.getCurrentData(),
         __ERR_PROPS__: undefined,
-      }: InitialNormProps<{}>);
+      }: InitialNormProps<{}, Data>);
     };
 
     WrappedComp.getInitialProps = getInitialProps;

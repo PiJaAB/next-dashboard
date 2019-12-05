@@ -56,13 +56,17 @@ class FetcherMap {
   }
 }
 
+type Mapper = <T>(T) => DataType<T>;
+
+type MappedData<D> = $ObjMap<D, Mapper>;
+
 /**
   Class that handles data subscription and polling for data.
   Will run relevant PollingFetcher's registered by the
   `addFetcher` method, when a component subscribes to data
   that fetcher provides.
 */
-export default class PollingProvider extends EventEmitter {
+export default class PollingProvider<Data: {} = {}> extends EventEmitter {
   constructor() {
     super();
 
@@ -158,7 +162,7 @@ export default class PollingProvider extends EventEmitter {
 
   listenersSet = new Set<string>();
 
-  data: { [string]: ?DataType<> } = {};
+  data: MappedData<Data> = ({}: any);
 
   +initialized: boolean;
 
@@ -255,7 +259,7 @@ export default class PollingProvider extends EventEmitter {
     return Boolean(this.getIdentity());
   }
 
-  getCurrentData(): { +[string]: ?DataType<> } {
+  getCurrentData(): MappedData<Data> {
     return this.data;
   }
 }

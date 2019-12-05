@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Statistic } from '@pija-ab/next-dashboard';
+import Statistic from 'src/components/OverviewStatistic';
 import Layout from 'src/components/Layout';
 import withDashboard from 'src/utils/withDashboard';
 
@@ -10,36 +10,16 @@ const Start = () => (
       <h1 className="page-title">Data from API</h1>
       <div className="grid">
         <div className="cell column-6-medium column-3-large">
-          <Statistic.WithData
-            label="Resources"
-            dataSource="overview"
-            path={['periodScores', 0, 'Resources']}
-            description="23% from last period"
-          />
+          <Statistic category="Resources" />
         </div>
         <div className="cell column-6-medium column-3-large">
-          <Statistic.WithData
-            label="Quality"
-            dataSource="overview"
-            path={['periodScores', 0, 'Quality']}
-            description="46% from last period"
-          />
+          <Statistic category="Quality" />
         </div>
         <div className="cell column-6-medium column-3-large">
-          <Statistic.WithData
-            label="Volume"
-            dataSource="overview"
-            path={['periodScores', 0, 'Volume']}
-            description="15% from last period"
-          />
+          <Statistic category="Volume" />
         </div>
         <div className="cell column-6-medium column-3-large">
-          <Statistic.WithData
-            label="Leadership"
-            dataSource="overview"
-            path={['periodScores', 0, 'Leadership']}
-            description="55% from last period"
-          />
+          <Statistic category="Leadership" />
         </div>
       </div>
     </div>

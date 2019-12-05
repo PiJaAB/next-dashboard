@@ -1,23 +1,22 @@
 // @flow
 import React from 'react';
 
-import type { Statuses, DataExtra, DataPath, DataType } from './types';
+import type { Statuses, DataExtra, MappedData, DataType } from './types';
 
 import displayNameOf from './displayNameOf';
 import useData from './useData';
 
 type Conf<T> = {
-  refiner: mixed => T,
   defaults: {
     error: (err: Error) => T,
     loading: () => T,
   },
 };
 
-type Stripped<T, P: { status: Statuses, value: T }> = {
+type Stripped<T, P: { status: Statuses, value: T }, Data> = {
   ...$Diff<P, { status: Statuses, value: T }>,
-  dataSource: string,
-  path?: DataPath,
+  parser: (MappedData<Data>) => T,
+  dataSource: $Keys<Data>,
   extra?: DataExtra,
 };
 
@@ -28,20 +27,19 @@ const defaultProps = {
 
 export default function withData<
   Type,
+  Data: {},
   Props: { value: Type, status: Statuses },
 >(
   Comp: React$ComponentType<Props>,
-  { refiner, defaults }: Conf<Type>,
-): React$ComponentType<Stripped<Type, Props>> {
+  { defaults }: Conf<Type>,
+): React$ComponentType<Stripped<Type, Props, Data>> {
   function WrappedComp(
-    props: Stripped<Type, Props>,
+    props: Stripped<Type, Props, Data>,
   ): React$Element<typeof Comp> {
-    const { dataSource, path, extra, ...restProps } = props;
-    const data: DataType<> = useData(dataSource, path, extra);
+    const { dataSource, parser, extra, ...restProps } = props;
+    const data: DataType<> = useData(dataSource, extra);
     if (data.status === 'success') {
-      return (
-        <Comp status="success" value={refiner(data.value)} {...restProps} />
-      );
+      return <Comp status="success" value={parser(data)} {...restProps} />;
     }
     if (data.status === 'error') {
       return (
