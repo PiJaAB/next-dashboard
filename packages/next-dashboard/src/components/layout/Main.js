@@ -9,7 +9,6 @@ import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import Nav from '../Nav';
 import SiteMessages from './SiteMessages';
 
 export type Props = {
@@ -22,7 +21,7 @@ export type Props = {
     | 'wide'
     | 'extra-wide',
   header?: boolean,
-  sidebar?: boolean,
+  sidebar?: React$Node,
   footer?: boolean,
 };
 
@@ -89,33 +88,6 @@ function DashboardLayout({
           context.setState<boolean>('sidebarActive', !sidebarActive);
         };
 
-        let normalChildren: ?React$Node = [];
-        let navChildren: ?React$Node;
-        if (Array.isArray(children)) {
-          normalChildren = [];
-          navChildren = [];
-          children.forEach(child => {
-            if (!Array.isArray(normalChildren)) {
-              throw new TypeError('Expected normalChildren to be Array.');
-            }
-            if (!Array.isArray(navChildren)) {
-              throw new TypeError('Expected navChildren to be Array.');
-            }
-            if (typeof child !== 'object' || typeof child.type !== 'function') {
-              normalChildren.push(child);
-              return;
-            }
-            const { prototype } = child.type;
-            if (prototype instanceof Nav) {
-              navChildren.push(child);
-              return;
-            }
-            normalChildren.push(child);
-          });
-        } else {
-          normalChildren = children;
-        }
-
         return (
           <div
             className={[
@@ -143,12 +115,12 @@ function DashboardLayout({
                 sidebarActive={sidebarActive}
                 sidebarCompact={sidebarCompact}
               >
-                {navChildren}
+                {sidebar}
               </Sidebar>
             )}
             <Content contentContainerWidth={contentContainerWidth}>
               <SiteMessages />
-              {normalChildren}
+              {children}
             </Content>
             {footer && <Footer />}
             <div id="dashboard-modal-root" />
@@ -164,7 +136,7 @@ DashboardLayout.defaultProps = {
   id: undefined,
   contentContainerWidth: undefined,
   header: true,
-  sidebar: true,
+  sidebar: undefined,
   footer: true,
 };
 

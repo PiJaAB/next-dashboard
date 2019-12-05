@@ -18,31 +18,32 @@ export class NotImplementedError extends Error {
   name = 'NotImplementedError';
 }
 
-export type DataType =
-  | {|
-      +status: 'success',
-      +value: mixed,
-    |}
-  | {|
-      +status: 'error',
-      +error: Error,
-    |}
-  | {|
-      +status: 'loading',
-    |}
-  | void;
+export type SuccessDataType<T = mixed> = {|
+  +status: 'success',
+  +value: T,
+  +updating?: boolean,
+|};
 
-export interface IDataProvider {
-  update<T>(key: string, data: T, extra?: mixed): Promise<void> | void;
-  getAuthData(): Promise<mixed> | mixed;
-  isAuthorizedForRoute(
-    href: string,
-    asPath: string,
-    query: { [string]: string | void },
-  ): Promise<boolean> | boolean;
-  +isAuthorized: boolean;
-  getCurrentData(): { [string]: DataType };
-}
+export type ErrorDataType = {|
+  +status: 'error',
+  +error: Error,
+|};
+
+export type LoadingDataType = {|
+  +status: 'loading',
+|};
+
+export type DataType<T = mixed> =
+  | SuccessDataType<T>
+  | ErrorDataType
+  | LoadingDataType;
+
+export type Identity = {
+  displayName?: string,
+  subName?: string,
+  imgUrl?: string,
+  authenticated?: boolean,
+};
 
 export type Theme = {
   name: string,
@@ -55,3 +56,33 @@ export type SiteMessageType = {
   +status?: 'info' | 'warning' | 'error',
   +count?: number,
 };
+
+export type Statuses = 'loading' | 'success' | 'error';
+
+export type DataProps<P: { status?: Statuses }> = {
+  ...$Diff<P, { status?: Statuses }>,
+  status: Statuses,
+};
+
+export type DataExtra =
+  | {
+      +[string]: ?DataExtra,
+    }
+  | $ReadOnlyArray<DataExtra>
+  | number
+  | string
+  | boolean;
+
+export type PollingFetcher = {
+  id: string,
+  runner(extra?: DataExtra): Promise<mixed> | mixed,
+  interval?: number,
+};
+
+export type PathFragment = string | number | (string | number)[];
+
+export type DataPath = { +[string]: PathFragment } | PathFragment;
+
+export type DataMapper = <T>(T) => DataType<T>;
+
+export type MappedData<D> = $ObjMap<D, DataMapper>;

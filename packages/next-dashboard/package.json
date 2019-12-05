@@ -1,6 +1,6 @@
 {
   "name": "@pija-ab/next-dashboard",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "> TODO: description",
   "author": "Linn Dahlgren <linn.dahlgren@pija.se>",
   "homepage": "https://github.com/PiJaAB/next-dashboard#readme",
@@ -41,7 +41,8 @@
   "peerDependencies": {
     "next": "^9.1.1",
     "next-cookies": "^2.0.2",
-    "react": "^16.8.6"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",

@@ -1,6 +1,5 @@
 // @flow
 import React, { useState, useRef } from 'react';
-import Link from 'next/link';
 
 import Modal from './Modal';
 
@@ -13,15 +12,21 @@ const Contact = () => {
   };
   return (
     <div className="contact" ref={contactRef}>
-      <Link href="/contact">
-        <a className="contact-image" onClick={openContactModal}>
-          <img src="/images/contact.png" alt="Anna Evesäter" />
-        </a>
-      </Link>
+      <button
+        type="button"
+        className="no-button contact-image"
+        onClick={openContactModal}
+      >
+        <img src="/images/contact.png" alt="Anna Evesäter" />
+      </button>
       <div className="contact-content">
-        <Link href="/contact">
-          <a className="color-text" onClick={openContactModal}>Contact</a>
-        </Link>
+        <button
+          type="button"
+          className="no-button color-text"
+          onClick={openContactModal}
+        >
+          Contact
+        </button>
       </div>
       <Modal
         id="contact"

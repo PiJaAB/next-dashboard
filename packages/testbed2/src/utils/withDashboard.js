@@ -1,30 +1,8 @@
 // @flow
 
-import {
-  createDashboardHOC,
-  DashboardContext,
-  type Config,
-} from '@pija-ab/next-dashboard';
+import { createDashboardHOC, type Config } from '@pija-ab/next-dashboard';
 import ErrorComp from 'src/components/Error';
-
-let authenticated = false;
-
-const dataProvider = {
-  update() {
-    throw new Error('Not implemented');
-  },
-  data: {},
-  needAuthDefault: true,
-  isAuthorizedForRoute(): boolean {
-    return authenticated;
-  },
-  getCurrentData() { return {}; },
-  auth(data: { username: string, password: string }): boolean {
-    console.log(data);
-    authenticated = true;
-    return authenticated;
-  },
-};
+import XzaxtProvider, { type Data } from 'src/utils/dataProvider';
 
 const config: Config = {
   unauthedRoute: '/dashboard/login',
@@ -35,10 +13,5 @@ const config: Config = {
   },
 };
 
-const withDashboard = createDashboardHOC<typeof dataProvider>(
-  dataProvider,
-  config,
-);
-const { Provider, Consumer } = DashboardContext;
+const withDashboard = createDashboardHOC<Data>(new XzaxtProvider(), config);
 export default withDashboard;
-export { DashboardContext as Context, Provider, Consumer };

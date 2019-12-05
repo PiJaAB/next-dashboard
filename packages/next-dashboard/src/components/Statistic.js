@@ -1,24 +1,27 @@
 // @flow
 import React, { PureComponent } from 'react';
 
+import type { Statuses } from '../utils/types';
+
 export type Props = {
   label?: string,
-  value?: string,
+  value: string | number,
   description?: string,
   prefix?: string,
   suffix?: string,
-  status?: string,
+  status?: Statuses,
+};
+
+export const defaultProps = {
+  label: undefined,
+  description: undefined,
+  status: undefined,
+  prefix: '',
+  suffix: '',
 };
 
 export default class Statistic extends PureComponent<Props> {
-  static defaultProps = {
-    label: undefined,
-    value: undefined,
-    description: undefined,
-    status: undefined,
-    prefix: '',
-    suffix: '',
-  };
+  static defaultProps = defaultProps;
 
   render() {
     const { label, description, value, prefix, suffix, status } = this.props;
