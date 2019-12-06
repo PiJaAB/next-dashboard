@@ -33,7 +33,6 @@ class Login extends Component<Props, State> {
 
   login = async ({ dataProvider }: $NonMaybeType<DashboardContextType>) => {
     const { username, password } = this.state;
-    console.log(Router.query);
     const { attemptedURI } = Router.query;
     this.setState({
       loading: true,
@@ -62,6 +61,13 @@ class Login extends Component<Props, State> {
 
   render() {
     const { loading, username, password, error } = this.state;
+
+    const getLoginHandler = ctx => ev => {
+      ev.preventDefault();
+      this.login(ctx);
+      return false;
+    };
+
     return (
       <Layout
         id="login"
@@ -98,7 +104,10 @@ class Login extends Component<Props, State> {
                       {error}
                     </p>
                   )}
-                  <form className="margin-bottom-x2">
+                  <form
+                    className="margin-bottom-x2"
+                    onSubmit={getLoginHandler(ctx)}
+                  >
                     <div className="form-item">
                       <label htmlFor="username">Username</label>
                       <input
@@ -125,11 +134,7 @@ class Login extends Component<Props, State> {
                     </div>
                     <div className="form-item">
                       {!loading ? (
-                        <button
-                          className="form-button"
-                          type="button"
-                          onClick={() => this.login(ctx)}
-                        >
+                        <button className="form-button" type="submit">
                           Log In
                         </button>
                       ) : (
