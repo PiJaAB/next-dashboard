@@ -46,7 +46,7 @@ function Login(): React$Node {
     [username, password],
   );
 
-  const handleLogin = useCallback(
+  const handleSubmit = useCallback(
     ev => {
       ev.preventDefault();
       login(ctx);
@@ -80,7 +80,7 @@ function Login(): React$Node {
         {error != null && (
           <p className="margin-bottom-x4 text-align-center">{error}</p>
         )}
-        <form className="margin-bottom-x2" onSubmit={handleLogin}>
+        <form className="margin-bottom-x2" onSubmit={handleSubmit}>
           <div className="form-item">
             <label htmlFor="username">Username</label>
             <input
