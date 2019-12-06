@@ -41,7 +41,7 @@ input[type='reset'] {
   //   outline: none;
   // }
   &[disabled] {
-    opacity: 0.3;
+    opacity: 0.5;
     cursor: wait;
   }
   &.no-button{

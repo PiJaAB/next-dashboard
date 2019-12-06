@@ -94,7 +94,7 @@ class Login extends Component<Props, State> {
                     Please enter your username and password to continue.
                   </p>
                   {error != null && (
-                    <p className="margin-bottom-x4 text-align-center">
+                    <p className="margin-bottom-x4 color-error text-align-center">
                       {error}
                     </p>
                   )}
