@@ -79,7 +79,7 @@ function compareSitemessages(
 }
 
 export default function createDashboardHOC(
-  dataProvider: IErrorAuthReporter,
+  authErrorReporter: IErrorAuthReporter,
   {
     needAuthDefault,
     unauthedRoute,
@@ -121,10 +121,10 @@ export default function createDashboardHOC(
     function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
       if (
         typeof window !== 'undefined' &&
-        !dataProvider.initialized &&
-        dataProvider.initialize
+        !authErrorReporter.initialized &&
+        authErrorReporter.initialize
       ) {
-        dataProvider.initialize({
+        authErrorReporter.initialize({
           asPath: Router.asPath,
           query: Router.query,
           pathname: Router.pathname,
@@ -206,9 +206,9 @@ export default function createDashboardHOC(
       }
 
       useEffect(() => {
-        dataProvider.on('error', registerSiteMessage);
+        authErrorReporter.on('error', registerSiteMessage);
         return () => {
-          dataProvider.off('error', registerSiteMessage);
+          authErrorReporter.off('error', registerSiteMessage);
         };
       });
 
@@ -217,7 +217,7 @@ export default function createDashboardHOC(
       ) ||
         themes[0] || { name: 'Default', class: 'default' };
       const context: IDashboardContext = {
-        isAuthenticated: () => dataProvider.isAuthenticated(),
+        isAuthenticated: () => authErrorReporter.isAuthenticated(),
         getState: getPersistentState,
         setState: setPersistentState,
         registerSiteMessage,
@@ -253,13 +253,13 @@ export default function createDashboardHOC(
     const getInitialProps: InitialPropsContext => Promise<
       InitialProps<$Shape<I> | {}>,
     > = async ctx => {
-      if (!dataProvider.initialized && dataProvider.initialize) {
-        dataProvider.initialize(ctx);
+      if (!authErrorReporter.initialized && authErrorReporter.initialize) {
+        authErrorReporter.initialize(ctx);
       }
       const { pathname, query, asPath } = ctx;
       const authenticated =
-        dataProvider &&
-        (await dataProvider.isAuthorizedForRoute(pathname, asPath, query));
+        authErrorReporter &&
+        (await authErrorReporter.isAuthorizedForRoute(pathname, asPath, query));
       if (parsedNeedAuth && !authenticated) {
         const { res } = ctx;
         if (unauthedRoute) {

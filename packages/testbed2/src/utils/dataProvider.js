@@ -11,7 +11,7 @@ import Axios from 'axios';
 
 const { getInitialState, persist } = createPersistentState('dashboardIdentity');
 
-type Identity = {
+export type Identity = {
   username: string,
   accessToken: string,
   customerId: string,
@@ -147,6 +147,7 @@ export class XzaktProvider extends PollingProvider<Data>
 
   setIdentity(identity: ?Identity) {
     this.identity = identity;
+    this.emit('newIdentity', identity);
     this.refreshAuth();
     persist(identity);
   }

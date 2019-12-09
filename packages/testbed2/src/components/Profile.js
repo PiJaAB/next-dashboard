@@ -1,20 +1,18 @@
 // @flow
-import React, { useContext } from 'react';
+import React from 'react';
 import { useData } from '@pija-ab/next-dashboard';
 
-import DataContext from 'src/utils/DataContext';
+import dataContext, { useIdentity } from 'src/utils/dataHooks';
 
 const Profile = () => {
-  const ctx = useContext(DataContext);
-  const identity = ctx.getIdentity();
+  const identity = useIdentity();
   if (identity == null) return null;
   const { username } = identity;
-  const custInfo = useData(ctx, 'customerInfo');
+  const custInfo = useData(dataContext, 'customerInfo');
   let custName = 'Loading...';
   if (custInfo.status === 'error') {
     custName = 'ERROR!';
-  }
-  if (custInfo.status === 'success') {
+  } else if (custInfo.status === 'success') {
     custName = custInfo.value.customerName;
   }
   const imgUrl = null;

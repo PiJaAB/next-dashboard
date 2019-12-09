@@ -1,19 +1,15 @@
 // @flow
 
-import { createContext } from 'react';
+import { useState, useEffect } from 'react';
 import type {
   IDataContext,
   MappedData,
   DataExtra,
 } from '@pija-ab/next-dashboard';
 
-import provider, { type Data } from 'src/utils/dataProvider';
+import provider, { type Data, type Identity } from 'src/utils/dataProvider';
 
-interface ICustomContext extends IDataContext<Data> {
-  getIdentity(): $Call<$PropertyType<typeof provider, 'getIdentity'>>;
-}
-
-const ctx: ICustomContext = {
+const dataContext: IDataContext<Data> = {
   read<DS: $Keys<Data>>(
     dataSource: DS,
     extra?: DataExtra,
@@ -36,10 +32,18 @@ const ctx: ICustomContext = {
   ) {
     provider.unsubscribe<DS>(cb, dataSource, extra);
   },
-
-  getIdentity(): $Call<$PropertyType<typeof provider, 'getIdentity'>> {
-    return provider.getIdentity();
-  },
 };
 
-export default createContext<ICustomContext>(ctx);
+function useIdentity(): ?Identity {
+  const [identity, setIdentity] = useState(provider.getIdentity());
+  useEffect(() => {
+    provider.on('newIdentity', setIdentity);
+    return () => {
+      provider.off('newIdentity', setIdentity);
+    };
+  });
+  return identity;
+}
+
+export default dataContext;
+export { useIdentity };
