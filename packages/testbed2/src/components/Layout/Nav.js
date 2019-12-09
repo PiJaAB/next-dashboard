@@ -15,6 +15,9 @@ export default function Nav(): React$Node {
         <NavEntry href="/dashboard" icon="home">
           Overview
         </NavEntry>
+        <NavEntry href="/dashboard/realtime" icon="clock">
+          Realtime
+        </NavEntry>
         <NavEntry href="/dashboard/datatest" icon="users">
           Data Test
         </NavEntry>
@@ -32,9 +35,6 @@ export default function Nav(): React$Node {
         </NavEntry>
         <NavEntry href="/dashboard/statistics" icon="signal">
           Statistics
-        </NavEntry>
-        <NavEntry href="/dashboard/realtime" icon="clock">
-          Realtime
         </NavEntry>
       </NavSection>
       <NavSection id="account">

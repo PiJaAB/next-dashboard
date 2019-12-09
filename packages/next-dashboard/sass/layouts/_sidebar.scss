@@ -3,6 +3,14 @@ body {
     .dashboard-sidebar {
       transition: none;
     }
+    .dashboard-sidebar-menu-item-button-text {
+      transition: none;
+    }
+    .dashboard-sidebar-profile {
+      .profile-content {
+        transition: none;
+      }
+    }
   }
 }
 
@@ -36,13 +44,19 @@ body {
     }
   }
   &_compact {
-    width: 100px;
+    @include breakpoint(medium) {
+      width: 100px;
+    }
     .dashboard-sidebar-menu-item-button-text {
-      opacity: 0;
+      @include breakpoint(medium) {
+        opacity: 0;
+      }
     }
     .dashboard-sidebar-profile {
       .profile-content {
-        opacity: 0;
+        @include breakpoint(medium) {
+          opacity: 0;
+        }
       }
     }
   }
@@ -112,6 +126,12 @@ body {
   margin: 0 0 40px;
   &:last-child {
     margin: 0;
+  }
+  &_other {
+    display: none;
+    @include breakpoint(medium) {
+      display: block;
+    }
   }
 }
 .dashboard-sidebar-profile {
