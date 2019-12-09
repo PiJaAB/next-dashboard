@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import { DashboardLayout } from '@pija-ab/next-dashboard';
-import Nav from './Nav';
+import Sidebar from './Sidebar';
+import Header from './Header';
 
 type Props = {
   children: React$Node,
@@ -12,17 +13,22 @@ type Props = {
 export default function Layout({
   children,
   sidebar,
+  header,
   ...props
 }: Props): React$Element<typeof DashboardLayout> {
   return (
-    <DashboardLayout {...props} sidebar={sidebar && <Nav />}>
+    <DashboardLayout
+      {...props}
+      header={header && <Header />}
+      sidebar={sidebar && <Sidebar />}
+    >
       {children}
     </DashboardLayout>
   );
 }
 
 Layout.defaultProps = {
-  header: undefined,
+  header: true,
   sidebar: true,
   footer: undefined,
 };

@@ -20,7 +20,7 @@ export type Props = {
     | 'normal'
     | 'wide'
     | 'extra-wide',
-  header?: boolean,
+  header?: React$Node,
   sidebar?: React$Node,
   footer?: boolean,
 };
@@ -108,7 +108,9 @@ function DashboardLayout({
               <Header
                 sidebarActive={sidebarActive}
                 toggleSidebarActive={toggleSidebarActive}
-              />
+              >
+                {header}
+              </Header>
             )}
             {sidebar && (
               <Sidebar

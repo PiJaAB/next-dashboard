@@ -1,8 +1,6 @@
 // @flow
 import React from 'react';
 
-import Search from '../Search';
-
 type Props = {
   sidebarActive: boolean,
   sidebarCompact: boolean,
@@ -20,9 +18,6 @@ const Sidebar = ({ sidebarActive, sidebarCompact, children }: Props) => {
         .filter(className => className)
         .join(' ')}
     >
-      <div className="dashboard-sidebar-search">
-        <Search />
-      </div>
       {children}
     </div>
   );

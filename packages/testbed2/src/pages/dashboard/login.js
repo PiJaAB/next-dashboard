@@ -2,15 +2,16 @@
 import React, { useCallback, useContext, useState } from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
-import { PageContent, ThemeSelector } from '@pija-ab/next-dashboard';
+import {
+  PageContent,
+  ThemeSelector,
+  DashboardContext,
+} from '@pija-ab/next-dashboard';
 
 import Layout from 'src/components/Layout';
 import Title from 'src/components/DashboardTitle';
 import withDashboard from 'src/utils/withDashboard';
-import {
-  type DashboardContextType,
-  Context as DashboardContext,
-} from 'src/utils/dashboardContext';
+import provider from 'src/utils/dataProvider';
 
 type Props = {};
 
@@ -20,40 +21,37 @@ function Login(): React$Node {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
+  const login = useCallback(async () => {
+    const { attemptedURI } = Router.query;
+    setLoading(true);
+    try {
+      if (await provider.auth(username, password)) {
+        setPassword('');
+        Router.push(attemptedURI || '/dashboard');
+      } else {
+        setError('Invalid credentials');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [username, password]);
+
+  const handleSubmit = useCallback(
+    ev => {
+      ev.preventDefault();
+      login();
+      return false;
+    },
+    [login],
+  );
+
   const ctx = useContext(DashboardContext);
 
   if (!ctx) {
     throw new TypeError('Login needs to be in a Dashboard Context');
   }
-
-  const login = useCallback(
-    async ({ dataProvider }: $NonMaybeType<DashboardContextType>) => {
-      const { attemptedURI } = Router.query;
-      setLoading(true);
-      try {
-        if (await dataProvider.auth(username, password)) {
-          setPassword('');
-          Router.push(attemptedURI || '/dashboard');
-        } else {
-          setError('Invalid credentials');
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [username, password],
-  );
-
-  const handleSubmit = useCallback(
-    ev => {
-      ev.preventDefault();
-      login(ctx);
-      return false;
-    },
-    [login, ctx],
-  );
 
   const themeClass = ctx.theme.class;
   const logo = `logo${themeClass !== 'default' ? `-${themeClass}` : ''}.png`;

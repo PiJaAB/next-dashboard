@@ -39,13 +39,6 @@ export type DataType<T = mixed> =
   | ErrorDataType
   | LoadingDataType;
 
-export type Identity = {
-  displayName?: string,
-  subName?: string,
-  imgUrl?: string,
-  authenticated?: boolean,
-};
-
 export type Theme = {
   name: string,
   class: string,

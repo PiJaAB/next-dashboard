@@ -2,8 +2,8 @@
 import {
   PollingProvider,
   createPersistentState,
-  type Identity,
   type PollingFetcher,
+  type IErrorAuthReporter,
 } from '@pija-ab/next-dashboard';
 
 import type { InitialPropsContext } from 'src/utils/nextTypes';
@@ -11,10 +11,9 @@ import Axios from 'axios';
 
 const { getInitialState, persist } = createPersistentState('dashboardIdentity');
 
-type XzaktIdentity = {
+type Identity = {
   username: string,
   accessToken: string,
-  customer: string,
   customerId: string,
 };
 
@@ -49,6 +48,14 @@ export type ScoresObj = {|
 type Overview = {
   periodScores: ScoresObj[],
   totalScore: ScoresObj,
+};
+
+type CustInfo = {
+  customerName: string,
+  CustNo: string,
+  Summary: string,
+  PrognoseInfo: string,
+  CustomerContacts: string,
 };
 
 function overviewSort({ periodScores, ...overview }: Overview): Overview {
@@ -89,23 +96,31 @@ const fetchers: PollingFetcher[] = [
       );
     },
   },
+  {
+    id: 'customerInfo',
+    async runner(): Promise<Overview> {
+      const self = (this /*:XzaktProvider*/);
+      return (await self.axios.get(`/Xvision/CustInfo`)).data;
+    },
+  },
 ];
 
 export type Data = {|
   overview: Overview,
-  lol: string,
+  customerInfo: CustInfo,
 |};
 
 type Fetch = {
   ApiToken: string,
   AuthUsername: string,
 };
-export class XzaktProvider extends PollingProvider<Data> {
+export class XzaktProvider extends PollingProvider<Data>
+  implements IErrorAuthReporter {
   axios = Axios.create({
     baseURL: 'https://api.xzakt.com/api/',
   });
 
-  identity: ?XzaktIdentity = null;
+  identity: ?Identity = null;
 
   initialize(ctx: InitialPropsContext) {
     this.identity = getInitialState(ctx);
@@ -117,16 +132,6 @@ export class XzaktProvider extends PollingProvider<Data> {
     this.addFetcher(fetchers);
   }
 
-  getIdentity(): ?Identity {
-    if (this.identity == null) return null;
-    const { username, customer } = this.identity;
-    return {
-      authenticated: true,
-      displayName: username,
-      subName: customer,
-    };
-  }
-
   refreshAuth() {
     const { identity, axios } = this;
     if (!identity) {
@@ -136,10 +141,22 @@ export class XzaktProvider extends PollingProvider<Data> {
     }
   }
 
-  setIdentity(identity: ?XzaktIdentity) {
+  getIdentity(): ?Identity {
+    return this.identity;
+  }
+
+  setIdentity(identity: ?Identity) {
     this.identity = identity;
     this.refreshAuth();
     persist(identity);
+  }
+
+  isAuthenticated(): boolean {
+    return Boolean(this.getIdentity());
+  }
+
+  isAuthorizedForRoute(): boolean {
+    return Boolean(this.getIdentity());
   }
 
   async auth(username: string, password: string): Promise<boolean> {

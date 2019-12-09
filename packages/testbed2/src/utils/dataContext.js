@@ -9,7 +9,11 @@ import type {
 
 import provider, { type Data } from 'src/utils/dataProvider';
 
-const ctx: IDataContext<Data> = {
+interface ICustomContext extends IDataContext<Data> {
+  getIdentity(): $Call<$PropertyType<typeof provider, 'getIdentity'>>;
+}
+
+const ctx: ICustomContext = {
   read<DS: $Keys<Data>>(
     dataSource: DS,
     extra?: DataExtra,
@@ -32,6 +36,10 @@ const ctx: IDataContext<Data> = {
   ) {
     provider.unsubscribe<DS>(cb, dataSource, extra);
   },
+
+  getIdentity(): $Call<$PropertyType<typeof provider, 'getIdentity'>> {
+    return provider.getIdentity();
+  },
 };
 
-export default createContext<IDataContext<Data>>(ctx);
+export default createContext<ICustomContext>(ctx);

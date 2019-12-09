@@ -1,27 +1,30 @@
 // @flow
 import React, { useContext } from 'react';
+import { useData } from '@pija-ab/next-dashboard';
 
-//import DashboardContext from '../utils/dashboardContext';
+import DataContext from 'src/utils/DataContext';
 
 const Profile = () => {
-  // const ctx = useContext(DashboardContext);
-  const ctx = null;
-  if (ctx == null) return null;
-  const identity = ctx.dataProvider.getIdentity();
+  const ctx = useContext(DataContext);
+  const identity = ctx.getIdentity();
   if (identity == null) return null;
-  const { imgUrl, displayName, subName } = identity;
-  if (imgUrl == null && displayName == null && subName == null) return null;
+  const { username } = identity;
+  const custInfo = useData(ctx, 'customerInfo');
+  let custName = 'Loading...';
+  if (custInfo.status === 'error') {
+    custName = 'ERROR!';
+  }
+  if (custInfo.status === 'success') {
+    custName = custInfo.value.customerName;
+  }
+  const imgUrl = null;
   return (
     <div className="profile">
       {imgUrl != null && <div className="profile-image" />}
-      {displayName != null && (
-        <div className="profile-content">
-          <div className="h5 margin-0 profile-name">{displayName}</div>
-          {subName != null && (
-            <div className="profile-organization">{subName}</div>
-          )}
-        </div>
-      )}
+      <div className="profile-content">
+        <div className="h5 margin-0 profile-name">{username}</div>
+        <div className="profile-organization">{custName}</div>
+      </div>
     </div>
   );
 };

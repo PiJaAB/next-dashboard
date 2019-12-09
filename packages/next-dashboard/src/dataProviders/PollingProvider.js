@@ -4,10 +4,8 @@ import EventEmitter from 'events';
 import {
   type DataType,
   NotImplementedError,
-  type Identity,
   type PollingFetcher,
   type DataExtra,
-  type IErrorAuthReporter,
 } from '../utils/types';
 
 import type { InitialPropsContext } from '../utils/nextTypes';
@@ -36,8 +34,7 @@ type MappedData<D> = $ObjMap<D, Mapper>;
   `addFetcher` method, when a component subscribes to data
   that fetcher provides.
 */
-export default class PollingProvider<Data: {} = {}> extends EventEmitter
-  implements IErrorAuthReporter {
+export default class PollingProvider<Data: {} = {}> extends EventEmitter {
   constructor() {
     super();
 
@@ -111,7 +108,8 @@ export default class PollingProvider<Data: {} = {}> extends EventEmitter
 
   setData(dataSource: string, data: ?DataType<>) {
     this.data[dataSource] = data;
-    this.emit('data', dataSource, data);
+    const listeners = this.activeListeners.get(dataSource);
+    if (listeners) listeners.forEach(listener => listener(data));
   }
 
   getActiveListeners(): $ReadOnlyArray<string> {
@@ -217,22 +215,6 @@ export default class PollingProvider<Data: {} = {}> extends EventEmitter
 
   send<T>(_key: string, _data: T, _extra?: mixed): Promise<void> | void {
     throw new NotImplementedError();
-  }
-
-  getIdentity(): ?Identity {
-    return null;
-  }
-
-  isAuthenticated(): boolean {
-    return Boolean(this.getIdentity());
-  }
-
-  isAuthorizedForRoute(
-    _href: string,
-    _asPath: string,
-    _query: { [string]: string | void },
-  ): boolean {
-    return Boolean(this.getIdentity());
   }
 
   getCurrentData(): MappedData<Data> {
