@@ -1,8 +1,9 @@
 // @flow
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { useData, Statistic } from '@pija-ab/next-dashboard';
 import type { Data, Scores } from 'src/utils/dataProvider';
+import DataContext from 'src/utils/dataContext';
 
 type StatProps = $PropertyType<Statistic, 'props'>;
 
@@ -35,7 +36,8 @@ export default function OverviewStatistic({
   label: providedLabel,
   ...props
 }: Props): React$Node {
-  const data = useData<Data>('overview').overview;
+  const ctx = useContext(DataContext);
+  const data = useData<Data, 'overview'>(ctx, 'overview');
   const label = providedLabel || category;
   if (data.status === 'loading') {
     return <Statistic value="Loading" label={label} {...props} />;

@@ -91,15 +91,16 @@ const fetchers: PollingFetcher[] = [
   },
 ];
 
-export type Data = {
+export type Data = {|
   overview: Overview,
-};
+  lol: string,
+|};
 
 type Fetch = {
   ApiToken: string,
   AuthUsername: string,
 };
-export default class XzaktProvider extends PollingProvider<Data> {
+export class XzaktProvider extends PollingProvider<Data> {
   axios = Axios.create({
     baseURL: 'https://api.xzakt.com/api/',
   });
@@ -165,3 +166,5 @@ export default class XzaktProvider extends PollingProvider<Data> {
     return true;
   }
 }
+
+export default new XzaktProvider();

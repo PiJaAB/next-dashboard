@@ -2,7 +2,6 @@
 import React from 'react';
 
 import Search from '../Search';
-import Profile from '../Profile';
 
 type Props = {
   sidebarActive: boolean,
@@ -25,9 +24,6 @@ const Sidebar = ({ sidebarActive, sidebarCompact, children }: Props) => {
         <Search />
       </div>
       {children}
-      <div className="dashboard-sidebar-profile">
-        <Profile />
-      </div>
     </div>
   );
 };

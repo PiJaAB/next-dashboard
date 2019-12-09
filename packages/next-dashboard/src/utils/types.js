@@ -1,4 +1,5 @@
 // @flow
+import type { InitialPropsContext } from './nextTypes';
 
 // eslint-disable-next-line import/prefer-default-export
 export class NotImplementedError extends Error {
@@ -18,20 +19,20 @@ export class NotImplementedError extends Error {
   name = 'NotImplementedError';
 }
 
-export type SuccessDataType<T = mixed> = {|
+export type SuccessDataType<T = mixed> = {
   +status: 'success',
   +value: T,
   +updating?: boolean,
-|};
+};
 
-export type ErrorDataType = {|
+export type ErrorDataType = {
   +status: 'error',
   +error: Error,
-|};
+};
 
-export type LoadingDataType = {|
+export type LoadingDataType = {
   +status: 'loading',
-|};
+};
 
 export type DataType<T = mixed> =
   | SuccessDataType<T>
@@ -85,4 +86,38 @@ export type DataPath = { +[string]: PathFragment } | PathFragment;
 
 export type DataMapper = <T>(T) => DataType<T>;
 
-export type MappedData<D> = $ObjMap<D, DataMapper>;
+export type MappedData<D: {}> = $ObjMap<D, DataMapper>;
+
+export interface IErrorAuthReporter {
+  on(string, any): IErrorAuthReporter;
+  off(string, any): IErrorAuthReporter;
+  +initialized: boolean;
+  +initialize: ?(ctx: InitialPropsContext) => void;
+  isAuthorizedForRoute(
+    _href: string,
+    _asPath: string,
+    _query: { [string]: string | void },
+  ): boolean;
+  isAuthenticated(): boolean;
+}
+
+export interface IDataContext<Data: {}> {
+  read<DS: $Keys<Data>>(
+    dataSource: DS,
+    extra?: DataExtra,
+  ): $ElementType<MappedData<Data>, DS>;
+
+  subscribe<DS: $Keys<Data>>(
+    cb: ($ElementType<MappedData<Data>, DS>) => void,
+    dataSource: DS,
+    extra?: DataExtra,
+  ): void;
+
+  unsubscribe<DS: $Keys<Data>>(
+    cb: ($ElementType<MappedData<Data>, DS>) => void,
+    dataSource: DS,
+    extra?: DataExtra,
+  ): void;
+}
+
+export type DataContext<Data: {}> = React$Context<IDataContext<Data>>;

@@ -6,7 +6,6 @@ import DashboardContext from '../../utils/dashboardContext';
 
 import Search from '../Search';
 import Contact from '../Contact';
-import Profile from '../Profile';
 
 type Props = {
   toggleSidebarActive: () => void,
@@ -54,9 +53,6 @@ const Header = ({ toggleSidebarActive, sidebarActive }: Props) => (
               </div>
               <div className="cell dashboard-header-cell dashboard-header-cell_contact">
                 <Contact />
-              </div>
-              <div className="cell dashboard-header-cell dashboard-header-cell_profile">
-                <Profile />
               </div>
             </div>
           </div>

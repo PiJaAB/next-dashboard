@@ -1,9 +1,11 @@
 // @flow
 import React, { useContext } from 'react';
-import DashboardContext from '../utils/dashboardContext';
+
+//import DashboardContext from '../utils/dashboardContext';
 
 const Profile = () => {
-  const ctx = useContext(DashboardContext);
+  // const ctx = useContext(DashboardContext);
+  const ctx = null;
   if (ctx == null) return null;
   const identity = ctx.dataProvider.getIdentity();
   if (identity == null) return null;

@@ -2,7 +2,7 @@
 
 import { createDashboardHOC, type Config } from '@pija-ab/next-dashboard';
 import ErrorComp from 'src/components/Error';
-import XzaxtProvider, { type Data } from 'src/utils/dataProvider';
+import provider from 'src/utils/dataProvider';
 
 const config: Config = {
   unauthedRoute: '/dashboard/login',
@@ -13,5 +13,5 @@ const config: Config = {
   },
 };
 
-const withDashboard = createDashboardHOC<Data>(new XzaxtProvider(), config);
+const withDashboard = createDashboardHOC(provider, config);
 export default withDashboard;

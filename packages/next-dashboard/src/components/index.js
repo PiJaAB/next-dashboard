@@ -4,7 +4,6 @@ export * from './layout';
 export { default as Statistic } from './Statistic';
 export { default as PageContent } from './PageContent';
 export { default as Contact } from './Contact';
-export { default as Profile } from './Profile';
 export { default as Search } from './Search';
 export { default as NavEntry } from './NavEntry';
 export { default as NavSection } from './NavSection';
