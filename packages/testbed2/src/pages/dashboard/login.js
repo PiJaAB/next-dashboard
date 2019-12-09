@@ -78,7 +78,9 @@ function Login(): React$Node {
           Please enter your username and password to continue.
         </p>
         {error != null && (
-          <p className="margin-bottom-x4 text-align-center">{error}</p>
+          <p className="margin-bottom-x4 color-error text-align-center">
+            {error}
+          </p>
         )}
         <form className="margin-bottom-x2" onSubmit={handleSubmit}>
           <div className="form-item">

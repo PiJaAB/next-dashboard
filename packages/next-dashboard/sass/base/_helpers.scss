@@ -21,6 +21,9 @@
     .color-text#{$breakpoint-class} {
       @include var('color', 'text');
     }
+    .color-error#{$breakpoint-class} {
+      @include var('color', 'error');
+    }
 
     .display-block#{$breakpoint-class} {
       display: block;
