@@ -112,5 +112,3 @@ export interface IDataContext<Data: {}> {
     extra?: DataExtra,
   ): void;
 }
-
-export type DataContext<Data: {}> = React$Context<IDataContext<Data>>;
