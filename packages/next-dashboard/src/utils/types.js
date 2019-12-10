@@ -82,6 +82,7 @@ export type DataMapper = <T>(T) => DataType<T>;
 export type MappedData<D: {}> = $ObjMap<D, DataMapper>;
 
 export interface IErrorAuthReporter {
+  emit(string, ...any): boolean;
   on(string, any): IErrorAuthReporter;
   off(string, any): IErrorAuthReporter;
   +initialize: ?(ctx: InitialPropsContext) => void;

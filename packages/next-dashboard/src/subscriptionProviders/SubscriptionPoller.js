@@ -113,16 +113,12 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     extra?: DataExtra,
   ) => void = (cb, dataSource, extra) => {
     const key = generateDataKey(dataSource, extra);
-    if (this.activeListeners.has(key)) {
-      // We've just checked for the existence using
-      // the .has method, and since the map does not
-      // contain maybetypes, this is now typechecked.
-      // $FlowIssue
-      const set: Set<($Keys<Data>) => void> = this.activeListeners.get(key);
+    let set = this.activeListeners.get(key);
+    if (set) {
       set.add(cb);
       return;
     }
-    const set = new Set<($Keys<Data>) => void>();
+    set = new Set<($Keys<Data>) => void>();
     set.add(cb);
     this.activeListeners.set(key, set);
     if (this.activeFetchers.has(key)) {
@@ -165,7 +161,8 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     extra?: DataExtra,
   ) => void = (cb, dataSource, extra) => {
     const key = generateDataKey(dataSource, extra);
-    if (!this.activeListeners.has(key)) {
+    const set = this.activeListeners.get(key);
+    if (!set) {
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
         console.warn(
@@ -174,14 +171,9 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       }
       return;
     }
-    // We've just checked for the existence using
-    // the .has method, and since the map does not
-    // contain maybetypes, this is now typechecked.
-    // $FlowIssue
-    const set: Set<($Keys<Data>) => void> = this.activeListeners.get(key);
+
     if (!set.has(cb)) {
       if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
         console.warn(
           `Trying to unsubscribe to ${dataSource} without being subscribed to it.`,
         );

@@ -64,7 +64,31 @@ module.exports = {
       'flowtype/sort-keys': ['off'],
       'flowtype/type-id-match': ['error', '^[A-Z]'],
       'flowtype/type-import-style': ['off'],
-      'flowtype/use-flow-type': ['off']
+      'flowtype/use-flow-type': ['off'],
+      'no-console': [ 'off' ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ForInStatement',
+          message: 'for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array.'
+        },
+        {
+          selector: 'ForOfStatement',
+          message: 'iterators/generators require regenerator-runtime, which is too heavyweight for this guide to allow them. Separately, loops should be avoided in favor of array iterations.',
+        },
+        {
+          selector: 'LabeledStatement',
+          message: 'Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.'
+        },
+        {
+          selector: 'WithStatement',
+          message: '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.'
+        },
+        {
+            "selector": ":not(IfStatement[test.operator='==='][test.right.type='Literal'][test.right.value='development'][test.left.type='MemberExpression'][test.left.object.type='MemberExpression'][test.left.object.property.type='Identifier'][test.left.object.property.name='env'][test.left.object.object.type='Identifier'][test.left.object.object.name='process'][test.left.property.type='Identifier'][test.left.property.name='NODE_ENV'] > BlockStatement > ExpressionStatement) > CallExpression[callee.object.name='console']",
+            "message": "Unexpected property on console object was called while not being directly in a development if-statement block."
+        }
+      ]
     },
     env: {
       jest: true,

@@ -57,8 +57,6 @@ export type Config = {
   themes?: Theme[],
 };
 
-const { getInitialState, persist } = createPersistentState('dashboardState');
-
 function makeStatusError(
   statusCode: number,
   message?: string,
@@ -93,6 +91,11 @@ export default function createDashboardHOC({
     { name: 'Light', class: 'default' },
     { name: 'Dark', class: 'dark' },
   ];
+
+  const { getInitialState, persist } = createPersistentState(
+    'dashboardState',
+    errorAuthReporter,
+  );
   let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
   let authInitialized = !errorAuthReporter.initialize;
 
@@ -107,12 +110,13 @@ export default function createDashboardHOC({
     if (process.env.NODE_ENV === 'development') {
       const { prototype } = (Comp: any) || {};
       if (prototype && prototype instanceof React.PureComponent) {
-        // eslint-disable-next-line no-console
-        console.warn(
-          `Please don't use PureComponent for dashboard root components, Use regular Component instead. Component: ${displayNameOf(
-            Comp,
-          )}`,
-        );
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(
+            `Please don't use PureComponent for dashboard root components, Use regular Component instead. Component: ${displayNameOf(
+              Comp,
+            )}`,
+          );
+        }
       }
     }
     // eslint-disable-next-line no-param-reassign

@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import toClassName from '../utils/toClassName';
+
 export type HeaderCellID = 'search' | 'profile' | 'contact';
 
 type Props = {
@@ -17,14 +19,12 @@ export default function HeaderCell({
 }: Props): React$Node {
   return (
     <div
-      className={[
+      className={toClassName([
         className,
         'cell',
         'dashboard-header-cell',
         cellId && `dashboard-header-cell_${cellId}`,
-      ]
-        .filter(c => c)
-        .join(' ')}
+      ])}
     >
       {children}
     </div>
