@@ -107,7 +107,6 @@ function ButtonEl({
 }: ButtonProps): React$Element<'button'> {
   if (as) {
     if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
       console.warn('`as` makes no sense without href.');
     }
   }
@@ -131,7 +130,6 @@ function ButtonEl({
 function RawEl({ children, onClick, href, icon, as }: PropsRaw): React$Node {
   if (onClick || href || icon || as) {
     if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
       console.warn(
         '`onClick`, `href`, `icon`, `as` unsupported during raw render.',
       );
