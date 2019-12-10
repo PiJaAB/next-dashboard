@@ -2,9 +2,10 @@
 
 import { createDashboardHOC, type Config } from '@pija-ab/next-dashboard';
 import ErrorComp from 'src/components/Error';
-import provider from 'src/utils/dataProvider';
+import errorAuthReporter from 'src/API/authProvider';
 
 const config: Config = {
+  errorAuthReporter,
   unauthedRoute: '/dashboard/login',
   needAuthDefault: true,
   error: {
@@ -13,5 +14,5 @@ const config: Config = {
   },
 };
 
-const withDashboard = createDashboardHOC(provider, config);
+const withDashboard = createDashboardHOC(config);
 export default withDashboard;

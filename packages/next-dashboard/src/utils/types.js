@@ -84,7 +84,6 @@ export type MappedData<D: {}> = $ObjMap<D, DataMapper>;
 export interface IErrorAuthReporter {
   on(string, any): IErrorAuthReporter;
   off(string, any): IErrorAuthReporter;
-  +initialized: boolean;
   +initialize: ?(ctx: InitialPropsContext) => void;
   isAuthorizedForRoute(
     _href: string,
@@ -94,7 +93,7 @@ export interface IErrorAuthReporter {
   isAuthenticated(): boolean;
 }
 
-export interface IDataContext<Data: {}> {
+export interface ISubscriptionProvider<Data: {}> {
   read<DS: $Keys<Data>>(
     dataSource: DS,
     extra?: DataExtra,

@@ -11,7 +11,7 @@ import {
 import Layout from 'src/components/Layout';
 import Title from 'src/components/DashboardTitle';
 import withDashboard from 'src/utils/withDashboard';
-import provider from 'src/utils/dataProvider';
+import authProvider from 'src/API/authProvider';
 
 type Props = {};
 
@@ -25,7 +25,7 @@ function Login(): React$Node {
     const { attemptedURI } = Router.query;
     setLoading(true);
     try {
-      if (await provider.auth(username, password)) {
+      if (await authProvider.auth(username, password)) {
         setPassword('');
         Router.push(attemptedURI || '/dashboard');
       } else {

@@ -6,9 +6,8 @@ import {
   NotImplementedError,
   type PollingFetcher,
   type DataExtra,
+  type ISubscriptionProvider,
 } from '../utils/types';
-
-import type { InitialPropsContext } from '../utils/nextTypes';
 
 import generateDataKey from '../utils/generateDataKey';
 
@@ -34,28 +33,11 @@ type MappedData<D> = $ObjMap<D, Mapper>;
   `addFetcher` method, when a component subscribes to data
   that fetcher provides.
 */
-export default class PollingProvider<Data: {} = {}> extends EventEmitter {
-  constructor() {
+export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
+  implements ISubscriptionProvider<Data> {
+  constructor(fetcher?: PollingFetcher | PollingFetcher[]) {
     super();
-
-    // Bit of magic code. Due to how next works, it's hard to tell if the initialize
-    // method has been called yet or not and we only want to actually initialize once.
-    if (!this.initialize) {
-      this.initialized = true;
-    } else {
-      let initialized = false;
-      const { initialize: oldInitialize } = this;
-      this.initialize = function initialize(ctx: InitialPropsContext) {
-        if (initialized) return;
-        initialized = true;
-        oldInitialize.call(this, ctx);
-      };
-      Object.defineProperty(this, ('initialized': string), {
-        get(): boolean {
-          return initialized;
-        },
-      });
-    }
+    if (fetcher) this.addFetcher(fetcher);
   }
 
   async startFetcher(fetcher: PollingFetcher) {
@@ -90,24 +72,20 @@ export default class PollingProvider<Data: {} = {}> extends EventEmitter {
     this.fetchers = this.fetchers.concat(fetchers);
   }
 
-  +initialized: boolean;
-
-  +initialize: ?(ctx: InitialPropsContext) => void;
-
   activeListeners: Map<string, Set<(any) => void>> = new Map();
 
   fetchers: PollingFetcher[] = [];
 
   activeFetchers: Map<string, PollingFetcher> = new Map();
 
-  data: { [string]: ?DataType<> } = {};
+  dataCache: { [string]: ?DataType<> } = {};
 
   +start: ?(id: string) => void;
 
   +stop: ?(id: string) => void;
 
   setData(dataSource: string, data: ?DataType<>) {
-    this.data[dataSource] = data;
+    this.dataCache[dataSource] = data;
     const listeners = this.activeListeners.get(dataSource);
     if (listeners) listeners.forEach(listener => listener(data));
   }
@@ -121,12 +99,12 @@ export default class PollingProvider<Data: {} = {}> extends EventEmitter {
     extra?: DataExtra,
   ) => $ElementType<MappedData<Data>, DS> = (dataSource, extra) => {
     const key = generateDataKey(dataSource, extra);
-    if (!this.data[key]) {
+    if (!this.dataCache[key]) {
       return {
         status: 'loading',
       };
     }
-    return this.data[key];
+    return this.dataCache[key];
   };
 
   subscribe: <DS: $Keys<Data>>(
@@ -188,9 +166,12 @@ export default class PollingProvider<Data: {} = {}> extends EventEmitter {
   ) => void = (cb, dataSource, extra) => {
     const key = generateDataKey(dataSource, extra);
     if (!this.activeListeners.has(key)) {
-      console.warn(
-        `Trying to unsubscribe to ${dataSource} without being subscribed to it.`,
-      );
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `Trying to unsubscribe to ${dataSource} without being subscribed to it.`,
+        );
+      }
       return;
     }
     // We've just checked for the existence using
@@ -199,14 +180,17 @@ export default class PollingProvider<Data: {} = {}> extends EventEmitter {
     // $FlowIssue
     const set: Set<($Keys<Data>) => void> = this.activeListeners.get(key);
     if (!set.has(cb)) {
-      console.warn(
-        `Trying to unsubscribe to ${dataSource} without being subscribed to it.`,
-      );
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `Trying to unsubscribe to ${dataSource} without being subscribed to it.`,
+        );
+      }
       return;
     }
     set.delete(cb);
     if (set.size === 0) {
-      delete this.data[key];
+      delete this.dataCache[key];
       this.activeListeners.delete(key);
       this.activeFetchers.delete(key);
       this.emit('stop-poll', dataSource, extra);
@@ -218,6 +202,6 @@ export default class PollingProvider<Data: {} = {}> extends EventEmitter {
   }
 
   getCurrentData(): MappedData<Data> {
-    return this.data;
+    return this.dataCache;
   }
 }

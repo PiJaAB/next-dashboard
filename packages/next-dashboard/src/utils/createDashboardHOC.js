@@ -45,6 +45,7 @@ export type WrappedProps<P: {}, I> =
   | InitialErrProps;
 
 export type Config = {
+  errorAuthReporter: IErrorAuthReporter,
   unauthedRoute?: string,
   needAuthDefault: boolean,
   error?: {
@@ -78,15 +79,13 @@ function compareSitemessages(
   return true;
 }
 
-export default function createDashboardHOC(
-  authErrorReporter: IErrorAuthReporter,
-  {
-    needAuthDefault,
-    unauthedRoute,
-    error: errorConf,
-    themes: confThemes,
-  }: Config,
-): <U: {}, Q: {} = {}>(
+export default function createDashboardHOC({
+  errorAuthReporter,
+  needAuthDefault,
+  unauthedRoute,
+  error: errorConf,
+  themes: confThemes,
+}: Config): <U: {}, Q: {} = {}>(
   Comp: NextComponent<U, Q>,
   needAuth?: boolean,
 ) => NextComponent<WrappedUnified<U, Q>, InitialUnified<Q>> {
@@ -95,6 +94,7 @@ export default function createDashboardHOC(
     { name: 'Dark', class: 'dark' },
   ];
   let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
+  let authInitialized = !errorAuthReporter.initialize;
 
   function withDashboard<P: {}, I: {} = {}>(
     Comp:
@@ -121,10 +121,11 @@ export default function createDashboardHOC(
     function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
       if (
         typeof window !== 'undefined' &&
-        !authErrorReporter.initialized &&
-        authErrorReporter.initialize
+        !authInitialized &&
+        errorAuthReporter.initialize
       ) {
-        authErrorReporter.initialize({
+        authInitialized = true;
+        errorAuthReporter.initialize({
           asPath: Router.asPath,
           query: Router.query,
           pathname: Router.pathname,
@@ -206,9 +207,9 @@ export default function createDashboardHOC(
       }
 
       useEffect(() => {
-        authErrorReporter.on('error', registerSiteMessage);
+        errorAuthReporter.on('error', registerSiteMessage);
         return () => {
-          authErrorReporter.off('error', registerSiteMessage);
+          errorAuthReporter.off('error', registerSiteMessage);
         };
       });
 
@@ -217,7 +218,7 @@ export default function createDashboardHOC(
       ) ||
         themes[0] || { name: 'Default', class: 'default' };
       const context: IDashboardContext = {
-        isAuthenticated: () => authErrorReporter.isAuthenticated(),
+        isAuthenticated: () => errorAuthReporter.isAuthenticated(),
         getState: getPersistentState,
         setState: setPersistentState,
         registerSiteMessage,
@@ -253,13 +254,14 @@ export default function createDashboardHOC(
     const getInitialProps: InitialPropsContext => Promise<
       InitialProps<$Shape<I> | {}>,
     > = async ctx => {
-      if (!authErrorReporter.initialized && authErrorReporter.initialize) {
-        authErrorReporter.initialize(ctx);
+      if (!authInitialized && errorAuthReporter.initialize) {
+        authInitialized = true;
+        errorAuthReporter.initialize(ctx);
       }
       const { pathname, query, asPath } = ctx;
       const authenticated =
-        authErrorReporter &&
-        (await authErrorReporter.isAuthorizedForRoute(pathname, asPath, query));
+        errorAuthReporter &&
+        (await errorAuthReporter.isAuthorizedForRoute(pathname, asPath, query));
       if (parsedNeedAuth && !authenticated) {
         const { res } = ctx;
         if (unauthedRoute) {

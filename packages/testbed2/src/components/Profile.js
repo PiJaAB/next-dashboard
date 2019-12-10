@@ -2,13 +2,14 @@
 import React from 'react';
 import { useData } from '@pija-ab/next-dashboard';
 
-import dataContext, { useIdentity } from 'src/utils/dataHooks';
+import subscriberProvider from 'src/API/subscriberProvider';
+import { useIdentity } from 'src/utils/dataHooks';
 
 const Profile = () => {
   const identity = useIdentity();
   if (identity == null) return null;
   const { username } = identity;
-  const custInfo = useData(dataContext, 'customerInfo');
+  const custInfo = useData(subscriberProvider, 'customerInfo');
   let custName = 'Loading...';
   if (custInfo.status === 'error') {
     custName = 'ERROR!';
