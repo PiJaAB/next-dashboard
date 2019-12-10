@@ -2,6 +2,7 @@
 
 import {
   type IErrorAuthReporter,
+  type PersistentState,
   createPersistentState,
 } from '@pija-ab/next-dashboard';
 
@@ -12,10 +13,22 @@ import type { Fetch, Identity } from './types';
 
 import axios from './axios';
 
-const { getInitialState, persist } = createPersistentState('xzaktIdentity');
-
 export class AuthProvider extends EventEmitter implements IErrorAuthReporter {
   identity: ?Identity = undefined;
+
+  constructor() {
+    super();
+    const { getInitialState, persist } = createPersistentState(
+      'xzaktIdentity',
+      this,
+    );
+    this.getInitialState = getInitialState;
+    this.persist = persist;
+  }
+
+  +getInitialState: InitialPropsContext => PersistentState;
+
+  +persist: PersistentState => void;
 
   refreshAuth() {
     if (!this.identity) {
@@ -26,7 +39,7 @@ export class AuthProvider extends EventEmitter implements IErrorAuthReporter {
   }
 
   initialize = (ctx: InitialPropsContext) => {
-    this.identity = getInitialState(ctx);
+    this.identity = this.getInitialState(ctx);
     this.refreshAuth();
     this.emit('newIdentity', this.identity);
   };
@@ -43,7 +56,7 @@ export class AuthProvider extends EventEmitter implements IErrorAuthReporter {
     this.identity = identity;
     this.refreshAuth();
     this.emit('newIdentity', identity);
-    persist(identity);
+    this.persist(identity);
   }
 
   async auth(username: string, password: string): Promise<boolean> {

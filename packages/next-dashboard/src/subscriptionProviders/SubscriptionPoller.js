@@ -123,7 +123,6 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     this.activeListeners.set(key, set);
     if (this.activeFetchers.has(key)) {
       if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
         console.error(
           'Fetcher is active, even though this is a new datafetcher. Desync in pollingprovider somewhere',
         );
@@ -164,7 +163,6 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     const set = this.activeListeners.get(key);
     if (!set) {
       if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
         console.warn(
           `Trying to unsubscribe to ${dataSource} without being subscribed to it.`,
         );
