@@ -1,7 +1,7 @@
 // @flow
 import React, { useState, useRef } from 'react';
 
-import Modal from './Modal';
+import { Modal } from '@pija-ab/next-dashboard';
 
 const Contact = () => {
   const contactRef = useRef();

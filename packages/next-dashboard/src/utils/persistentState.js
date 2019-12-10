@@ -1,6 +1,7 @@
 // @flow
 
 import cookies from 'next-cookies';
+import type { IErrorAuthReporter } from './types';
 
 import type { InitialPropsContext } from './nextTypes';
 
@@ -19,6 +20,7 @@ if (typeof window === 'undefined') {
 
 export default function createPersistentState(
   cookieName: string,
+  errorReporter: IErrorAuthReporter,
   version?: number,
 ): {
   getInitialState(ctx: InitialPropsContext): PersistentState,
@@ -35,7 +37,7 @@ export default function createPersistentState(
         if (dashboardState.version !== version) return {};
         return dashboardState.data;
       } catch (err) {
-        console.error(err);
+        errorReporter.emit('error', err);
         return {};
       }
     },
@@ -52,7 +54,7 @@ export default function createPersistentState(
               btoa(JSON.stringify({ version, data: curState })),
             )}; path=/`;
           } catch (err) {
-            console.error(err);
+            errorReporter.emit('error', err);
           }
         }, 100);
       }

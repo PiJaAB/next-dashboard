@@ -36,7 +36,7 @@ class Page extends Component<Props> {
       <DashboardContext.Consumer>
         {ctx => (
           <Layout
-            {...(ctx && ctx.dataProvider.isAuthenticated
+            {...(ctx && ctx.isAuthenticated()
               ? {}
               : { header: false, sidebar: false, footer: false })}
           >

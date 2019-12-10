@@ -28,6 +28,7 @@
   "scripts": {
     "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
     "dev:pkg": "nodemon -w src -x \"yarn run -s build:silent\"",
+    "lint": "NODE_ENV=production prettier -c 'src/**/*.js' && eslint src",
     "build": "yarn build:babel && yarn build:flow",
     "build:silent": "yarn run -s build:babel && yarn run -s build:flow",
     "build:babel": "babel src -d dist",

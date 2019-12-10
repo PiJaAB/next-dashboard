@@ -4,18 +4,15 @@ import Link from 'next/link';
 
 import DashboardContext from '../../utils/dashboardContext';
 
-import Search from '../Search';
-import Contact from '../Contact';
-import Profile from '../Profile';
-
 type Props = {
   toggleSidebarActive: () => void,
   sidebarActive: boolean,
+  children: React$Node,
 };
 
 // TODO: dashboard home url config
 
-const Header = ({ toggleSidebarActive, sidebarActive }: Props) => (
+const Header = ({ toggleSidebarActive, sidebarActive, children }: Props) => (
   <DashboardContext.Consumer>
     {context => {
       if (!context) {
@@ -49,15 +46,7 @@ const Header = ({ toggleSidebarActive, sidebarActive }: Props) => (
                   </a>
                 </Link>
               </div>
-              <div className="cell dashboard-header-cell dashboard-header-cell_search">
-                <Search />
-              </div>
-              <div className="cell dashboard-header-cell dashboard-header-cell_contact">
-                <Contact />
-              </div>
-              <div className="cell dashboard-header-cell dashboard-header-cell_profile">
-                <Profile />
-              </div>
+              {children}
             </div>
           </div>
         </header>

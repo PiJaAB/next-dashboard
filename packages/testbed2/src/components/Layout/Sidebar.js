@@ -8,9 +8,15 @@ import {
   CompactButton,
 } from '@pija-ab/next-dashboard';
 
+import Search from 'src/components/Search';
+import Profile from 'src/components/Profile';
+
 export default function Nav(): React$Node {
   return (
     <>
+      <div className="dashboard-sidebar-search">
+        <Search />
+      </div>
       <NavSection id="main">
         <NavEntry href="/dashboard" icon="home">
           Overview
@@ -49,6 +55,9 @@ export default function Nav(): React$Node {
       <NavSection id="other">
         <CompactButton />
       </NavSection>
+      <div className="dashboard-sidebar-profile">
+        <Profile />
+      </div>
     </>
   );
 }

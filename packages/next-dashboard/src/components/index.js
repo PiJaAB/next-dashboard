@@ -1,11 +1,13 @@
 // @flow
 
+import HeaderCell, { type HeaderCellID } from './HeaderCell';
+
 export * from './layout';
+export type { HeaderCellID };
+export { HeaderCell };
 export { default as Statistic } from './Statistic';
 export { default as PageContent } from './PageContent';
-export { default as Contact } from './Contact';
-export { default as Profile } from './Profile';
-export { default as Search } from './Search';
+export { default as Modal } from './Modal';
 export { default as NavEntry } from './NavEntry';
 export { default as NavSection } from './NavSection';
 export { default as CompactButton } from './CompactButton';

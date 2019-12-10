@@ -1,38 +1,24 @@
 // @flow
 
-import { useContext, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import DashboardContext, {
-  type DashboardContextType,
-} from './dashboardContext';
-import type { MappedData, DataExtra } from './types';
-import generateDataKey from './generateDataKey';
+import type { MappedData, DataExtra, ISubscriptionProvider } from './types';
 
-function useData<Data: {}>(
-  dataSource: $Keys<Data>,
+function useData<Data: {}, DS: $Keys<Data>>(
+  subProvider: ISubscriptionProvider<Data>,
+  dataSource: DS,
   extra?: DataExtra,
-): MappedData<Data> {
-  const ctx = useContext<DashboardContextType<Data>>(DashboardContext);
-  if (!ctx) throw TypeError('Cannot get data without a context');
+): $ElementType<MappedData<Data>, DS> {
+  const [data, setData] = useState<
+    $ElementType<MappedData<Data>, typeof dataSource>,
+  >(subProvider.read(dataSource, extra));
 
   useEffect(() => {
-    ctx.dataProvider.listen(dataSource, extra);
+    subProvider.subscribe(setData, dataSource, extra);
     return () => {
-      ctx.dataProvider.unListen(dataSource, extra);
+      subProvider.unsubscribe(setData, dataSource, extra);
     };
   }, [dataSource, extra]);
-
-  const dataKey = generateDataKey(dataSource, extra);
-  const { data } = ctx;
-
-  if (data[dataKey] == null) {
-    return {
-      ...data,
-      [dataKey]: {
-        status: 'loading',
-      },
-    };
-  }
 
   return data;
 }

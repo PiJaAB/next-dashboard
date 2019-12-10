@@ -17,7 +17,5 @@ export type {
 };
 export { createDashboardHOC, DashboardContext, createPersistentState };
 export * from './components';
-export * from './utils/types';
-export * from './dataProviders';
-export { default as useData } from './utils/useData';
-export { default as withData } from './utils/withData';
+export * from './subscriptionProviders';
+export * from './utils';
