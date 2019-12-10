@@ -4,34 +4,30 @@ import { type PollingFetcher } from '@pija-ab/next-dashboard';
 import authProvider from './authProvider';
 import type { Overview, CustInfo } from './types';
 import axios from './axios';
+import sortBy from '../utils/sortBy';
+
+const formatDate = date => {
+  const YYYY = date.getFullYear();
+  const MM = String(date.getMonth() + 1).padStart(2, '0');
+  return `${YYYY}-${MM}`;
+};
 
 function getOverviewParams(): { from: string, to: string } {
   const date = new Date();
   date.setDate(0);
-  const to = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    '0',
-  )}`;
+  const to = formatDate(date);
   date.setDate(0);
-  const from = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    '0',
-  )}`;
+  const from = formatDate(date);
   return { to, from };
 }
 
 function overviewSort({ periodScores, ...overview }: Overview): Overview {
-  const scores = periodScores.sort(({ Period: P1 }, { Period: P2 }) => {
-    const p1 = P1.split(':')
-      .map(s => s.padStart(5, '0'))
-      .join(':');
-    const p2 = P2.split(':')
-      .map(s => s.padStart(5, '0'))
-      .join(':');
-    if (p1 < p2) return -1;
-    if (p1 > p2) return 1;
-    return 0;
-  });
+  const pad5 = str => str.padStart(5, '0');
+  const scores = sortBy(periodScores, ({ Period }): string =>
+    Period.split(':')
+      .map(pad5)
+      .join(':'),
+  );
   return {
     ...overview,
     periodScores: scores,
