@@ -1,9 +1,7 @@
 // @flow
 import React from 'react';
-import { useData } from '@pija-ab/next-dashboard';
 
-import subscriberProvider from 'src/API/subscriberProvider';
-import { useIdentity } from 'src/utils/dataHooks';
+import { useIdentity, useCurrentCustomerInfo } from 'src/utils/dataHooks';
 import readFromData from 'src/utils/readFromData';
 
 const Profile = () => {
@@ -11,11 +9,10 @@ const Profile = () => {
   if (identity == null) return null;
 
   const { username } = identity;
-  const custInfo = useData(subscriberProvider, 'customerInfo');
+  const customer = useCurrentCustomerInfo();
   const custName = readFromData(
-    custInfo,
-    // TODO: ability to select between customers instead of hardcoding [0]
-    ci => (ci.Customers[0] ? ci.Customers[0].customerName : '(no customers)'),
+    customer,
+    c => (c ? c.customerName : '(no customers)'),
     'ERROR!',
     'Loading...',
   );

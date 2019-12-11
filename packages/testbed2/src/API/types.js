@@ -21,14 +21,15 @@ export type Overview = {
 };
 
 /** Type of the Xvision/CustInfo endpoint response */
+export type Customer = {
+  customerName: string,
+  CustNo: string,
+  Summary: string,
+  PrognoseInfo: string,
+  CustomerContacts: string,
+};
 export type CustInfo = {
-  Customers: {
-    customerName: string,
-    CustNo: string,
-    Summary: string,
-    PrognoseInfo: string,
-    CustomerContacts: string,
-  }[],
+  Customers: Customer[],
 };
 
 /** Type of the Token/CustInfo endpoint response */

@@ -10,6 +10,7 @@ import {
 
 import subscriberProvider from 'src/API/subscriberProvider';
 import Layout from 'src/components/Layout';
+import { useCurrentCustomerInfo } from 'src/utils/dataHooks';
 import withDashboard from 'src/utils/withDashboard';
 import readFromData from 'src/utils/readFromData';
 
@@ -204,12 +205,9 @@ const renderAsList = str => {
 };
 
 const Start = () => {
-  const custInfo = useData(subscriberProvider, 'customerInfo');
-  // TODO: selector to select between available customers
-  const readFirstCustomer = fn => v =>
-    v.Customers[0] ? fn(v.Customers[0]) : '(no customers)';
+  const customer = useCurrentCustomerInfo();
   const readFromCustInfo = fn =>
-    readFromData(custInfo, readFirstCustomer(fn), 'ERROR!', 'Loading...');
+    readFromData(customer, fn, 'ERROR!', 'Loading...');
 
   const summary = readFromCustInfo(c => renderAsParagraph(c.Summary));
   const prognoseInfo = readFromCustInfo(c => renderAsParagraph(c.PrognoseInfo));
