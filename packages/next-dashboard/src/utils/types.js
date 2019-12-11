@@ -19,20 +19,20 @@ export class NotImplementedError extends Error {
   name = 'NotImplementedError';
 }
 
-export type SuccessDataType<T = mixed> = {
+export type SuccessDataType<T = mixed> = {|
   +status: 'success',
   +value: T,
   +updating?: boolean,
-};
+|};
 
-export type ErrorDataType = {
+export type ErrorDataType = {|
   +status: 'error',
   +error: Error,
-};
+|};
 
-export type LoadingDataType = {
+export type LoadingDataType = {|
   +status: 'loading',
-};
+|};
 
 export type DataType<T = mixed> =
   | SuccessDataType<T>
