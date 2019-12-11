@@ -9,7 +9,7 @@ import {
 import EventEmitter from 'events';
 
 import type { InitialPropsContext } from 'src/utils/nextTypes';
-import type { Fetch, Identity } from './types';
+import type { CustInfo, TokenFetch, Identity } from './types';
 
 import axios from './axios';
 
@@ -60,13 +60,13 @@ export class AuthProvider extends EventEmitter implements IErrorAuthReporter {
   }
 
   async auth(username: string, password: string): Promise<boolean> {
-    const { ApiToken, AuthUsername }: Fetch = (
+    const { ApiToken, AuthUsername }: TokenFetch = (
       await axios.post('Token/Fetch', {
         username,
         password,
       })
     ).data;
-    const { CustNo }: { CustNo: string } = (
+    const { Customers }: CustInfo = (
       await axios.get('Xvision/CustInfo', {
         headers: {
           AccessToken: ApiToken,
@@ -76,7 +76,7 @@ export class AuthProvider extends EventEmitter implements IErrorAuthReporter {
     this.setIdentity({
       username: AuthUsername,
       accessToken: ApiToken,
-      customerId: CustNo,
+      customerId: Customers[0].CustNo,
     });
     return true;
   }
