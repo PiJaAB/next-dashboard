@@ -1,6 +1,10 @@
 // @flow
 import type { DataType } from '@pija-ab/next-dashboard/src/utils/types';
 
+// We work around flow here because strictly speaking `T` might be a function
+// type, in which case the type signature is a bit of a lie.  We can't
+// restrict `T` to only non-function types currently (at least AFAIK).
+
 const wrapToFn0 = <T>(valueOrFn: (() => T) | T): (() => T) =>
   // $FlowIssue
   typeof valueOrFn === 'function' ? valueOrFn : () => valueOrFn;
