@@ -4,19 +4,23 @@ import { useData } from '@pija-ab/next-dashboard';
 
 import subscriberProvider from 'src/API/subscriberProvider';
 import { useIdentity } from 'src/utils/dataHooks';
+import readFromData from 'src/utils/readFromData';
 
 const Profile = () => {
   const identity = useIdentity();
   if (identity == null) return null;
+
   const { username } = identity;
   const custInfo = useData(subscriberProvider, 'customerInfo');
-  let custName = 'Loading...';
-  if (custInfo.status === 'error') {
-    custName = 'ERROR!';
-  } else if (custInfo.status === 'success') {
-    custName = custInfo.value.customerName;
-  }
+  const custName = readFromData(
+    custInfo,
+    // TODO: ability to select between customers instead of hardcoding [0]
+    ci => (ci.Customers[0] ? ci.Customers[0].customerName : '(no customers)'),
+    'ERROR!',
+    'Loading...',
+  );
   const imgUrl = null;
+
   return (
     <div className="profile">
       {imgUrl != null && <div className="profile-image" />}

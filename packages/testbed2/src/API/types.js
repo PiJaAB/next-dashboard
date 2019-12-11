@@ -25,11 +25,13 @@ export type Overview = {
 };
 
 export type CustInfo = {
-  customerName: string,
-  CustNo: string,
-  Summary: string,
-  PrognoseInfo: string,
-  CustomerContacts: string,
+  Customers: {
+    customerName: string,
+    CustNo: string,
+    Summary: string,
+    PrognoseInfo: string,
+    CustomerContacts: string,
+  }[],
 };
 
 export type Data = {|
