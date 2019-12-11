@@ -64,3 +64,4 @@ typings/
 
 # Editor files:
 *.code-workspace
+*.swp

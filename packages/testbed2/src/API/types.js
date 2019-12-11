@@ -1,10 +1,6 @@
 // @flow
 
-export type Identity = {
-  username: string,
-  accessToken: string,
-  customerId: string,
-};
+// Types of API responses
 
 export type Scores = {|
   Volume: number,
@@ -24,12 +20,30 @@ export type Overview = {
   TtotalScore: ScoresObj,
 };
 
-export type CustInfo = {
+/** Type of the Xvision/CustInfo endpoint response */
+export type Customer = {
   customerName: string,
   CustNo: string,
   Summary: string,
   PrognoseInfo: string,
   CustomerContacts: string,
+};
+export type CustInfo = {
+  Customers: Customer[],
+};
+
+/** Type of the Token/CustInfo endpoint response */
+export type TokenFetch = {
+  ApiToken: string,
+  AuthUsername: string,
+};
+
+// Types of our data providers' states
+
+export type Identity = {
+  username: string,
+  accessToken: string,
+  customerId: string,
 };
 
 export type Data = {|
@@ -37,8 +51,3 @@ export type Data = {|
   overviewChart: Overview,
   customerInfo: CustInfo,
 |};
-
-export type Fetch = {
-  ApiToken: string,
-  AuthUsername: string,
-};

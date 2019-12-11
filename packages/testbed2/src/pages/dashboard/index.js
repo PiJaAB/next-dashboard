@@ -6,7 +6,9 @@ import {
   PageTable,
   PageChart,
 } from '@pija-ab/next-dashboard';
+
 import Layout from 'src/components/Layout';
+import { useCurrentCustomerInfo } from 'src/utils/dataHooks';
 import withDashboard from 'src/utils/withDashboard';
 import useThemeVars from 'src/utils/useThemeVars';
 
@@ -19,6 +21,7 @@ import {
   Tooltip,
   ComposedChart,
 } from 'recharts';
+import readFromData from 'src/utils/readFromData';
 
 const columns = [
   {
@@ -194,6 +197,22 @@ const data = [
   },
 ];
 
+const renderAsParagraph = str => <p className="pre">{str}</p>;
+
+const renderAsList = str => {
+  const lines = str
+    .split('\n')
+    .map(s => s.trim())
+    .filter(Boolean);
+  return (
+    <ul>
+      {lines.map(line => (
+        <li key={line}>{line}</li>
+      ))}
+    </ul>
+  );
+};
+
 const chartData = [
   {
     name: 'Page A',
@@ -227,6 +246,16 @@ const chartData = [
 
 const Start = () => {
   const { chartBarColor } = useThemeVars();
+  const customer = useCurrentCustomerInfo();
+  const readFromCustInfo = fn =>
+    readFromData(customer, fn, 'ERROR!', 'Loading...');
+
+  const summary = readFromCustInfo(c => renderAsParagraph(c.Summary));
+  const prognoseInfo = readFromCustInfo(c => renderAsParagraph(c.PrognoseInfo));
+  const customerContacts = readFromCustInfo(c =>
+    renderAsList(c.CustomerContacts),
+  );
+
   return (
     <Layout>
       <div>
@@ -289,38 +318,11 @@ const Start = () => {
           <div className="cell">
             <PageContent>
               <h2 className="h4-size">Brief Facts about the Assignment</h2>
-              <p>
-                Xzakt ska regelbundet förse Fora med den statistik som parterna
-                överkommer, enligt avtal. Veckorapportering gälland: Ink, Besv,
-                Tapp, Tapp%, Max Kö, Snitt Kö, Snitt Service, Snitt Clearical,
-                AHT, Total handling och SLA%.
-              </p>
+              {summary}
               <h3 className="h5-size">Prognose Information</h3>
-              <p>
-                Senaste utbildningen slutfördes 23/10 2017. Senaste 9:e ska
-                prognos inkomma för kommande 3 månader.
-              </p>
-              <ul>
-                <li>
-                  Månad 1 är 100% beställning, månad 2 är 70% beställning och
-                  månad 3 är 50% beställning. SLA 90/300
-                </li>
-                <li>Max tapp 10% (gäller ej tapp inom 5 sek)</li>
-                <li>AHT 5 min</li>
-                <li>Uppklarningsprocent 95%</li>
-                <li>Generell nöjdhet 86%</li>
-                <li>Vidarekoppling max 10%</li>
-              </ul>
-
+              {prognoseInfo}
               <h3 className="h5-size">Contact Information</h3>
-              <ul>
-                <li>Ann Hägerlind Ekehov, ann.hagerlind.ekehov@fora.se</li>
-                <li>
-                  Moa Holmsten, Trafikledare/Kvalitet, 08-787 45 98,
-                  moa.holmsten@fora.se
-                </li>
-                <li>Bindia Chamat, Trafikledare, bindia.chamat@fora.se</li>
-              </ul>
+              {customerContacts}
             </PageContent>
           </div>
         </div>

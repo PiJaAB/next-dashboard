@@ -1,22 +1,23 @@
 // @flow
 import React from 'react';
-import { useData } from '@pija-ab/next-dashboard';
 
-import subscriberProvider from 'src/API/subscriberProvider';
-import { useIdentity } from 'src/utils/dataHooks';
+import { useIdentity, useCurrentCustomerInfo } from 'src/utils/dataHooks';
+import readFromData from 'src/utils/readFromData';
 
 const Profile = () => {
   const identity = useIdentity();
   if (identity == null) return null;
+
   const { username } = identity;
-  const custInfo = useData(subscriberProvider, 'customerInfo');
-  let custName = 'Loading...';
-  if (custInfo.status === 'error') {
-    custName = 'ERROR!';
-  } else if (custInfo.status === 'success') {
-    custName = custInfo.value.customerName;
-  }
+  const customer = useCurrentCustomerInfo();
+  const custName = readFromData(
+    customer,
+    c => (c ? c.customerName : '(no customers)'),
+    'ERROR!',
+    'Loading...',
+  );
   const imgUrl = null;
+
   return (
     <div className="profile">
       {imgUrl != null && <div className="profile-image" />}
