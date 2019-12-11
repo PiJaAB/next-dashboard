@@ -9,6 +9,16 @@ import {
 import Layout from 'src/components/Layout';
 import withDashboard from 'src/utils/withDashboard';
 
+import {
+  ResponsiveContainer,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ComposedChart,
+} from 'recharts';
+
 const columns = [
   {
     title: 'Servicegroup',
@@ -183,6 +193,37 @@ const data = [
   },
 ];
 
+const chartData = [
+  {
+    name: 'Page A',
+    value: 2400,
+  },
+  {
+    name: 'Page B',
+    value: 1398,
+  },
+  {
+    name: 'Page C',
+    value: 9800,
+  },
+  {
+    name: 'Page D',
+    value: 3908,
+  },
+  {
+    name: 'Page E',
+    value: 4800,
+  },
+  {
+    name: 'Page F',
+    value: 3800,
+  },
+  {
+    name: 'Page G',
+    value: 4300,
+  },
+];
+
 const Start = () => (
   <Layout>
     <div>
@@ -217,7 +258,17 @@ const Start = () => (
           />
         </div>
         <div className="cell">
-          <PageChart />
+          <PageChart>
+            <ResponsiveContainer>
+              <ComposedChart data={chartData}>
+                <CartesianGrid />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip animationDuration={250} />
+                <Bar dataKey="value" barSize={20} animationDuration={250} />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </PageChart>
         </div>
         <div className="cell">
           <PageTable

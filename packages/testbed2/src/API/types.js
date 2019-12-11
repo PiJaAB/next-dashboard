@@ -14,14 +14,14 @@ export type Scores = {|
   Average: number,
 |};
 
-export type ScoresObj = {|
+export type ScoresObj = {
   Period: string,
   ...Scores,
-|};
+};
 
 export type Overview = {
-  periodScores: ScoresObj[],
-  totalScore: ScoresObj,
+  PeriodScores: ScoresObj[],
+  TtotalScore: ScoresObj,
 };
 
 export type CustInfo = {
@@ -34,6 +34,7 @@ export type CustInfo = {
 
 export type Data = {|
   overview: Overview,
+  overviewChart: Overview,
   customerInfo: CustInfo,
 |};
 

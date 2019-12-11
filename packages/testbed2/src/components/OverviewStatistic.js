@@ -44,13 +44,13 @@ export default function OverviewStatistic({
   if (data.status === 'error') {
     return <Statistic value="Error!" label={label} {...props} />;
   }
-  const len = data.value.periodScores.length;
+  const len = data.value.PeriodScores.length;
   if (len < 1)
     return <Statistic value="Insufficient data" label={label} {...props} />;
-  const current = data.value.periodScores[data.value.periodScores.length - 1];
+  const current = data.value.PeriodScores[data.value.PeriodScores.length - 1];
   if (len < 2)
     return <Statistic value={current[category]} label={label} {...props} />;
-  const prev = data.value.periodScores[data.value.periodScores.length - 2];
+  const prev = data.value.PeriodScores[data.value.PeriodScores.length - 2];
   const percentage = toPercent(current[category], prev[category]);
   return (
     <Statistic

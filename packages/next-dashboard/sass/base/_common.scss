@@ -6,6 +6,15 @@
   @include breakpoint(large) {
     margin: 0 0 40px;
   }
+  + .page-subtitle {
+    margin-top: -10px;
+    @include breakpoint(medium) {
+      margin-top: -20px;
+    }
+    @include breakpoint(large) {
+      margin-top: -30px;
+    }
+  }
 }
 
 // .preamble {

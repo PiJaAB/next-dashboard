@@ -164,6 +164,11 @@ export default function createDashboardHOC({
 
       function registerSiteMessage(siteMessage: SiteMessageType | Error) {
         if (siteMessage instanceof Error) {
+          // We probably want to log extended debug info if we're throwing
+          // an error into the face of the user somewhere, so we can request
+          // more info in case we fail to reproduce.
+          // eslint-disable-next-line no-restricted-syntax
+          console.error(siteMessage);
           registerSiteMessage({
             title: siteMessage.constructor.name,
             status: 'error',

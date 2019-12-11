@@ -15,7 +15,8 @@
     "next-env": "^1.1.0",
     "nprogress": "^0.2.0",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "recharts": "^1.8.5"
   },
   "scripts": {
     "start": "node server",
