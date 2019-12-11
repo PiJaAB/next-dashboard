@@ -78,6 +78,8 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
 
   activeFetchers: Map<string, PollingFetcher> = new Map();
 
+  stoppingTimers: Map<string, TimeoutID> = new Map();
+
   dataCache: { [string]: ?DataType<> } = {};
 
   +start: ?(id: string) => void;
@@ -118,14 +120,24 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       set.add(cb);
       return;
     }
+
+    const wasStopped = this.stoppingTimers.has(key);
+    const stoppingTimer = this.stoppingTimers.get(key);
+    if (stoppingTimer != null) {
+      this.stoppingTimers.delete(key);
+      clearTimeout(stoppingTimer);
+    }
+
     set = new Set<($Keys<Data>) => void>();
     set.add(cb);
     this.activeListeners.set(key, set);
     if (this.activeFetchers.has(key)) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error(
-          'Fetcher is active, even though this is a new datafetcher. Desync in pollingprovider somewhere',
-        );
+      if (!wasStopped) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error(
+            'Fetcher is active, even though this is a new datafetcher. Desync in pollingprovider somewhere',
+          );
+        }
       }
       return;
     }
@@ -180,9 +192,15 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     }
     set.delete(cb);
     if (set.size === 0) {
-      delete this.dataCache[key];
+      this.stoppingTimers.set(
+        key,
+        setTimeout(() => {
+          this.stoppingTimers.delete(key);
+          this.activeFetchers.delete(key);
+          delete this.dataCache[key];
+        }, 5000),
+      );
       this.activeListeners.delete(key);
-      this.activeFetchers.delete(key);
       this.emit('stop-poll', dataSource, extra);
     }
   };
