@@ -11,9 +11,15 @@ function useData<Data: {}, DS: $Keys<Data>>(
 ): $ElementType<MappedData<Data>, DS> {
   const [data, setData] = useState<
     $ElementType<MappedData<Data>, typeof dataSource>,
-  >(subProvider.read(dataSource, extra));
+  >({ status: 'loading' });
 
   useEffect(() => {
+    const curData = subProvider.read(dataSource, extra);
+    if (curData.status !== data.status) {
+      setData(curData);
+    } else if (curData.status === 'success' && curData.value !== data.value) {
+      setData(curData);
+    }
     subProvider.subscribe(setData, dataSource, extra);
     return () => {
       subProvider.unsubscribe(setData, dataSource, extra);

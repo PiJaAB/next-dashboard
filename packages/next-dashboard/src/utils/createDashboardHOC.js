@@ -8,6 +8,7 @@ import type { Theme, SiteMessageType, IErrorAuthReporter } from './types';
 import displayNameOf from './displayNameOf';
 
 import createPersistentState from './persistentState';
+import { SilentError } from './silentError';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
 
 type InitialNormProps<I> = {
@@ -164,6 +165,7 @@ export default function createDashboardHOC({
 
       function registerSiteMessage(siteMessage: SiteMessageType | Error) {
         if (siteMessage instanceof Error) {
+          if (siteMessage instanceof SilentError) return;
           // We probably want to log extended debug info if we're throwing
           // an error into the face of the user somewhere, so we can request
           // more info in case we fail to reproduce.

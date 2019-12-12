@@ -3,11 +3,11 @@
 // Types of API responses
 
 export type Scores = {|
-  Volume: number,
-  Quality: number,
-  Resources: number,
-  Leadership: number,
-  Average: number,
+  Volume: ?number,
+  Quality: ?number,
+  Resources: ?number,
+  Leadership: ?number,
+  Average: ?number,
 |};
 
 export type ScoresObj = {

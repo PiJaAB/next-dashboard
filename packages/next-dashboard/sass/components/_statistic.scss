@@ -1,6 +1,7 @@
 .statistic {
   padding: 20px;
   border-radius: 10px;
+  text-align: center;
   @include var('background-color', 'primary-alt');
   &.statistic-error {
     @include var('background-color', 'error');

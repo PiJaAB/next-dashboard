@@ -27,20 +27,31 @@ export default function MonthSelector({
   initialDate,
   setDate,
 }: Props): React$Node {
+  const canMoveForward =
+    date.getFullYear() < initialDate.getFullYear() ||
+    (date.getFullYear() === initialDate.getFullYear() &&
+      date.getMonth() < initialDate.getMonth());
   const moveForward = () => {
     setDate(curDate => {
       const newDate = new Date(curDate);
-      newDate.setMonth(newDate.getMonth(), 1);
+      newDate.setMonth(newDate.getMonth() + 1, 1);
       return newDate;
     });
-  }
+  };
+  const moveBackward = () => {
+    setDate(curDate => {
+      const newDate = new Date(curDate);
+      newDate.setMonth(newDate.getMonth() - 1, 1);
+      return newDate;
+    });
+  };
   return (
     <h3 className="page-subtitle">
-      <button type="button">
+      <button type="button" onClick={moveBackward}>
         <span className="fa fa-arrow-left" />
       </button>
       {date.getFullYear()} {monthNames[date.getMonth()]}
-      <button type="button">
+      <button type="button" disabled={false && !canMoveForward} onClick={moveForward}>
         <span className="fa fa-arrow-right" />
       </button>
     </h3>

@@ -1,19 +1,17 @@
 // @flow
 import React from 'react';
 
-import { useData } from '@pija-ab/next-dashboard';
+import { useData, PageChart } from '@pija-ab/next-dashboard';
 
 import subscriberProvider from 'src/API/subscriberProvider';
 import useThemeVars from 'src/utils/useThemeVars';
 import toDigits from 'src/utils/toDigits';
-import { Tooltip } from 'recharts';
-import PageChart from './PageChart';
+import { XAxis } from 'recharts';
+import Chart from './Chart';
 
 type Props = {
-  date: Date
+  date: Date,
 };
-
-
 
 function dateToParams(inputDate: Date): { from: string, to: string } {
   const date = new Date(inputDate);
@@ -41,16 +39,36 @@ function dateToParams(inputDate: Date): { from: string, to: string } {
 export default function OverviewChart({ date }: Props): React$Node {
   const data = useData(subscriberProvider, 'overviewChart', dateToParams(date));
   const year = toDigits(date.getFullYear(), 4);
-  const month = toDigits(date.getMonth() + 1, 2);
   const { overviewChart } = useThemeVars();
   if (data.status === 'loading') {
-    return null;
+    return (
+      <PageChart>
+        <h1>Loading...</h1>
+      </PageChart>
+    );
   }
   if (data.status === 'error') {
-    return null;
+    return (
+      <PageChart>
+        <h1>Error fetching data!</h1>
+      </PageChart>
+    );
   }
-  const chart = data.value.PeriodScores;
+  const chart = data.value.PeriodScores.map(p => {
+    const { Period, ...scores } = p;
+    return {
+      Period: `${year}-${Period.split(':')
+        .map(s => toDigits(s, 2))
+        .join('-')}`,
+      ...scores,
+    };
+  });
   const plots = [
+    {
+      dataKey: 'Average',
+      type: 'line',
+      color: overviewChart.Average,
+    },
     {
       dataKey: 'Volume',
       type: 'line',
@@ -71,19 +89,14 @@ export default function OverviewChart({ date }: Props): React$Node {
       type: 'line',
       color: overviewChart.Leadership,
     },
-    {
-      dataKey: 'Average',
-      type: 'line',
-      color: overviewChart.Average,
-    },
   ];
   return (
-    <PageChart data={chart} plots={plots}>
-      <Tooltip
-        labelFormatter={label => `${year}-${month}-${toDigits(label, 2)}`}
-        isAnimationActive={false}
+    <Chart data={chart} plots={plots}>
+      <XAxis
+        dataKey="Period"
+        tickFormatter={val => val.replace(/.*-(\d{1,2})$/, (_, m) => m)}
       />
-    </PageChart>
+    </Chart>
   );
 }
 OverviewChart.defaultProps = {

@@ -22,19 +22,24 @@ function Start(): React$Node {
         />
         <h1 className="page-title">Monthly Overview</h1>
         <div className="grid">
-          <div className="cell column-6-medium column-3-large">
-            <Statistic category="Resources" />
+          <div className="cell column-12-medium column-2-4-large">
+            <Statistic date={date} category="Average" />
           </div>
-          <div className="cell column-6-medium column-3-large">
-            <Statistic category="Quality" />
+          <div className="cell column-6-medium column-2-4-large">
+            <Statistic date={date} category="Resources" />
           </div>
-          <div className="cell column-6-medium column-3-large">
-            <Statistic category="Volume" />
+          <div className="cell column-6-medium column-2-4-large">
+            <Statistic date={date} category="Quality" />
           </div>
-          <div className="cell column-6-medium column-3-large">
-            <Statistic category="Leadership" />
+          <div className="cell column-6-medium column-2-4-large">
+            <Statistic date={date} category="Volume" />
           </div>
-          <OverviewChart date={date} />
+          <div className="cell column-6-medium column-2-4-large">
+            <Statistic date={date} category="Leadership" />
+          </div>
+          <div className="cell">
+            <OverviewChart date={date} />
+          </div>
         </div>
       </div>
     </Layout>
