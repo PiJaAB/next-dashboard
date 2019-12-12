@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "version": "0.0.0",
-  "main": "packages/next-dashboard/dist/entry.js",
+  "main": "packages/next-dashboard/src/entry.js",
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "dev": "lerna run --parallel dev:pkg",
