@@ -67,6 +67,8 @@ export class SilentError extends Error {
   }
 }
 
+SilentError.prototype.name = 'SilentError';
+
 export function makeSilent(error: Error): empty {
   throw new SilentError(error);
 }
