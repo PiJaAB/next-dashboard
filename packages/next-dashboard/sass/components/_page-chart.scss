@@ -18,6 +18,26 @@
 }
 
 
+.recharts-legend-item {
+  position: relative;
+  .recharts-legend-item-text {
+    position: absolute;
+    display: block;
+    visibility: hidden;
+    left: 50%;
+    bottom: 100%;
+    transform: translateX(-50%);
+  }
+  &.inactive {
+    opacity: .5;
+  }
+  &:hover, &.hover {
+    .recharts-legend-item-text {
+      visibility: visible;
+    }
+  }
+}
+
 .recharts-cartesian-grid {
   line {
     @include var('stroke', 'text-rgb', 'rgba', 0.125);
@@ -43,7 +63,4 @@
 }
 .recharts-text {
   @include var('fill', 'text');
-}
-.recharts-rectangle {
-  @include var('fill', 'primary');
 }

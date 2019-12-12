@@ -4,11 +4,11 @@ import React, { PureComponent } from 'react';
 import type { Statuses } from '../utils/types';
 
 export type Props = {
-  label?: string,
-  value: string | number,
-  description?: string,
-  prefix?: string,
-  suffix?: string,
+  label?: React$Node,
+  value: React$Node,
+  description?: React$Node,
+  prefix?: React$Node,
+  suffix?: React$Node,
   status?: Statuses,
 };
 

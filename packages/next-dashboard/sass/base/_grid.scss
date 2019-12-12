@@ -56,5 +56,9 @@
       }
     }
 
+    .cell.column-2-4#{$breakpoint-class} {
+      flex: 0 0 20%;
+      max-width: 20%;
+    }
   }
 }

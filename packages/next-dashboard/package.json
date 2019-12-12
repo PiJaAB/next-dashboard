@@ -43,7 +43,8 @@
     "next": "^9.1.1",
     "next-cookies": "^2.0.2",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "recharts": "^1.8.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -73,8 +74,7 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.7.2",
     "atob": "^2.1.2",
-    "btoa": "^1.2.1",
-    "recharts": "^1.8.5"
+    "btoa": "^1.2.1"
   },
   "gitHead": "aca5c077064ea0f0c30b98ef1ed199708faaa82b"
 }

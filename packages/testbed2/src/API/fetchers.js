@@ -1,54 +1,73 @@
 // @flow
 
-import { type PollingFetcher } from '@pija-ab/next-dashboard';
+import {
+  makeSilent,
+  type PollingFetcher,
+  type DataExtra,
+} from '@pija-ab/next-dashboard';
 import authProvider from './authProvider';
 import type { Overview, CustInfo } from './types';
 import axios from './axios';
 import sortBy from '../utils/sortBy';
 
-const formatDate = date => {
-  const YYYY = date.getFullYear();
-  const MM = String(date.getMonth() + 1).padStart(2, '0');
-  return `${YYYY}-${MM}`;
-};
-
-function getOverviewParams(): { from: string, to: string } {
-  const date = new Date();
-  date.setDate(0);
-  const to = formatDate(date);
-  date.setDate(0);
-  const from = formatDate(date);
-  return { to, from };
-}
-
-function overviewSort({ periodScores, ...overview }: Overview): Overview {
+function overviewSort({ PeriodScores, ...overview }: Overview): Overview {
   const pad5 = str => str.padStart(5, '0');
-  const scores = sortBy(periodScores, ({ Period }): string =>
+  const scores = sortBy(PeriodScores, ({ Period }): string =>
     Period.split(':')
       .map(pad5)
       .join(':'),
   );
   return {
     ...overview,
-    periodScores: scores,
+    PeriodScores: scores,
   };
 }
 
 export default ([
   {
     id: 'overview',
-    async runner(): Promise<Overview> {
+    async runner(extra?: DataExtra): Promise<Overview> {
       const { identity } = authProvider;
       if (!identity) {
         throw new Error('Error fetching overview, not authenticated');
       }
+      if (!extra || typeof extra !== 'object' || Array.isArray(extra)) {
+        throw new TypeError('Expected object as extra');
+      }
       const { customerId } = identity;
-      const { from, to } = getOverviewParams();
+      const { from, to } = extra;
+      if (typeof from !== 'string' || typeof to !== 'string') {
+        throw new TypeError('Expected extra.from and extra.to to be strings.');
+      }
       return overviewSort(
         (
-          await axios.get(
-            `/Xvision/OverviewScoresGraph/${customerId}/${from}/${to}/2`,
-          )
+          await axios
+            .get(`/Xvision/OverviewScoresGraph/${customerId}/${from}/${to}/2`)
+            .catch(makeSilent)
+        ).data,
+      );
+    },
+  },
+  {
+    id: 'overviewChart',
+    async runner(extra?: DataExtra): Promise<Overview> {
+      const { identity } = authProvider;
+      if (!identity) {
+        throw new Error('Error fetching overview, not authenticated');
+      }
+      if (!extra || typeof extra !== 'object' || Array.isArray(extra)) {
+        throw new TypeError('Expected object as extra');
+      }
+      const { customerId } = identity;
+      const { from, to } = extra;
+      if (typeof from !== 'string' || typeof to !== 'string') {
+        throw new TypeError('Expected extra.from and extra.to to be strings.');
+      }
+      return overviewSort(
+        (
+          await axios
+            .get(`/Xvision/OverviewScoresGraph/${customerId}/${from}/${to}/1`)
+            .catch(makeSilent)
         ).data,
       );
     },

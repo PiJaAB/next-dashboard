@@ -5,13 +5,22 @@ import {
   PageContent,
   PageTable,
   PageChart,
-  useData,
 } from '@pija-ab/next-dashboard';
 
-import subscriberProvider from 'src/API/subscriberProvider';
 import Layout from 'src/components/Layout';
 import { useCurrentCustomerInfo } from 'src/utils/dataHooks';
 import withDashboard from 'src/utils/withDashboard';
+import useThemeVars from 'src/utils/useThemeVars';
+
+import {
+  ResponsiveContainer,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ComposedChart,
+} from 'recharts';
 import readFromData from 'src/utils/readFromData';
 
 const columns = [
@@ -204,7 +213,39 @@ const renderAsList = str => {
   );
 };
 
+const chartData = [
+  {
+    name: 'Page A',
+    value: 2400,
+  },
+  {
+    name: 'Page B',
+    value: 1398,
+  },
+  {
+    name: 'Page C',
+    value: 9800,
+  },
+  {
+    name: 'Page D',
+    value: 3908,
+  },
+  {
+    name: 'Page E',
+    value: 4800,
+  },
+  {
+    name: 'Page F',
+    value: 3800,
+  },
+  {
+    name: 'Page G',
+    value: 4300,
+  },
+];
+
 const Start = () => {
+  const { chartBarColor } = useThemeVars();
   const customer = useCurrentCustomerInfo();
   const readFromCustInfo = fn =>
     readFromData(customer, fn, 'ERROR!', 'Loading...');
@@ -249,7 +290,22 @@ const Start = () => {
             />
           </div>
           <div className="cell">
-            <PageChart />
+            <PageChart>
+              <ResponsiveContainer>
+                <ComposedChart data={chartData}>
+                  <CartesianGrid />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip animationDuration={250} />
+                  <Bar
+                    dataKey="value"
+                    fill={chartBarColor}
+                    barSize={20}
+                    animationDuration={250}
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </PageChart>
           </div>
           <div className="cell">
             <PageTable

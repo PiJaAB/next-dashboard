@@ -3,21 +3,21 @@
 // Types of API responses
 
 export type Scores = {|
-  Volume: number,
-  Quality: number,
-  Resources: number,
-  Leadership: number,
-  Average: number,
+  Volume: ?number,
+  Quality: ?number,
+  Resources: ?number,
+  Leadership: ?number,
+  Average: ?number,
 |};
 
-export type ScoresObj = {|
+export type ScoresObj = {
   Period: string,
   ...Scores,
-|};
+};
 
 export type Overview = {
-  periodScores: ScoresObj[],
-  totalScore: ScoresObj,
+  PeriodScores: ScoresObj[],
+  TtotalScore: ScoresObj,
 };
 
 /** Type of the Xvision/CustInfo endpoint response */
@@ -48,5 +48,6 @@ export type Identity = {
 
 export type Data = {|
   overview: Overview,
+  overviewChart: Overview,
   customerInfo: CustInfo,
 |};

@@ -7,3 +7,5 @@ export * from './types';
 export { default as useData } from './useData';
 export { default as withData } from './withData';
 export { default as toClassName } from './toClassName';
+export * from './consoleError';
+export * from './silentError';
