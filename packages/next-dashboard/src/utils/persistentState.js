@@ -26,7 +26,7 @@ export default function createPersistentState(
   getInitialState(ctx: InitialPropsContext): PersistentState,
   persist(state: PersistentState): void,
 } {
-  let latestState = null;
+  let latestState: ?PersistentState;
   return {
     getInitialState(ctx: InitialPropsContext): PersistentState {
       const { [cookieName]: dashboardB64 } = cookies(ctx);
@@ -44,11 +44,11 @@ export default function createPersistentState(
 
     persist(state: PersistentState) {
       if (typeof window === 'undefined' || !window.setTimeout) return;
-      if (!latestState) {
+      if (latestState === undefined) {
         window.setTimeout(() => {
           const curState = latestState;
-          latestState = null;
-          if (!curState) return;
+          latestState = undefined;
+          if (curState === undefined) return;
           try {
             window.document.cookie = `${cookieName}=${escape(
               btoa(JSON.stringify({ version, data: curState })),
