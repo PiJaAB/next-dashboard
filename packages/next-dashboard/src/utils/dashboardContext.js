@@ -11,6 +11,8 @@ export interface IDashboardContext {
   +theme: Theme;
   +themes: $ReadOnlyArray<Theme>;
   +siteMessages: $ReadOnlyArray<SiteMessageType>;
+  +modalActive: boolean;
+  setModalActive((boolean => boolean) | boolean): void;
 }
 
 export type DashboardContextType = IDashboardContext | void;

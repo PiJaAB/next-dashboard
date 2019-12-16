@@ -1,7 +1,7 @@
 // TODO: Fix initial "at-top" body class.
 
 // @flow
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import Head from 'next/head';
 
 import DashboardContext from '../../utils/dashboardContext';
@@ -32,7 +32,7 @@ function DashboardLayout({
   header,
   sidebar,
   footer,
-}: Props): React$Element<typeof DashboardContext.Consumer> {
+}: Props): React$Element<'div'> {
   const atTop = () => {
     const { body } = document;
     if (!body) return;
@@ -61,75 +61,90 @@ function DashboardLayout({
       window.removeEventListener('resize', noTransition);
     };
   }, []);
+  const context = useContext(DashboardContext);
+  if (!context) {
+    throw new TypeError('Dashboard Layout needs to be in a Dashboard Context');
+  }
+
+  const {
+    getState,
+    theme: { class: themeClass },
+    modalActive,
+  } = context;
+
+  const sidebarActive = getState<boolean>('sidebarActive', false);
+  const sidebarCompact = getState<boolean>('sidebarCompact', false);
+
+  const toggleSidebarActive = () => {
+    context.setState<boolean>('sidebarActive', !sidebarActive);
+  };
+
+  const [scrollOffset, setScrollOffset] = useState<number | null>(null);
+  const [savedScrollOffset, setSavedScrollOffset] = useState<number | null>(
+    null,
+  );
+
+  // When a modal is shown, we want to save the top offset and set position fixed to disable scrolling
+  useEffect(() => {
+    if (scrollOffset === null && !modalActive) return;
+    if (modalActive) setScrollOffset(window.pageYOffset);
+    else {
+      setSavedScrollOffset(scrollOffset);
+      setScrollOffset(null);
+    }
+  }, [modalActive]);
+
+  // Once the modal isn't showing anymore, we want to scroll back to the old position, AFTER the DOM
+  // has updated with the new regular positioning.
+  useEffect(() => {
+    if (savedScrollOffset) window.scrollTo(0, savedScrollOffset);
+    setSavedScrollOffset(null);
+  }, [savedScrollOffset]);
 
   return (
-    <DashboardContext.Consumer>
-      {context => {
-        if (!context) {
-          throw new TypeError(
-            'Dashboard Layout needs to be in a Dashboard Context',
-          );
-        }
-
-        /*
-          I really really really really really don't think this is neat and tidy code.
-          I have no choice.
-          The tools chosen against my will is Prettier, and apparently Prettier knows
-          better than me.
-        */
-        const sidebarActive = context.getState<boolean>('sidebarActive', false);
-        const sidebarCompact = context.getState<boolean>(
-          'sidebarCompact',
-          false,
-        );
-        const theme = context.theme.class;
-
-        const toggleSidebarActive = () => {
-          context.setState<boolean>('sidebarActive', !sidebarActive);
-        };
-
-        return (
-          <div
-            className={[
-              'dashboard',
-              id && `dashboard_id-${id}`,
-              theme && `dashboard_theme-${theme}`,
-            ]
-              .filter(className => className)
-              .join(' ')}
-          >
-            <Head>
-              <link
-                rel="stylesheet"
-                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-              />
-            </Head>
-            {header && (
-              <Header
-                sidebarActive={sidebarActive}
-                toggleSidebarActive={toggleSidebarActive}
-              >
-                {header}
-              </Header>
-            )}
-            {sidebar && (
-              <Sidebar
-                sidebarActive={sidebarActive}
-                sidebarCompact={sidebarCompact}
-              >
-                {sidebar}
-              </Sidebar>
-            )}
-            <Content contentContainerWidth={contentContainerWidth}>
-              <SiteMessages />
-              {children}
-            </Content>
-            {footer && <Footer />}
-            <div id="dashboard-modal-root" />
-          </div>
-        );
-      }}
-    </DashboardContext.Consumer>
+    <div
+      className={[
+        'dashboard',
+        scrollOffset !== null && 'modal_active',
+        id && `dashboard_id-${id}`,
+        themeClass && `dashboard_theme-${themeClass}`,
+      ]
+        .filter(className => className)
+        .join(' ')}
+      style={
+        scrollOffset != null
+          ? {
+              top: `-${scrollOffset}px`,
+            }
+          : {}
+      }
+    >
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        />
+      </Head>
+      {header && (
+        <Header
+          sidebarActive={sidebarActive}
+          toggleSidebarActive={toggleSidebarActive}
+        >
+          {header}
+        </Header>
+      )}
+      {sidebar && (
+        <Sidebar sidebarActive={sidebarActive} sidebarCompact={sidebarCompact}>
+          {sidebar}
+        </Sidebar>
+      )}
+      <Content contentContainerWidth={contentContainerWidth}>
+        <SiteMessages />
+        {children}
+      </Content>
+      {footer && <Footer />}
+      <div id="dashboard-modal-root" />
+    </div>
   );
 }
 

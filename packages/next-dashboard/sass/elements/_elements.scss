@@ -117,4 +117,10 @@ video {
   display: block;
   height: auto;
   width: 100%;
+  &.img-icon {
+    display: inline-block;
+    width: auto;
+    height: 1.3em;
+    vertical-align: bottom;
+  }
 }

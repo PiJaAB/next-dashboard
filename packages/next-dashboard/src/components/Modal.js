@@ -1,8 +1,10 @@
 // TODO: Disable body scroll.
 
 // @flow
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import ReactDOM from 'react-dom';
+
+import DashboardContext from '../utils/dashboardContext';
 
 const useInitialFlag = () => {
   const [initial, setInitial] = useState(true);
@@ -26,6 +28,7 @@ type Props = {
 };
 
 const Modal = ({ ...props }: Props) => {
+  const context = useContext(DashboardContext);
   const initial = useInitialFlag();
   if (typeof window === 'undefined') return null;
 
@@ -66,18 +69,8 @@ const Modal = ({ ...props }: Props) => {
     if (event.keyCode === 27) close();
   };
 
-  const atTop = () => {
-    const { documentElement } = document;
-    if (!documentElement) return;
-    if (active) {
-      documentElement.classList.add('html_modal-active');
-    } else {
-      documentElement.classList.remove('html_modal-active');
-    }
-  };
-
   useEffect(() => {
-    atTop();
+    if (context) context.setModalActive(active);
     document.addEventListener('mousedown', click);
     document.addEventListener('keydown', escape);
     return () => {

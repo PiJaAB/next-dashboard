@@ -1,7 +1,5 @@
-html {
-  &.html_modal-active {
-    overflow: hidden;
-  }
+.dashboard.modal_active {
+  position: fixed;
 }
 
 .modal-overlay {
