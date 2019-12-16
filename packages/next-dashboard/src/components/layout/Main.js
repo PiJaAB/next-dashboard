@@ -5,6 +5,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import Head from 'next/head';
 
 import DashboardContext from '../../utils/dashboardContext';
+import toClassName from '../../utils/toClassName';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
@@ -101,23 +102,19 @@ function DashboardLayout({
     setSavedScrollOffset(null);
   }, [savedScrollOffset]);
 
+  const style = {
+    top: scrollOffset != null ? `-${scrollOffset}px` : undefined,
+  };
+
   return (
     <div
-      className={[
+      className={toClassName([
         'dashboard',
         scrollOffset !== null && 'modal_active',
         id && `dashboard_id-${id}`,
         themeClass && `dashboard_theme-${themeClass}`,
-      ]
-        .filter(className => className)
-        .join(' ')}
-      style={
-        scrollOffset != null
-          ? {
-              top: `-${scrollOffset}px`,
-            }
-          : {}
-      }
+      ])}
+      style={style}
     >
       <Head>
         <link
