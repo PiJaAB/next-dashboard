@@ -1,7 +1,7 @@
 // TODO: Fix initial "at-top" body class.
 
 // @flow
-import React, { useEffect, useContext, useState, useRef } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import Head from 'next/head';
 
 import DashboardContext from '../../utils/dashboardContext';
