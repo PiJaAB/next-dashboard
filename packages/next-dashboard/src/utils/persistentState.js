@@ -26,7 +26,9 @@ export default function createPersistentState(
   getInitialState(ctx: InitialPropsContext): PersistentState,
   persist(state: PersistentState): void,
 } {
-  let latestState = null;
+  let latestState: ?PersistentState;
+  let debouncing: boolean = false;
+
   return {
     getInitialState(ctx: InitialPropsContext): PersistentState {
       const { [cookieName]: dashboardB64 } = cookies(ctx);
@@ -44,11 +46,22 @@ export default function createPersistentState(
 
     persist(state: PersistentState) {
       if (typeof window === 'undefined' || !window.setTimeout) return;
-      if (!latestState) {
-        window.setTimeout(() => {
+      if (!debouncing) {
+        try {
+          window.document.cookie = `${cookieName}=${escape(
+            btoa(JSON.stringify({ version, data: state })),
+          )}; path=/`;
+        } catch (err) {
+          errorReporter.emit('error', err);
+        }
+        debouncing = true;
+        const debounce = () => {
           const curState = latestState;
-          latestState = null;
-          if (!curState) return;
+          latestState = undefined;
+          if (curState === undefined) {
+            debouncing = false;
+            return;
+          }
           try {
             window.document.cookie = `${cookieName}=${escape(
               btoa(JSON.stringify({ version, data: curState })),
@@ -56,9 +69,12 @@ export default function createPersistentState(
           } catch (err) {
             errorReporter.emit('error', err);
           }
-        }, 100);
+          window.setTimeout(debounce, 100);
+        };
+        window.setTimeout(debounce, 100);
+      } else {
+        latestState = state;
       }
-      latestState = state;
     },
   };
 }
