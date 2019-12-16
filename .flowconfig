@@ -2,6 +2,7 @@
 [ignore]
 .*/.next/.*
 .*/dist/.*
+<PROJECT_ROOT>/packages/secret-.*
 
 [untyped]
 .*/node_modules/.*
