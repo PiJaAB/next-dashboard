@@ -1,55 +1,47 @@
 // @flow
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
-type Style = {|
-  top: string,
-  position: string,
-|};
+export default function useScrollFix(
+  shouldFix: boolean,
+): {| current: HTMLElement | null |} {
+  const ref = useRef<HTMLElement | null>(null);
 
-export default function useScrollFix(shouldFix: boolean): Style | void {
-  const [scrollOffset, setScrollOffset] = useState<number | void>();
-  const [savedScrollOffset, setSavedScrollOffset] = useState<number | void>();
-
-  // When a modal is shown, we want to save the top offset and set position fixed to disable scrolling
   useEffect(() => {
-    if (scrollOffset === undefined && !shouldFix) return;
-    if (shouldFix) {
-      setScrollOffset(window.pageYOffset);
-    } else {
-      setSavedScrollOffset(scrollOffset);
-      setScrollOffset(undefined);
-    }
+    const el = ref.current;
+    if (!el || !shouldFix) return undefined;
+    const oldTop = el.style.top;
+    const oldPos = el.style.position;
+    el.style.top = `-${window.pageYOffset}px`;
+    el.style.position = 'fixed';
+    return () => {
+      const oldScroll = el.style.top
+        ? -Number(el.style.top.replace('px', ''))
+        : NaN;
+      if (!Number.isNaN(oldScroll)) {
+        el.style.position = oldPos;
+        el.style.top = oldTop;
+        window.scrollTo(0, oldScroll);
+      }
+    };
   }, [shouldFix]);
 
-  // Once the modal isn't showing anymore, we want to scroll back to the old position, AFTER the DOM
-  // has updated with the new regular positioning.
-  useEffect(() => {
-    if (savedScrollOffset) {
-      window.scrollTo(0, savedScrollOffset);
-    }
-    setSavedScrollOffset(undefined);
-  }, [savedScrollOffset]);
-
   const onResize = () => {
-    setScrollOffset(0);
+    const el = ref.current;
+    if (!el) return;
+    el.style.top = '-0px';
   };
 
   useEffect(() => {
-    if (scrollOffset) {
+    if (shouldFix) {
       window.addEventListener('resize', onResize);
     }
     return () => {
-      if (scrollOffset) {
+      if (shouldFix) {
         window.removeEventListener('resize', onResize);
       }
     };
-  }, [scrollOffset]);
+  }, [shouldFix]);
 
-  return scrollOffset !== undefined
-    ? {
-        top: `-${scrollOffset}px`,
-        position: 'fixed',
-      }
-    : undefined;
+  return ref;
 }
