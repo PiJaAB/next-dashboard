@@ -280,7 +280,6 @@ export default function createDashboardHOC({
     const getInitialProps: InitialPropsContext => Promise<
       InitialProps<$Shape<I> | {}>,
     > = async ctx => {
-      console.log(!authInitialized, errorAuthReporter.initialize);
       if (!authInitialized && errorAuthReporter.initialize) {
         authInitialized = true;
         errorAuthReporter.initialize(ctx);
