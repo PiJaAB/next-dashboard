@@ -281,6 +281,12 @@ export default function createDashboardHOC({
       InitialProps<$Shape<I> | {}>,
     > = async ctx => {
       if (!authInitialized && errorAuthReporter.initialize) {
+        if (process.env.NODE_ENV === 'development') {
+          // Workaround for dev server not cleaning up properly between renders
+          setTimeout(() => {
+            authInitialized = false;
+          }, 10);
+        }
         authInitialized = true;
         errorAuthReporter.initialize(ctx);
       }
