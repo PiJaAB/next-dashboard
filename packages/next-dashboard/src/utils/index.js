@@ -9,3 +9,4 @@ export { default as withData } from './withData';
 export { default as toClassName } from './toClassName';
 export * from './consoleError';
 export * from './silentError';
+export { default as useInitialFlag } from './useInitialFlag';

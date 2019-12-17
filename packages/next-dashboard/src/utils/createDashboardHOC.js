@@ -10,6 +10,7 @@ import displayNameOf from './displayNameOf';
 import createPersistentState from './persistentState';
 import { SilentError } from './silentError';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
+import useInitialFlag from './useInitialFlag';
 
 type InitialNormProps<I> = {
   ...I,
@@ -223,6 +224,16 @@ export default function createDashboardHOC({
           errorAuthReporter.off('error', registerSiteMessage);
         };
       });
+
+      const initial = useInitialFlag();
+
+      useEffect(() => {
+        if (!initial) {
+          const htmlEl = document.documentElement;
+          if (!htmlEl) return;
+          htmlEl.classList.remove('html_initial-render');
+        }
+      }, [initial]);
 
       const [modalActive, setModalActive] = useState(false);
 

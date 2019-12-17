@@ -1,18 +1,11 @@
 // TODO: Disable body scroll.
 
 // @flow
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import ReactDOM from 'react-dom';
 
 import DashboardContext from '../utils/dashboardContext';
-
-const useInitialFlag = () => {
-  const [initial, setInitial] = useState(true);
-  useEffect(() => {
-    setInitial(false);
-  }, []);
-  return initial;
-};
+import useInitialFlag from '../utils/useInitialFlag';
 
 type Props = {
   id: string,
