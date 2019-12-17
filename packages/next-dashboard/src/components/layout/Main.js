@@ -34,34 +34,6 @@ function DashboardLayout({
   sidebar,
   footer,
 }: Props): React$Element<'div'> {
-  const atTop = () => {
-    const { body } = document;
-    if (!body) return;
-    if (window.scrollY <= 0) {
-      body.classList.add('body_at-top');
-    } else {
-      body.classList.remove('body_at-top');
-    }
-  };
-
-  const noTransition = () => {
-    const { body } = document;
-    if (!body) return;
-    body.classList.add('body_resizing');
-    setTimeout(() => {
-      body.classList.remove('body_resizing');
-    });
-  };
-
-  useEffect(() => {
-    atTop();
-    window.addEventListener('scroll', atTop);
-    window.addEventListener('resize', noTransition);
-    return () => {
-      window.removeEventListener('scroll', atTop);
-      window.removeEventListener('resize', noTransition);
-    };
-  }, []);
   const context = useContext(DashboardContext);
   if (!context) {
     throw new TypeError('Dashboard Layout needs to be in a Dashboard Context');
@@ -85,6 +57,50 @@ function DashboardLayout({
     null,
   );
 
+  const atTop = () => {
+    const { body } = document;
+    if (!body) return;
+    if (window.scrollY <= 0) {
+      body.classList.add('body_at-top');
+    } else {
+      body.classList.remove('body_at-top');
+    }
+  };
+
+  const noTransition = () => {
+    const { body } = document;
+    if (!body) return;
+    body.classList.add('body_resizing');
+    setTimeout(() => {
+      body.classList.remove('body_resizing');
+    });
+  };
+
+  const onResize = () => {
+    noTransition();
+    if (scrollOffset) {
+      setScrollOffset(0);
+      atTop();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, [scrollOffset]);
+
+  useEffect(() => {
+    if (!modalActive) {
+      atTop();
+      window.addEventListener('scroll', atTop);
+    }
+    return () => {
+      if (!modalActive) window.removeEventListener('scroll', atTop);
+    };
+  }, [modalActive]);
+
   // When a modal is shown, we want to save the top offset and set position fixed to disable scrolling
   useEffect(() => {
     if (scrollOffset === null && !modalActive) return;
@@ -98,7 +114,9 @@ function DashboardLayout({
   // Once the modal isn't showing anymore, we want to scroll back to the old position, AFTER the DOM
   // has updated with the new regular positioning.
   useEffect(() => {
-    if (savedScrollOffset) window.scrollTo(0, savedScrollOffset);
+    if (savedScrollOffset) {
+      window.scrollTo(0, savedScrollOffset);
+    }
     setSavedScrollOffset(null);
   }, [savedScrollOffset]);
 
