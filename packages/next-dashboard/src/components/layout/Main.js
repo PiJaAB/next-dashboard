@@ -110,7 +110,7 @@ function DashboardLayout({
     <div
       className={toClassName([
         'dashboard',
-        scrollOffset !== null && 'modal_active',
+        scrollOffset !== null && 'dashboard_modal-active',
         id && `dashboard_id-${id}`,
         themeClass && `dashboard_theme-${themeClass}`,
       ])}
