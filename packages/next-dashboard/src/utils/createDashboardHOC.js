@@ -10,6 +10,7 @@ import displayNameOf from './displayNameOf';
 import createPersistentState from './persistentState';
 import { SilentError } from './silentError';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
+import useInitialFlag from './useInitialFlag';
 
 type InitialNormProps<I> = {
   ...I,
@@ -224,6 +225,16 @@ export default function createDashboardHOC({
         };
       });
 
+      const initial = useInitialFlag();
+
+      useEffect(() => {
+        if (!initial) {
+          const htmlEl = document.documentElement;
+          if (!htmlEl) return;
+          htmlEl.classList.remove('html_initial-render');
+        }
+      }, [initial]);
+
       const [modalActive, setModalActive] = useState(false);
 
       const theme: Theme = themes.find(
@@ -269,6 +280,7 @@ export default function createDashboardHOC({
     const getInitialProps: InitialPropsContext => Promise<
       InitialProps<$Shape<I> | {}>,
     > = async ctx => {
+      console.log(!authInitialized, errorAuthReporter.initialize);
       if (!authInitialized && errorAuthReporter.initialize) {
         authInitialized = true;
         errorAuthReporter.initialize(ctx);
