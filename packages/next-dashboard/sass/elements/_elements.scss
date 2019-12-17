@@ -19,6 +19,7 @@ html {
   font-size: 62.5%;
   overflow-x: hidden;
   box-sizing: border-box;
+  overflow-y: scroll;
 }
 
 .dashboard {
@@ -117,4 +118,10 @@ video {
   display: block;
   height: auto;
   width: 100%;
+  &.img-icon {
+    display: inline-block;
+    width: auto;
+    height: 1.3em;
+    vertical-align: bottom;
+  }
 }

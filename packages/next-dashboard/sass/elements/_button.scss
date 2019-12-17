@@ -49,6 +49,7 @@ input[type='reset'] {
     margin: 0;
     border-radius: 0;
     background: none;
+    text-align: left;
     @include var('color', 'text');
   }
 }

@@ -224,6 +224,8 @@ export default function createDashboardHOC({
         };
       });
 
+      const [modalActive, setModalActive] = useState(false);
+
       const theme: Theme = themes.find(
         t => t.class === persistentState.theme,
       ) ||
@@ -237,6 +239,8 @@ export default function createDashboardHOC({
         siteMessages: localSiteMessages,
         themes,
         theme,
+        modalActive,
+        setModalActive,
       };
       // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
       if (props.__ERRORED__) {
