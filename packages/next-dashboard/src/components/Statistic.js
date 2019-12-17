@@ -6,28 +6,48 @@ import type { Statuses } from '../utils/types';
 export type Props = {
   label?: React$Node,
   value: React$Node,
-  description?: React$Node,
   prefix?: React$Node,
   suffix?: React$Node,
+  periodValue?: React$Node,
+  periodText?: React$Node,
+  description?: React$Node,
   status?: Statuses,
+  direction?: 'up' | 'down',
 };
 
 export const defaultProps = {
   label: undefined,
-  description: undefined,
-  status: undefined,
   prefix: '',
   suffix: '',
+  periodValue: undefined,
+  periodText: undefined,
+  description: undefined,
+  status: undefined,
+  direction: undefined,
 };
 
 export default class Statistic extends PureComponent<Props> {
   static defaultProps = defaultProps;
 
   render() {
-    const { label, description, value, prefix, suffix, status } = this.props;
+    const {
+      label,
+      value,
+      prefix,
+      suffix,
+      periodValue,
+      periodText,
+      description,
+      status,
+      direction,
+    } = this.props;
     return (
       <div
-        className={['statistic', status != null && `statistics-${status}`]
+        className={[
+          'statistic',
+          status && `statistic_status_${status}`,
+          direction && `statistic_direction_${direction}`,
+        ]
           .filter(c => c)
           .join(' ')}
       >
@@ -36,10 +56,23 @@ export default class Statistic extends PureComponent<Props> {
         </div>
         <h2 className="margin-bottom-x1">
           {prefix}
-          {value != null ? value : <>&nbsp;</>}
+          {value}
           {suffix}
         </h2>
-        <p>{description != null ? description : <>&nbsp;</>}</p>
+        {(periodValue || periodText) && (
+          <p>
+            {direction && (
+              <img
+                className="statistic-period-icon"
+                src={`/images/statistic/statistic-direction-icon-${direction}.svg`}
+                alt=""
+              />
+            )}
+            <span className="statistic-period-value">{periodValue}</span>{' '}
+            {periodText}
+          </p>
+        )}
+        {description != null && <p>{description}</p>}
       </div>
     );
   }

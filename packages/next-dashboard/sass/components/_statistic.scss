@@ -1,15 +1,47 @@
 .statistic {
+  height: 100%;
   padding: 20px;
   border-radius: 10px;
-  text-align: center;
   @include var('background-color', 'primary-alt');
-  &.statistic-error {
-    @include var('background-color', 'error');
+  background-position: right 10px top 10px;
+  background-repeat: no-repeat;
+  background-size: auto 50%;
+  &_status {
+    &_error {
+      @include var('background-color', 'error');
+    }
+    &_warning {
+      @include var('background-color', 'warning');
+    }
+    &_loading {
+      opacity: 0.5;
+    }
   }
-  &.statistic-warning {
-    @include var('background-color', 'warning');
+  &_direction {
+    &_up {
+      background-image: url('/images/statistic/statistic-direction-up.svg');
+      .statistic-period-value {
+        color: #00b69b;
+      }
+    }
+    &_down {
+      background-image: url('/images/statistic/statistic-direction-down.svg');
+      .statistic-period-value {
+        color: #f93c65;
+      }
+    }
   }
-  &.statistic-loading {
-    opacity: 0.3;
+  p {
+    margin: 0 0 10px;
+    &:last-child {
+      margin: 0;
+    }
   }
+}
+
+.statistic-period-icon {
+  display: inline-block;
+  width: (14px * 1.25);
+  margin: 0 (10px / 1.25) 0 0;
+  vertical-align: middle;
 }
