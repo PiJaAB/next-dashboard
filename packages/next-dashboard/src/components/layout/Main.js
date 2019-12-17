@@ -1,11 +1,12 @@
 // TODO: Fix initial "at-top" body class.
 
 // @flow
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Head from 'next/head';
 
 import DashboardContext from '../../utils/dashboardContext';
 import toClassName from '../../utils/toClassName';
+import useScrollFix from '../../utils/useScrollFix';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';
@@ -52,11 +53,6 @@ function DashboardLayout({
     context.setState<boolean>('sidebarActive', !sidebarActive);
   };
 
-  const [scrollOffset, setScrollOffset] = useState<number | null>(null);
-  const [savedScrollOffset, setSavedScrollOffset] = useState<number | null>(
-    null,
-  );
-
   const atTop = () => {
     const { body } = document;
     if (!body) return;
@@ -76,20 +72,12 @@ function DashboardLayout({
     });
   };
 
-  const onResize = () => {
-    noTransition();
-    if (scrollOffset) {
-      setScrollOffset(0);
-      atTop();
-    }
-  };
-
   useEffect(() => {
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', noTransition());
     return () => {
-      window.removeEventListener('resize', onResize);
+      window.removeEventListener('resize', noTransition());
     };
-  }, [scrollOffset]);
+  }, []);
 
   useEffect(() => {
     if (!modalActive) {
@@ -101,34 +89,12 @@ function DashboardLayout({
     };
   }, [modalActive]);
 
-  // When a modal is shown, we want to save the top offset and set position fixed to disable scrolling
-  useEffect(() => {
-    if (scrollOffset === null && !modalActive) return;
-    if (modalActive) setScrollOffset(window.pageYOffset);
-    else {
-      setSavedScrollOffset(scrollOffset);
-      setScrollOffset(null);
-    }
-  }, [modalActive]);
-
-  // Once the modal isn't showing anymore, we want to scroll back to the old position, AFTER the DOM
-  // has updated with the new regular positioning.
-  useEffect(() => {
-    if (savedScrollOffset) {
-      window.scrollTo(0, savedScrollOffset);
-    }
-    setSavedScrollOffset(null);
-  }, [savedScrollOffset]);
-
-  const style = {
-    top: scrollOffset != null ? `-${scrollOffset}px` : undefined,
-  };
+  const style = useScrollFix(modalActive);
 
   return (
     <div
       className={toClassName([
         'dashboard',
-        scrollOffset !== null && 'dashboard_modal-active',
         id && `dashboard_id-${id}`,
         themeClass && `dashboard_theme-${themeClass}`,
       ])}
