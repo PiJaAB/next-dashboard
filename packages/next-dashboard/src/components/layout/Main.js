@@ -89,7 +89,7 @@ function DashboardLayout({
     };
   }, [modalActive]);
 
-  const style = useScrollFix(modalActive);
+  const scrollRef = useScrollFix(modalActive);
 
   return (
     <div
@@ -98,7 +98,7 @@ function DashboardLayout({
         id && `dashboard_id-${id}`,
         themeClass && `dashboard_theme-${themeClass}`,
       ])}
-      style={style}
+      ref={scrollRef}
     >
       <Head>
         <link
