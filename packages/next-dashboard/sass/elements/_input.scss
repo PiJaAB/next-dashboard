@@ -34,7 +34,14 @@ select {
     margin-bottom: 0;
   }
 }
-//
+select {
+  padding: 10px (15px + 12.5px + 15px) 10px 15px;
+  background-image: url('/images/select-arrow.svg');
+  background-size: 12.5px auto;
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+}
+
 // input[type="checkbox"],
 // input[type="radio"] {
 //   @include visually-hidden;
