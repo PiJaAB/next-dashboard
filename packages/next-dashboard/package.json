@@ -10,12 +10,14 @@
   "directories": {
     "dist": "dist",
     "sass": "sass",
+    "src": "src",
     "styles": "styles",
     "test": "__tests__"
   },
   "files": [
     "dist",
     "sass",
+    "src",
     "styles"
   ],
   "publishConfig": {
