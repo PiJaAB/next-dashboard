@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "main": "packages/next-dashboard/src/entry.js",
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "node magic lerna bootstrap",
     "dev": "lerna run --parallel dev:pkg",
     "new": "lerna create",
     "lerna": "lerna",
-    "wizard": "node -e \"require('lerna-wizard')({commandChoiceFilter:({value:v})=>!['ls','updated','create','init'].includes(v)}).catch(e=>{console.error(e);process.exit(1)})\""
+    "wizard": "node -e \"require('lerna-wizard')({commandChoiceFilter:({value:v})=>!['ls','updated','create','init'].includes(v)}).catch(e=>{console.error(e);process.exit(1)})\"",
+    "magic": "node magic"
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.7.2",
