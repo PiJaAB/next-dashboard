@@ -42,79 +42,61 @@ select {
   background-position: right 15px center;
 }
 
-// input[type="checkbox"],
-// input[type="radio"] {
-//   @include visually-hidden;
-//   margin: (3px + 20px) 0 0 (20px / 2);
-//   &:focus {
-//     +label {
-//       &:before {
-//         border-color: $primary-color;
-//       }
-//     }
-//   }
-//   &:checked {
-//     +label {
-//       &:after {
-//         display: block;
-//       }
-//     }
-//   }
-//   +label {
-//     display: inline-block;
-//     position: relative;
-//     margin: 0;
-//     padding: 0 0 0 20px + 10px;
-//     user-select: none;
-//     cursor: pointer;
-//     &:before,
-//     &:after {
-//       content: '';
-//       position: absolute;
-//     }
-//     &:before {
-//       top: -3px;
-//       left: 0;
-//       height: 20px;
-//       width: 20px;
-//       border: 3px solid rgba($text-color, 0.25);
-//       background-color: $white;
-//     }
-//     &:after {
-//       display: none;
-//     }
-//     &:active {
-//       &:before {
-//         border-color: $primary-color;
-//       }
-//     }
-//   }
-// }
-// input[type="checkbox"] {
-//   +label {
-//     &:after {
-//       top: -8px;
-//       left: 9px;
-//       height: 20px;
-//       width: 10px;
-//       border-right: 3px solid $primary-color;
-//       border-bottom: 3px solid $primary-color;
-//       transform: rotate(45deg);
-//     }
-//   }
-// }
-// input[type="radio"] {
-//   +label {
-//     &:before {
-//       border-radius: 50%;
-//     }
-//     &:after {
-//       top: 2px;
-//       left: 5px;
-//       height: 10px;
-//       width: 10px;
-//       border-radius: 50%;
-//       background-color: $primary-color;
-//     }
-//   }
-// }
+[type="checkbox"],
+[type="radio"] {
+  @include visually-hidden;
+  margin: 20px 0 0 (20px / 2);
+  &:focus,
+  &:active {
+    +label {
+      &:before {
+        @include var('background-color', 'background-dark');
+      }
+    }
+  }
+  &:checked {
+    +label {
+      &:after {
+        display: block;
+      }
+    }
+  }
+  +label {
+    position: relative;
+    padding: 0 0 0 20px + 10px;
+    user-select: none;
+    cursor: pointer;
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+    }
+    &:before {
+      top: 0;
+      left: 0;
+      height: 20px;
+      width: 20px;
+      border-radius: 5px;
+      @include var('background-color', 'background');
+    }
+    &:after {
+      display: none;
+      top: 5px;
+      left: 5px;
+      height: 10px;
+      width: 10px;
+      border-radius: 2.5px;
+      background-color: $primary-color;
+    }
+  }
+}
+input[type="radio"] {
+  +label {
+    &:before {
+      border-radius: 50%;
+    }
+    &:after {
+      border-radius: 50%;
+    }
+  }
+}

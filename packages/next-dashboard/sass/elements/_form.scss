@@ -7,7 +7,7 @@
   .label {
     margin: 0 0 10px;
     @include var('color', 'text');
-    &:last-child {
+    &:last-child {
       margin: 0;
     }
   }
