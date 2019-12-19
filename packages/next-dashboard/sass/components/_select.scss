@@ -1,0 +1,113 @@
+.select {
+  &-container {
+    position: relative;
+  }
+  &__control {
+    display: flex;
+    outline: 0 !important; // ?
+    border-radius: 5px;
+    @include var('background-color', 'background');
+    cursor: default;
+  }
+  &__value-container {
+    flex: 1 0 auto;
+    position: relative;
+    padding: 10px 15px;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    // &--has-value {}
+  }
+  &__single-value {
+    position: absolute;
+    max-width: calc(100% - #{15px * 2});
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  // &__input {}
+  &__indicators {
+    display: flex;
+  }
+  &__indicator-separator {
+    display: none;
+  }
+  &__loading-indicator {
+    display: flex;
+    align-items: center;
+    >span {
+      height: 5px;
+      width: 5px;
+      margin: 0 5px 0 0;
+      border-radius: 50%;
+      @include var('background-color', 'primary');
+      &:nth-child(1) {
+        animation: animation-stj4i2 1s ease-in-out 0ms infinite;
+      }
+      &:nth-child(2) {
+        animation: animation-stj4i2 1s ease-in-out 160ms infinite;
+      }
+      &:nth-child(3) {
+        animation: animation-stj4i2 1s ease-in-out 320ms infinite;
+      }
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+  &__dropdown-indicator {
+    width: 15px + 12.5px + 15px;
+    background-image: url('/images/select-arrow.svg');
+    background-size: 12.5px auto;
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    >svg {
+      display: none;
+    }
+  }
+  &__input {
+    >input {
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    margin: 10px 0 0;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba($black, 0.125);
+    @include var('background-color', 'primary-alt');
+    font-size: 1.2rem;
+    overflow: hidden;
+    z-index: 1;
+  }
+  &__menu-list {
+    max-height: 250px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  &__menu-notice {
+    padding: 10px 15px;
+  }
+  &__option {
+    padding: 10px 15px;
+    cursor: default;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba($black, 0);
+    &--is-focused {
+      @include var('background-color', 'primary-rgb', 'rgba', 0.125);
+      &:active {
+        @include var('background-color', 'primary-rgb', 'rgba', 0.25);
+      }
+    }
+    &--is-selected {
+      @include var('background-color', 'primary');
+      color: $white;
+      &:active {
+        @include var('background-color', 'primary-rgb', 'rgba', 0.75);
+      }
+    }
+  }
+}
