@@ -1895,14 +1895,6 @@
   dependencies:
     safe-buffer "^5.1.2"
 
-"@pija-ab/next-dashboard@git://github.com/PiJaAB/next-dashboard.git":
-  version "0.0.0"
-  resolved "git://github.com/PiJaAB/next-dashboard.git#db9d75d21ed4d49254c4ef36d9d608c63e867643"
-  dependencies:
-    "@babel/runtime-corejs2" "^7.7.2"
-    atob "^2.1.2"
-    btoa "^1.2.1"
-
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"

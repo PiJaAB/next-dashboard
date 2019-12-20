@@ -65,7 +65,8 @@ export type DataExtra =
   | $ReadOnlyArray<DataExtra>
   | number
   | string
-  | boolean;
+  | boolean
+  | null;
 
 export type PollingFetcher = {
   id: string,
