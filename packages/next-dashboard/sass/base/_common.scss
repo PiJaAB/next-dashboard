@@ -6,15 +6,6 @@
   @include breakpoint(large) {
     margin: 0 0 40px;
   }
-  + .page-subtitle {
-    margin-top: -10px;
-    @include breakpoint(medium) {
-      margin-top: -20px;
-    }
-    @include breakpoint(large) {
-      margin-top: -30px;
-    }
-  }
 }
 
 // .preamble {
@@ -30,4 +21,15 @@
 
 .visually-hidden {
   @include visually-hidden;
+}
+
+.title-select {
+  @include breakpoint(medium) {
+    width: 200px;
+  }
+  .select {
+    &__control {
+      @include var('background-color', 'primary-alt');
+    }
+  }
 }
