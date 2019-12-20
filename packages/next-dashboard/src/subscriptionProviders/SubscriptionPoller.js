@@ -7,16 +7,17 @@ import {
   type PollingFetcher,
   type DataExtra,
   type ISubscriptionProvider,
+  type GeneralPollingFetcher,
 } from '../utils/types';
 
 import generateDataKey from '../utils/generateDataKey';
 
-function wrapExtra(
-  func: $PropertyType<PollingFetcher, 'runner'>,
+function wrapExtra<Data: {}>(
+  func: $PropertyType<PollingFetcher<Data>, 'runner'>,
   extra: DataExtra,
-): $PropertyType<PollingFetcher, 'runner'> {
+): $PropertyType<PollingFetcher<Data>, 'runner'> {
   return function runner(): $Call<
-    $PropertyType<PollingFetcher, 'runner'>,
+    $PropertyType<PollingFetcher<Data>, 'runner'>,
     DataExtra,
   > {
     return func.call(this, extra);
@@ -35,12 +36,12 @@ type MappedData<D> = $ObjMap<D, Mapper>;
 */
 export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
   implements ISubscriptionProvider<Data> {
-  constructor(fetcher?: PollingFetcher | PollingFetcher[]) {
+  constructor(fetcher?: PollingFetcher<Data> | PollingFetcher<Data>[]) {
     super();
     if (fetcher) this.addFetcher(fetcher);
   }
 
-  async startFetcher(fetcher: PollingFetcher) {
+  async startFetcher(fetcher: GeneralPollingFetcher) {
     if (!this.activeFetchers.has(fetcher.id)) {
       return;
     }
@@ -65,18 +66,24 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     }
   }
 
-  addFetcher(fetcher: PollingFetcher | PollingFetcher[]) {
-    const fetchers: PollingFetcher[] = Array.isArray(fetcher)
+  addFetcher(fetcher: PollingFetcher<Data> | PollingFetcher<Data>[]) {
+    const fetchers: $ReadOnlyArray<PollingFetcher<Data>> = Array.isArray(
+      fetcher,
+    )
       ? fetcher
       : [fetcher];
+    // Not sure how to type this. Technically flow is correct I suppose?
+    // Since keys COULD be symbols, but 1. Flow doesn't support symbols
+    // 2. using symbols as keys in this instance would be silly.
+    // $FlowIssue
     this.fetchers = this.fetchers.concat(fetchers);
   }
 
   activeListeners: Map<string, Set<(any) => void>> = new Map();
 
-  fetchers: PollingFetcher[] = [];
+  fetchers: GeneralPollingFetcher[] = [];
 
-  activeFetchers: Map<string, PollingFetcher> = new Map();
+  activeFetchers: Map<string, GeneralPollingFetcher> = new Map();
 
   stoppingTimers: Map<string, TimeoutID> = new Map();
 
@@ -141,7 +148,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       }
       return;
     }
-    let fetcher: PollingFetcher | void = this.fetchers.find(({ id }) => {
+    let fetcher: GeneralPollingFetcher | void = this.fetchers.find(({ id }) => {
       return id === dataSource;
     });
     if (!fetcher) {
@@ -159,7 +166,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
         ...rest,
         id: key,
         runner: wrapExtra(runner, extra),
-      }: PollingFetcher);
+      }: GeneralPollingFetcher);
     }
     this.activeFetchers.set(key, fetcher);
     this.startFetcher(fetcher);
