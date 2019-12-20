@@ -65,12 +65,22 @@ export type DataExtra =
   | $ReadOnlyArray<DataExtra>
   | number
   | string
-  | boolean;
+  | boolean
+  | null;
 
-export type PollingFetcher = {
-  id: string,
+type CommonPollingFetcher = {
   runner(extra?: DataExtra): Promise<mixed> | mixed,
   interval?: number,
+};
+
+export type PollingFetcher<+Data: {}> = {
+  ...CommonPollingFetcher,
+  +id: $Keys<Data>,
+};
+
+export type GeneralPollingFetcher = {
+  ...CommonPollingFetcher,
+  +id: string,
 };
 
 export type PathFragment = string | number | (string | number)[];
