@@ -68,19 +68,10 @@ export type DataExtra =
   | boolean
   | null;
 
-type CommonPollingFetcher = {
-  runner(extra?: DataExtra): Promise<mixed> | mixed,
-  interval?: number,
-};
-
 export type PollingFetcher<+Data: {}> = {
-  ...CommonPollingFetcher,
+  runner: (extra?: DataExtra) => Promise<mixed> | mixed,
+  interval?: number | ((extra?: DataExtra) => number | void),
   +id: $Keys<Data>,
-};
-
-export type GeneralPollingFetcher = {
-  ...CommonPollingFetcher,
-  +id: string,
 };
 
 export type PathFragment = string | number | (string | number)[];

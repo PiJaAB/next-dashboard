@@ -7,7 +7,6 @@ import {
   type PollingFetcher,
   type DataExtra,
   type ISubscriptionProvider,
-  type GeneralPollingFetcher,
 } from '../utils/types';
 
 import generateDataKey from '../utils/generateDataKey';
@@ -28,6 +27,12 @@ type Mapper = <T>(T) => DataType<T>;
 
 type MappedData<D> = $ObjMap<D, Mapper>;
 
+type ParsedPollingFetcher = {
+  +id: string,
+  interval?: number | ((extra?: DataExtra) => number | void),
+  runner: (extra?: DataExtra) => mixed,
+};
+
 /**
   Class that handles data subscription and polling for data.
   Will run relevant PollingFetcher's registered by the
@@ -41,7 +46,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     if (fetcher) this.addFetcher(fetcher);
   }
 
-  async startFetcher(fetcher: GeneralPollingFetcher) {
+  async startFetcher(fetcher: ParsedPollingFetcher) {
     if (!this.activeFetchers.has(fetcher.id)) {
       return;
     }
@@ -58,7 +63,10 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       this.setData(fetcher.id, { status: 'error', error: err });
       this.emit('error', err);
     } finally {
-      if (this.activeFetchers.has(fetcher.id) && fetcher.interval != null) {
+      if (
+        this.activeFetchers.has(fetcher.id) &&
+        typeof fetcher.interval === 'number'
+      ) {
         setTimeout(() => {
           this.startFetcher(fetcher);
         }, fetcher.interval * 1000);
@@ -66,24 +74,22 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     }
   }
 
-  addFetcher(fetcher: PollingFetcher<Data> | PollingFetcher<Data>[]) {
-    const fetchers: $ReadOnlyArray<PollingFetcher<Data>> = Array.isArray(
+  addFetcher(
+    fetcher: PollingFetcher<Data> | $ReadOnlyArray<PollingFetcher<Data>>,
+  ) {
+    const fetchers: $ReadOnlyArray<ParsedPollingFetcher> = Array.isArray(
       fetcher,
     )
       ? fetcher
       : [fetcher];
-    // Not sure how to type this. Technically flow is correct I suppose?
-    // Since keys COULD be symbols, but 1. Flow doesn't support symbols
-    // 2. using symbols as keys in this instance would be silly.
-    // $FlowIssue
-    this.fetchers = this.fetchers.concat(fetchers);
+    this.fetchers.push(...fetchers);
   }
 
   activeListeners: Map<string, Set<(any) => void>> = new Map();
 
-  fetchers: GeneralPollingFetcher[] = [];
+  fetchers: ParsedPollingFetcher[] = [];
 
-  activeFetchers: Map<string, GeneralPollingFetcher> = new Map();
+  activeFetchers: Map<string, ParsedPollingFetcher> = new Map();
 
   stoppingTimers: Map<string, TimeoutID> = new Map();
 
@@ -148,7 +154,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       }
       return;
     }
-    let fetcher: GeneralPollingFetcher | void = this.fetchers.find(({ id }) => {
+    let fetcher: ParsedPollingFetcher | void = this.fetchers.find(({ id }) => {
       return id === dataSource;
     });
     if (!fetcher) {
@@ -160,13 +166,23 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       });
       return;
     }
+    const interval =
+      typeof fetcher.interval === 'function'
+        ? fetcher.interval(extra)
+        : fetcher.interval;
     if (extra != null) {
-      const { runner, id, ...rest } = fetcher;
+      const { runner, ...rest } = fetcher;
       fetcher = ({
         ...rest,
         id: key,
         runner: wrapExtra(runner, extra),
-      }: GeneralPollingFetcher);
+      }: ParsedPollingFetcher);
+    }
+    if (fetcher.interval !== interval) {
+      fetcher = ({
+        ...fetcher,
+        interval,
+      }: ParsedPollingFetcher);
     }
     this.activeFetchers.set(key, fetcher);
     this.startFetcher(fetcher);
