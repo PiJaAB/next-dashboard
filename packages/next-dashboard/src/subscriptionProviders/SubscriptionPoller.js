@@ -82,9 +82,6 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     )
       ? fetcher
       : [fetcher];
-    // Not sure how to type this. Technically flow is correct I suppose?
-    // Since keys COULD be symbols, but 1. Flow doesn't support symbols
-    // 2. using symbols as keys in this instance would be silly.
     this.fetchers.push(...fetchers);
   }
 
