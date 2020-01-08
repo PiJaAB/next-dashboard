@@ -21,8 +21,6 @@ body {
   height: calc(100% - 80px);
   width: calc(100% - 80px);
   padding: 20px;
-  border-top: 1px solid;
-  @include var('border-color', 'primary');
   @include var('background-color', 'primary-alt');
   z-index: 100;
   overflow: hidden;
@@ -72,6 +70,7 @@ body {
 .dashboard-sidebar-menu-item-button {
   display: block;
   width: 100%;
+  padding: 10px 14px;
   background-color: transparent;
   @include var('color', 'text');
   text-align: left;

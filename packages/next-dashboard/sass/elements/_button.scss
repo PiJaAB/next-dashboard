@@ -53,11 +53,3 @@ input[type='reset'] {
     @include var('color', 'text');
   }
 }
-
-.overview-button {
-  color: inherit;
-  &:hover {
-    color: inherit;
-    text-decoration: none;
-  }
-}
