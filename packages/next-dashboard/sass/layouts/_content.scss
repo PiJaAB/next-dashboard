@@ -29,6 +29,7 @@ body {
       }
     }
     &.dashboard-sidebar_compact {
+      width: 86px;
       +.dashboard-content {
         @include breakpoint(medium) {
           padding-left: 100px;
