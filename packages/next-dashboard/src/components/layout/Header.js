@@ -22,7 +22,7 @@ const Header = ({ toggleSidebarActive, sidebarActive, children }: Props) => (
       const logo = `logo${theme !== 'default' ? `-${theme}` : ''}.png`;
       return (
         <header className="dashboard-header">
-          <div className="container container-unlimited">
+          <div className="header-content-container">
             <div className="grid grid-x3-medium grid-x4-large align-items-center">
               <div className="cell dashboard-header-cell dashboard-header-cell_sidebar">
                 <button

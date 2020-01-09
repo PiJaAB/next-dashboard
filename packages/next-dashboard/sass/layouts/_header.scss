@@ -107,3 +107,11 @@ body {
   display: block;
   width: 75px;
 }
+
+.header-content-container {
+  margin-left: 38px;
+  width: calc(100% - 38px);
+  @include breakpoint(large) {
+    width: calc(100% - 76px);
+  }
+}
