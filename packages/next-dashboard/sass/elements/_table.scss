@@ -32,6 +32,8 @@ th {
   flex: 0 0 33.33333%;
   max-width: 33.33333%;
   border-right: 1px solid;
+  z-index: 1;
+  overflow: hidden;
   @include var('border-color', 'primary-rgb', 'rgba', 0.25);
   @include breakpoint(medium) {
     flex: 0 0 25%;
