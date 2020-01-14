@@ -1,4 +1,11 @@
 .dashboard-search {
-  padding: 10px 20px;
-  border-radius: 100px;
+  // padding: 10px 20px;
+  .select {
+    &__control {
+      border-radius: 100px;
+    }
+    // &__dropdown-indicator {
+    //   display: none;
+    // }
+  }
 }

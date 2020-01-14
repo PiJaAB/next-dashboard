@@ -64,6 +64,30 @@
       display: none;
     }
   }
+  &__clear-indicator {
+    position: relative;
+    width: 10px;
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 2px;
+      width: 12.5px;
+      border-radius: 1px;
+      background-color: #bcbcbc;
+    }
+    &:before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    &:after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+    >svg {
+      display: none;
+    }
+  }
   &__input {
     >input {
       margin: 0;
