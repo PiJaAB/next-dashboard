@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 
 type Entry = {
   key?: string,
@@ -43,7 +44,7 @@ const ResponsiveTable = ({
 }: Props) => {
   const textAlignClass = (props: TextAlignProps) =>
     props.textAlign && `text-align-${props.textAlign}`;
-  const table = (cols: Column[]) => (
+  const table = (cols: Column[], type: string) => (
     <table>
       <thead>
         <tr>
@@ -62,6 +63,11 @@ const ResponsiveTable = ({
           <tr key={dataKeyExtractor(entry)}>
             {cols.map(column => (
               <td
+                data-tip={
+                  type === 'head'
+                    ? (column.renderBody || renderBody)(entry, column)
+                    : null
+                }
                 key={columnKeyExtractor(column)}
                 className={textAlignClass(column)}
               >
@@ -75,8 +81,11 @@ const ResponsiveTable = ({
   );
   return (
     <div className={['responsive-table', className].filter(c => c).join(' ')}>
-      <div className="responsive-table-head">{table([columns[0]])}</div>
-      <div className="responsive-table-body">{table(columns.slice(1))}</div>
+      <div className="responsive-table-head">{table([columns[0]], 'head')}</div>
+      <div className="responsive-table-body">
+        {table(columns.slice(1), 'body')}
+      </div>
+      <ReactTooltip className="tooltip-style" />
     </div>
   );
 };

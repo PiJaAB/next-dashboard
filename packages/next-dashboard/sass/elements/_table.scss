@@ -43,6 +43,14 @@ th {
     flex: 0 0 20%;
     max-width: 20%;
   }
+  table {
+    table-layout: fixed;
+  }
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 .responsive-table-body {
   flex: 0 0 66.66667%;
