@@ -4,25 +4,33 @@ import React, { useState, useEffect } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
-import type { Theme, SiteMessageType, IErrorAuthReporter } from './types';
+import type {
+  Theme,
+  SiteMessageType,
+  IAuthProvider,
+  DashboardComponent,
+} from './types';
 import displayNameOf from './displayNameOf';
 
 import createPersistentState from './persistentState';
 import { SilentError } from './silentError';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
+import errorReporter from './errorReporter';
 
 type InitialNormProps<I> = {
   ...I,
   __ERRORED__: false,
   __INITIAL_STATE__: { [string]: any },
   __ERR_PROPS__: void,
+  __AUTH_SERIALIZED__: string,
 };
 
 type InitialErrProps = {
   __ERRORED__: true,
   __INITIAL_STATE__: { [string]: any },
   __ERR_PROPS__: {} | void,
+  __AUTH_SERIALIZED__: string,
 };
 
 type InitialUnified<I> = {
@@ -30,6 +38,7 @@ type InitialUnified<I> = {
   __ERRORED__: boolean,
   __INITIAL_STATE__: { [string]: any } | void,
   __ERR_PROPS__: {} | void,
+  __AUTH_SERIALIZED__: string,
 };
 
 type InitialProps<I> = InitialErrProps | InitialNormProps<I>;
@@ -47,7 +56,7 @@ export type WrappedProps<P: {}, I> =
   | InitialErrProps;
 
 export type Config = {
-  errorAuthReporter: IErrorAuthReporter,
+  AuthProvider: Class<IAuthProvider>,
   unauthedRoute?: string,
   needAuthDefault: boolean,
   error?: {
@@ -80,13 +89,13 @@ function compareSitemessages(
 }
 
 export default function createDashboardHOC({
-  errorAuthReporter,
+  AuthProvider,
   needAuthDefault,
   unauthedRoute,
   error: errorConf,
   themes: confThemes,
 }: Config): <U: {}, Q: {} = {}>(
-  Comp: NextComponent<U, Q>,
+  Comp: DashboardComponent<U, Q>,
   needAuth?: boolean,
 ) => NextComponent<WrappedUnified<U, Q>, InitialUnified<Q>> {
   const themes: Theme[] = confThemes || [
@@ -94,17 +103,13 @@ export default function createDashboardHOC({
     { name: 'Dark', class: 'dark' },
   ];
 
-  const { getInitialState, persist } = createPersistentState(
-    'dashboardState',
-    errorAuthReporter,
-  );
+  const { getInitialState, persist } = createPersistentState('dashboardState');
   let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
-  let authInitialized = !errorAuthReporter.initialize;
 
   function withDashboard<P: {}, I: {} = {}>(
     Comp:
       | (React$ComponentType<P> & { +getInitialProps: void })
-      | NextComponent<P, I>,
+      | DashboardComponent<P, I>,
     needAuth?: boolean,
   ):
     | NextComponent<WrappedUnified<P, I>, InitialUnified<I>>
@@ -121,26 +126,12 @@ export default function createDashboardHOC({
         }
       }
     }
-    // eslint-disable-next-line no-param-reassign
+
     const parsedNeedAuth = needAuth == null ? needAuthDefault : needAuth;
 
     function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
-      if (
-        typeof window !== 'undefined' &&
-        !authInitialized &&
-        errorAuthReporter.initialize
-      ) {
-        authInitialized = true;
-        errorAuthReporter.initialize({
-          asPath: Router.asPath,
-          query: Router.query,
-          pathname: Router.pathname,
-          AppTree() {
-            throw new Error("Can't generate AppTree in provider Init");
-          },
-        });
-      }
-      const { __INITIAL_STATE__, ...props } = fullProps;
+      const { __INITIAL_STATE__, __AUTH_SERIALIZED__, ...props } = fullProps;
+      const authProvider = new AuthProvider(__AUTH_SERIALIZED__);
       const [persistentState, updatePersistentState] = useState(
         __INITIAL_STATE__,
       );
@@ -219,9 +210,9 @@ export default function createDashboardHOC({
       }
 
       useEffect(() => {
-        errorAuthReporter.on('error', registerSiteMessage);
+        errorReporter.on('error', registerSiteMessage);
         return () => {
-          errorAuthReporter.off('error', registerSiteMessage);
+          errorReporter.off('error', registerSiteMessage);
         };
       });
 
@@ -242,7 +233,7 @@ export default function createDashboardHOC({
       ) ||
         themes[0] || { name: 'Default', class: 'default' };
       const context: IDashboardContext = {
-        isAuthenticated: () => errorAuthReporter.isAuthenticated(),
+        isAuthenticated: () => authProvider.isAuthenticated(),
         getState: getPersistentState,
         setState: setPersistentState,
         registerSiteMessage,
@@ -252,6 +243,7 @@ export default function createDashboardHOC({
         theme,
         modalActive,
         setModalActive,
+        authProvider,
       };
       // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
       if (props.__ERRORED__) {
@@ -280,19 +272,11 @@ export default function createDashboardHOC({
     const getInitialProps: InitialPropsContext => Promise<
       InitialProps<$Shape<I> | {}>,
     > = async ctx => {
-      if (!authInitialized && errorAuthReporter.initialize) {
-        authInitialized = true;
-        errorAuthReporter.initialize(ctx);
-        // Workaround for auth leaking. NOT PERMANENT SOLUTION!
-        // WILL FIX AFTER VACATION
-        setTimeout(() => {
-          authInitialized = false;
-        }, 10);
-      }
+      const authProvider = new AuthProvider(ctx);
       const { pathname, query, asPath } = ctx;
       const authenticated =
-        errorAuthReporter &&
-        (await errorAuthReporter.isAuthorizedForRoute(pathname, asPath, query));
+        AuthProvider &&
+        (await authProvider.isAuthorizedForRoute(pathname, asPath, query));
       if (parsedNeedAuth && !authenticated) {
         const { res } = ctx;
         if (unauthedRoute) {
@@ -311,6 +295,7 @@ export default function createDashboardHOC({
                   : null) || {},
               __INITIAL_STATE__: getInitialState(ctx) || {},
               __ERRORED__: true,
+              __AUTH_SERIALIZED__: authProvider.serialize(),
             };
           }
           Router.push({
@@ -325,6 +310,7 @@ export default function createDashboardHOC({
                 : null) || {},
             __INITIAL_STATE__: getInitialState(ctx) || {},
             __ERRORED__: true,
+            __AUTH_SERIALIZED__: authProvider.serialize(),
           };
         }
 
@@ -344,24 +330,27 @@ export default function createDashboardHOC({
                 : null) || {},
             __INITIAL_STATE__: getInitialState(ctx) || {},
             __ERRORED__: true,
+            __AUTH_SERIALIZED__: authProvider.serialize(),
           };
         }
         throw err;
       }
 
       if (Comp.getInitialProps) {
-        const CompInit = await Comp.getInitialProps(ctx);
+        const CompInit = await Comp.getInitialProps({ ...ctx, authProvider });
         return ({
           ...CompInit,
           __ERRORED__: false,
           __INITIAL_STATE__: getInitialState(ctx) || {},
           __ERR_PROPS__: undefined,
+          __AUTH_SERIALIZED__: authProvider.serialize(),
         }: InitialNormProps<I>);
       }
       return ({
         __ERRORED__: false,
         __INITIAL_STATE__: getInitialState(ctx) || {},
         __ERR_PROPS__: undefined,
+        __AUTH_SERIALIZED__: authProvider.serialize(),
       }: InitialNormProps<{}>);
     };
 
