@@ -29,7 +29,7 @@ type TextAlignProps = { textAlign: string | void };
 
 const defaultRenderHead = ({ title }: Column) => title;
 const defaultRenderBody = (entry: Entry, { field }: Column) =>
-  String(entry[field]);
+  entry[field] !== null ? String(entry[field]) : null;
 const defaultKeyExtractor = ({ key }: Entry | Column) => key;
 
 const ResponsiveTable = ({
