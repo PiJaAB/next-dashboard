@@ -1,7 +1,8 @@
 // @flow
 
 import cookies from 'next-cookies';
-import type { IErrorAuthReporter } from './types';
+
+import errorReporter from './errorReporter';
 
 import type { InitialPropsContext } from './nextTypes';
 
@@ -20,20 +21,25 @@ if (typeof window === 'undefined') {
 
 export default function createPersistentState(
   cookieName: string,
-  errorReporter: IErrorAuthReporter,
   version?: number,
 ): {
-  getInitialState(ctx: InitialPropsContext): PersistentState,
+  getInitialState(ctx: InitialPropsContext | string): PersistentState,
   persist(state: PersistentState): void,
+  serialize(state: PersistentState): string,
 } {
   let latestState: ?PersistentState;
   let debouncing: boolean = false;
 
   return {
-    getInitialState(ctx: InitialPropsContext): PersistentState {
-      const { [cookieName]: dashboardB64 } = cookies(ctx);
-      if (!dashboardB64) return null;
+    getInitialState(ctx: InitialPropsContext | string): PersistentState {
       try {
+        if (typeof ctx === 'string') {
+          const dashboardState = JSON.parse(ctx);
+          if (dashboardState.version !== version) return {};
+          return dashboardState.data;
+        }
+        const { [cookieName]: dashboardB64 } = cookies(ctx);
+        if (!dashboardB64) return null;
         const dashboardJson = atob(dashboardB64);
         const dashboardState = JSON.parse(dashboardJson);
         if (dashboardState.version !== version) return {};
@@ -75,6 +81,10 @@ export default function createPersistentState(
       } else {
         latestState = state;
       }
+    },
+
+    serialize(state: PersistentState): string {
+      return JSON.stringify({ version, data: state });
     },
   };
 }

@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import type { Theme, SiteMessageType } from './types';
+import type { Theme, SiteMessageType, IAuthProvider } from './types';
 
 export interface IDashboardContext {
   getState<T>(key: string, defaultValue: T): T;
@@ -13,6 +13,7 @@ export interface IDashboardContext {
   +siteMessages: $ReadOnlyArray<SiteMessageType>;
   +modalActive: boolean;
   setModalActive((boolean => boolean) | boolean): void;
+  authProvider: IAuthProvider;
 }
 
 export type DashboardContextType = IDashboardContext | void;

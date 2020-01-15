@@ -10,8 +10,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
-import { PageChart } from '@pija-ab/next-dashboard';
-import useThemeVars from 'src/utils/useThemeVars';
+import PageChart from './PageChart';
 
 type Props = {
   title: string,
@@ -19,10 +18,10 @@ type Props = {
     Peroid: string,
     Average: number,
   }[],
+  chartLineColor: string,
 };
 
-const LineChart = ({ title, data }: Props) => {
-  const { chartLineColor } = useThemeVars();
+const LineChart = ({ title, data, chartLineColor }: Props) => {
   const chart = (
     <PageChart>
       <ResponsiveContainer>
