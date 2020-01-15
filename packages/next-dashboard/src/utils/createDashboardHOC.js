@@ -274,9 +274,11 @@ export default function createDashboardHOC({
     > = async ctx => {
       const authProvider = new AuthProvider(ctx);
       const { pathname, query, asPath } = ctx;
-      const authenticated =
-        AuthProvider &&
-        (await authProvider.isAuthorizedForRoute(pathname, asPath, query));
+      const authenticated = await authProvider.isAuthorizedForRoute(
+        pathname,
+        asPath,
+        query,
+      );
       if (parsedNeedAuth && !authenticated) {
         const { res } = ctx;
         if (unauthedRoute) {
