@@ -96,8 +96,6 @@ export interface IAuthProvider {
     _query: { [string]: string | void },
   ): boolean;
   isAuthenticated(): boolean;
-  deAuth(): void;
-  auth<Args: $ReadOnlyArray<*>>(...args: Args): Promise<boolean>;
 }
 
 export type DashboardInitialPropsContext = InitialPropsContext & {
