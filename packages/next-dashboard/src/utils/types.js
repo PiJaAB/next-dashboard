@@ -28,10 +28,12 @@ export type SuccessDataType<T = mixed> = {|
 export type ErrorDataType = {|
   +status: 'error',
   +error: Error,
+  +value?: void,
 |};
 
 export type LoadingDataType = {|
   +status: 'loading',
+  +value?: void,
 |};
 
 export type DataType<T = mixed> =
@@ -82,18 +84,31 @@ export type DataMapper = <T>(T) => DataType<T>;
 
 export type MappedData<D: {}> = $ObjMap<D, DataMapper>;
 
-export interface IErrorAuthReporter {
+export interface IAuthProvider {
+  constructor(ctx: InitialPropsContext | string): void;
+  serialize(): string;
   emit(string, ...any): boolean;
-  on(string, any): IErrorAuthReporter;
-  off(string, any): IErrorAuthReporter;
-  +initialize: ?(ctx: InitialPropsContext) => void;
+  on(string, any): IAuthProvider;
+  off(string, any): IAuthProvider;
   isAuthorizedForRoute(
     _href: string,
     _asPath: string,
     _query: { [string]: string | void },
   ): boolean;
   isAuthenticated(): boolean;
+  deAuth(): void;
+  auth<Args: $ReadOnlyArray<*>>(...args: Args): Promise<boolean>;
 }
+
+export type DashboardInitialPropsContext = InitialPropsContext & {
+  authProvider?: IAuthProvider,
+};
+
+export type DashboardComponent<P: {}, I: {} = {}> = React$ComponentType<
+  P & I,
+> & {
+  +getInitialProps?: (ctx: DashboardInitialPropsContext) => Promise<I> | I,
+};
 
 export interface ISubscriptionProvider<Data: {}> {
   read<DS: $Keys<Data>>(

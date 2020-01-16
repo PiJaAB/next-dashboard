@@ -10,3 +10,4 @@ export { default as toClassName } from './toClassName';
 export * from './consoleError';
 export * from './silentError';
 export { default as useInitialFlag } from './useInitialFlag';
+export { default as errorReporter } from './errorReporter';

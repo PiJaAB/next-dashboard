@@ -25,11 +25,15 @@ th {
 .responsive-table-head,
 .responsive-table-body {
   overflow-x: auto;
+  box-shadow: 6px 1px 7px -3px rgba(0,0,0,0.4);
 }
 .responsive-table-head {
+  z-index: 1;
   flex: 0 0 33.33333%;
   max-width: 33.33333%;
   border-right: 1px solid;
+  z-index: 1;
+  overflow: hidden;
   @include var('border-color', 'primary-rgb', 'rgba', 0.25);
   @include breakpoint(medium) {
     flex: 0 0 25%;
@@ -38,6 +42,14 @@ th {
   @include breakpoint(large) {
     flex: 0 0 20%;
     max-width: 20%;
+  }
+  table {
+    table-layout: fixed;
+  }
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 .responsive-table-body {
