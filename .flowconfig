@@ -1,7 +1,7 @@
 
 [ignore]
 .*/.next/.*
-.*/dist/.*
+<PROJECT_ROOT>/packages/.*/dist/.*
 <PROJECT_ROOT>/packages/secret-.*
 <PROJECT_ROOT>/packages/testbed2/.*
 
