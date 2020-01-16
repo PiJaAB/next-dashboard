@@ -243,7 +243,18 @@ export default function createDashboardHOC({
         theme,
         modalActive,
         setModalActive,
-        authProvider,
+        getAuthProvider<A: IAuthProvider>(C: Class<A>): A | void {
+          if (authProvider === undefined) return undefined;
+          if (authProvider instanceof C) return authProvider;
+          if (process.env.NODE_ENV === 'development') {
+            console.error(
+              new Error(
+                'AuthProvider mismatch, instance not of requested class',
+              ),
+            );
+          }
+          return undefined;
+        },
       };
       // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
       if (props.__ERRORED__) {

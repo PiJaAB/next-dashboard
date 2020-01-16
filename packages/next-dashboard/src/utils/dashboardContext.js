@@ -1,5 +1,9 @@
 // @flow
 import React from 'react';
+
+// eslint fails to parse `getAuthProvider<T: IAuthProvider>`
+// as this type being used...
+// eslint-disable-next-line no-unused-vars
 import type { Theme, SiteMessageType, IAuthProvider } from './types';
 
 export interface IDashboardContext {
@@ -13,7 +17,7 @@ export interface IDashboardContext {
   +siteMessages: $ReadOnlyArray<SiteMessageType>;
   +modalActive: boolean;
   setModalActive((boolean => boolean) | boolean): void;
-  authProvider: IAuthProvider;
+  getAuthProvider<T: IAuthProvider>(Class: Class<T>): T | void;
 }
 
 export type DashboardContextType = IDashboardContext | void;
