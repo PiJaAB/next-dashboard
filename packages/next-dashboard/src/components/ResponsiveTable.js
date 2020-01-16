@@ -3,8 +3,8 @@ import React from 'react';
 import ReactTooltip from 'react-tooltip';
 
 type Entry = {
-  key?: string,
-  [string]: mixed,
+  +key?: string | void,
+  +[string]: mixed,
 };
 
 type Column = {
@@ -19,7 +19,7 @@ type Column = {
 export type Props = {
   className?: string,
   columns: Column[],
-  data: Entry[],
+  data: $ReadOnlyArray<Entry>,
   renderHead?: (column: Column) => ?React$Node,
   renderBody?: (entry: Entry, column: Column) => ?React$Node,
   columnKeyExtractor?: (column: Column) => string,

@@ -14,10 +14,10 @@ import PageChart from './PageChart';
 
 type Props = {
   title: string,
-  data: {
-    Peroid: string,
+  data: $ReadOnlyArray<{
+    Period: string,
     Average: number,
-  }[],
+  }>,
   chartLineColor: string,
 };
 
