@@ -12,7 +12,7 @@
 
 .hamburger-menu path {
     fill: none;
-    stroke: #fff;
+    @include var('stroke', 'secondary');
     stroke-width: 3;
     stroke-linecap: round;
     stroke-linejoin: round;
