@@ -3,9 +3,11 @@ import React from 'react';
 import Link from 'next/link';
 
 import DashboardContext from '../../utils/dashboardContext';
+import HamburgerMenu from '../HamburgerMenu';
 
 type Props = {
   toggleSidebarActive: () => void,
+  sidebarActive: boolean,
   children: React$Node,
 };
 
@@ -24,30 +26,10 @@ const Header = ({ toggleSidebarActive, sidebarActive, children }: Props) => (
           <div className="header-content-container">
             <div className="grid grid-x3-medium grid-x4-large align-items-center">
               <div className="cell dashboard-header-cell dashboard-header-cell_sidebar">
-                <div className="hamburger-menu">
-                  <label>
-                    <input
-                      type="checkbox"
-                      onChange={toggleSidebarActive}
-                      checked={sidebarActive}
-                      defaultChecked={sidebarActive}
-                    />
-                    <svg
-                      viewBox="0 0 100 100"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        className="line--1"
-                        d="M0 40h62c13 0 6 28-4 18L35 35"
-                      />
-                      <path className="line--2" d="M0 50h70" />
-                      <path
-                        className="line--3"
-                        d="M0 60h62c13 0 6-28-4-18L35 65"
-                      />
-                    </svg>
-                  </label>
-                </div>
+                <HamburgerMenu
+                  sidebarActive={sidebarActive}
+                  toggleSidebarActive={toggleSidebarActive}
+                />
               </div>
               <div className="cell dashboard-header-cell dashboard-header-cell_logo">
                 <Link href="/dashboard">
