@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import DashboardContext from '../../utils/dashboardContext';
+import HamburgerMenu from '../HamburgerMenu';
 
 type Props = {
   toggleSidebarActive: () => void,
@@ -25,19 +26,10 @@ const Header = ({ toggleSidebarActive, sidebarActive, children }: Props) => (
           <div className="header-content-container">
             <div className="grid grid-x3-medium grid-x4-large align-items-center">
               <div className="cell dashboard-header-cell dashboard-header-cell_sidebar">
-                <button
-                  type="button"
-                  className="dashboard-header-sidebar-button"
-                  onClick={toggleSidebarActive}
-                >
-                  <span
-                    className={[
-                      'dashboard-sidebar-button-icon',
-                      'fa',
-                      sidebarActive ? 'fa-times' : 'fa-bars',
-                    ].join(' ')}
-                  />
-                </button>
+                <HamburgerMenu
+                  sidebarActive={sidebarActive}
+                  toggleSidebarActive={toggleSidebarActive}
+                />
               </div>
               <div className="cell dashboard-header-cell dashboard-header-cell_logo">
                 <Link href="/dashboard">

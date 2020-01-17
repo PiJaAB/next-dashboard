@@ -1,0 +1,60 @@
+// https://tamino-martinius.github.io/ui-snippets-menu-animations/
+
+.hamburger-menu label {
+    display: block;
+    cursor: pointer;
+    position: relative;
+    max-width: 72px;
+    max-height: 72px;
+    bottom: 0;
+    right: 0;
+}
+
+.hamburger-menu path {
+    fill: none;
+    @include var('stroke', 'secondary');
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: var(--length) var(--total-length);
+    stroke-dashoffset: var(--offset);
+    -webkit-transition: all .8s cubic-bezier(.645, .045, .355, 1);
+    transition: all .8s cubic-bezier(.645, .045, .355, 1);
+}
+
+.hamburger-menu {
+    --length: 24;
+    --offset: -38;
+}
+
+.hamburger-menu input:checked+svg .line--1,
+.hamburger-menu input:checked+svg .line--3 {
+    --length: 22.627416998;
+}
+
+.hamburger-menu input:checked+svg .line--2 {
+    --length: 0;
+}
+
+.back input:checked+svg .line--1,
+.back input:checked+svg .line--3 {
+    --length: 8.602325267;
+}
+
+.hamburger-menu .line--1,
+.hamburger-menu .line--3 {
+    --total-length: 126.64183044433594;
+}
+
+.hamburger-menu .line--2 {
+    --total-length: 70;
+}
+
+.hamburger-menu input:checked+svg .line--1,
+.hamburger-menu input:checked+svg .line--3 {
+    --offset: -94.1149185097;
+}
+
+.hamburger-menu input:checked+svg .line--2 {
+    --offset: -50;
+}

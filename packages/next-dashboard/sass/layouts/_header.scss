@@ -78,6 +78,10 @@ body {
   }
 }
 
+.dashboard-header-cell_sidebar {
+  padding: 0 !important;
+}
+
 .dashboard-header-sidebar-button {
   display: block;
   position: relative;
@@ -109,7 +113,7 @@ body {
 }
 
 .header-content-container {
-  margin-left: 38px;
+  margin-left: 28px;
   width: calc(100% - 38px);
   @include breakpoint(large) {
     width: calc(100% - 76px);
