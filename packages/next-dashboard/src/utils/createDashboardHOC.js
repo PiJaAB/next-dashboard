@@ -18,17 +18,21 @@ import DashboardContext, { type IDashboardContext } from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
 import errorReporter from './errorReporter';
 
+type PersistentState = {
+  [string]: any,
+};
+
 type InitialNormProps<I> = {
   ...I,
   __ERRORED__: false,
-  __INITIAL_STATE__: { [string]: any },
+  __INITIAL_STATE__: PersistentState,
   __ERR_PROPS__: void,
   __AUTH_SERIALIZED__: string,
 };
 
 type InitialErrProps = {
   __ERRORED__: true,
-  __INITIAL_STATE__: { [string]: any },
+  __INITIAL_STATE__: PersistentState,
   __ERR_PROPS__: {} | void,
   __AUTH_SERIALIZED__: string,
 };
@@ -36,7 +40,7 @@ type InitialErrProps = {
 type InitialUnified<I> = {
   ...I,
   __ERRORED__: boolean,
-  __INITIAL_STATE__: { [string]: any } | void,
+  __INITIAL_STATE__: PersistentState | void,
   __ERR_PROPS__: {} | void,
   __AUTH_SERIALIZED__: string,
 };
@@ -103,7 +107,9 @@ export default function createDashboardHOC({
     { name: 'Dark', class: 'dark' },
   ];
 
-  const { getInitialState, persist } = createPersistentState('dashboardState');
+  const { getInitialState, persist } = createPersistentState<{}>(
+    'dashboardState',
+  );
   let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
 
   function withDashboard<P: {}, I: {} = {}>(
@@ -132,9 +138,10 @@ export default function createDashboardHOC({
     function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
       const { __INITIAL_STATE__, __AUTH_SERIALIZED__, ...props } = fullProps;
       const authProvider = new AuthProvider(__AUTH_SERIALIZED__);
-      const [persistentState, updatePersistentState] = useState(
-        __INITIAL_STATE__,
-      );
+      const [
+        persistentState,
+        updatePersistentState,
+      ] = useState<PersistentState>(__INITIAL_STATE__);
       const [localSiteMessages, setLocalSiteMessages] = useState(siteMessages);
 
       function getPersistentState<T>(key: string, defaultValue: T): T {
@@ -144,9 +151,9 @@ export default function createDashboardHOC({
       }
 
       function setPersistentState<T>(key: string, value: T) {
-        updatePersistentState(curState => {
+        updatePersistentState((curState: PersistentState): PersistentState => {
           if (curState[key] === value) return curState;
-          const newPersistentState = {
+          const newPersistentState: PersistentState = {
             ...curState,
             [key]: value,
           };

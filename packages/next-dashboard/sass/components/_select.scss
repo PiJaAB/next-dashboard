@@ -6,16 +6,26 @@
     display: flex;
     outline: 0 !important; // ?
     border-radius: 5px;
-    @include var('background-color', 'background');
+    @include var('background-color', 'primary-alt');
     cursor: default;
   }
   &__value-container {
-    flex: 1 0 auto;
+    flex: 1;
     position: relative;
     padding: 10px 15px;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
     // &--has-value {}
+    &--is-multi {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+      &.select__value-container--has-value {
+        padding: 6.5px 15px;
+      }
+    }
   }
   &__single-value {
     position: absolute;
@@ -23,6 +33,29 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+  }
+  &__multi-value {
+    @include var('background-color', 'background');;
+    border-radius: 2px;
+    display: flex;
+    margin: 2px;
+    min-width: 0;
+    &__label {
+      border-radius: 2px;
+      font-size: 85%;
+      overflow: hidden;
+      padding: 3px;
+      padding-left: 6px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &__remove {
+      align-items: center;
+      border-radius: 2px;
+      display: flex;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
   }
   // &__input {}
   &__indicators {

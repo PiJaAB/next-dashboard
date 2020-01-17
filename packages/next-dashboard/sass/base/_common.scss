@@ -27,9 +27,4 @@
   @include breakpoint(medium) {
     width: 200px;
   }
-  .select {
-    &__control {
-      @include var('background-color', 'primary-alt');
-    }
-  }
 }

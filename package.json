@@ -22,5 +22,5 @@
     "lerna-wizard": "^1.1.1",
     "nodemon": "^1.19.4"
   },
-  "workspaces": ["packages/next-dashboard", "packages/testbed2", "packages/secret-*"]
+  "workspaces": ["packages/next-dashboard", "packages/secret-*"]
 }

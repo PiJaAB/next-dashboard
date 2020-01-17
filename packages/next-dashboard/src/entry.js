@@ -5,17 +5,11 @@ import DashboardContext, {
   type DashboardContextType,
   type IDashboardContext,
 } from './utils/dashboardContext';
-import createPersistentState, {
-  type PersistentState,
-} from './utils/persistentState';
 
-export type {
-  Config,
-  DashboardContextType,
-  IDashboardContext,
-  PersistentState,
-};
-export { createDashboardHOC, DashboardContext, createPersistentState };
+export { default as createPersistentState } from './utils/persistentState';
+
+export type { Config, DashboardContextType, IDashboardContext };
+export { createDashboardHOC, DashboardContext };
 export * from './components';
 export * from './subscriptionProviders';
 export * from './utils';
