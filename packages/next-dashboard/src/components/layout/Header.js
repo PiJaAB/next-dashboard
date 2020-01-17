@@ -11,7 +11,7 @@ type Props = {
 
 // TODO: dashboard home url config
 
-const Header = ({ toggleSidebarActive, children }: Props) => (
+const Header = ({ toggleSidebarActive, sidebarActive, children }: Props) => (
   <DashboardContext.Consumer>
     {context => {
       if (!context) {
@@ -26,7 +26,12 @@ const Header = ({ toggleSidebarActive, children }: Props) => (
               <div className="cell dashboard-header-cell dashboard-header-cell_sidebar">
                 <div className="hamburger-menu">
                   <label>
-                    <input type="checkbox" onClick={toggleSidebarActive} />
+                    <input
+                      type="checkbox"
+                      onChange={toggleSidebarActive}
+                      checked={sidebarActive}
+                      defaultChecked={sidebarActive}
+                    />
                     <svg
                       viewBox="0 0 100 100"
                       xmlns="http://www.w3.org/2000/svg"
