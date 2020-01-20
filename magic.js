@@ -81,7 +81,7 @@ packages.forEach(pkg => {
   fs.writeFileSync(pkg.path, `${JSON.stringify(patchPkg(pkg.org), null, 2)}\n`)
 });
 
-spawnSync('yarn', args, { stdio: 'inherit' });
+spawnSync('yarn', args, { stdio: 'inherit', shell: true });
 
 packages.forEach(pkg => {
   const newPkg = JSON.parse(fs.readFileSync(pkg.path, { encoding: 'utf8' }));
