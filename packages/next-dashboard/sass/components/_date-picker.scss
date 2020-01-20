@@ -11,6 +11,10 @@
       box-sizing: border-box;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      &__button {
+        margin-bottom: 0;
+      }
     }
   }
   .date-picker {
@@ -32,7 +36,7 @@
       width: 12%;
       margin: 0 1%;
       text-align: center;
-      &__col-6 {
+      &--col-6 {
         color: red;
       }
     }
