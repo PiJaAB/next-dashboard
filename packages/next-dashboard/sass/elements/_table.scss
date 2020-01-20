@@ -12,6 +12,9 @@ td {
   &:last-child {
     padding-left: 10px;
   }
+    &:empty::after {
+    content: '\00a0';
+  }
 }
 th {
   font-weight: inherit;
@@ -25,7 +28,7 @@ th {
 .responsive-table-head,
 .responsive-table-body {
   overflow-x: auto;
-  box-shadow: 6px 1px 7px -3px rgba(0,0,0,0.4);
+  box-shadow: 6px 1px 7px -3px rgba(0,0,0,0.2);
 }
 .responsive-table-head {
   z-index: 1;

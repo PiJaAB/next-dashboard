@@ -4,6 +4,7 @@
     overflow: hidden;
     .responsive-table-head {
       @include var('border-color', 'text-rgb', 'rgba', 0.125);
+      border-right: none;
     }
     thead {
       @include var('background-color', 'tertiary-alt');
