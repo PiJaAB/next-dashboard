@@ -6,8 +6,6 @@ import errorReporter from './errorReporter';
 
 import type { InitialPropsContext } from './nextTypes';
 
-export type PersistentState = ?{ [string]: any };
-
 let btoa;
 let atob;
 if (typeof window === 'undefined') {
@@ -19,34 +17,44 @@ if (typeof window === 'undefined') {
   ({ btoa, atob } = window);
 }
 
-export default function createPersistentState(
+export type JSONSerializable =
+  | string
+  | boolean
+  | number
+  | null
+  | $ReadOnlyArray<empty>
+  | {};
+
+export default function createPersistentState<
+  PersistentState: ?JSONSerializable,
+>(
   cookieName: string,
   version?: number,
 ): {
-  getInitialState(ctx: InitialPropsContext | string): PersistentState,
+  getInitialState(ctx: InitialPropsContext | string): PersistentState | null,
   persist(state: PersistentState): void,
   serialize(state: PersistentState): string,
 } {
-  let latestState: ?PersistentState;
+  let latestState: PersistentState | void;
   let debouncing: boolean = false;
 
   return {
-    getInitialState(ctx: InitialPropsContext | string): PersistentState {
+    getInitialState(ctx: InitialPropsContext | string): PersistentState | null {
       try {
         if (typeof ctx === 'string') {
           const dashboardState = JSON.parse(ctx);
-          if (dashboardState.version !== version) return {};
+          if (dashboardState.version !== version) return null;
           return dashboardState.data;
         }
         const { [cookieName]: dashboardB64 } = cookies(ctx);
         if (!dashboardB64) return null;
         const dashboardJson = atob(dashboardB64);
         const dashboardState = JSON.parse(dashboardJson);
-        if (dashboardState.version !== version) return {};
+        if (dashboardState.version !== version) return null;
         return dashboardState.data;
       } catch (err) {
         errorReporter.emit('error', err);
-        return {};
+        return null;
       }
     },
 

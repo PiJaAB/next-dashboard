@@ -1,0 +1,52 @@
+.datepicker-container {
+  position: relative;
+  .select {
+    &__group-heading {
+      cursor: default;
+      margin-bottom: 0.25em;
+      padding-left: 12px;
+      padding-right: 12px;
+      text-align: center;
+      text-transform: uppercase;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &__button {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .date-picker {
+    &__month {
+      margin: 8px;
+      box-sizing: border-box;
+    }
+    &__weekdays {
+      margin-top: 5px;
+      padding-top: 5px;
+      padding-left: 2%;
+      border-top: 1px solid #eee;
+    }
+    &__weekday {
+      cursor: default;
+      font-size: 75%;
+      font-weight: 500;
+      display: inline-block;
+      width: 12%;
+      margin: 0 1%;
+      text-align: center;
+      &--col-6 {
+        color: red;
+      }
+    }
+    &__date {
+      display: inline-block;
+      width: 12%;
+      margin: 0 1%;
+      text-align: center;
+      border-radius: 4px;
+      color: black;
+    }
+  }
+}
