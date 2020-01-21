@@ -43,6 +43,7 @@ export type DataType<T = mixed> =
 
 export type Branding = {
   +name: string,
+  +keywords?: string[],
 };
 
 export type Theme = {
@@ -106,11 +107,16 @@ export type DashboardInitialPropsContext = InitialPropsContext & {
   authProvider?: IAuthProvider,
 };
 
+type DashboardComponentStatics = {
+  title?: string,
+  url?: string,
+};
+
 export type DashboardComponent<P: {}, I: {} = {}> = React$ComponentType<
   P & I,
 > & {
   +getInitialProps?: (ctx: DashboardInitialPropsContext) => Promise<I> | I,
-};
+} & DashboardComponentStatics;
 
 export interface ISubscriptionProvider<Data: {}> {
   read<DS: $Keys<Data>>(

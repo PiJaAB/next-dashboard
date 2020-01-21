@@ -6,6 +6,7 @@ import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import type {
   Branding,
+  DashboardComponent,
   IAuthProvider,
   SiteMessageType,
   Theme,
@@ -19,6 +20,7 @@ export interface IDashboardContext {
   isAuthenticated(): boolean;
   +branding: Branding,
   +theme: Theme;
+  +Comp: DashboardComponent<any>,
   +themes: $ReadOnlyArray<Theme>;
   +siteMessages: $ReadOnlyArray<SiteMessageType>;
   +modalActive: boolean;

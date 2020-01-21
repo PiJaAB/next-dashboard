@@ -255,6 +255,7 @@ export default function createDashboardHOC({
         branding,
         themes,
         theme,
+        Comp,
         modalActive,
         setModalActive,
         getAuthProvider<A: IAuthProvider>(C: Class<A>): A | void {
