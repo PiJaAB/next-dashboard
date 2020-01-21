@@ -1,12 +1,12 @@
 // @flow
 import React from 'react';
 
-// eslint fails to parse `getAuthProvider<T: IAuthProvider>`
-// as this type being used...
-// eslint-disable-next-line no-unused-vars
 import type {
   Branding,
   DashboardComponent,
+  // eslint fails to parse `getAuthProvider<T: IAuthProvider>`
+  // as this type being used...
+  // eslint-disable-next-line no-unused-vars
   IAuthProvider,
   SiteMessageType,
   Theme,

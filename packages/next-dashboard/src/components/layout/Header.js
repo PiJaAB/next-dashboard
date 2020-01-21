@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext } from 'react';
+import React, { useContext, type Node } from 'react';
 import Link from 'next/link';
 
 import DashboardContext from '../../utils/dashboardContext';
@@ -11,16 +11,23 @@ type Props = {
   children: React$Node,
 };
 
-// TODO: dashboard home url config
+const getLogoURL = (conf: ?(string | { [string]: string }), theme: string) => {
+  if (typeof conf === 'object' && conf !== null) {
+    return conf[theme];
+  }
+  const imageName = `logo${theme !== 'default' ? `-${theme}` : ''}.png`;
+  return `${conf || '/images'}/${imageName}`;
+};
 
-function Header({ toggleSidebarActive, sidebarActive, children }: Props) {
+function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
   const ctx = useContext(DashboardContext);
   if (ctx == null) throw new Error('Header: no dashboard context in scope');
 
   const theme = ctx.theme.class;
-  const logo = `logo${theme !== 'default' ? `-${theme}` : ''}.png`;
 
-  const { name } = ctx != null ? ctx.branding : {};
+  const { logoURL: logoURLConf, homepageURL = '/dashboard', name } =
+    ctx != null ? ctx.branding : {};
+  const logoURL = getLogoURL(logoURLConf, theme);
 
   return (
     <header className="dashboard-header">
@@ -33,9 +40,9 @@ function Header({ toggleSidebarActive, sidebarActive, children }: Props) {
             />
           </div>
           <div className="cell dashboard-header-cell dashboard-header-cell_logo">
-            <Link href="/dashboard">
+            <Link href={homepageURL}>
               <a className="dashboard-header-logo">
-                <img src={`/images/${logo}`} alt={name || 'Logo'} />
+                <img src={logoURL} alt={name || 'Logo'} />
               </a>
             </Link>
           </div>

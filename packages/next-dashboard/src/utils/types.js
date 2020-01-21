@@ -42,8 +42,14 @@ export type DataType<T = mixed> =
   | LoadingDataType;
 
 export type Branding = {
+  /** Site name */
   +name: string,
+  /** Array of keywords globally relevant for the site */
   +keywords?: string[],
+  /** URL to the homepage/index, used e.g. for the logo */
+  +homepageURL?: string,
+  /** Base URL for location of logo images, or map from theme class name to logo URL */
+  +logoURL?: string | { [string]: string },
 };
 
 export type Theme = {
