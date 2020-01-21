@@ -3,7 +3,7 @@
 .*/.next/.*
 <PROJECT_ROOT>/packages/.*/dist/.*
 <PROJECT_ROOT>/packages/secret-.*
-<PROJECT_ROOT>/packages/testbed2/.*
+<PROJECT_ROOT>/packages/dashboard-testbed/.*
 
 [untyped]
 .*/node_modules/.*
