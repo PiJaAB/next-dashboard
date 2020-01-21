@@ -31,7 +31,7 @@
     "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
     "dev:pkg": "nodemon -w src -x \"yarn run -s build:silent\"",
     "lint": "run-p --aggregate-output --continue-on-error lint:*",
-    "lint:check-eslint": "eslint --print-config .eslintrc.yml | eslint-config-prettier-check",
+    "lint:check-eslint": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "lint:prettier": "NODE_ENV=production prettier -c 'src/**/*.js'",
     "lint:eslint": "NODE_ENV=production eslint src --report-unused-disable-directives --color",
     "lint:flow": "flow --color=always",
