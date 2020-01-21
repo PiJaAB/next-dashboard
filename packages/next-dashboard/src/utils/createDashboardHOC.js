@@ -121,9 +121,7 @@ export default function createDashboardHOC({
   let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
 
   function withDashboard<P: {}, I: {} = {}>(
-    Comp:
-      | (React$ComponentType<P> & { +getInitialProps: void })
-      | DashboardComponent<P, I>,
+    Comp: DashboardComponent<P, I>,
     needAuth?: boolean,
   ):
     | NextComponent<WrappedUnified<P, I>, InitialUnified<I>>
