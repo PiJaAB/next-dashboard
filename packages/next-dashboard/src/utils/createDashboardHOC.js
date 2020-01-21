@@ -258,7 +258,7 @@ export default function createDashboardHOC({
           return undefined;
         },
       };
-      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
+      // eslint-disable-next-line no-underscore-dangle
       if (restProps.__ERRORED__) {
         const { __ERR_PROPS__: errProps } = restProps;
         if (errorConf) {
