@@ -25,14 +25,14 @@ type Props = {
   barChartKeysAndColor?:
     | null
     | { key: string, color: string }
-    | { key: string, color: string }[],
+    | { key: string, color: string, stackId?: string }[],
 };
 
 const renderBars = barChartKeysAndColor => {
   if (barChartKeysAndColor) {
     if (Array.isArray(barChartKeysAndColor)) {
-      return barChartKeysAndColor.map(({ key, color }) => (
-        <Bar dataKey={key} barSize={20} fill={color} />
+      return barChartKeysAndColor.map(({ key, color, stackId }) => (
+        <Bar dataKey={key} barSize={20} stackId={stackId} fill={color} />
       ));
     }
     return (
@@ -77,7 +77,6 @@ const Chart = ({
               <stop offset="60%" stopColor={chartLineColor} stopOpacity={0} />
             </linearGradient>
           </defs>
-
           {areaChartKey ? (
             <Area
               type="monotone"
