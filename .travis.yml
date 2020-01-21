@@ -1,0 +1,18 @@
+dist: trusty
+language: node_js
+cache:
+  directories:
+    - $HOME/.cache/yarn
+    - node_modules
+    - packages/testbed2/.next/cache
+node_js:
+- '12'
+before_install:
+- npm install -g yarn
+- yarn --version
+install:
+- yarn magic install
+- yarn bootstrap
+script:
+- yarn build
+- yarn test

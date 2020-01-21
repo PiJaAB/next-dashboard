@@ -135,7 +135,11 @@ export default function createDashboardHOC({
     const parsedNeedAuth = needAuth == null ? needAuthDefault : needAuth;
 
     function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
-      const { __INITIAL_STATE__, __AUTH_SERIALIZED__, ...props } = fullProps;
+      const {
+        __INITIAL_STATE__,
+        __AUTH_SERIALIZED__,
+        ...restProps
+      } = fullProps;
       const authProvider = new AuthProvider(__AUTH_SERIALIZED__);
       const [
         persistentState,
@@ -255,8 +259,8 @@ export default function createDashboardHOC({
         },
       };
       // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
-      if (props.__ERRORED__) {
-        const { __ERR_PROPS__: errProps } = props;
+      if (restProps.__ERRORED__) {
+        const { __ERR_PROPS__: errProps } = restProps;
         if (errorConf) {
           return errorConf.withContext ? (
             <DashboardContext.Provider value={context}>
@@ -268,7 +272,7 @@ export default function createDashboardHOC({
         }
         return null;
       }
-      const { __ERRORED__: _, ...rest } = props;
+      const { __ERRORED__: _, ...rest } = restProps;
       return (
         Comp != null && (
           <DashboardContext.Provider value={context}>
