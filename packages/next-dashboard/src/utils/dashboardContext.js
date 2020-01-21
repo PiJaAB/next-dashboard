@@ -4,7 +4,12 @@ import React from 'react';
 // eslint fails to parse `getAuthProvider<T: IAuthProvider>`
 // as this type being used...
 // eslint-disable-next-line no-unused-vars
-import type { Theme, SiteMessageType, IAuthProvider } from './types';
+import type {
+  Branding,
+  IAuthProvider,
+  SiteMessageType,
+  Theme,
+} from './types';
 
 export interface IDashboardContext {
   getState<T>(key: string, defaultValue: T): T;
@@ -12,6 +17,7 @@ export interface IDashboardContext {
   registerSiteMessage(siteMessages: Error | SiteMessageType): void;
   dismissSiteMessage(siteMessages: SiteMessageType): void;
   isAuthenticated(): boolean;
+  +branding: Branding,
   +theme: Theme;
   +themes: $ReadOnlyArray<Theme>;
   +siteMessages: $ReadOnlyArray<SiteMessageType>;

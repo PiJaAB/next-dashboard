@@ -41,6 +41,10 @@ export type DataType<T = mixed> =
   | ErrorDataType
   | LoadingDataType;
 
+export type Branding = {
+  +name: string,
+};
+
 export type Theme = {
   name: string,
   class: string,

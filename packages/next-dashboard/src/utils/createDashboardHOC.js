@@ -5,10 +5,11 @@ import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
 import type {
-  Theme,
-  SiteMessageType,
-  IAuthProvider,
+  Branding,
   DashboardComponent,
+  IAuthProvider,
+  SiteMessageType,
+  Theme,
 } from './types';
 import displayNameOf from './displayNameOf';
 
@@ -62,6 +63,7 @@ export type WrappedProps<P: {}, I> =
 
 export type Config = {
   AuthProvider: Class<IAuthProvider>,
+  branding: Branding,
   unauthedRoute?: string,
   needAuthDefault: boolean,
   error?: {
@@ -98,15 +100,20 @@ export default function createDashboardHOC({
   needAuthDefault,
   unauthedRoute,
   error: errorConf,
-  themes: confThemes,
+  themes: themesConf,
+  branding: brandingConf,
 }: Config): <U: {}, Q: {} = {}>(
   Comp: DashboardComponent<U, Q>,
   needAuth?: boolean,
 ) => NextComponent<WrappedUnified<U, Q>, InitialUnified<Q>> {
-  const themes: Theme[] = confThemes || [
+  const themes: Theme[] = themesConf || [
     { name: 'Light', class: 'default' },
     { name: 'Dark', class: 'dark' },
   ];
+
+  const branding: Branding = brandingConf || {
+    name: 'PiJa Next',
+  };
 
   const { getInitialState, persist } = createPersistentState<{}>(
     'dashboardState',
@@ -245,6 +252,7 @@ export default function createDashboardHOC({
         registerSiteMessage,
         dismissSiteMessage,
         siteMessages: localSiteMessages,
+        branding,
         themes,
         theme,
         modalActive,
