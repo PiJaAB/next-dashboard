@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-testbed",
+  "name": "dashboard-testbed",
   "version": "0.0.8",
   "private": true,
   "dependencies": {
