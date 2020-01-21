@@ -16,8 +16,8 @@ import PageChart from './PageChart';
 type Props = {
   title: string,
   data: $ReadOnlyArray<{
-    Period: string,
-    Average: number,
+    +Period: string,
+    +Average: number,
   }>,
   chartLineColor: string,
   loading?: boolean,
