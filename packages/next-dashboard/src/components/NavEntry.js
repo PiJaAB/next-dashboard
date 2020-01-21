@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import logger from '../utils/logger';
 
 type Props = {
   href?: string,
@@ -75,11 +76,9 @@ function LinkEl({
   icon,
 }: LinkProps): React$Element<Link> {
   if (onClick) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn(
-        '`onClick` not supported with href. If you need both, use raw render.',
-      );
-    }
+    logger.debug(
+      '`onClick` not supported with href. If you need both, use raw render.',
+    );
   }
   return (
     <Link href={href} as={as}>
@@ -106,9 +105,7 @@ function ButtonEl({
   as,
 }: ButtonProps): React$Element<'button'> {
   if (as) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('`as` makes no sense without href.');
-    }
+    logger.debug('`as` makes no sense without href.');
   }
   return (
     <button
@@ -129,11 +126,9 @@ function ButtonEl({
 
 function RawEl({ children, onClick, href, icon, as }: PropsRaw): React$Node {
   if (onClick || href || icon || as) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn(
-        '`onClick`, `href`, `icon`, `as` unsupported during raw render.',
-      );
-    }
+    logger.debug(
+      '`onClick`, `href`, `icon`, `as` unsupported during raw render.',
+    );
   }
   return children;
 }

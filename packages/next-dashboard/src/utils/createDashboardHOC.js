@@ -17,6 +17,7 @@ import { SilentError } from './silentError';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
 import errorReporter from './errorReporter';
+import logger from './logger';
 
 type PersistentState = {
   [string]: any,
@@ -123,13 +124,11 @@ export default function createDashboardHOC({
     if (process.env.NODE_ENV === 'development') {
       const { prototype } = (Comp: any) || {};
       if (prototype && prototype instanceof React.PureComponent) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(
-            `Please don't use PureComponent for dashboard root components, Use regular Component instead. Component: ${displayNameOf(
-              Comp,
-            )}`,
-          );
-        }
+        logger.warn(
+          `Please don't use PureComponent for dashboard root components, Use regular Component instead. Component: ${displayNameOf(
+            Comp,
+          )}`,
+        );
       }
     }
 
@@ -169,11 +168,7 @@ export default function createDashboardHOC({
       function registerSiteMessage(siteMessage: SiteMessageType | Error) {
         if (siteMessage instanceof Error) {
           if (siteMessage instanceof SilentError) return;
-          // We probably want to log extended debug info if we're throwing
-          // an error into the face of the user somewhere, so we can request
-          // more info in case we fail to reproduce.
-          // eslint-disable-next-line no-restricted-syntax
-          console.error(siteMessage);
+          logger.error(siteMessage);
           registerSiteMessage({
             title: siteMessage.constructor.name,
             status: 'error',
@@ -257,13 +252,9 @@ export default function createDashboardHOC({
         getAuthProvider<A: IAuthProvider>(C: Class<A>): A | void {
           if (authProvider === undefined) return undefined;
           if (authProvider instanceof C) return authProvider;
-          if (process.env.NODE_ENV === 'development') {
-            console.error(
-              new Error(
-                'AuthProvider mismatch, instance not of requested class',
-              ),
-            );
-          }
+          logger.error(
+            new Error('AuthProvider mismatch, instance not of requested class'),
+          );
           return undefined;
         },
       };

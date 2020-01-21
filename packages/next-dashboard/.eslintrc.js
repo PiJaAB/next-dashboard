@@ -65,7 +65,7 @@ module.exports = {
       'flowtype/type-id-match': ['error', '^[A-Z]'],
       'flowtype/type-import-style': ['off'],
       'flowtype/use-flow-type': ['off'],
-      'no-console': [ 'off' ],
+      'no-console': [ 'error' ],
       'no-restricted-syntax': [
         'error',
         {
@@ -83,10 +83,6 @@ module.exports = {
         {
           selector: 'WithStatement',
           message: '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.'
-        },
-        {
-            "selector": ":not(IfStatement[test.operator='==='][test.right.type='Literal'][test.right.value='development'][test.left.type='MemberExpression'][test.left.object.type='MemberExpression'][test.left.object.property.type='Identifier'][test.left.object.property.name='env'][test.left.object.object.type='Identifier'][test.left.object.object.name='process'][test.left.property.type='Identifier'][test.left.property.name='NODE_ENV'] > BlockStatement > ExpressionStatement) > CallExpression[callee.object.name='console']",
-            "message": "Unexpected property on console object was called while not being directly in a development if-statement block."
         }
       ]
     },
