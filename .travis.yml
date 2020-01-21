@@ -12,6 +12,7 @@ before_install:
 - yarn --version
 install:
 - yarn magic install
+- yarn magic bootstrap
 script:
 - yarn build
 - yarn test
