@@ -1,7 +1,6 @@
 // @flow
 import type { InitialPropsContext } from './nextTypes';
 
-// eslint-disable-next-line import/prefer-default-export
 export class NotImplementedError extends Error {
   constructor(message?: string) {
     let realMessage;
