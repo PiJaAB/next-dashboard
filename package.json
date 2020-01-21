@@ -12,10 +12,10 @@
     "magic": "node magic",
     "build": "yarn run --silent build:lib && yarn run --silent build:testbed",
     "build:lib": "yarn workspace @pija-ab/next-dashboard build",
-    "build:testbed": "echo \"\u001B[43m\u001B[30m Testbed building disabled for now \u001B[0m\" || yarn workspace dashboard-testbed build",
+    "build:testbed": "echo \"\u001b[43m\u001b[30m Testbed building disabled for now \u001b[0m\" || yarn workspace dashboard-testbed build",
     "test": "yarn run --silent test:lib && yarn run --silent test:testbed",
     "test:lib": "yarn workspace @pija-ab/next-dashboard test",
-    "test:testbed": "echo \"\u001B[43m\u001B[30m Testbed testing disabled for now \u001B[0m\" || yarn workspace dashboard-testbed test"
+    "test:testbed": "echo \"\u001b[43m\u001b[30m Testbed testing disabled for now \u001b[0m\" || yarn workspace dashboard-testbed test"
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.7.2",
@@ -26,8 +26,15 @@
   "devDependencies": {
     "lerna": "^3.18.4",
     "lerna-wizard": "^1.1.1",
-    "nodemon": "^1.19.4"
+    "next": "^9.1.1",
+    "next-cookies": "^2.0.2",
+    "nodemon": "^1.19.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "recharts": "^1.8.5"
   },
-  "workspaces": ["packages/next-dashboard", "packages/testbed2", "packages/secret-*"],
-  "workspaces": ["packages/next-dashboard", "packages/secret-*"]
+  "workspaces": [
+    "packages/next-dashboard",
+    "packages/secret-*"
+  ]
 }
