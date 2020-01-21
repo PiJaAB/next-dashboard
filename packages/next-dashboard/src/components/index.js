@@ -17,3 +17,4 @@ export { default as ResponsiveTable } from './ResponsiveTable';
 export { default as PageChart } from './PageChart';
 export { default as SiteMessage } from './SiteMessage';
 export { default as LineChart } from './LineChart';
+export { default as Chart } from './Chart';
