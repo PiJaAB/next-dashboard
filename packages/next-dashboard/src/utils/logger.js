@@ -1,25 +1,39 @@
 // @flow
+
 /* eslint-disable no-console */
+function printLog(level?: string, ...args: mixed[]) {
+  console.log(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);
+}
+function printWarn(level?: string, ...args: $ReadOnlyArray<mixed>) {
+  console.warn(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);
+}
+function printError(level?: string, ...args: mixed[]) {
+  console.log(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);
+}
+function printDir(...args: mixed[]) {
+  printLog('DIR');
+  console.dir(...args);
+}
+/* eslint-enable no-console */
 
 const logger = {
-  log(level?: string, ...args: mixed[]) {
-    console.log(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);
+  log(...args: mixed[]) {
+    this.debug(...args);
   },
   debug(...args: mixed[]) {
-    this.log('DEBUG', ...args);
+    printLog('DEBUG', ...args);
   },
   dir(...args: mixed[]) {
-    this.log('DIR');
-    console.dir(...args);
+    printDir(...args);
   },
   info(...args: mixed[]) {
-    this.log('[INFO]', ...args);
+    printLog('INFO', ...args);
   },
   warn(...args: mixed[]) {
-    console.warn('[NEXT-DASHBOARD][WARN]', ...args);
+    printWarn('WARN', ...args);
   },
   error(...args: mixed[]) {
-    console.error('[NEXT-DASHBOARD][WARN]', ...args);
+    printError('ERROR', ...args);
   },
 };
 
