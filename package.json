@@ -9,7 +9,13 @@
     "new": "lerna create",
     "lerna": "lerna",
     "wizard": "node -e \"require('lerna-wizard')({commandChoiceFilter:({value:v})=>!['ls','updated','create','init'].includes(v)}).catch(e=>{console.error(e);process.exit(1)})\"",
-    "magic": "node magic"
+    "magic": "node magic",
+    "build": "yarn run --silent build:lib && yarn run --silent build:testbed",
+    "build:lib": "yarn workspace @pija-ab/next-dashboard build",
+    "build:testbed": "echo \"\u001B[43m\u001B[30m Testbed building disabled for now \u001B[0m\" || yarn workspace dashboard-testbed build",
+    "test": "yarn run --silent test:lib && yarn run --silent test:testbed",
+    "test:lib": "yarn workspace @pija-ab/next-dashboard test",
+    "test:testbed": "echo \"\u001B[43m\u001B[30m Testbed testing disabled for now \u001B[0m\" || yarn workspace dashboard-testbed test"
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.7.2",
@@ -22,5 +28,6 @@
     "lerna-wizard": "^1.1.1",
     "nodemon": "^1.19.4"
   },
+  "workspaces": ["packages/next-dashboard", "packages/testbed2", "packages/secret-*"],
   "workspaces": ["packages/next-dashboard", "packages/secret-*"]
 }
