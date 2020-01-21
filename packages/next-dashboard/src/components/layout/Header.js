@@ -13,11 +13,7 @@ type Props = {
 
 // TODO: dashboard home url config
 
-function Header({
-  toggleSidebarActive,
-  sidebarActive,
-  children,
-}: Props) {
+function Header({ toggleSidebarActive, sidebarActive, children }: Props) {
   const ctx = useContext(DashboardContext);
   if (ctx == null) throw new Error('Header: no dashboard context in scope');
 

@@ -18,9 +18,9 @@ export interface IDashboardContext {
   registerSiteMessage(siteMessages: Error | SiteMessageType): void;
   dismissSiteMessage(siteMessages: SiteMessageType): void;
   isAuthenticated(): boolean;
-  +branding: Branding,
+  +branding: Branding;
   +theme: Theme;
-  +Comp: DashboardComponent<any>,
+  +Comp: DashboardComponent<any>;
   +themes: $ReadOnlyArray<Theme>;
   +siteMessages: $ReadOnlyArray<SiteMessageType>;
   +modalActive: boolean;
