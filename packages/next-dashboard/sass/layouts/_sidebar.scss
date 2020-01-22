@@ -22,7 +22,7 @@ body {
   width: calc(100% - 80px);
   padding: 20px;
   @include var('background-color', 'primary-alt');
-  z-index: 100;
+  z-index: 90;
   overflow: hidden;
   overflow-y: auto;
   transform: translateX(-100%);
