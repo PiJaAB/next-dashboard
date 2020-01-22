@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useContext, type Node } from 'react';
 import Link from 'next/link';
 
 import DashboardContext from '../../utils/dashboardContext';
@@ -11,40 +11,46 @@ type Props = {
   children: React$Node,
 };
 
-// TODO: dashboard home url config
+const getLogoURL = (conf: ?(string | { [string]: string }), theme: string) => {
+  if (typeof conf === 'object' && conf !== null) {
+    return conf[theme];
+  }
+  const imageName = `logo${theme !== 'default' ? `-${theme}` : ''}.png`;
+  return `${conf || '/images'}/${imageName}`;
+};
 
-const Header = ({ toggleSidebarActive, sidebarActive, children }: Props) => (
-  <DashboardContext.Consumer>
-    {context => {
-      if (!context) {
-        throw new TypeError('Header needs to be in a Dashboard Context');
-      }
-      const theme = context.theme.class;
-      const logo = `logo${theme !== 'default' ? `-${theme}` : ''}.png`;
-      return (
-        <header className="dashboard-header">
-          <div className="header-content-container">
-            <div className="grid grid-x3-medium grid-x4-large align-items-center">
-              <div className="cell dashboard-header-cell dashboard-header-cell_sidebar">
-                <HamburgerMenu
-                  sidebarActive={sidebarActive}
-                  toggleSidebarActive={toggleSidebarActive}
-                />
-              </div>
-              <div className="cell dashboard-header-cell dashboard-header-cell_logo">
-                <Link href="/dashboard">
-                  <a className="dashboard-header-logo">
-                    <img src={`/images/${logo}`} alt="XVision" />
-                  </a>
-                </Link>
-              </div>
-              {children}
-            </div>
+function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
+  const ctx = useContext(DashboardContext);
+  if (ctx == null) throw new Error('Header: no dashboard context in scope');
+
+  const theme = ctx.theme.class;
+
+  const { logoURL: logoURLConf, homepageURL = '/dashboard', name } =
+    ctx != null ? ctx.branding : {};
+  const logoURL = getLogoURL(logoURLConf, theme);
+
+  return (
+    <header className="dashboard-header">
+      <div className="header-content-container">
+        <div className="grid grid-x3-medium grid-x4-large align-items-center">
+          <div className="cell dashboard-header-cell dashboard-header-cell_sidebar">
+            <HamburgerMenu
+              sidebarActive={sidebarActive}
+              toggleSidebarActive={toggleSidebarActive}
+            />
           </div>
-        </header>
-      );
-    }}
-  </DashboardContext.Consumer>
-);
+          <div className="cell dashboard-header-cell dashboard-header-cell_logo">
+            <Link href={homepageURL}>
+              <a className="dashboard-header-logo">
+                <img src={logoURL} alt={name || 'Logo'} />
+              </a>
+            </Link>
+          </div>
+          {children}
+        </div>
+      </div>
+    </header>
+  );
+}
 
 export default Header;

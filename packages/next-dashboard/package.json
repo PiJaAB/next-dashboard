@@ -30,7 +30,11 @@
   "scripts": {
     "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
     "dev:pkg": "nodemon -w src -x \"yarn run -s build:silent\"",
-    "lint": "NODE_ENV=production prettier -c 'src/**/*.js' && eslint src",
+    "lint": "run-p --aggregate-output --continue-on-error lint:*",
+    "lint:check-eslint": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
+    "lint:prettier": "NODE_ENV=production prettier -c 'src/**/*.js'",
+    "lint:eslint": "NODE_ENV=production eslint src --report-unused-disable-directives --color",
+    "lint:flow": "flow --color=always",
     "build": "yarn run --silent build:babel && yarn run --silent build:flow",
     "build:silent": "yarn run -s build:babel && yarn run -s build:flow",
     "build:babel": "babel src -d dist",
@@ -72,6 +76,7 @@
     "flow-bin": "^0.107.0",
     "flow-copy-source": "^2.0.8",
     "nodemon": "^1.19.4",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1"
   },
   "dependencies": {
