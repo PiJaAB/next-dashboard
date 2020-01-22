@@ -111,13 +111,16 @@ function DashboardLayout({
           sidebarActive={sidebarActive}
           toggleSidebarActive={toggleSidebarActive}
         >
+          {sidebar && (
+            <Sidebar
+              sidebarActive={sidebarActive}
+              sidebarCompact={sidebarCompact}
+            >
+              {sidebar}
+            </Sidebar>
+          )}
           {header}
         </Header>
-      )}
-      {sidebar && (
-        <Sidebar sidebarActive={sidebarActive} sidebarCompact={sidebarCompact}>
-          {sidebar}
-        </Sidebar>
       )}
       <Content contentContainerWidth={contentContainerWidth}>
         <SiteMessages />

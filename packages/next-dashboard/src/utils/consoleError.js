@@ -1,6 +1,7 @@
 // @flow
 
 import { SilentError } from './silentError';
+import logger from './logger';
 
 // This is an Error proxy, to ensure that the automatic sitewide
 // error reporter does not display this error. It does however
@@ -9,11 +10,7 @@ import { SilentError } from './silentError';
 export class ConsoleError extends SilentError {
   constructor(error: ?Error | string) {
     super(error);
-    // Purpose of this class is to create an error that gets logged
-    // to console, but not automatically get put as an error on the
-    // site
-    // eslint-disable-next-line no-restricted-syntax
-    console.error(this);
+    logger.error(this);
   }
 }
 

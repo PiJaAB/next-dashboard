@@ -30,13 +30,17 @@
   "scripts": {
     "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
     "dev:pkg": "nodemon -w src -x \"yarn run -s build:silent\"",
-    "lint": "NODE_ENV=production prettier -c 'src/**/*.js' && eslint src",
-    "build": "yarn build:babel && yarn build:flow",
+    "lint": "run-p --aggregate-output --continue-on-error lint:*",
+    "lint:check-eslint": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
+    "lint:prettier": "NODE_ENV=production prettier -c 'src/**/*.js'",
+    "lint:eslint": "NODE_ENV=production eslint src --report-unused-disable-directives --color",
+    "lint:flow": "flow --color=always",
+    "build": "yarn run --silent build:babel && yarn run --silent build:flow",
     "build:silent": "yarn run -s build:babel && yarn run -s build:flow",
     "build:babel": "babel src -d dist",
     "build:flow": "flow-copy-source src dist",
     "prepack": "yarn build",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "yarn run --silent lint"
   },
   "bugs": {
     "url": "https://github.com/PiJaAB/next-dashboard/issues"
@@ -56,6 +60,7 @@
     "@babel/preset-react": "^7.7.4",
     "babel-eslint": "^10.0.3",
     "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-strip-function-call": "^1.0.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-flow-strip-types": "6.22.0",
     "copy": "^0.3.2",
@@ -71,6 +76,7 @@
     "flow-bin": "^0.107.0",
     "flow-copy-source": "^2.0.8",
     "nodemon": "^1.19.4",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1"
   },
   "dependencies": {

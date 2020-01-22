@@ -53,6 +53,7 @@ body {
     }
   }
   &_search {
+    z-index: 100;
     flex: 1 0 auto;
     display: none;
     @include breakpoint(medium) {

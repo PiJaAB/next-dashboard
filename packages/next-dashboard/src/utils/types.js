@@ -1,7 +1,6 @@
 // @flow
 import type { InitialPropsContext } from './nextTypes';
 
-// eslint-disable-next-line import/prefer-default-export
 export class NotImplementedError extends Error {
   constructor(message?: string) {
     let realMessage;
@@ -40,6 +39,17 @@ export type DataType<T = mixed> =
   | SuccessDataType<T>
   | ErrorDataType
   | LoadingDataType;
+
+export type Branding = {
+  /** Site name */
+  +name: string,
+  /** Array of keywords globally relevant for the site */
+  +keywords?: string[],
+  /** URL to the homepage/index, used e.g. for the logo */
+  +homepageURL?: string,
+  /** Base URL for location of logo images, or map from theme class name to logo URL */
+  +logoURL?: string | { [string]: string },
+};
 
 export type Theme = {
   name: string,
@@ -102,11 +112,16 @@ export type DashboardInitialPropsContext = InitialPropsContext & {
   authProvider?: IAuthProvider,
 };
 
+type DashboardComponentStatics = {
+  title?: string,
+  url?: string,
+};
+
 export type DashboardComponent<P: {}, I: {} = {}> = React$ComponentType<
   P & I,
 > & {
   +getInitialProps?: (ctx: DashboardInitialPropsContext) => Promise<I> | I,
-};
+} & DashboardComponentStatics;
 
 export interface ISubscriptionProvider<Data: {}> {
   read<DS: $Keys<Data>>(

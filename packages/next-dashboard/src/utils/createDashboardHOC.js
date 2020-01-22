@@ -5,10 +5,11 @@ import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
 import type {
-  Theme,
-  SiteMessageType,
-  IAuthProvider,
+  Branding,
   DashboardComponent,
+  IAuthProvider,
+  SiteMessageType,
+  Theme,
 } from './types';
 import displayNameOf from './displayNameOf';
 
@@ -17,6 +18,7 @@ import { SilentError } from './silentError';
 import DashboardContext, { type IDashboardContext } from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
 import errorReporter from './errorReporter';
+import logger from './logger';
 
 type PersistentState = {
   [string]: any,
@@ -61,6 +63,7 @@ export type WrappedProps<P: {}, I> =
 
 export type Config = {
   AuthProvider: Class<IAuthProvider>,
+  branding: Branding,
   unauthedRoute?: string,
   needAuthDefault: boolean,
   error?: {
@@ -97,15 +100,20 @@ export default function createDashboardHOC({
   needAuthDefault,
   unauthedRoute,
   error: errorConf,
-  themes: confThemes,
+  themes: themesConf,
+  branding: brandingConf,
 }: Config): <U: {}, Q: {} = {}>(
   Comp: DashboardComponent<U, Q>,
   needAuth?: boolean,
 ) => NextComponent<WrappedUnified<U, Q>, InitialUnified<Q>> {
-  const themes: Theme[] = confThemes || [
+  const themes: Theme[] = themesConf || [
     { name: 'Light', class: 'default' },
     { name: 'Dark', class: 'dark' },
   ];
+
+  const branding: Branding = brandingConf || {
+    name: 'PiJa Next',
+  };
 
   const { getInitialState, persist } = createPersistentState<{}>(
     'dashboardState',
@@ -113,9 +121,7 @@ export default function createDashboardHOC({
   let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
 
   function withDashboard<P: {}, I: {} = {}>(
-    Comp:
-      | (React$ComponentType<P> & { +getInitialProps: void })
-      | DashboardComponent<P, I>,
+    Comp: DashboardComponent<P, I>,
     needAuth?: boolean,
   ):
     | NextComponent<WrappedUnified<P, I>, InitialUnified<I>>
@@ -123,20 +129,22 @@ export default function createDashboardHOC({
     if (process.env.NODE_ENV === 'development') {
       const { prototype } = (Comp: any) || {};
       if (prototype && prototype instanceof React.PureComponent) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(
-            `Please don't use PureComponent for dashboard root components, Use regular Component instead. Component: ${displayNameOf(
-              Comp,
-            )}`,
-          );
-        }
+        logger.warn(
+          `Please don't use PureComponent for dashboard root components, Use regular Component instead. Component: ${displayNameOf(
+            Comp,
+          )}`,
+        );
       }
     }
 
     const parsedNeedAuth = needAuth == null ? needAuthDefault : needAuth;
 
     function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
-      const { __INITIAL_STATE__, __AUTH_SERIALIZED__, ...props } = fullProps;
+      const {
+        __INITIAL_STATE__,
+        __AUTH_SERIALIZED__,
+        ...restProps
+      } = fullProps;
       const authProvider = new AuthProvider(__AUTH_SERIALIZED__);
       const [
         persistentState,
@@ -165,11 +173,7 @@ export default function createDashboardHOC({
       function registerSiteMessage(siteMessage: SiteMessageType | Error) {
         if (siteMessage instanceof Error) {
           if (siteMessage instanceof SilentError) return;
-          // We probably want to log extended debug info if we're throwing
-          // an error into the face of the user somewhere, so we can request
-          // more info in case we fail to reproduce.
-          // eslint-disable-next-line no-restricted-syntax
-          console.error(siteMessage);
+          logger.error(siteMessage);
           registerSiteMessage({
             title: siteMessage.constructor.name,
             status: 'error',
@@ -246,26 +250,24 @@ export default function createDashboardHOC({
         registerSiteMessage,
         dismissSiteMessage,
         siteMessages: localSiteMessages,
+        branding,
         themes,
         theme,
+        Comp,
         modalActive,
         setModalActive,
         getAuthProvider<A: IAuthProvider>(C: Class<A>): A | void {
           if (authProvider === undefined) return undefined;
           if (authProvider instanceof C) return authProvider;
-          if (process.env.NODE_ENV === 'development') {
-            console.error(
-              new Error(
-                'AuthProvider mismatch, instance not of requested class',
-              ),
-            );
-          }
+          logger.error(
+            new Error('AuthProvider mismatch, instance not of requested class'),
+          );
           return undefined;
         },
       };
-      // eslint-disable-next-line no-underscore-dangle,react/destructuring-assignment
-      if (props.__ERRORED__) {
-        const { __ERR_PROPS__: errProps } = props;
+      // eslint-disable-next-line no-underscore-dangle
+      if (restProps.__ERRORED__) {
+        const { __ERR_PROPS__: errProps } = restProps;
         if (errorConf) {
           return errorConf.withContext ? (
             <DashboardContext.Provider value={context}>
@@ -277,7 +279,7 @@ export default function createDashboardHOC({
         }
         return null;
       }
-      const { __ERRORED__: _, ...rest } = props;
+      const { __ERRORED__: _, ...rest } = restProps;
       return (
         Comp != null && (
           <DashboardContext.Provider value={context}>
