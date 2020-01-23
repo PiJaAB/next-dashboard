@@ -8,6 +8,8 @@
     }
     thead {
       @include var('background-color', 'tertiary-alt');
+      font-weight: 600;
+      text-transform: uppercase;
     }
     tbody {
       >tr {
