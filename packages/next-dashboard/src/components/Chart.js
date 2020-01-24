@@ -10,6 +10,7 @@ import {
   CartesianGrid,
   Tooltip,
   Bar,
+  Legend,
 } from 'recharts';
 import PageChart from './PageChart';
 
@@ -56,18 +57,25 @@ const Chart = ({
 }: Props) => {
   const chart = (
     <PageChart>
-      <ResponsiveContainer>
+      <ResponsiveContainer className="line-chart">
         <ComposedChart
           data={data}
-          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+          margin={{ top: 10, right: 30, left: 24, bottom: 0 }}
         >
           <CartesianGrid vertical={false} />
-          <XAxis dataKey="Period" tickLine={false} minTickGap={10} />
+          <XAxis
+            dataKey="Period"
+            tickLine={false}
+            minTickGap={10}
+            height={50}
+            dy={20}
+          />
           <YAxis
             tickLine={false}
             axisLine={false}
             tickMargin={12}
             minTickGap={10}
+            dx={-45}
           />
           <Tooltip isAnimationActive={false} cursor={false} />
           {renderBars(barChartKeysAndColor)}
@@ -89,6 +97,21 @@ const Chart = ({
               dot
             />
           ) : null}
+          <Legend
+            content={({ payload }) => (
+              <ul className="line-chart-legend-list">
+                {payload.map(entry => (
+                  <li key={entry.value} className="line-chart-type">
+                    <div
+                      className="line-chart-type-color"
+                      style={{ backgroundColor: entry.color }}
+                    />
+                    {entry.value}
+                  </li>
+                ))}
+              </ul>
+            )}
+          />
         </ComposedChart>
       </ResponsiveContainer>
     </PageChart>
