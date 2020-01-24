@@ -9,6 +9,7 @@ import {
   CartesianGrid,
   Tooltip,
   Bar,
+  Legend,
 } from 'recharts';
 
 type Props = {
@@ -28,8 +29,14 @@ type Props = {
 const renderBars = barChartKeysAndColor => {
   if (barChartKeysAndColor) {
     if (Array.isArray(barChartKeysAndColor)) {
-      return barChartKeysAndColor.map(({ key, color, stackId }) => (
-        <Bar dataKey={key} barSize={12} stackId={stackId} fill={color} />
+      return barChartKeysAndColor.map(({ key, color, stackId }, index) => (
+        <Bar
+          dataKey={key}
+          barSize={12}
+          stackId={stackId}
+          fill={color}
+          yAxisId={index}
+        />
       ));
     }
     return (
@@ -62,6 +69,32 @@ const Chart = ({ title, data, loading, barChartKeysAndColor }: Props) => {
               axisLine={false}
               type="category"
               width={200}
+              yAxisId={0}
+              dx={-18}
+            />
+            <YAxis
+              dataKey="Fullname"
+              tickLine={false}
+              axisLine={false}
+              type="category"
+              width={200}
+              hide
+              yAxisId={1}
+            />
+            <Legend
+              content={({ payload }) => (
+                <ul className="line-chart-legend-list">
+                  {payload.map(entry => (
+                    <li key={entry.value} className="line-chart-type">
+                      <div
+                        className="line-chart-type-color"
+                        style={{ backgroundColor: entry.color }}
+                      />
+                      {entry.value}
+                    </li>
+                  ))}
+                </ul>
+              )}
             />
             <Tooltip isAnimationActive={false} cursor={false} />
             {renderBars(barChartKeysAndColor)}

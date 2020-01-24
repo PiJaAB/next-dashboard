@@ -1,4 +1,5 @@
 .vertical-bar-chart-container {
+  @extend .line-chart;
   &:after {
     padding: 0;
   }
