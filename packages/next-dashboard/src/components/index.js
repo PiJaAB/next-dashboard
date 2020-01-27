@@ -19,3 +19,4 @@ export { default as SiteMessage } from './SiteMessage';
 export { default as LineChart } from './LineChart';
 export { default as Chart } from './Chart';
 export { default as VerticalBarChart } from './VerticalBarChart';
+export { default as FeatureBox } from './FeatureBox';
