@@ -5,6 +5,8 @@ $primary-alt-color-dark:     #273142 !default;
 $secondary-alt-color-dark:   #1b2431 !default;
 $tertiary-alt-color-dark:    #323d4e !default;
 
+$border-color-dark:          #313D4F !default;
+
 $background-color-dark:      $secondary-alt-color-dark !default;
 $background-dark-color-dark: darken($background-color-dark, 1.5625%) !default;
 $text-color-dark:            $secondary-color-dark !default;
@@ -27,4 +29,5 @@ $colors-dark: (
   'text-rgb':                hexToRgb($text-color-dark),
   'error':                   $error-color-dark,
   'warning':                 $warning-color-dark,
+  'border':                  $border-color-dark,
 ) !default;
