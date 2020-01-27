@@ -6,14 +6,15 @@ export type Props = {
   icon: string,
   iconBackgroundColor: string,
   label?: React$Node,
-  value: string,
-  footerComponent: React$Node,
+  value: string | number,
+  footerComponent?: React$Node,
   status?: Statuses,
 };
 
 export const defaultProps = {
   label: undefined,
   status: undefined,
+  footerComponent: undefined,
 };
 
 export default class FeatureBox extends PureComponent<Props> {
@@ -44,7 +45,9 @@ export default class FeatureBox extends PureComponent<Props> {
         <div className="feature_box_value margin-bottom-x1">
           <h2>{status === 'loading' ? 'Loading...' : value}</h2>
         </div>
-        <div className="feature_box_footer">{footerComponent}</div>
+        {footerComponent && (
+          <div className="feature_box_footer">{footerComponent}</div>
+        )}
       </div>
     );
   }
