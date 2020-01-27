@@ -1,5 +1,6 @@
 .page-table {
     border-radius: 10px;
+    @include add-border;
     @include var('background-color', 'primary-alt');
     overflow: hidden;
     .responsive-table-head {

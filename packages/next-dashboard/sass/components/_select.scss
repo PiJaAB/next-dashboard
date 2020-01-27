@@ -3,6 +3,7 @@
     position: relative;
   }
   &__control {
+    @include add-border;
     display: flex;
     outline: 0 !important; // ?
     border-radius: 5px;
