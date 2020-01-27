@@ -19,7 +19,7 @@ type Column = {
 export type Props = {
   className?: string,
   columns: Column[],
-  data: $ReadOnlyArray<Entry>,
+  data: ?$ReadOnlyArray<Entry>,
   renderHead?: (column: Column) => ?React$Node,
   renderBody?: (entry: Entry, column: Column) => ?React$Node,
   columnKeyExtractor?: (column: Column) => string,
@@ -59,23 +59,24 @@ const ResponsiveTable = ({
         </tr>
       </thead>
       <tbody>
-        {data.map(entry => (
-          <tr key={dataKeyExtractor(entry)}>
-            {cols.map(column => (
-              <td
-                data-tip={
-                  type === 'head'
-                    ? (column.renderBody || renderBody)(entry, column)
-                    : null
-                }
-                key={columnKeyExtractor(column)}
-                className={textAlignClass(column)}
-              >
-                {(column.renderBody || renderBody)(entry, column)}
-              </td>
-            ))}
-          </tr>
-        ))}
+        {data &&
+          data.map(entry => (
+            <tr key={dataKeyExtractor(entry)}>
+              {cols.map(column => (
+                <td
+                  data-tip={
+                    type === 'head'
+                      ? (column.renderBody || renderBody)(entry, column)
+                      : null
+                  }
+                  key={columnKeyExtractor(column)}
+                  className={textAlignClass(column)}
+                >
+                  {(column.renderBody || renderBody)(entry, column)}
+                </td>
+              ))}
+            </tr>
+          ))}
       </tbody>
     </table>
   );
