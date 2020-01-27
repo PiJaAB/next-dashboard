@@ -7,6 +7,17 @@
   background-repeat: no-repeat;
   background-size: auto 50%;
   position: relative;
+  &_status {
+    &_error {
+      @include var('background-color', 'error');
+    }
+    &_warning {
+      @include var('background-color', 'warning');
+    }
+    &_loading {
+      opacity: 0.5;
+    }
+  }
   .feature_box_icon {
     display: flex;
     position: absolute;
