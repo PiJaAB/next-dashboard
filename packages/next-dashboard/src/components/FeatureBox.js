@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import type { Statuses } from '../utils/types';
+
 export type Props = {
   icon: string,
   iconBackgroundColor: string,
