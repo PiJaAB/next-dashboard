@@ -63,6 +63,16 @@ function DashboardLayout({
     }
   }, [sidebarActive]);
 
+  useEffect(() => {
+    const { body } = document;
+    if (!body) return;
+    if (sidebarCompact) {
+      body.classList.add('sidebar_compact');
+    } else {
+      body.classList.remove('sidebar_compact');
+    }
+  }, [sidebarCompact]);
+
   const atTop = () => {
     const { body } = document;
     if (!body) return;

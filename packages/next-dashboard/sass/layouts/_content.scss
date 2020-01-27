@@ -43,7 +43,17 @@ body {
 .dashboard_sidebar_active {
   .dashboard-content {
     @include breakpoint(medium) {
+      margin-left: 200px;
+    }
+    @include breakpoint(large) {
       margin-left: 240px;
+    }
+  }
+  &.sidebar_compact {
+    .dashboard-content {
+      @include breakpoint(medium) {
+        margin-left: 86px;
+      }
     }
   }
 }
