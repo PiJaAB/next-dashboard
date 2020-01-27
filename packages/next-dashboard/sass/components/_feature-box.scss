@@ -7,6 +7,9 @@
   background-repeat: no-repeat;
   background-size: auto 50%;
   position: relative;
+  @include var('border-color', 'border');
+  border-width: 1px;
+  border-style: solid;
   &_status {
     &_error {
       @include var('background-color', 'error');
@@ -29,7 +32,7 @@
     text-align: center;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;;
+    border-radius: 20px;;
     i {
       font-size: 2rem;
     }
