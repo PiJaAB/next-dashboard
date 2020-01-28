@@ -66,19 +66,20 @@ const TableHead = <D: Entry>({
       update(headEl);
     },
   );
-
   return (
     <thead ref={headRef}>
       <tr>
-        {cols.map(column => (
-          <th
-            key={columnKeyExtractor(column)}
-            className={textAlignClass(column)}
-            onClick={onColumnClick && (() => onColumnClick(column))}
-          >
-            {(column.renderHead || renderHead)(column)}
-          </th>
-        ))}
+        {cols.map(column => {
+          return (
+            <th
+              key={columnKeyExtractor(column)}
+              className={textAlignClass(column)}
+              onClick={onColumnClick && (() => onColumnClick(column))}
+            >
+              {(column.renderHead || renderHead)(column)}
+            </th>
+          );
+        })}
       </tr>
     </thead>
   );

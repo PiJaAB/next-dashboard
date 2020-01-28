@@ -6,8 +6,14 @@
       display: flex;
       outline: 0 !important; // ?
       border-radius: 5px;
-      @include var('background-color', 'primary-alt');
+      @include var('background-color', 'primary');
+      @include var('color', 'white');
+      text-align: center;
       cursor: default;
+      &--is-disabled {
+        opacity: .5;
+        cursor: not-allowed;
+      }
     }
     &__label {
       flex: 1;

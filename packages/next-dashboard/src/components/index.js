@@ -2,10 +2,15 @@
 
 import HeaderCell, { type HeaderCellID } from './HeaderCell';
 
+import type {
+  Entry as TableEntry,
+  Column as TableColumn,
+} from './ResponsiveTable';
+
 export * from './layout';
 export { default as SortableTable } from './SortableTable';
 export { default as SortablePageTable } from './SortablePageTable';
-export type { HeaderCellID };
+export type { HeaderCellID, TableEntry, TableColumn };
 export { HeaderCell };
 export { default as Statistic } from './Statistic';
 export { default as PageContent } from './PageContent';

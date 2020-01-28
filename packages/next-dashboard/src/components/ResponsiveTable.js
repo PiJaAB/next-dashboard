@@ -17,7 +17,7 @@ export type ColData<D: Entry> = $ReadOnly<{
   field: $Keys<D>,
 }>;
 
-type Column<D: Entry> = $ReadOnly<{
+export type Column<D: Entry> = $ReadOnly<{
   ...ColData<D>,
   +renderHead?: (column: ColData<D>) => ?React$Node,
   +renderBody?: (entry: D, column: ColData<D>) => ?React$Node,
@@ -33,11 +33,12 @@ export type Props<D: Entry> = {
   columnKeyExtractor?: (column: ColData<D>) => string,
   dataKeyExtractor?: (entry: D) => string,
   onColumnClick?: (column: HeadColumn<D>) => void,
+  style?: ?{ [string]: mixed },
 };
 
 export type TextAlignProps = { +textAlign: string | void };
 
-const defaultRenderHead = <D: Entry>({ title }: ColData<D>) => title;
+export const defaultRenderHead = <D: Entry>({ title }: ColData<D>) => title;
 const defaultRenderBody = <D: Entry>(entry: D, { field }: ColData<D>) =>
   entry[field] !== null ? String(entry[field]) : null;
 const defaultKeyExtractor = <D: Entry>({ key }: Entry | ColData<D>) => key;
@@ -51,6 +52,7 @@ const ResponsiveTable = <D: Entry>({
   columnKeyExtractor = defaultKeyExtractor,
   dataKeyExtractor = defaultKeyExtractor,
   onColumnClick,
+  style,
 }: Props<D>) => {
   const textAlignClass = (props: TextAlignProps) =>
     props.textAlign && `text-align-${props.textAlign}`;
@@ -86,7 +88,10 @@ const ResponsiveTable = <D: Entry>({
     </table>
   );
   return (
-    <div className={['responsive-table', className].filter(c => c).join(' ')}>
+    <div
+      style={style}
+      className={['responsive-table', className].filter(c => c).join(' ')}
+    >
       <div className="responsive-table-head">{table([columns[0]], 'head')}</div>
       <FixedScrollbar className="responsive-table-body">
         {table(columns.slice(1), 'body')}
@@ -103,6 +108,7 @@ ResponsiveTable.defaultProps = {
   columnKeyExtractor: defaultKeyExtractor,
   dataKeyExtractor: defaultKeyExtractor,
   onColumnClick: undefined,
+  style: undefined,
 };
 
 export default ResponsiveTable;
