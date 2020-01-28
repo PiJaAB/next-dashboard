@@ -57,6 +57,8 @@ $primary-alt-color:       #ffffff !default;
 $secondary-alt-color:     #f5f6fa !default;
 $tertiary-alt-color:      #fafafa !default;
 
+$border-color:            #B9B9B9 !default;
+
 $black:                   #000000 !default;
 $white:                   #ffffff !default;
 
@@ -69,21 +71,22 @@ $background-darker-color: darken($background-dark-color, 1.5625%) !default;
 $text-color:              $secondary-color !default;
 
 $colors: (
-  'primary':              $primary-color,
-  'primary-rgb':          hexToRgb($primary-color),
-  'secondary':            $secondary-color,
-  'primary-alt':          $primary-alt-color,
-  'secondary-alt':        $secondary-alt-color,
-  'tertiary-alt':         $tertiary-alt-color,
-  'black':                $black,
-  'white':                $white,
-  'background':           $background-color,
-  'background-dark':      $background-dark-color,
-  'backgrounder-dark':    $background-darker-color,
-  'text':                 $text-color,
-  'text-rgb':             hexToRgb($text-color),
-  'error':                $error-color,
-  'warning':              $warning-color,
+  'primary':            $primary-color,
+  'primary-rgb':        hexToRgb($primary-color),
+  'secondary':          $secondary-color,
+  'primary-alt':        $primary-alt-color,
+  'secondary-alt':      $secondary-alt-color,
+  'tertiary-alt':       $tertiary-alt-color,
+  'black':              $black,
+  'white':              $white,
+  'background':         $background-color,
+  'background-dark':    $background-dark-color,
+  'background-darker':  $background-darker-color,
+  'text':               $text-color,
+  'text-rgb':           hexToRgb($text-color),
+  'error':              $error-color,
+  'warning':            $warning-color,
+  'border':             $secondary-alt-color,
 ) !default;
 
 $primary-font-family: '' !default;

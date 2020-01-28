@@ -21,6 +21,7 @@
 @import 'mixins/font-face';
 @import 'mixins/breakpoint';
 @import 'mixins/visually-hidden';
+@import 'mixins/add_border';
 
 @import 'variables';
 
@@ -62,7 +63,10 @@
 @import 'components/faq';
 @import 'components/fixed-scrollbar';
 @import 'components/line-chart';
+@import 'components/pie-chart';
+@import 'components/vertical-bar-chart';
 @import 'components/hamburger-menu';
+@import 'components/feature-box';
 
 @import 'pages/login';
 

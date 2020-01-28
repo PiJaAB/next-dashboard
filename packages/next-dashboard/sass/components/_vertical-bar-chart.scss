@@ -1,0 +1,13 @@
+.vertical-bar-chart-container {
+  @extend .line-chart;
+  &:after {
+    padding: 0;
+  }
+}
+
+.vertical-bar-chart {
+  .recharts-surface .recharts-cartesian-grid-horizontal line:nth-last-child(2),
+  .recharts-surface .recharts-cartesian-grid-horizontal line:last-child {
+    stroke-opacity: 0;
+  }
+}

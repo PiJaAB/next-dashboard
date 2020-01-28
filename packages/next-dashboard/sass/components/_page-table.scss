@@ -1,5 +1,6 @@
 .page-table {
     border-radius: 10px;
+    @include add-border;
     @include var('background-color', 'primary-alt');
     overflow: hidden;
     .responsive-table-head {
@@ -38,6 +39,8 @@
         position: relative;
         top: inherit;
         @include var('background-color', 'tertiary-alt');
+        font-weight: 600;
+        text-transform: uppercase;
       }
     }
   }

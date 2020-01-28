@@ -27,7 +27,7 @@ type Column<D: Entry> = $ReadOnly<{
 export type Props<D: Entry> = {
   className?: string,
   columns: $ReadOnlyArray<Column<D>>,
-  data: $ReadOnlyArray<D>,
+  data: ?$ReadOnlyArray<D>,
   renderHead?: (column: ColData<D>) => ?React$Node,
   renderBody?: (entry: D, column: ColData<D>) => ?React$Node,
   columnKeyExtractor?: (column: ColData<D>) => string,
@@ -64,23 +64,24 @@ const ResponsiveTable = <D: Entry>({
         onColumnClick={onColumnClick}
       />
       <tbody>
-        {data.map(entry => (
-          <tr key={dataKeyExtractor(entry)}>
-            {cols.map(column => (
-              <td
-                data-tip={
-                  type === 'head'
-                    ? (column.renderBody || renderBody)(entry, column)
-                    : null
-                }
-                key={columnKeyExtractor(column)}
-                className={textAlignClass(column)}
-              >
-                {(column.renderBody || renderBody)(entry, column)}
-              </td>
-            ))}
-          </tr>
-        ))}
+        {data &&
+          data.map(entry => (
+            <tr key={dataKeyExtractor(entry)}>
+              {cols.map(column => (
+                <td
+                  data-tip={
+                    type === 'head'
+                      ? (column.renderBody || renderBody)(entry, column)
+                      : null
+                  }
+                  key={columnKeyExtractor(column)}
+                  className={textAlignClass(column)}
+                >
+                  {(column.renderBody || renderBody)(entry, column)}
+                </td>
+              ))}
+            </tr>
+          ))}
       </tbody>
     </table>
   );

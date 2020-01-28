@@ -4,3 +4,23 @@
   padding-top: 38px;
   margin-bottom: 30px;
 }
+
+.line-chart {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.line-chart-legend-list {
+  @extend .pie-chart-types-list;
+  border-top: none !important;
+  padding-top: 10px !important;
+  margin-top: 0 !important;
+}
+
+.line-chart-type {
+  @extend .pie-chart-type;
+}
+
+.line-chart-type-color {
+  @extend .pie-chart-type-color;
+}
