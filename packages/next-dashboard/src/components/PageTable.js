@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 
-import ResponsiveTable, { type Props } from './ResponsiveTable';
+import ResponsiveTable, { type Props, type Entry } from './ResponsiveTable';
 
-const PageTable = (props: Props) => (
+const PageTable = <D: Entry>(props: Props<D>) => (
   <ResponsiveTable className="page-table" {...props} />
 );
 

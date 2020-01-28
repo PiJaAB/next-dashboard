@@ -53,6 +53,16 @@ function DashboardLayout({
     context.setState<boolean>('sidebarActive', !sidebarActive);
   };
 
+  useEffect(() => {
+    const { body } = document;
+    if (!body) return;
+    if (sidebarActive) {
+      body.classList.add('dashboard_sidebar_active');
+    } else {
+      body.classList.remove('dashboard_sidebar_active');
+    }
+  }, [sidebarActive]);
+
   const atTop = () => {
     const { body } = document;
     if (!body) return;

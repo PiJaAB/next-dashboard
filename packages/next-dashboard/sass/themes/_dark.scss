@@ -1,16 +1,17 @@
-$primary-color-dark:         #4880ff !default;
-$secondary-color-dark:       #ffffff !default;
+$primary-color-dark:           #4880ff !default;
+$secondary-color-dark:         #ffffff !default;
 
-$primary-alt-color-dark:     #273142 !default;
-$secondary-alt-color-dark:   #1b2431 !default;
-$tertiary-alt-color-dark:    #323d4e !default;
+$primary-alt-color-dark:       #273142 !default;
+$secondary-alt-color-dark:     #1b2431 !default;
+$tertiary-alt-color-dark:      #323d4e !default;
 
-$background-color-dark:      $secondary-alt-color-dark !default;
-$background-dark-color-dark: darken($background-color-dark, 1.5625%) !default;
-$text-color-dark:            $secondary-color-dark !default;
+$background-color-dark:        $secondary-alt-color-dark !default;
+$background-dark-color-dark:   darken($background-color-dark, 1.5625%) !default;
+$background-darker-color-dark: darken($background-dark-color-dark, 1.5625%) !default;
+$text-color-dark:              $secondary-color-dark !default;
 
-$error-color-dark:          #ff4f4f !default;
-$warning-color-dark:        orange  !default;
+$error-color-dark:            #ff4f4f !default;
+$warning-color-dark:          orange  !default;
 
 $colors-dark: (
   'primary':                 $primary-color-dark,
@@ -23,6 +24,7 @@ $colors-dark: (
   'white':                   $white,
   'background':              $background-color-dark,
   'background-dark':         $background-dark-color-dark,
+  'background-darker':       $background-darker-color-dark,
   'text':                    $text-color-dark,
   'text-rgb':                hexToRgb($text-color-dark),
   'error':                   $error-color-dark,

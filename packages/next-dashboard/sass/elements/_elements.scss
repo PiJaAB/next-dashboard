@@ -1,18 +1,19 @@
 :root {
-  --primary-color:         #{map-get($colors, 'primary')};
-  --primary-rgb-color:     #{map-get($colors, 'primary-rgb')};
-  --secondary-color:       #{map-get($colors, 'secondary')};
-  --primary-alt-color:     #{map-get($colors, 'primary-alt')};
-  --secondary-alt-color:   #{map-get($colors, 'secondary-alt')};
-  --tertiary-alt-color:    #{map-get($colors, 'tertiary-alt')};
-  --black-color:           #{map-get($colors, 'black')};
-  --white-color:           #{map-get($colors, 'white')};
-  --background-color:      #{map-get($colors, 'background')};
-  --background-dark-color: #{map-get($colors, 'background-dark')};
-  --text-color:            #{map-get($colors, 'text')};
-  --text-rgb-color:        #{map-get($colors, 'text-rgb')};
-  --error-color:           #{map-get($colors, 'error')};
-  --warning-color:         #{map-get($colors, 'warning')};
+  --primary-color:           #{map-get($colors, 'primary')};
+  --primary-rgb-color:       #{map-get($colors, 'primary-rgb')};
+  --secondary-color:         #{map-get($colors, 'secondary')};
+  --primary-alt-color:       #{map-get($colors, 'primary-alt')};
+  --secondary-alt-color:     #{map-get($colors, 'secondary-alt')};
+  --tertiary-alt-color:      #{map-get($colors, 'tertiary-alt')};
+  --black-color:             #{map-get($colors, 'black')};
+  --white-color:             #{map-get($colors, 'white')};
+  --background-color:        #{map-get($colors, 'background')};
+  --background-dark-color:   #{map-get($colors, 'background-dark')};
+  --background-darker-color: #{map-get($colors, 'background-darker')};
+  --text-color:              #{map-get($colors, 'text')};
+  --text-rgb-color:          #{map-get($colors, 'text-rgb')};
+  --error-color:             #{map-get($colors, 'error')};
+  --warning-color:           #{map-get($colors, 'warning')};
 }
 
 html {
@@ -33,20 +34,21 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   &.dashboard_theme-dark {
-    --primary-color:         #{map-get($colors-dark, 'primary')};
-    --primary-rgb-color:     #{map-get($colors-dark, 'primary-rgb')};
-    --secondary-color:       #{map-get($colors-dark, 'secondary')};
-    --primary-alt-color:     #{map-get($colors-dark, 'primary-alt')};
-    --secondary-alt-color:   #{map-get($colors-dark, 'secondary-alt')};
-    --tertiary-alt-color:    #{map-get($colors-dark, 'tertiary-alt')};
-    --black-color:           #{map-get($colors-dark, 'black')};
-    --white-color:           #{map-get($colors-dark, 'white')};
-    --background-color:      #{map-get($colors-dark, 'background')};
-    --background-dark-color: #{map-get($colors-dark, 'background-dark')};
-    --text-color:            #{map-get($colors-dark, 'text')};
-    --text-rgb-color:        #{map-get($colors-dark, 'text-rgb')};
-    --error-color:           #{map-get($colors-dark, 'error')};
-    --warning-color:         #{map-get($colors-dark, 'warning')};
+    --primary-color:           #{map-get($colors-dark, 'primary')};
+    --primary-rgb-color:       #{map-get($colors-dark, 'primary-rgb')};
+    --secondary-color:         #{map-get($colors-dark, 'secondary')};
+    --primary-alt-color:       #{map-get($colors-dark, 'primary-alt')};
+    --secondary-alt-color:     #{map-get($colors-dark, 'secondary-alt')};
+    --tertiary-alt-color:      #{map-get($colors-dark, 'tertiary-alt')};
+    --black-color:             #{map-get($colors-dark, 'black')};
+    --white-color:             #{map-get($colors-dark, 'white')};
+    --background-color:        #{map-get($colors-dark, 'background')};
+    --background-dark-color:   #{map-get($colors-dark, 'background-dark')};
+    --background-darker-color: #{map-get($colors-dark, 'background-darker')};
+    --text-color:              #{map-get($colors-dark, 'text')};
+    --text-rgb-color:          #{map-get($colors-dark, 'text-rgb')};
+    --error-color:             #{map-get($colors-dark, 'error')};
+    --warning-color:           #{map-get($colors-dark, 'warning')};
   }
 }
 

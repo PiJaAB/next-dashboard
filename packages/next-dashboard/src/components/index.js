@@ -3,6 +3,8 @@
 import HeaderCell, { type HeaderCellID } from './HeaderCell';
 
 export * from './layout';
+export { default as SortableTable } from './SortableTable';
+export { default as SortablePageTable } from './SortablePageTable';
 export type { HeaderCellID };
 export { HeaderCell };
 export { default as Statistic } from './Statistic';
@@ -18,3 +20,4 @@ export { default as PageChart } from './PageChart';
 export { default as SiteMessage } from './SiteMessage';
 export { default as LineChart } from './LineChart';
 export { default as Chart } from './Chart';
+export { default as FixedScrollbar } from './FixedScrollbar';

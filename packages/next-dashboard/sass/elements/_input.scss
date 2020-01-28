@@ -50,7 +50,7 @@ select {
   &:active {
     +label {
       &:before {
-        @include var('background-color', 'background-dark');
+        @include var('background-color', 'background-darker');
       }
     }
   }
@@ -72,16 +72,18 @@ select {
       position: absolute;
     }
     &:before {
-      top: 0;
+      top: 50%;
+      transform: translateY(-50%);
       left: 0;
       height: 20px;
       width: 20px;
       border-radius: 5px;
-      @include var('background-color', 'background');
+      @include var('background-color', 'background-dark');
     }
     &:after {
       display: none;
-      top: 5px;
+      top: 50%;
+      transform: translateY(-50%);
       left: 5px;
       height: 10px;
       width: 10px;

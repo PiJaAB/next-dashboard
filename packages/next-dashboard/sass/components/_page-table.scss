@@ -6,9 +6,6 @@
       @include var('border-color', 'text-rgb', 'rgba', 0.125);
       border-right: none;
     }
-    thead {
-      @include var('background-color', 'tertiary-alt');
-    }
     tbody {
       >tr {
         border-bottom: 1px solid;
@@ -32,9 +29,15 @@
       padding-bottom: 20px;
     }
     thead {
+      tr {
+        top: inherit;
+      }
       th {
         padding-top: 15px;
         padding-bottom: 15px;
+        position: relative;
+        top: inherit;
+        @include var('background-color', 'tertiary-alt');
       }
     }
   }
