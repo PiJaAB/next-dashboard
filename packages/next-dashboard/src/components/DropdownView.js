@@ -45,7 +45,7 @@ const DropdownView = ({ classPrefix, children, label, isDisabled }: Props) => {
           .filter(c => c)
           .join(' ')}
         onKeyPress={handleKeyPress}
-        onClick={!isDisabled && handleClick}
+        onClick={!isDisabled ? handleClick : undefined}
         role="button"
         tabIndex="0"
       >
