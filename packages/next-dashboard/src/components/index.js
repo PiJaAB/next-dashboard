@@ -29,3 +29,4 @@ export { default as Chart } from './Chart';
 export { default as FixedScrollbar } from './FixedScrollbar';
 export { default as VerticalBarChart } from './VerticalBarChart';
 export { default as FeatureBox } from './FeatureBox';
+export { default as DropdownView } from './DropdownView';
