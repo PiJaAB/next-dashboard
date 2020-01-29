@@ -9,6 +9,9 @@
     border-radius: 5px;
     @include var('background-color', 'primary-alt');
     cursor: default;
+    &--is-disabled {
+      cursor: not-allowed;
+    }
   }
   &__value-container {
     flex: 1;

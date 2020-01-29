@@ -11,3 +11,4 @@ export * from './consoleError';
 export * from './silentError';
 export { default as useInitialFlag } from './useInitialFlag';
 export { default as errorReporter } from './errorReporter';
+export { default as useMutationObserver } from './useMutationObserver';

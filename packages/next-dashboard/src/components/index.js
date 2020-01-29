@@ -2,8 +2,15 @@
 
 import HeaderCell, { type HeaderCellID } from './HeaderCell';
 
+import type {
+  Entry as TableEntry,
+  Column as TableColumn,
+} from './ResponsiveTable';
+
 export * from './layout';
-export type { HeaderCellID };
+export { default as SortableTable } from './SortableTable';
+export { default as SortablePageTable } from './SortablePageTable';
+export type { HeaderCellID, TableEntry, TableColumn };
 export { HeaderCell };
 export { default as Statistic } from './Statistic';
 export { default as PageContent } from './PageContent';
@@ -19,5 +26,6 @@ export { default as SiteMessage } from './SiteMessage';
 export { default as LineChart } from './LineChart';
 export { default as PieChart } from './PieChart';
 export { default as Chart } from './Chart';
+export { default as FixedScrollbar } from './FixedScrollbar';
 export { default as VerticalBarChart } from './VerticalBarChart';
 export { default as FeatureBox } from './FeatureBox';

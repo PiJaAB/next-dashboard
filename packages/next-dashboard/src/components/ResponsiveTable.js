@@ -2,36 +2,47 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 
-type Entry = {
-  +key?: string | void,
+import FixedScrollbar from './FixedScrollbar';
+import TableHead from './ResponsiveTableHead';
+
+import type { Column as HeadColumn } from './ResponsiveTableHead';
+
+export type Entry = {
+  +key?: string,
   +[string]: mixed,
 };
 
-type Column = {
+export type ColData = $ReadOnly<{
   key?: string,
   title: string,
   field: string,
-  renderHead?: (column: Column) => ?React$Node,
-  renderBody?: (entry: Entry, column: Column) => ?React$Node,
-  textAlign?: string,
-};
+}>;
+
+export type Column = $ReadOnly<{
+  ...ColData,
+  +renderHead?: (column: ColData) => ?React$Node,
+  +renderBody?: (entry: Entry, column: ColData) => ?React$Node,
+  +textAlign?: string,
+}>;
 
 export type Props = {
   className?: string,
-  columns: Column[],
+  columns: $ReadOnlyArray<Column>,
   data: ?$ReadOnlyArray<Entry>,
-  renderHead?: (column: Column) => ?React$Node,
-  renderBody?: (entry: Entry, column: Column) => ?React$Node,
-  columnKeyExtractor?: (column: Column) => string,
+  renderHead?: (column: ColData) => ?React$Node,
+  renderBody?: (entry: Entry, column: ColData) => ?React$Node,
+  columnKeyExtractor?: (column: ColData) => string,
   dataKeyExtractor?: (entry: Entry) => string,
+  onColumnClick?: (column: HeadColumn) => void,
+  style?: ?{ [string]: mixed },
 };
 
-type TextAlignProps = { textAlign: string | void };
+export type TextAlignProps = { +textAlign: string | void };
 
-const defaultRenderHead = ({ title }: Column) => title;
-const defaultRenderBody = (entry: Entry, { field }: Column) =>
+export const defaultRenderHead = ({ title }: ColData) => title;
+const defaultRenderBody = (entry: Entry, { field }: ColData) =>
   entry[field] !== null ? String(entry[field]) : null;
-const defaultKeyExtractor = ({ key }: Entry | Column) => key;
+const defaultKeyExtractor = ({ key }: Entry | ColData) => key;
 
 const ResponsiveTable = ({
   className,
@@ -41,23 +52,20 @@ const ResponsiveTable = ({
   renderBody = defaultRenderBody,
   columnKeyExtractor = defaultKeyExtractor,
   dataKeyExtractor = defaultKeyExtractor,
+  onColumnClick,
+  style,
 }: Props) => {
   const textAlignClass = (props: TextAlignProps) =>
     props.textAlign && `text-align-${props.textAlign}`;
-  const table = (cols: Column[], type: string) => (
+  const table = (cols: $ReadOnlyArray<Column>, type: string) => (
     <table>
-      <thead>
-        <tr>
-          {cols.map(column => (
-            <th
-              key={columnKeyExtractor(column)}
-              className={textAlignClass(column)}
-            >
-              {(column.renderHead || renderHead)(column)}
-            </th>
-          ))}
-        </tr>
-      </thead>
+      <TableHead
+        cols={cols}
+        columnKeyExtractor={columnKeyExtractor}
+        textAlignClass={textAlignClass}
+        renderHead={renderHead}
+        onColumnClick={onColumnClick}
+      />
       <tbody>
         {data &&
           data.map(entry => (
@@ -81,11 +89,14 @@ const ResponsiveTable = ({
     </table>
   );
   return (
-    <div className={['responsive-table', className].filter(c => c).join(' ')}>
+    <div
+      style={style}
+      className={['responsive-table', className].filter(c => c).join(' ')}
+    >
       <div className="responsive-table-head">{table([columns[0]], 'head')}</div>
-      <div className="responsive-table-body">
+      <FixedScrollbar className="responsive-table-body">
         {table(columns.slice(1), 'body')}
-      </div>
+      </FixedScrollbar>
       <ReactTooltip className="tooltip-style" />
     </div>
   );
@@ -97,6 +108,8 @@ ResponsiveTable.defaultProps = {
   renderBody: defaultRenderBody,
   columnKeyExtractor: defaultKeyExtractor,
   dataKeyExtractor: defaultKeyExtractor,
+  onColumnClick: undefined,
+  style: undefined,
 };
 
 export default ResponsiveTable;

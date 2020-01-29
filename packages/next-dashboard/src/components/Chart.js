@@ -17,12 +17,12 @@ import PageChart from './PageChart';
 type Props = {
   title: string,
   data: $ReadOnlyArray<{
-    +Period: string,
-    +Average: number,
+    +[string]: mixed,
   }>,
   chartLineColor: string,
   loading?: boolean,
-  areaChartKey?: string,
+  xAxisKey: ?string,
+  areaChartKey: ?string,
   barChartKeysAndColor?:
     | null
     | { key: string, color: string }
@@ -52,6 +52,7 @@ const Chart = ({
   data,
   chartLineColor,
   loading,
+  xAxisKey,
   areaChartKey,
   barChartKeysAndColor,
 }: Props) => {
@@ -64,7 +65,7 @@ const Chart = ({
         >
           <CartesianGrid vertical={false} />
           <XAxis
-            dataKey="Period"
+            dataKey={xAxisKey}
             tickLine={false}
             minTickGap={10}
             height={50}
@@ -146,7 +147,6 @@ const Chart = ({
 
 Chart.defaultProps = {
   loading: false,
-  areaChartKey: null,
   barChartKeysAndColor: null,
 };
 

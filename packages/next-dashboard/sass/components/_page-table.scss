@@ -7,11 +7,6 @@
       @include var('border-color', 'text-rgb', 'rgba', 0.125);
       border-right: none;
     }
-    thead {
-      @include var('background-color', 'tertiary-alt');
-      font-weight: 600;
-      text-transform: uppercase;
-    }
     tbody {
       >tr {
         border-bottom: 1px solid;
@@ -35,9 +30,35 @@
       padding-bottom: 20px;
     }
     thead {
+      tr {
+        top: inherit;
+      }
       th {
         padding-top: 15px;
         padding-bottom: 15px;
+        position: relative;
+        top: inherit;
+        @include var('background-color', 'tertiary-alt');
+        font-weight: 600;
+        text-transform: uppercase;
+        &.sort:after {
+          font-weight: 900;
+          font-family: "Font Awesome 5 Free";
+          -moz-osx-font-smoothing: grayscale;
+          -webkit-font-smoothing: antialiased;
+          display: inline-block;
+          font-style: normal;
+          font-variant: normal;
+          text-rendering: auto;
+          line-height: 1;
+          content: "";
+        }
+        &.sort-desc:after {
+          content: "\f0dd";
+        }
+        &.sort-asc:after {
+          content: "\f0de";
+        }
       }
     }
   }

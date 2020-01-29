@@ -147,5 +147,9 @@
     .margin-0#{$breakpoint-class} {
       margin: 0;
     }
+
+    .hidden#{$breakpoint-class} {
+      visibility: hidden;
+    }
   }
 }

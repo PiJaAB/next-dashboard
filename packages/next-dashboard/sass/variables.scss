@@ -50,24 +50,25 @@ $breakpoints: (
   // 'extra-large': ( min-width: map-get($breakpoint-sizes, 'extra-large') ),
 ) !default;
 
-$primary-color:         #4880ff !default;
-$secondary-color:       #202224 !default;
+$primary-color:           #4880ff !default;
+$secondary-color:         #202224 !default;
 
-$primary-alt-color:     #ffffff !default;
-$secondary-alt-color:   #f5f6fa !default;
-$tertiary-alt-color:    #fafafa !default;
+$primary-alt-color:       #ffffff !default;
+$secondary-alt-color:     #f5f6fa !default;
+$tertiary-alt-color:      #fafafa !default;
 
-$border-color:          #B9B9B9 !default;
+$border-color:            #B9B9B9 !default;
 
-$black:                 #000000 !default;
-$white:                 #ffffff !default;
+$black:                   #000000 !default;
+$white:                   #ffffff !default;
 
-$error-color:           #ff4f4f !default;
-$warning-color:         orange  !default;
+$error-color:             #ff4f4f !default;
+$warning-color:           orange  !default;
 
-$background-color:      $secondary-alt-color !default;
-$background-dark-color: darken($background-color, 1.5625%) !default;
-$text-color:            $secondary-color !default;
+$background-color:        $secondary-alt-color !default;
+$background-dark-color:   darken($background-color, 1.5625%) !default;
+$background-darker-color: darken($background-dark-color, 1.5625%) !default;
+$text-color:              $secondary-color !default;
 
 $colors: (
   'primary':            $primary-color,
@@ -80,6 +81,7 @@ $colors: (
   'white':              $white,
   'background':         $background-color,
   'background-dark':    $background-dark-color,
+  'background-darker':  $background-darker-color,
   'text':               $text-color,
   'text-rgb':           hexToRgb($text-color),
   'error':              $error-color,

@@ -44,6 +44,10 @@ input[type='reset'] {
     opacity: 0.5;
     cursor: wait;
   }
+  &[disabled].no-loading {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   &.no-button{
     display: inline;
     margin: 0;

@@ -1,0 +1,16 @@
+.fixed-scrollbar{
+  position: relative;
+  overflow-x: hidden;
+  &__content {
+    overflow-x: auto;
+  }
+  &__scroll {
+    overflow-x: auto;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    div {
+     height: 1px;
+    }
+  }
+}
