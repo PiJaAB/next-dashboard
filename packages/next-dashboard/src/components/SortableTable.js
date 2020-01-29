@@ -9,29 +9,23 @@ import ResponsiveTable, {
 
 export type { Entry } from './ResponsiveTable';
 
-type Sort<D: Entry> = void | {|
-  field: $Keys<D>,
+type Sort = void | {|
+  field: string,
   dir: 'asc' | 'desc',
 |};
 
-type Data<D: Entry> = ?$ReadOnlyArray<D>;
+type Data = ?$ReadOnlyArray<Entry>;
 
-function defaultCompare<D: Entry>(a: D, b: D, field: $Keys<D>): number {
+function defaultCompare(a: Entry, b: Entry, field: string): number {
   return String(a[field]).localeCompare(String(b[field]));
 }
 
-export type Props<D: Entry> = {
-  ...TableProps<D>,
-  compare?: (a: D, b: D, field: $Keys<D>) => number,
+export type Props = {
+  ...TableProps,
+  compare?: (a: Entry, b: Entry, field: string) => number,
 };
 
-const SortIcon = <D: Entry>({
-  col,
-  sort,
-}: {
-  col: ColData<D>,
-  sort: Sort<D>,
-}) => (
+const SortIcon = ({ col, sort }: { col: ColData, sort: Sort }) => (
   <span
     className={[
       'fa',
@@ -47,18 +41,16 @@ const SortIcon = <D: Entry>({
   />
 );
 
-function MultiResponsiveTable<D: Entry>({
+function SortableTable({
   data: orgData,
   onColumnClick,
   compare,
   renderHead,
   className,
   ...props
-}: Props<D>): null | React$Element<
-  <D: Entry>(TableProps<D>) => React$Element<'div'>,
-> {
-  const [data, setData] = useState<Data<D>>(orgData);
-  const [sort, setSort] = useState<Sort<D>>();
+}: Props): null | React$Element<(TableProps) => React$Element<'div'>> {
+  const [data, setData] = useState<Data>(orgData);
+  const [sort, setSort] = useState<Sort>();
   useEffect(() => {
     if (data === orgData && !sort) return;
     if (!sort || !orgData) {
@@ -89,7 +81,7 @@ function MultiResponsiveTable<D: Entry>({
     }
   };
 
-  const wrappedRenderHead = (col: ColData<D>) => (
+  const wrappedRenderHead = (col: ColData) => (
     <>
       {(renderHead || defaultRenderHead)(col)}{' '}
       <SortIcon col={col} sort={sort} />
@@ -107,9 +99,9 @@ function MultiResponsiveTable<D: Entry>({
   );
 }
 
-MultiResponsiveTable.defaultProps = {
+SortableTable.defaultProps = {
   groupPreproccesor: undefined,
   compare: undefined,
 };
 
-export default MultiResponsiveTable;
+export default SortableTable;

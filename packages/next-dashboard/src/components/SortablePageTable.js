@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 
-import SortableTable, { type Props, type Entry } from './SortableTable';
+import SortableTable, { type Props } from './SortableTable';
 
-const PageTable = <D: Entry>({ className, ...props }: Props<D>) => (
+const PageTable = ({ className, ...props }: Props) => (
   <SortableTable className={`page-table ${className || ''}`} {...props} />
 );
 

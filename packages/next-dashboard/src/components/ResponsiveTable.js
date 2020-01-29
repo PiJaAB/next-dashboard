@@ -9,41 +9,42 @@ import type { Column as HeadColumn } from './ResponsiveTableHead';
 
 export type Entry = {
   +key?: string,
+  +[string]: mixed,
 };
 
-export type ColData<D: Entry> = $ReadOnly<{
+export type ColData = $ReadOnly<{
   key?: string,
   title: string,
-  field: $Keys<D>,
+  field: string,
 }>;
 
-export type Column<D: Entry> = $ReadOnly<{
-  ...ColData<D>,
-  +renderHead?: (column: ColData<D>) => ?React$Node,
-  +renderBody?: (entry: D, column: ColData<D>) => ?React$Node,
+export type Column = $ReadOnly<{
+  ...ColData,
+  +renderHead?: (column: ColData) => ?React$Node,
+  +renderBody?: (entry: Entry, column: ColData) => ?React$Node,
   +textAlign?: string,
 }>;
 
-export type Props<D: Entry> = {
+export type Props = {
   className?: string,
-  columns: $ReadOnlyArray<Column<D>>,
-  data: ?$ReadOnlyArray<D>,
-  renderHead?: (column: ColData<D>) => ?React$Node,
-  renderBody?: (entry: D, column: ColData<D>) => ?React$Node,
-  columnKeyExtractor?: (column: ColData<D>) => string,
-  dataKeyExtractor?: (entry: D) => string,
-  onColumnClick?: (column: HeadColumn<D>) => void,
+  columns: $ReadOnlyArray<Column>,
+  data: ?$ReadOnlyArray<Entry>,
+  renderHead?: (column: ColData) => ?React$Node,
+  renderBody?: (entry: Entry, column: ColData) => ?React$Node,
+  columnKeyExtractor?: (column: ColData) => string,
+  dataKeyExtractor?: (entry: Entry) => string,
+  onColumnClick?: (column: HeadColumn) => void,
   style?: ?{ [string]: mixed },
 };
 
 export type TextAlignProps = { +textAlign: string | void };
 
-export const defaultRenderHead = <D: Entry>({ title }: ColData<D>) => title;
-const defaultRenderBody = <D: Entry>(entry: D, { field }: ColData<D>) =>
+export const defaultRenderHead = ({ title }: ColData) => title;
+const defaultRenderBody = (entry: Entry, { field }: ColData) =>
   entry[field] !== null ? String(entry[field]) : null;
-const defaultKeyExtractor = <D: Entry>({ key }: Entry | ColData<D>) => key;
+const defaultKeyExtractor = ({ key }: Entry | ColData) => key;
 
-const ResponsiveTable = <D: Entry>({
+const ResponsiveTable = ({
   className,
   columns,
   data,
@@ -53,10 +54,10 @@ const ResponsiveTable = <D: Entry>({
   dataKeyExtractor = defaultKeyExtractor,
   onColumnClick,
   style,
-}: Props<D>) => {
+}: Props) => {
   const textAlignClass = (props: TextAlignProps) =>
     props.textAlign && `text-align-${props.textAlign}`;
-  const table = (cols: $ReadOnlyArray<Column<D>>, type: string) => (
+  const table = (cols: $ReadOnlyArray<Column>, type: string) => (
     <table>
       <TableHead
         cols={cols}
