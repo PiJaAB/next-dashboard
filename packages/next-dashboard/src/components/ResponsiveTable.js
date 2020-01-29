@@ -43,6 +43,7 @@ export const defaultRenderHead = ({ title }: ColData) => title;
 const defaultRenderBody = (entry: Entry, { field }: ColData) =>
   entry[field] !== null ? String(entry[field]) : null;
 const defaultKeyExtractor = ({ key }: Entry | ColData) => key;
+const defaultColumnKeyExtractor = ({ field, key }: ColData) => key || field;
 
 const ResponsiveTable = ({
   className,
@@ -50,7 +51,7 @@ const ResponsiveTable = ({
   data,
   renderHead = defaultRenderHead,
   renderBody = defaultRenderBody,
-  columnKeyExtractor = defaultKeyExtractor,
+  columnKeyExtractor = defaultColumnKeyExtractor,
   dataKeyExtractor = defaultKeyExtractor,
   onColumnClick,
   style,
@@ -106,7 +107,7 @@ ResponsiveTable.defaultProps = {
   className: undefined,
   renderHead: defaultRenderHead,
   renderBody: defaultRenderBody,
-  columnKeyExtractor: defaultKeyExtractor,
+  columnKeyExtractor: defaultColumnKeyExtractor,
   dataKeyExtractor: defaultKeyExtractor,
   onColumnClick: undefined,
   style: undefined,
