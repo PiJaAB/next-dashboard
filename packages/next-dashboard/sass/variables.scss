@@ -35,7 +35,7 @@ $breakpoint-sizes: (
   'small':          0px,
   'medium':       640px,
   'large':       1024px,
-  // 'extra-large': 1440px,
+  'extra-large': 1440px,
 ) !default;
 // $breakpoint-vertical-sizes: (
 //   'small':          0px,
@@ -47,7 +47,7 @@ $breakpoints: (
   'small':       ( min-width: map-get($breakpoint-sizes,       'small') ),
   'medium':      ( min-width: map-get($breakpoint-sizes,      'medium') ),
   'large':       ( min-width: map-get($breakpoint-sizes,       'large') ),
-  // 'extra-large': ( min-width: map-get($breakpoint-sizes, 'extra-large') ),
+  'extra-large': ( min-width: map-get($breakpoint-sizes, 'extra-large') ),
 ) !default;
 
 $primary-color:           #4880ff !default;
@@ -94,3 +94,7 @@ $primary-font-family: '' !default;
 $font-family-sans-serif: $primary-font-family, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif !default;
 $font-family-serif:      Georgia, Cambria, "Times New Roman", Times, serif !default;
 $font-family-monospace:  Consolas, 'Liberation Mono', Courier, monospace !default;
+
+$border-radius-small:   5px;
+$border-radius:         15px;
+$border-radius-large:   30px;

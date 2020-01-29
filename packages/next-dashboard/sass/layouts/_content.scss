@@ -18,32 +18,23 @@ body {
   @include breakpoint(large) {
     padding: (80px + 40px) 0 80px;
   }
-}
-.dashboard-sidebar {
-  &_active {
-    +.dashboard-content {
-      @include breakpoint(medium) {
-        padding-left: 200px;
-      }
-      @include breakpoint(large) {
-        padding-left: 240px;
-      }
-    }
-    &.dashboard-sidebar_compact {
-      width: 86px;
-      +.dashboard-content {
-        @include breakpoint(medium) {
-          padding-left: 100px;
-        }
-      }
-    }
-  }
+
 }
 
 .dashboard_sidebar_active {
   .dashboard-content {
     @include breakpoint(medium) {
+      margin-left: 200px;
+    }
+    @include breakpoint(large) {
       margin-left: 240px;
+    }
+  }
+  &.sidebar_compact {
+    .dashboard-content {
+      @include breakpoint(medium) {
+        margin-left: 86px;
+      }
     }
   }
 }
