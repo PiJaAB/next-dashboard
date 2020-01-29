@@ -33,7 +33,7 @@ body {
   &.sidebar_compact {
     .dashboard-content {
       @include breakpoint(medium) {
-        margin-left: 100px;
+        margin-left: 86px;
       }
     }
   }

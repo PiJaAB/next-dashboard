@@ -43,7 +43,7 @@ body {
   }
   &_compact {
     @include breakpoint(medium) {
-      width: 100px;
+      width: 86px;
     }
     .dashboard-sidebar-menu-item-button-text {
       @include breakpoint(medium) {
