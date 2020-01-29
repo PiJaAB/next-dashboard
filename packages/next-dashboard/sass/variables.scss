@@ -35,7 +35,7 @@ $breakpoint-sizes: (
   'small':          0px,
   'medium':       640px,
   'large':       1024px,
-  // 'extra-large': 1440px,
+  'extra-large': 1440px,
 ) !default;
 // $breakpoint-vertical-sizes: (
 //   'small':          0px,
@@ -47,7 +47,7 @@ $breakpoints: (
   'small':       ( min-width: map-get($breakpoint-sizes,       'small') ),
   'medium':      ( min-width: map-get($breakpoint-sizes,      'medium') ),
   'large':       ( min-width: map-get($breakpoint-sizes,       'large') ),
-  // 'extra-large': ( min-width: map-get($breakpoint-sizes, 'extra-large') ),
+  'extra-large': ( min-width: map-get($breakpoint-sizes, 'extra-large') ),
 ) !default;
 
 $primary-color:           #4880ff !default;
