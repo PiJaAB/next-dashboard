@@ -25,7 +25,7 @@ function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
 
   const theme = ctx.theme.class;
 
-  const { logoURL: logoURLConf, homepageURL = '/dashboard', name } =
+  const { logoURL: logoURLConf, homepageURL = '/', name } =
     ctx != null ? ctx.branding : {};
   const logoURL = getLogoURL(logoURLConf, theme);
 
