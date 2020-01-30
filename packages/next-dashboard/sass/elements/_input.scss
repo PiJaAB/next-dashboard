@@ -1,3 +1,12 @@
+
+select {
+  padding: 10px (15px + 12.5px + 15px) 10px 15px;
+  background-image: url('/images/select-arrow.svg');
+  background-size: 12.5px auto;
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+}
+
 [type='text'],
 [type='password'],
 [type='date'],
@@ -34,33 +43,22 @@ select {
     margin-bottom: 0;
   }
 }
-select {
-  padding: 10px (15px + 12.5px + 15px) 10px 15px;
-  background-image: url('/images/select-arrow.svg');
-  background-size: 12.5px auto;
-  background-repeat: no-repeat;
-  background-position: right 15px center;
+
+input[type="radio"] {
+  +label {
+    &:before {
+      border-radius: 50%;
+    }
+    &:after {
+      border-radius: 50%;
+    }
+  }
 }
 
-[type="checkbox"],
-[type="radio"] {
+input[type="checkbox"],
+input[type="radio"] {
   @include visually-hidden;
   margin: 20px 0 0 (20px / 2);
-  &:focus,
-  &:active {
-    +label {
-      &:before {
-        @include var('background-color', 'background-darker');
-      }
-    }
-  }
-  &:checked {
-    +label {
-      &:after {
-        display: block;
-      }
-    }
-  }
   +label {
     position: relative;
     padding: 0 0 0 20px + 10px;
@@ -91,14 +89,19 @@ select {
       background-color: $primary-color;
     }
   }
-}
-input[type="radio"] {
-  +label {
-    &:before {
-      border-radius: 50%;
+  &:focus,
+  &:active {
+    +label {
+      &:before {
+        @include var('background-color', 'background-darker');
+      }
     }
-    &:after {
-      border-radius: 50%;
+  }
+  &:checked {
+    +label {
+      &:after {
+        display: block;
+      }
     }
   }
 }

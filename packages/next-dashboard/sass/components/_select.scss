@@ -39,7 +39,7 @@
     overflow: hidden;
   }
   &__multi-value {
-    @include var('background-color', 'background');;
+    @include var('background-color', 'background');
     border-radius: 2px;
     display: flex;
     margin: 2px;
