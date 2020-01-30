@@ -48,16 +48,16 @@ p {
 }
 
 ul,
+ol {
+  padding-left: 20px;
+}
+ul,
 ol,
 dl {
   margin: 0 0 20px;
   &:last-child {
     margin-bottom: 0;
   }
-}
-ul,
-ol {
-  padding-left: 20px;
 }
 dd {
   margin-left: 20px;

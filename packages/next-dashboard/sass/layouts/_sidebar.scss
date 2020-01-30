@@ -1,17 +1,14 @@
-body {
-  &.body_resizing {
-    .dashboard-sidebar {
-      transition: none;
-    }
-    .dashboard-sidebar-menu-item-button-text {
-      transition: none;
-    }
-    .dashboard-sidebar-profile {
-      .profile-content {
-        transition: none;
-      }
-    }
+.dashboard-sidebar-profile {
+  @include breakpoint(large) {
+    display: none;
   }
+  .profile-content {
+    transition: opacity 0.25s ease;
+  }
+}
+
+.dashboard-sidebar-menu-item-button-text {
+  transition: opacity 0.25s ease;
 }
 
 .dashboard-sidebar {
@@ -111,9 +108,6 @@ body {
   margin: 0 10px 0 0;
   text-align: center;
 }
-.dashboard-sidebar-menu-item-button-text {
-  transition: opacity 0.25s ease;
-}
 
 .dashboard-sidebar-search {
   margin: 0 0 20px;
@@ -133,11 +127,19 @@ body {
     }
   }
 }
-.dashboard-sidebar-profile {
-  @include breakpoint(large) {
-    display: none;
-  }
-  .profile-content {
-    transition: opacity 0.25s ease;
+
+body {
+  &.body_resizing {
+    .dashboard-sidebar {
+      transition: none;
+    }
+    .dashboard-sidebar-menu-item-button-text {
+      transition: none;
+    }
+    .dashboard-sidebar-profile {
+      .profile-content {
+        transition: none;
+      }
+    }
   }
 }

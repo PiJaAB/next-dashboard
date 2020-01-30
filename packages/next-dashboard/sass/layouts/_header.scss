@@ -1,16 +1,3 @@
-body {
-  &.body_resizing {
-    .dashboard-header {
-      transition: none;
-    }
-  }
-  &.body_at-top {
-    .dashboard-header {
-      box-shadow: none;
-    }
-  }
-}
-
 .dashboard-header {
   display: flex;
   align-items: center;
@@ -35,6 +22,7 @@ body {
 .dashboard-header-cell {
   flex: 0 0 auto;
   &_sidebar {
+    padding: 0 !important;
     flex: 0 0 25%;
     max-width: 25%;
     @include breakpoint(medium) {
@@ -79,10 +67,6 @@ body {
   }
 }
 
-.dashboard-header-cell_sidebar {
-  padding: 0 !important;
-}
-
 .dashboard-header-sidebar-button {
   display: block;
   position: relative;
@@ -118,5 +102,18 @@ body {
   width: calc(100% - 38px);
   @include breakpoint(large) {
     width: calc(100% - 76px);
+  }
+}
+
+body {
+  &.body_resizing {
+    .dashboard-header {
+      transition: none;
+    }
+  }
+  &.body_at-top {
+    .dashboard-header {
+      box-shadow: none;
+    }
   }
 }
