@@ -69,6 +69,7 @@ $background-color:        $secondary-alt-color !default;
 $background-dark-color:   darken($background-color, 1.5625%) !default;
 $background-darker-color: darken($background-dark-color, 1.5625%) !default;
 $text-color:              $secondary-color !default;
+$text-alt-color:          lighten($text-color, 40%) !default;
 
 $colors: (
   'primary':            $primary-color,
@@ -83,6 +84,7 @@ $colors: (
   'background-dark':    $background-dark-color,
   'background-darker':  $background-darker-color,
   'text':               $text-color,
+  'text-alt':           $text-alt-color,
   'text-rgb':           hexToRgb($text-color),
   'error':              $error-color,
   'warning':            $warning-color,

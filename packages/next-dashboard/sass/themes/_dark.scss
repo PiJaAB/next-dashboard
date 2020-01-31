@@ -11,6 +11,7 @@ $background-color-dark:        $secondary-alt-color-dark !default;
 $background-dark-color-dark:   darken($background-color-dark, 1.5625%) !default;
 $background-darker-color-dark: darken($background-dark-color-dark, 1.5625%) !default;
 $text-color-dark:              $secondary-color-dark !default;
+$text-alt-color-dark:          darken($text-color-dark, 40%) !default;
 
 $error-color-dark:            #ff4f4f !default;
 $warning-color-dark:          orange  !default;
@@ -28,6 +29,7 @@ $colors-dark: (
   'background-dark':         $background-dark-color-dark,
   'background-darker':       $background-darker-color-dark,
   'text':                    $text-color-dark,
+  'text-alt':                $text-alt-color-dark,
   'text-rgb':                hexToRgb($text-color-dark),
   'error':                   $error-color-dark,
   'warning':                 $warning-color-dark,
