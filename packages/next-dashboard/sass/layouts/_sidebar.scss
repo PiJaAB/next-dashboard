@@ -17,6 +17,7 @@
   left: 0;
   height: calc(100% - 80px);
   width: calc(100% - 80px);
+  max-width: 320px;
   padding: 20px;
   @include var('background-color', 'primary-alt');
   z-index: 90;

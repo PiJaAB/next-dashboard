@@ -53,6 +53,9 @@
       .cell.column-#{$grid-column}#{$breakpoint-class} {
         flex: 0 0 (100% / $grid-columns) * $grid-column;
         max-width: (100% / $grid-columns) * $grid-column;
+        &-max{
+          max-width: 300px;
+        }
       }
     }
 
