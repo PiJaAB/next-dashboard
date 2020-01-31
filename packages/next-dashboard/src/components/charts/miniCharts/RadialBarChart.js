@@ -12,33 +12,29 @@ import {
 import WrapChart from './WrapChart';
 import PageChart from '../PageChart';
 import TextComp, { type StyledText } from './TextComp';
+import type { Plot } from './types';
 
-import { INNER_RADIUS, OUTER_RADIUS, PADDING_BOTTOM, radius } from './utils';
+import { INNER_RADIUS, OUTER_RADIUS, PADDING, radius } from './utils';
 
-type Props = {
-  plots: {
-    name: string,
-    fill: string,
-    stroke: string,
-    value: ?number,
-  }[],
-  maxValue?: number,
+type Props<T: Plot> = {
+  plots: $ReadOnlyArray<T>,
   children?: React$Node,
+  maxValue?: number,
   offsetAngle?: number,
   angularSize?: number,
-  valueFormatter?: (number, boolean) => string | number,
+  valueFormatter?: (number, T, boolean) => ?string | number,
   centerText?: StyledText | [StyledText, StyledText],
 };
 
-export default function RadialBarChart({
+export default function RadialBarChart<T: Plot>({
   plots,
-  maxValue,
   children,
+  maxValue,
   offsetAngle,
   angularSize,
   valueFormatter,
   centerText,
-}: Props): React$Element<typeof PageChart> {
+}: Props<T>): React$Element<typeof PageChart> {
   const startAngle = 90 - (offsetAngle || 0);
   const endAngle = startAngle - (angularSize != null ? angularSize : 360);
   const domain = [0, maxValue != null ? maxValue : 'auto'];
@@ -51,8 +47,8 @@ export default function RadialBarChart({
               startAngle={startAngle}
               endAngle={endAngle}
               data={plots}
-              cy={height / 2 - PADDING_BOTTOM}
-              cx={width / 2}
+              cy={height / 2 - PADDING.BOTTOM + PADDING.TOP}
+              cx={width / 2 - PADDING.RIGHT + PADDING.LEFT}
               innerRadius={radius(INNER_RADIUS, width, height)}
               outerRadius={radius(OUTER_RADIUS, width, height)}
               width={width}
@@ -63,7 +59,8 @@ export default function RadialBarChart({
               <Tooltip
                 labelFormatter={() => null}
                 formatter={(value, name, { payload }) => [
-                  valueFormatter ? valueFormatter(value, true) : value,
+                  (valueFormatter && valueFormatter(value, payload, true)) ||
+                    value,
                   payload.name,
                 ]}
                 isAnimationActive={false}
@@ -104,6 +101,7 @@ export default function RadialBarChart({
                       radius={radius(INNER_RADIUS, width, height)}
                     />
                   )}
+                  key="RadialBarChartCustomizedElement"
                 />
               )}
             </RechartRadialBarChart>

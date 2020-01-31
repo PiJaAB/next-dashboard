@@ -52,6 +52,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       return;
     }
     try {
+      this.setUpdating(fetcher.id);
       const res = await fetcher.runner.call(this);
       if (!this.activeFetchers.has(fetcher.id)) {
         return;
@@ -99,6 +100,16 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
   +start: ?(id: string) => void;
 
   +stop: ?(id: string) => void;
+
+  setUpdating(dataSource: string): ?DataType<> {
+    if (!this.dataCache[dataSource]) return;
+    // $FlowIssue: I not sure why flow spazzes out...
+    const newData: DataType<> = {
+      ...this.dataCache[dataSource],
+      updating: true,
+    };
+    this.setData(dataSource, newData);
+  }
 
   setData(dataSource: string, data: ?DataType<>) {
     this.dataCache[dataSource] = data;
