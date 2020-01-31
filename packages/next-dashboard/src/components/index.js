@@ -8,6 +8,8 @@ import type {
 } from './ResponsiveTable';
 
 export * from './layout';
+export * from './charts';
+
 export { default as SortableTable } from './SortableTable';
 export { default as SortablePageTable } from './SortablePageTable';
 export type { HeaderCellID, TableEntry, TableColumn };
@@ -21,11 +23,7 @@ export { default as CompactButton } from './CompactButton';
 export { default as ThemeSelector } from './ThemeSelector';
 export { default as PageTable } from './PageTable';
 export { default as ResponsiveTable } from './ResponsiveTable';
-export { default as PageChart } from './PageChart';
 export { default as SiteMessage } from './SiteMessage';
-export { default as LineChart } from './LineChart';
-export { default as PieChart } from './PieChart';
-export { default as Chart } from './Chart';
 export { default as FixedScrollbar } from './FixedScrollbar';
 export { default as VerticalBarChart } from './VerticalBarChart';
 export { default as FeatureBox } from './FeatureBox';

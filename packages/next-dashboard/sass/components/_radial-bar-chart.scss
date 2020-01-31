@@ -1,0 +1,42 @@
+.radial-bar-chart-title-container {
+  font-size: 16px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 16px;
+}
+
+.radial-bar-chart-types-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(151, 151, 151, 0.4);
+}
+
+.radial-bar-chart-type {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.radial-bar-chart-type-color {
+  margin-right: 10px;
+  height: 10px;
+  width: 10px;
+  border-radius: 10px;
+}
+
+text.radial-bar-chart__center-text {
+  @include var('fill', 'text');
+  text-anchor: middle;
+  alignment-baseline: middle; // Valid svg text element property
+  &__single, &__top {
+    font-weight: bold;
+  }
+  &__bottom {
+    @include var('fill', 'text-alt');
+  }
+}
