@@ -38,5 +38,17 @@
       }
     }
 
+    .container-extra-narrow#{$breakpoint-class} {
+      max-width: $page-width-extra-narrow;
+    }
+    .container-narrow#{$breakpoint-class} {
+      max-width: $page-width-narrow;
+    }
+    .container-wide#{$breakpoint-class} {
+      max-width: $page-width-wide;
+    }
+    .container-extra-wide#{$breakpoint-class} {
+      max-width: $page-width-extra-wide;
+    }
   }
 }
