@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { PADDING_BOTTOM } from './utils';
+import { PADDING } from './utils';
 
 export type StyledText =
   | string
@@ -50,8 +50,8 @@ const TextComp = ({ text, width, height, radius }: Props) => {
     }
     return (
       <text
-        y={height / 2 - PADDING_BOTTOM}
-        x={width / 2}
+        y={height / 2 - PADDING.BOTTOM + PADDING.TOP}
+        x={width / 2 - PADDING.RIGHT + PADDING.LEFT}
         style={{
           fontSize: `${size}px`,
         }}
@@ -89,8 +89,8 @@ const TextComp = ({ text, width, height, radius }: Props) => {
   return (
     <>
       <text
-        y={height / 2 - PADDING_BOTTOM}
-        x={width / 2}
+        y={height / 2 - PADDING.BOTTOM + PADDING.TOP}
+        x={width / 2 - PADDING.RIGHT + PADDING.LEFT}
         dy={`${-bottomSize / 2}px`}
         style={{
           fontSize: `${topSize}px`,
@@ -100,8 +100,8 @@ const TextComp = ({ text, width, height, radius }: Props) => {
         {topStr}
       </text>
       <text
-        y={height / 2 - PADDING_BOTTOM}
-        x={width / 2}
+        y={height / 2 - PADDING.BOTTOM + PADDING.TOP}
+        x={width / 2 - PADDING.RIGHT + PADDING.LEFT}
         dy={`${topSize / 2}px`}
         style={{
           fontSize: `${bottomSize}px`,

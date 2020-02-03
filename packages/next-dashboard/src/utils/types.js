@@ -27,12 +27,13 @@ export type SuccessDataType<T = mixed> = {|
 export type ErrorDataType = {|
   +status: 'error',
   +error: Error,
-  +value?: void,
+  +value?: empty,
+  +updating?: boolean,
 |};
 
 export type LoadingDataType = {|
   +status: 'loading',
-  +value?: void,
+  +value?: empty,
 |};
 
 export type DataType<T = mixed> =

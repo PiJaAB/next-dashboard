@@ -12,39 +12,35 @@ import WrapChart from './WrapChart';
 import PageChart from '../PageChart';
 import TextComp, { type StyledText } from './TextComp';
 import RenderCustomizedPieLabel from './RenderCustomizedPieLabel';
+import type { Plot } from './types';
 
 import {
   INNER_RADIUS,
   OUTER_RADIUS,
-  PADDING_BOTTOM,
+  PADDING,
   radius,
   pieRadius,
 } from './utils';
 
 import { RENDER_ISSUE_OFFSET_PADDING } from './rechartsCorrections';
 
-type Props = {
-  plots: {
-    name: string,
-    fill: string,
-    stroke: string,
-    value: ?number,
-  }[],
+type Props<T: Plot> = {
+  plots: $ReadOnlyArray<T>,
   children?: React$Node,
   offsetAngle?: number,
   angularSize?: number,
-  valueFormatter?: (number, boolean) => string | number,
+  valueFormatter?: (number, T, boolean) => ?string | number,
   centerText?: StyledText | [StyledText, StyledText],
 };
 
-export default function HollowPieChart({
+export default function HollowPieChart<T: Plot>({
   plots,
   children,
   offsetAngle,
   angularSize,
   valueFormatter,
   centerText,
-}: Props): React$Element<typeof PageChart> {
+}: Props<T>): React$Element<typeof PageChart> {
   const startAngle = 90 - (offsetAngle || 0);
   const endAngle = startAngle - (angularSize != null ? angularSize : 360);
   return (
@@ -62,7 +58,8 @@ export default function HollowPieChart({
               <Tooltip
                 labelFormatter={() => null}
                 formatter={(value, name, { payload }) => [
-                  valueFormatter ? valueFormatter(value, true) : value,
+                  (valueFormatter && valueFormatter(value, payload, true)) ||
+                    value,
                   payload.name,
                 ]}
                 isAnimationActive={false}
@@ -86,8 +83,13 @@ export default function HollowPieChart({
                 )}
               />
               <Pie
-                cy={height / 2 - PADDING_BOTTOM - RENDER_ISSUE_OFFSET_PADDING}
-                cx={width / 2}
+                cy={
+                  height / 2 -
+                  PADDING.BOTTOM +
+                  PADDING.TOP -
+                  RENDER_ISSUE_OFFSET_PADDING
+                }
+                cx={width / 2 - PADDING.RIGHT + PADDING.LEFT}
                 data={plots}
                 innerRadius={pieRadius(INNER_RADIUS, width, height)}
                 outerRadius={pieRadius(OUTER_RADIUS, width, height)}
@@ -96,7 +98,14 @@ export default function HollowPieChart({
                 dataKey="value"
                 nameKey="name"
                 labelLine={false}
-                label={RenderCustomizedPieLabel}
+                label={props =>
+                  RenderCustomizedPieLabel({
+                    ...props,
+                    valueFormatter,
+                    width,
+                    height,
+                  })
+                }
               />
               {centerText && (
                 <Customized
@@ -108,6 +117,7 @@ export default function HollowPieChart({
                       radius={radius(INNER_RADIUS, width, height)}
                     />
                   )}
+                  key="HollowPieChartCustomizedElement"
                 />
               )}
             </PieChart>

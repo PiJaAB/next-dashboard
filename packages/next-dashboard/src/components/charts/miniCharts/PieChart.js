@@ -10,29 +10,27 @@ import {
 import WrapChart from './WrapChart';
 import PageChart from '../PageChart';
 import RenderCustomizedPieLabel from './RenderCustomizedPieLabel';
+import type { Plot } from './types';
 
-import { PADDING_BOTTOM, OUTER_RADIUS, pieRadius } from './utils';
+import { PADDING, OUTER_RADIUS, pieRadius } from './utils';
 
 import { RENDER_ISSUE_OFFSET_PADDING } from './rechartsCorrections';
 
-type Props = {
-  plots: {
-    name: string,
-    fill: string,
-    stroke: string,
-    value: ?number,
-  }[],
+type Props<T: Plot> = {
+  plots: $ReadOnlyArray<T>,
+  children?: React$Node,
   offsetAngle?: number,
   angularSize?: number,
-  children?: React$Node,
+  valueFormatter?: (number, T, boolean) => ?string | number,
 };
 
-export default function PieChart({
+export default function PieChart<T: Plot>({
   plots,
+  children,
   offsetAngle,
   angularSize,
-  children,
-}: Props): React$Element<typeof PageChart> {
+  valueFormatter,
+}: Props<T>): React$Element<typeof PageChart> {
   const startAngle = 90 - (offsetAngle || 0);
   const endAngle = startAngle - (angularSize != null ? angularSize : 360);
   return (
@@ -47,7 +45,15 @@ export default function PieChart({
               margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
             >
               {children}
-              <Tooltip isAnimationActive={false} />
+              <Tooltip
+                labelFormatter={() => null}
+                formatter={(value, name, { payload }) => [
+                  (valueFormatter && valueFormatter(value, payload, true)) ||
+                    value,
+                  payload.name,
+                ]}
+                isAnimationActive={false}
+              />
               <Legend
                 key="pie-chart-key"
                 verticalAlign="bottom"
@@ -67,8 +73,13 @@ export default function PieChart({
                 )}
               />
               <Pie
-                cy={height / 2 - PADDING_BOTTOM - RENDER_ISSUE_OFFSET_PADDING}
-                cx={width / 2}
+                cy={
+                  height / 2 -
+                  PADDING.BOTTOM +
+                  PADDING.TOP -
+                  RENDER_ISSUE_OFFSET_PADDING
+                }
+                cx={width / 2 - PADDING.RIGHT + PADDING.LEFT}
                 data={plots}
                 outerRadius={pieRadius(OUTER_RADIUS, width, height)}
                 startAngle={startAngle}
@@ -76,7 +87,14 @@ export default function PieChart({
                 dataKey="value"
                 nameKey="name"
                 labelLine={false}
-                label={RenderCustomizedPieLabel}
+                label={props =>
+                  RenderCustomizedPieLabel({
+                    ...props,
+                    valueFormatter,
+                    width,
+                    height,
+                  })
+                }
               />
             </RechartPieChart>
           )}
@@ -90,4 +108,5 @@ PieChart.defaultProps = {
   children: undefined,
   offsetAngle: undefined,
   angularSize: undefined,
+  valueFormatter: undefined,
 };
