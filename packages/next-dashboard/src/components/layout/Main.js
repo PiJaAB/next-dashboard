@@ -56,12 +56,12 @@ function DashboardLayout({
   useEffect(() => {
     const { body } = document;
     if (!body) return;
-    if (sidebarActive) {
+    if (sidebar && sidebarActive) {
       body.classList.add('dashboard_sidebar_active');
     } else {
       body.classList.remove('dashboard_sidebar_active');
     }
-  }, [sidebarActive]);
+  }, [sidebar, sidebarActive]);
 
   useEffect(() => {
     const { body } = document;
