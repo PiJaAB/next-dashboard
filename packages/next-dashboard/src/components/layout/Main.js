@@ -142,7 +142,7 @@ function DashboardLayout({
           {header}
         </Header>
       )}
-      <Content contentContainerWidth={contentContainerWidth}>
+      <Content contentContainerWidth={contentContainerWidth} header={header}>
         <SiteMessages />
         {children}
       </Content>

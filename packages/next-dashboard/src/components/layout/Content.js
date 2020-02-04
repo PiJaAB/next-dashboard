@@ -9,10 +9,15 @@ type Props = {
     | 'normal'
     | 'wide'
     | 'extra-wide',
+  header?: React$Node,
 };
 
-const Content = ({ children, contentContainerWidth }: Props) => (
-  <div className="dashboard-content">
+const Content = ({ children, contentContainerWidth, header }: Props) => (
+  <div
+    className={['dashboard-content', !header && 'no-header']
+      .filter(className => className)
+      .join(' ')}
+  >
     <div
       className={[
         'container',
@@ -29,6 +34,7 @@ const Content = ({ children, contentContainerWidth }: Props) => (
 Content.defaultProps = {
   children: null,
   contentContainerWidth: undefined,
+  header: true,
 };
 
 export default Content;
