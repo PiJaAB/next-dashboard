@@ -4,7 +4,7 @@ import React from 'react';
 import type {
   Statuses,
   DataExtra,
-  MappedData,
+  DataType,
   ISubscriptionProvider,
 } from './types';
 
@@ -20,7 +20,7 @@ type Conf<T> = {
 
 type Stripped<T, P: { status: Statuses, value: T }, Data> = {
   ...$Diff<P, { status: Statuses, value: T }>,
-  parser: (MappedData<Data>) => T,
+  parser: (DataType<$ElementType<Data, string>>) => T,
   dataSource: $Keys<Data>,
   extra?: DataExtra,
 };

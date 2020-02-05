@@ -22,6 +22,7 @@
       @include var('background-color', 'tertiary-alt');
       font-weight: 600;
       text-transform: uppercase;
+      z-index: 99;
       &.sort:after {
         font-weight: 900;
         font-family: "Font Awesome 5 Free", sans-serif;
@@ -52,6 +53,9 @@
     }
     tbody {
       >tr {
+        >td>* {
+          line-height: $line-height;
+        }
         border-bottom: 1px solid;
         @include var('border-color', 'text-rgb', 'rgba', 0.125);
         &:last-child {

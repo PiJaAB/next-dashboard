@@ -3,29 +3,32 @@ import React, { useState, useEffect } from 'react';
 import ResponsiveTable, {
   defaultRenderHead,
   type Props as TableProps,
-  type Entry,
   type ColData,
 } from './ResponsiveTable';
-
-export type { Entry } from './ResponsiveTable';
 
 type Sort = void | {|
   field: string,
   dir: 'asc' | 'desc',
 |};
 
-type Data = ?$ReadOnlyArray<Entry>;
+type Data<E: {}> = ?$ReadOnlyArray<E>;
 
-function defaultCompare(a: Entry, b: Entry, field: string): number {
+function defaultCompare<E: {}>(a: E, b: E, field: string): number {
   return String(a[field]).localeCompare(String(b[field]));
 }
 
-export type Props = {
-  ...TableProps,
-  compare?: (a: Entry, b: Entry, field: string) => number,
+export type Props<-E, -C> = {
+  ...TableProps<E, C>,
+  compare?: (a: E, b: E, field: string) => number,
 };
 
-const SortIcon = ({ col, sort }: { col: ColData, sort: Sort }) => (
+const SortIcon = <-E: {}, C>({
+  col,
+  sort,
+}: {
+  col: ColData<E, C>,
+  sort: Sort,
+}) => (
   <span
     className={[
       'fa',
@@ -41,15 +44,15 @@ const SortIcon = ({ col, sort }: { col: ColData, sort: Sort }) => (
   />
 );
 
-function SortableTable({
+const SortableTable = <-E: {} = { +[string]: mixed }, -C: {} = {}>({
   data: orgData,
   onColumnClick,
   compare,
   renderHead,
   className,
   ...props
-}: Props): null | React$Element<(TableProps) => React$Element<'div'>> {
-  const [data, setData] = useState<Data>(orgData);
+}: Props<E, C>) => {
+  const [data, setData] = useState<Data<E>>(orgData);
   const [sort, setSort] = useState<Sort>();
   useEffect(() => {
     if (data === orgData && !sort) return;
@@ -81,7 +84,7 @@ function SortableTable({
     }
   };
 
-  const wrappedRenderHead = (col: ColData) => (
+  const wrappedRenderHead = (col: ColData<E, C>) => (
     <>
       {(renderHead || defaultRenderHead)(col)}{' '}
       <SortIcon col={col} sort={sort} />
@@ -97,7 +100,7 @@ function SortableTable({
       {...props}
     />
   );
-}
+};
 
 SortableTable.defaultProps = {
   groupPreproccesor: undefined,

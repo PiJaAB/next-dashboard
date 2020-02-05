@@ -8,8 +8,7 @@
 
 // eslint-disable-next-line flowtype/no-weak-types
 const WrapChart = ({ children, height, width }: any) => {
-  const wat = children(width, height);
-  return wat;
+  return children(width, height);
 };
 
 export default WrapChart;

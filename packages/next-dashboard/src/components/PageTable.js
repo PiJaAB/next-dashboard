@@ -3,7 +3,7 @@ import React from 'react';
 
 import ResponsiveTable, { type Props } from './ResponsiveTable';
 
-const PageTable = ({ className, ...props }: Props) => (
+const PageTable = <E: {}, C>({ className, ...props }: Props<E, C>) => (
   <ResponsiveTable className={`page-table ${className || ''}`} {...props} />
 );
 
