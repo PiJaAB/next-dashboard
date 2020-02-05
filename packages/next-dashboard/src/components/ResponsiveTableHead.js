@@ -3,21 +3,21 @@ import React, { useRef, useEffect } from 'react';
 import { useMutationObserver } from '../utils';
 import type { TextAlignProps, ColData } from './ResponsiveTable';
 
-export type Column = $ReadOnly<{
-  ...ColData,
-  +renderHead?: (column: Column) => ?React$Node,
+export type Column<E, C> = $ReadOnly<{
+  ...ColData<E, C>,
+  +renderHead?: (column: Column<E, C>) => ?React$Node,
   +textAlign?: string,
 }>;
 
-type HeadProps = {
-  cols: $ReadOnlyArray<Column>,
-  columnKeyExtractor: (column: Column) => string,
+type HeadProps<E, C> = {
+  cols: $ReadOnlyArray<Column<E, C>>,
+  columnKeyExtractor: (column: Column<E, C>) => string,
   textAlignClass: (props: TextAlignProps) => void | string,
-  renderHead: (column: Column) => ?React$Node,
-  onColumnClick?: (column: Column) => void,
+  renderHead: (column: Column<E, C>) => ?React$Node,
+  onColumnClick?: (column: Column<E, C>) => void,
 };
 
-const HEADER_OFFSET = 80; // Header is 80px long
+const HEADER_OFFSET = 80; // Header is 80px tall
 
 const update = (el: HTMLTableSectionElement) => {
   const rect = el.getClientRects()[0];
@@ -31,13 +31,13 @@ const update = (el: HTMLTableSectionElement) => {
   }
 };
 
-const TableHead = ({
+const TableHead = <E: {}, C>({
   cols,
   columnKeyExtractor,
   textAlignClass,
   renderHead,
   onColumnClick,
-}: HeadProps) => {
+}: HeadProps<E, C>) => {
   const headRef = useRef<HTMLTableSectionElement | null>(null);
   useEffect(() => {
     const headEl = headRef.current;

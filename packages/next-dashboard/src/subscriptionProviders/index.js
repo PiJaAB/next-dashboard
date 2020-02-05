@@ -1,4 +1,6 @@
 // @flow
 
-// eslint-disable-next-line import/prefer-default-export
-export { default as SubscriptionPoller } from './SubscriptionPoller';
+export {
+  default as SubscriptionPoller,
+  makePollingAlias,
+} from './SubscriptionPoller';

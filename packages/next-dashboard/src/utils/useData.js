@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from 'react';
 
-import type { MappedData, DataExtra, ISubscriptionProvider } from './types';
+import type { DataExtra, ISubscriptionProvider, DataType } from './types';
 
 function useData<Data: {}, DS: $Keys<Data>>(
   subProvider: ISubscriptionProvider<Data>,
   dataSource: DS,
   extra?: DataExtra,
   dummy?: boolean,
-): $ElementType<MappedData<Data>, DS> {
+): DataType<$ElementType<Data, DS>> {
   const [data, setData] = useState<
-    $ElementType<MappedData<Data>, typeof dataSource>,
+    DataType<$ElementType<Data, typeof dataSource>>,
   >({ status: 'loading' });
 
   useEffect(() => {

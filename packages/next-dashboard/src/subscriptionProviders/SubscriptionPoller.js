@@ -24,14 +24,23 @@ function wrapExtra<Data: {}>(
   };
 }
 
-type Mapper = <T>(T) => DataType<T>;
+export function makePollingAlias<Data: {}, DS1: $Keys<Data>, DS2: $Keys<Data>>(
+  parentId: DS1,
+  id: DS2,
+  parser: ($ElementType<Data, DS1>) => $ElementType<Data, DS2>,
+): PollingFetcher<Data> {
+  return {
+    id,
+    runner: parentId,
+    parser,
+  };
+}
 
-type MappedData<D> = $ObjMap<D, Mapper>;
-
-type ParsedPollingFetcher = {
+type ParsedPollingFetcher<Data: {}> = {
   +id: string,
   interval?: number | ((extra?: DataExtra) => number | void),
-  runner: (extra?: DataExtra) => mixed,
+  runner: $Keys<Data> | ((extra?: DataExtra) => mixed),
+  parser?: any => any,
 };
 
 /**
@@ -42,12 +51,14 @@ type ParsedPollingFetcher = {
 */
 export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
   implements ISubscriptionProvider<Data> {
-  constructor(fetcher?: PollingFetcher<Data> | PollingFetcher<Data>[]) {
+  constructor(
+    fetcher?: PollingFetcher<Data> | $ReadOnlyArray<PollingFetcher<Data>>,
+  ) {
     super();
     if (fetcher) this.addFetcher(fetcher);
   }
 
-  async startFetcher(fetcher: ParsedPollingFetcher) {
+  async startFetcher(fetcher: ParsedPollingFetcher<Data>) {
     if (!this.activeFetchers.has(fetcher.id)) {
       return;
     }
@@ -79,7 +90,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
   addFetcher(
     fetcher: PollingFetcher<Data> | $ReadOnlyArray<PollingFetcher<Data>>,
   ) {
-    const fetchers: $ReadOnlyArray<ParsedPollingFetcher> = Array.isArray(
+    const fetchers: $ReadOnlyArray<ParsedPollingFetcher<Data>> = Array.isArray(
       fetcher,
     )
       ? fetcher
@@ -87,11 +98,14 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     this.fetchers.push(...fetchers);
   }
 
-  activeListeners: Map<string, Set<(any) => void>> = new Map();
+  activeListeners: Map<
+    string,
+    Set<(DataType<$ElementType<Data, $Keys<Data>>>) => void>,
+  > = new Map();
 
-  fetchers: ParsedPollingFetcher[] = [];
+  fetchers: ParsedPollingFetcher<Data>[] = [];
 
-  activeFetchers: Map<string, ParsedPollingFetcher> = new Map();
+  activeFetchers: Map<string, ParsedPollingFetcher<Data>> = new Map();
 
   stoppingTimers: Map<string, TimeoutID> = new Map();
 
@@ -111,7 +125,10 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     this.setData(dataSource, newData);
   }
 
-  setData(dataSource: string, data: ?DataType<>) {
+  setData<DS: $Keys<Data>>(
+    dataSource: string,
+    data: DataType<$ElementType<Data, DS>>,
+  ) {
     this.dataCache[dataSource] = data;
     const listeners = this.activeListeners.get(dataSource);
     if (listeners) listeners.forEach(listener => listener(data));
@@ -124,7 +141,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
   read: <DS: $Keys<Data>>(
     dataSource: DS,
     extra?: DataExtra,
-  ) => $ElementType<MappedData<Data>, DS> = (dataSource, extra) => {
+  ) => DataType<$ElementType<Data, DS>> = (dataSource, extra) => {
     const key = generateDataKey(dataSource, extra);
     if (!this.dataCache[key]) {
       return {
@@ -134,11 +151,116 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     return this.dataCache[key];
   };
 
-  subscribe: <DS: $Keys<Data>>(
-    cb: ($ElementType<MappedData<Data>, DS>) => void,
+  aliasCallbacks: Map<
+    string,
+    (DataType<$ElementType<Data, $Keys<Data>>>) => void,
+  > = new Map();
+
+  subscribeAlias: <DS: $Keys<Data>>(
+    cb: (DataType<$ElementType<Data, DS>>) => void,
     dataSource: DS,
     extra?: DataExtra,
-  ) => void = (cb, dataSource, extra) => {
+  ) => boolean = <DS: $Keys<Data>>(cb, dataSource, extra) => {
+    const fetcher: ParsedPollingFetcher<Data> | void = this.fetchers.find(
+      ({ id }) => {
+        return id === dataSource;
+      },
+    );
+    if (!fetcher) return false;
+    if (typeof fetcher.runner !== 'string') return false;
+
+    const parentSource: $Keys<Data> = fetcher.runner;
+
+    const key = generateDataKey(dataSource, extra);
+
+    const stoppingTimer = this.stoppingTimers.get(key);
+    if (stoppingTimer != null) {
+      this.stoppingTimers.delete(key);
+      clearTimeout(stoppingTimer);
+    }
+    let set = this.activeListeners.get(key);
+    if (set) {
+      set.add(cb);
+      return true;
+    }
+
+    set = new Set<(DataType<$ElementType<Data, DS>>) => void>();
+    set.add(cb);
+    this.activeListeners.set(key, set);
+
+    const runner = data => {
+      let parsed;
+      if (!fetcher.parser || data.status !== 'success') {
+        parsed = data;
+      } else {
+        parsed = {
+          ...data,
+          value: fetcher.parser(data.value),
+        };
+      }
+      this.setData(key, parsed);
+    };
+    runner(this.read(parentSource, extra));
+    this.aliasCallbacks.set(key, runner);
+    this.subscribe<DS>(runner, parentSource, extra);
+    return true;
+  };
+
+  unsubscribeAlias: <DS: $Keys<Data>>(
+    cb: (DataType<$ElementType<Data, DS>>) => void,
+    dataSource: string,
+    extra?: DataExtra,
+  ) => boolean = <DS: $Keys<Data>>(cb, dataSource, extra) => {
+    const fetcher: ParsedPollingFetcher<Data> | void = this.fetchers.find(
+      ({ id }) => {
+        return id === dataSource;
+      },
+    );
+    if (!fetcher) return false;
+    if (typeof fetcher.runner !== 'string') return false;
+    const parentSource: $Keys<Data> = fetcher.runner;
+
+    const key = generateDataKey(dataSource, extra);
+    const set = this.activeListeners.get(key);
+
+    if (!set) {
+      logger.warn(
+        `Trying to unsubscribe from alias ${dataSource} without being subscribed to it. 1`,
+      );
+      return true;
+    }
+
+    if (!set.has(cb)) {
+      logger.warn(
+        `Trying to unsubscribe from alias ${dataSource} without being subscribed to it. 2`,
+      );
+      return true;
+    }
+    set.delete(cb);
+    if (set.size === 0) {
+      this.stoppingTimers.set(
+        key,
+        setTimeout(() => {
+          this.stoppingTimers.delete(key);
+          delete this.dataCache[key];
+          const runner = this.aliasCallbacks.get(key);
+          if (runner) {
+            this.aliasCallbacks.delete(key);
+            this.unsubscribe<DS>(runner, parentSource, extra);
+          }
+          this.activeListeners.delete(key);
+        }, 5000),
+      );
+    }
+    return true;
+  };
+
+  subscribe: <DS: $Keys<Data>>(
+    cb: (DataType<$ElementType<Data, DS>>) => void,
+    dataSource: DS,
+    extra?: DataExtra,
+  ) => void = <DS: $Keys<Data>>(cb, dataSource, extra) => {
+    if (this.subscribeAlias(cb, dataSource, extra)) return;
     const key = generateDataKey(dataSource, extra);
     let set = this.activeListeners.get(key);
     if (set) {
@@ -153,7 +275,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       clearTimeout(stoppingTimer);
     }
 
-    set = new Set<($Keys<Data>) => void>();
+    set = new Set<(DataType<$ElementType<Data, DS>>) => void>();
     set.add(cb);
     this.activeListeners.set(key, set);
     if (this.activeFetchers.has(key)) {
@@ -164,9 +286,11 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       }
       return;
     }
-    let fetcher: ParsedPollingFetcher | void = this.fetchers.find(({ id }) => {
-      return id === dataSource;
-    });
+    let fetcher: ParsedPollingFetcher<Data> | void = this.fetchers.find(
+      ({ id }) => {
+        return id === dataSource;
+      },
+    );
     if (!fetcher) {
       const err = new Error(`No datafetcher registered for id '${dataSource}'`);
       this.emit('error', err);
@@ -186,13 +310,13 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
         ...rest,
         id: key,
         runner: wrapExtra(runner, extra),
-      }: ParsedPollingFetcher);
+      }: ParsedPollingFetcher<Data>);
     }
     if (fetcher.interval !== interval) {
       fetcher = ({
         ...fetcher,
         interval,
-      }: ParsedPollingFetcher);
+      }: ParsedPollingFetcher<Data>);
     }
     this.activeFetchers.set(key, fetcher);
     this.startFetcher(fetcher);
@@ -200,10 +324,11 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
   };
 
   unsubscribe: <DS: $Keys<Data>>(
-    cb: ($ElementType<MappedData<Data>, DS>) => void,
+    cb: (DataType<$ElementType<Data, DS>>) => void,
     dataSource: string,
     extra?: DataExtra,
   ) => void = (cb, dataSource, extra) => {
+    if (this.unsubscribeAlias(cb, dataSource, extra)) return;
     const key = generateDataKey(dataSource, extra);
     const set = this.activeListeners.get(key);
     if (!set) {
@@ -236,9 +361,5 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
 
   send<T>(_key: string, _data: T, _extra?: mixed): Promise<void> | void {
     throw new NotImplementedError();
-  }
-
-  getCurrentData(): MappedData<Data> {
-    return this.dataCache;
   }
 }

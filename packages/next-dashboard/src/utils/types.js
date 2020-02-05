@@ -82,18 +82,15 @@ export type DataExtra =
   | null;
 
 export type PollingFetcher<+Data: {}> = {
-  runner: <Extra: DataExtra>(extra?: Extra) => Promise<mixed> | mixed,
-  interval?: number | (<Extra: DataExtra>(extra?: Extra) => number | void),
+  runner: $Keys<Data> | ((extra?: DataExtra) => Promise<mixed> | mixed),
+  parser?: any => any,
+  interval?: number | ((extra?: DataExtra) => number | void),
   +id: $Keys<Data>,
 };
 
 export type PathFragment = string | number | (string | number)[];
 
 export type DataPath = { +[string]: PathFragment } | PathFragment;
-
-export type DataMapper = <T>(T) => DataType<T>;
-
-export type MappedData<D: {}> = $ObjMap<D, DataMapper>;
 
 export interface IAuthProvider {
   constructor(ctx: InitialPropsContext | string): void;
@@ -128,17 +125,19 @@ export interface ISubscriptionProvider<Data: {}> {
   read<DS: $Keys<Data>>(
     dataSource: DS,
     extra?: DataExtra,
-  ): $ElementType<MappedData<Data>, DS>;
+  ): DataType<$ElementType<Data, DS>>;
 
   subscribe<DS: $Keys<Data>>(
-    cb: ($ElementType<MappedData<Data>, DS>) => void,
+    cb: (DataType<$ElementType<Data, DS>>) => void,
     dataSource: DS,
     extra?: DataExtra,
   ): void;
 
   unsubscribe<DS: $Keys<Data>>(
-    cb: ($ElementType<MappedData<Data>, DS>) => void,
+    cb: (DataType<$ElementType<Data, DS>>) => void,
     dataSource: DS,
     extra?: DataExtra,
   ): void;
 }
+
+export type ArrayType<Q> = $Call<<T>($ReadOnlyArray<T>) => T, Q>;
