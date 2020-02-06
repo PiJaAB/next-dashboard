@@ -95,14 +95,11 @@ export type DataPath = { +[string]: PathFragment } | PathFragment;
 export interface IAuthProvider {
   constructor(ctx: InitialPropsContext | string): void;
   serialize(): string;
-  emit(string, ...any): boolean;
-  on(string, any): IAuthProvider;
-  off(string, any): IAuthProvider;
   isAuthorizedForRoute(
     _href: string,
     _asPath: string,
     _query: { [string]: string | void },
-  ): boolean;
+  ): boolean | Symbol | Promise<boolean | Symbol>;
   isAuthenticated(): boolean;
 }
 

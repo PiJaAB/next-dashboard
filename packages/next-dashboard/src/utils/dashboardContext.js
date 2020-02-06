@@ -17,7 +17,7 @@ export interface IDashboardContext {
   setState: <T>(key: string, value: T) => void;
   registerSiteMessage(siteMessages: Error | SiteMessageType): void;
   dismissSiteMessage(siteMessages: SiteMessageType): void;
-  isAuthenticated(): boolean;
+  isAuthenticated(): boolean | Promise<boolean>;
   +branding: Branding;
   +theme: Theme;
   +Comp: DashboardComponent<any>;

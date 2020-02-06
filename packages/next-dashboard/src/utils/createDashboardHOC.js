@@ -30,6 +30,7 @@ type InitialNormProps<I> = {
   __INITIAL_STATE__: PersistentState,
   __ERR_PROPS__: void,
   __AUTH_SERIALIZED__: string,
+  __PERFORM_SSR__: boolean | void,
 };
 
 type InitialErrProps = {
@@ -37,6 +38,7 @@ type InitialErrProps = {
   __INITIAL_STATE__: PersistentState,
   __ERR_PROPS__: {} | void,
   __AUTH_SERIALIZED__: string,
+  __PERFORM_SSR__: boolean | void,
 };
 
 type InitialUnified<I> = {
@@ -45,6 +47,7 @@ type InitialUnified<I> = {
   __INITIAL_STATE__: PersistentState | void,
   __ERR_PROPS__: {} | void,
   __AUTH_SERIALIZED__: string,
+  __PERFORM_SSR__: boolean | void,
 };
 
 type InitialProps<I> = InitialErrProps | InitialNormProps<I>;
@@ -73,6 +76,7 @@ export type Config = {
     withContext?: boolean,
   },
   themes?: Theme[],
+  ClientAuthComp?: React$ComponentType<any>,
 };
 
 function makeStatusError(
@@ -95,6 +99,10 @@ function compareSitemessages(
   return true;
 }
 
+const isSSR = typeof window === 'undefined';
+
+export const CLIENT_AUTH = Symbol('Client Auth');
+
 export default function createDashboardHOC({
   AuthProvider,
   needAuthDefault,
@@ -102,6 +110,7 @@ export default function createDashboardHOC({
   error: errorConf,
   themes: themesConf,
   branding: brandingConf,
+  ClientAuthComp,
 }: Config): <U: {}, Q: {} = {}>(
   Comp: DashboardComponent<U, Q>,
   needAuth?: boolean,
@@ -143,6 +152,7 @@ export default function createDashboardHOC({
       const {
         __INITIAL_STATE__,
         __AUTH_SERIALIZED__,
+        __PERFORM_SSR__,
         ...restProps
       } = fullProps;
       const authProvider = new AuthProvider(__AUTH_SERIALIZED__);
@@ -151,6 +161,9 @@ export default function createDashboardHOC({
         updatePersistentState,
       ] = useState<PersistentState>(__INITIAL_STATE__);
       const [localSiteMessages, setLocalSiteMessages] = useState(siteMessages);
+
+      const [firstRender, setFirstRender] = useState(true);
+      useEffect(() => setFirstRender(false));
 
       function getPersistentState<T>(key: string, defaultValue: T): T {
         if (typeof persistentState[key] !== 'undefined')
@@ -280,10 +293,15 @@ export default function createDashboardHOC({
         return null;
       }
       const { __ERRORED__: _, ...rest } = restProps;
+      let RenderComp = Comp;
+      if (__PERFORM_SSR__ != null && !__PERFORM_SSR__ && firstRender) {
+        RenderComp = ClientAuthComp;
+      }
+
       return (
-        Comp != null && (
+        RenderComp != null && (
           <DashboardContext.Provider value={context}>
-            <Comp {...rest} />
+            <RenderComp {...rest} />
           </DashboardContext.Provider>
         )
       );
@@ -299,6 +317,7 @@ export default function createDashboardHOC({
         asPath,
         query,
       );
+      const performSSR = authenticated && authenticated !== CLIENT_AUTH;
       if (parsedNeedAuth && !authenticated) {
         const { res } = ctx;
         if (unauthedRoute) {
@@ -318,6 +337,7 @@ export default function createDashboardHOC({
               __INITIAL_STATE__: getInitialState(ctx) || {},
               __ERRORED__: true,
               __AUTH_SERIALIZED__: authProvider.serialize(),
+              __PERFORM_SSR__: isSSR ? performSSR : undefined,
             };
           }
           Router.push({
@@ -333,6 +353,7 @@ export default function createDashboardHOC({
             __INITIAL_STATE__: getInitialState(ctx) || {},
             __ERRORED__: true,
             __AUTH_SERIALIZED__: authProvider.serialize(),
+            __PERFORM_SSR__: isSSR ? performSSR : undefined,
           };
         }
 
@@ -353,6 +374,7 @@ export default function createDashboardHOC({
             __INITIAL_STATE__: getInitialState(ctx) || {},
             __ERRORED__: true,
             __AUTH_SERIALIZED__: authProvider.serialize(),
+            __PERFORM_SSR__: isSSR ? performSSR : undefined,
           };
         }
         throw err;
@@ -366,6 +388,7 @@ export default function createDashboardHOC({
           __INITIAL_STATE__: getInitialState(ctx) || {},
           __ERR_PROPS__: undefined,
           __AUTH_SERIALIZED__: authProvider.serialize(),
+          __PERFORM_SSR__: isSSR ? performSSR : undefined,
         }: InitialNormProps<I>);
       }
       return ({
@@ -373,6 +396,7 @@ export default function createDashboardHOC({
         __INITIAL_STATE__: getInitialState(ctx) || {},
         __ERR_PROPS__: undefined,
         __AUTH_SERIALIZED__: authProvider.serialize(),
+        __PERFORM_SSR__: isSSR ? performSSR : undefined,
       }: InitialNormProps<{}>);
     };
 

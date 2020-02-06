@@ -1,9 +1,19 @@
 // @flow
 
-import { type ClassName } from './toClassName';
+export type { ClassName } from './toClassName';
+export type { Config } from './createDashboardHOC';
+export type {
+  DashboardContextType,
+  IDashboardContext,
+} from './dashboardContext';
 
-export type { ClassName };
+export {
+  default as createDashboardHOC,
+  CLIENT_AUTH,
+} from './createDashboardHOC';
+export { default as createPersistentState } from './persistentState';
 export * from './types';
+export { default as DashboardContext } from './dashboardContext';
 export { default as useData } from './useData';
 export { default as withData } from './withData';
 export { default as toClassName } from './toClassName';
