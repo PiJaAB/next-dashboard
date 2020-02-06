@@ -18,18 +18,16 @@
 
 @import 'mixins/var';
 @import 'mixins/hex-to-rgb';
-@import 'mixins/font-face';
 @import 'mixins/breakpoint';
 @import 'mixins/visually-hidden';
 @import 'mixins/add_border';
+@import 'mixins/font-family';
 
 @import 'variables';
 
 @import 'themes/dark';
 
 @import 'base/resets';
-
-@import 'fonts/inter';
 
 @import 'elements/elements';
 @import 'elements/headings';
