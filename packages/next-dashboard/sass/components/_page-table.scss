@@ -7,16 +7,10 @@
       @include var('border-color', 'text-rgb', 'rgba', 0.125);
       border-right: none;
     }
-    th {
-      padding-top: 20px;
-      padding-bottom: 20px;
-    }
     th, td {
-      padding: 27px 15px;
+      padding: 14px;
     }
     thead th {
-      padding-top: 15px;
-      padding-bottom: 15px;
       position: relative;
       top: inherit;
       @include var('background-color', 'tertiary-alt');

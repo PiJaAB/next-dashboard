@@ -38,9 +38,9 @@ export function makePollingAlias<Data: {}, DS1: $Keys<Data>, DS2: $Keys<Data>>(
 
 type ParsedPollingFetcher<Data: {}> = {
   +id: string,
-  interval?: number | ((extra?: DataExtra) => number | void),
-  runner: $Keys<Data> | ((extra?: DataExtra) => mixed),
-  parser?: any => any,
+  +interval?: number | ((extra?: DataExtra) => number | void),
+  +runner: $Keys<Data> | ((extra?: DataExtra) => mixed),
+  +parser?: any => any,
 };
 
 /**

@@ -14,7 +14,7 @@ html {
 .dashboard {
   @include var('background-color', 'background');
   @include var('color', 'text');
-  font-family: $font-family-sans-serif;
+  @include font-family-sans-serif;
   font-size: $font-size;
   font-weight: $font-weight;
   font-style: $font-style;
