@@ -15,7 +15,7 @@ export default function useMutationObserver(
   options: MutationObserverInit | void | null,
   callback: ?Callback,
 ) {
-  if (!window) return;
+  if (typeof window === 'undefined') return;
   const [observer] = useState(new MutationObserver(gcb));
   useEffect(() => {
     if (!target || !options) return undefined;

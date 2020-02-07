@@ -101,6 +101,7 @@ export interface IAuthProvider {
     _query: { [string]: string | void },
   ): boolean | Symbol | Promise<boolean | Symbol>;
   isAuthenticated(): boolean;
+  +ready?: Promise<mixed> | mixed;
 }
 
 export type DashboardInitialPropsContext = InitialPropsContext & {

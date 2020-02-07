@@ -311,6 +311,7 @@ export default function createDashboardHOC({
       InitialProps<$Shape<I> | {}>,
     > = async ctx => {
       const authProvider = new AuthProvider(ctx);
+      await authProvider.ready;
       const { pathname, query, asPath } = ctx;
       const authenticated = await authProvider.isAuthorizedForRoute(
         pathname,

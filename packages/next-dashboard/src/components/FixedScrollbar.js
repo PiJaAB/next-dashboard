@@ -23,6 +23,7 @@ const update: Update = ({
     (document.documentElement && document.documentElement.clientHeight);
   if (!vh) return;
   const rect = containerEl.getClientRects()[0];
+  if (!rect) return;
   setWidth(`${containerEl.scrollWidth}px`);
   if (rect.bottom > vh) {
     setHide(false);
@@ -59,7 +60,7 @@ const FixedScrollbar = ({ className, children, ...props }: Props) => {
   }, [containerRef, fakeContainerRef]);
 
   useMutationObserver(
-    document.documentElement,
+    typeof document !== 'undefined' ? document.documentElement : null,
     {
       subtree: true,
       childList: true,
