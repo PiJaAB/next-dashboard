@@ -32,7 +32,7 @@ export default function createPersistentState<
   version?: number,
 ): {
   getInitialState(ctx: InitialPropsContext | string): PersistentState | null,
-  persist(state: PersistentState): void,
+  persist(state: PersistentState, ctx?: InitialPropsContext | string): void,
   serialize(state: PersistentState): string,
 } {
   let latestState: PersistentState | void;
@@ -58,8 +58,16 @@ export default function createPersistentState<
       }
     },
 
-    persist(state: PersistentState) {
-      if (typeof window === 'undefined' || !window.setTimeout) return;
+    persist(state: PersistentState, ctx?: InitialPropsContext | string) {
+      if (typeof window === 'undefined' || !window.setTimeout) {
+        if (!ctx || typeof ctx === 'string') return;
+        const { res } = ctx;
+        if (!res) return;
+        if (res.headersSent) return;
+        // $FlowIssue: Express.js has res.cookie...
+        res.cookie(cookieName, btoa(JSON.stringify({ version, data: state })));
+        return;
+      }
       if (!debouncing) {
         try {
           window.document.cookie = `${cookieName}=${escape(

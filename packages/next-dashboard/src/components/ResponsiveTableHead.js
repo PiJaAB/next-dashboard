@@ -21,6 +21,7 @@ const HEADER_OFFSET = 80; // Header is 80px tall
 
 const update = (el: HTMLTableSectionElement) => {
   const rect = el.getClientRects()[0];
+  if (!rect) return;
   const top = rect.top - HEADER_OFFSET;
   if (top < 0) {
     const { style } = el;
@@ -53,7 +54,7 @@ const TableHead = <E: {}, C>({
   }, [headRef]);
 
   useMutationObserver(
-    document.documentElement,
+    typeof document !== 'undefined' ? document.documentElement : null,
     {
       subtree: true,
       childList: true,
