@@ -8,10 +8,10 @@ import LayoutContext from '../utils/layoutContext';
 
 type Props = { children?: React$Node, icon?: React$Node };
 
-function rotateTheme(cur: Theme, themes: $ReadOnlyArray<Theme>): string {
+function rotateTheme(cur: Theme, themes: $ReadOnlyArray<Theme>): Theme {
   return themes[
     (themes.findIndex(t => t.class === cur.class) + 1) % themes.length
-  ].class;
+  ];
 }
 
 export default function ThemeSelector({ children, icon }: Props): React$Node {
@@ -20,7 +20,7 @@ export default function ThemeSelector({ children, icon }: Props): React$Node {
   return (
     <NavEntry
       icon={icon || 'palette'}
-      onClick={() => setState<string>('theme', rotateTheme(theme, themes))}
+      onClick={() => setState<Theme>('theme', rotateTheme(theme, themes))}
     >
       {children || `Theme: ${theme.name}`}
     </NavEntry>

@@ -15,7 +15,9 @@ import displayNameOf from './displayNameOf';
 
 import createPersistentState from './persistentState';
 import { SilentError } from './silentError';
-import DashboardContext, { useCreateDashboardContext } from './dashboardContext';
+import DashboardContext, {
+  useCreateDashboardContext,
+} from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
 import errorReporter from './errorReporter';
 import logger from './logger';

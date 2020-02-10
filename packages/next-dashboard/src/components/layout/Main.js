@@ -4,7 +4,9 @@
 import React, { useEffect, useContext } from 'react';
 import Head from 'next/head';
 
-import LayoutContext, { useCreateLayoutContext } from '../../utils/layoutContext';
+import LayoutContext, {
+  useCreateLayoutContext,
+} from '../../utils/layoutContext';
 import DashboardContext, { LAYOUT } from '../../utils/dashboardContext';
 import toClassName from '../../utils/toClassName';
 import useScrollFix from '../../utils/useScrollFix';
