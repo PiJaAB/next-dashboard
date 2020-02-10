@@ -74,9 +74,16 @@ export function useCreateLayoutContext(
     }
     return [get, set];
   }, [persistentState, setPersistentState, persist]);
-  const useModalActive = useState(false);
+  const [modalActive, setModalActive] = useState(false);
 
-  const inputs = [getState, setState, ...useModalActive, persist, ctx.themes];
+  const inputs = [
+    getState,
+    setState,
+    modalActive,
+    setModalActive,
+    persist,
+    ctx.themes,
+  ];
 
   const context = useMemo(() => buildContext(...inputs), inputs);
 
