@@ -1,8 +1,10 @@
 // @flow
-import React, { useState, useEffect, type Context } from 'react';
+import React, { useState, useMemo, type Context } from 'react';
 
 import type { Theme } from './types';
 import type { IDashboardContext } from './dashboardContext';
+
+const DEFAULT_THEME: Theme = { name: 'Default', class: 'default' };
 
 export interface ILayoutContext {
   getState<T>(key: string, defaultValue: T): T;
@@ -18,8 +20,8 @@ const defaultContext: ILayoutContext = {
     return defaultValue;
   },
   setState: (_, __) => {},
-  theme: { name: 'Default', class: 'default' },
-  themes: [{ name: 'Default', class: 'default' }],
+  theme: DEFAULT_THEME,
+  themes: [DEFAULT_THEME],
   modalActive: false,
   setModalActive: () => {},
 };
@@ -29,34 +31,17 @@ export type LayoutState = {
 };
 
 function buildContext(
-  usePersistentState: [
-    LayoutState,
-    ((LayoutState => LayoutState) | LayoutState) => void,
-  ],
-  useModalActive: [boolean, ((boolean => boolean) | boolean) => void],
+  getState: <T>(key: string, defaultValue: T) => T,
+  setState: <T>(key: string, value: T) => void,
+  modalActive: boolean,
+  setModalActive: ((boolean => boolean) | boolean) => void,
   persist: LayoutState => void,
-  ctx: IDashboardContext,
+  themes: $ReadOnlyArray<Theme>,
 ): ILayoutContext {
-  const [persistentState, setPersistentState] = usePersistentState;
-  const [modalActive, setModalActive] = useModalActive;
-  function getState<T>(key: string, defaultValue: T): T {
-    if (typeof persistentState[key] !== 'undefined')
-      return persistentState[key];
-    return defaultValue;
-  }
-  function setState<T>(key: string, value: T) {
-    const newState: LayoutState = {
-      ...persistentState,
-      [key]: value,
-    };
-    setPersistentState(newState);
-    persist(newState);
-  }
-
-  const { themes } = ctx;
-
-  const theme: Theme = themes.find(t => t.class === persistentState.theme) ||
-    themes[0] || { name: 'Default', class: 'default' };
+  const theme: Theme =
+    themes.find(t => t.class === getState('theme', DEFAULT_THEME).class) ||
+    themes[0] ||
+    DEFAULT_THEME;
   return {
     getState,
     setState,
@@ -72,15 +57,28 @@ export function useNewLayoutContext(
   persist: LayoutState => void,
   ctx: IDashboardContext,
 ): ILayoutContext {
-  const usePersistentState = useState(initialState);
+  const [persistentState, setPersistentState] = useState(initialState);
+  const [getState, setState] = useMemo(() => {
+    function set<T>(key: string, value: T) {
+      const newState: LayoutState = {
+        ...persistentState,
+        [key]: value,
+      };
+      setPersistentState(newState);
+      persist(newState);
+    }
+    function get<T>(key: string, defaultValue: T): T {
+      if (typeof persistentState[key] !== 'undefined')
+        return persistentState[key];
+      return defaultValue;
+    }
+    return [get, set];
+  }, [persistentState, setPersistentState, persist]);
   const useModalActive = useState(false);
-  const [context, setContext] = useState(() =>
-    buildContext(usePersistentState, useModalActive, persist, ctx),
-  );
 
-  useEffect(() => {
-    setContext(buildContext(usePersistentState, useModalActive, persist, ctx));
-  }, [...usePersistentState, ...useModalActive, persist, ctx.themes]);
+  const inputs = [getState, setState, ...useModalActive, persist, ctx.themes];
+
+  const context = useMemo(() => buildContext(...inputs), inputs);
 
   return context;
 }

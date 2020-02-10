@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
@@ -228,24 +228,14 @@ export default function createDashboardHOC({
         $ReadOnlyArray<SiteMessageType>,
       >(siteMessages);
 
-      const [firstRender, setFirstRender] = useState(true);
-      useEffect(() => setFirstRender(false));
-
-      const [
-        [registerSiteMessage, dismissSiteMessage],
-        setSiteMessageManipulators,
-      ] = useState<
+      const [registerSiteMessage, dismissSiteMessage] = useMemo<
         [
           (SiteMessageType | Error) => void,
           (siteMessage: SiteMessageType) => void,
         ],
-      >(() => makeSiteMessageManipulators(setLocalSiteMessages));
-
-      useEffect(() => {
-        setSiteMessageManipulators(
-          makeSiteMessageManipulators(setLocalSiteMessages),
-        );
-      }, [setLocalSiteMessages]);
+      >(() => makeSiteMessageManipulators(setLocalSiteMessages), [
+        setLocalSiteMessages,
+      ]);
 
       useEffect(() => {
         errorReporter.on('error', registerSiteMessage);
@@ -294,7 +284,7 @@ export default function createDashboardHOC({
       }
       const { __ERRORED__: _, ...rest } = restProps;
       let RenderComp = Comp;
-      if (__PERFORM_SSR__ != null && !__PERFORM_SSR__ && firstRender) {
+      if (__PERFORM_SSR__ != null && !__PERFORM_SSR__ && initial) {
         RenderComp = ClientAuthComp;
       }
 

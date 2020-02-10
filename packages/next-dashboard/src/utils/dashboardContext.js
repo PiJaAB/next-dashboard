@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useEffect, type Context } from 'react';
+import React, { useState, useMemo, type Context } from 'react';
 
 import type {
   Branding,
@@ -97,100 +97,6 @@ function buildContext(
   };
 }
 
-function usePersistentState(
-  initialState: DashboardState,
-  persist: DashboardState => void,
-): [
-  <T>(key: string, defaultValue: T) => T,
-  <T>(key: string, value: T) => void,
-] {
-  const [persistentState, setPersistentState] = useState(initialState);
-  const [getState, setGetState] = useState(
-    () => /*::<T>*/ (key: string, defaultValue: T) => {
-      if (typeof persistentState[key] !== 'undefined')
-        return persistentState[key];
-      return defaultValue;
-    },
-  );
-  const [setState, setSetState] = useState(
-    () => /*::<T>*/ (key: string, value: T) => {
-      const newState: DashboardState = {
-        ...persistentState,
-        [key]: value,
-      };
-      setPersistentState(newState);
-      persist(newState);
-    },
-  );
-
-  useEffect(() => {
-    setGetState(() => /*::<T>*/ (key: string, defaultValue: T) => {
-      if (typeof persistentState[key] !== 'undefined')
-        return persistentState[key];
-      return defaultValue;
-    });
-  }, [persistentState]);
-
-  useEffect(() => {
-    setSetState(() => /*::<T>*/ (key: string, value: T) => {
-      const newState: DashboardState = {
-        ...persistentState,
-        [key]: value,
-      };
-      setPersistentState(newState);
-      persist(newState);
-    });
-  }, [persistentState, setPersistentState, persist]);
-
-  return [getState, setState];
-}
-
-const useAuthProvider = (
-  AuthProvider: Class<IAuthProvider>,
-  authSerialized: string,
-) => {
-  const [authProvider, setAuthProvider] = useState<IAuthProvider>(
-    () => new AuthProvider(authSerialized),
-  );
-  const [getAuthProvider, setGetAuthProvider] = useState(
-    () => <A: IAuthProvider>(C: Class<A>): A | void => {
-      if (authProvider === undefined) return undefined;
-      if (authProvider instanceof C) return authProvider;
-      logger.error(
-        new Error('AuthProvider mismatch, instance not of requested class'),
-      );
-      return undefined;
-    },
-  );
-  const [isAuthenticated, setIsAuthenticated] = useState(() => () =>
-    authProvider.isAuthenticated(),
-  );
-
-  useEffect(() => {
-    if (
-      authProvider.serialize() === authSerialized &&
-      authProvider instanceof AuthProvider
-    ) {
-      return;
-    }
-    setAuthProvider(new AuthProvider(authSerialized));
-  }, [AuthProvider, authSerialized]);
-
-  useEffect(() => {
-    setGetAuthProvider(() => <A: IAuthProvider>(C: Class<A>): A | void => {
-      if (authProvider === undefined) return undefined;
-      if (authProvider instanceof C) return authProvider;
-      logger.error(
-        new Error('AuthProvider mismatch, instance not of requested class'),
-      );
-      return undefined;
-    });
-    setIsAuthenticated(() => () => authProvider.isAuthenticated());
-  }, [authProvider]);
-
-  return [getAuthProvider, isAuthenticated];
-};
-
 export function useNewDashboardContext(
   initialDashboardState: DashboardState,
   initialLayoutState: LayoutState,
@@ -205,49 +111,40 @@ export function useNewDashboardContext(
   authSerialized: string,
   AuthProvider: Class<IAuthProvider>,
 ): IDashboardContext {
-  const [getState, setState] = usePersistentState(
-    initialDashboardState,
-    persistDashboard,
-  );
-  const [getAuthProvider, isAuthenticated] = useAuthProvider(
-    AuthProvider,
-    authSerialized,
-  );
-  const [context, setContext] = useState(() =>
-    buildContext(
-      initialLayoutState,
-      persistLayout,
-      getState,
-      setState,
-      themes,
-      siteMessages,
-      registerSiteMessage,
-      dismissSiteMessage,
-      branding,
-      Comp,
-      getAuthProvider,
-      isAuthenticated,
-    ),
-  );
+  const [persistentState, setPersistentState] = useState(initialDashboardState);
+  const [getState, setState] = useMemo(() => {
+    function set<T>(key: string, value: T) {
+      const newState: DashboardState = {
+        ...persistentState,
+        [key]: value,
+      };
+      setPersistentState(newState);
+      persistDashboard(newState);
+    }
+    function get<T>(key: string, defaultValue: T): T {
+      if (typeof persistentState[key] !== 'undefined')
+        return persistentState[key];
+      return defaultValue;
+    }
+    return [get, set];
+  }, [persistentState, setPersistentState, persistDashboard]);
 
-  useEffect(() => {
-    setContext(
-      buildContext(
-        initialLayoutState,
-        persistLayout,
-        getState,
-        setState,
-        themes,
-        siteMessages,
-        registerSiteMessage,
-        dismissSiteMessage,
-        branding,
-        Comp,
-        getAuthProvider,
-        isAuthenticated,
-      ),
-    );
-  }, [
+  const [getAuthProvider, isAuthenticated] = useMemo(() => {
+    const authProvider = new AuthProvider(authSerialized);
+    function getAP<A: IAuthProvider>(C: Class<A>): A | void {
+      if (authProvider === undefined) return undefined;
+      if (authProvider instanceof C) return authProvider;
+      logger.error(
+        new Error('AuthProvider mismatch, instance not of requested class'),
+      );
+      return undefined;
+    }
+
+    const isAuth = () => authProvider.isAuthenticated();
+    return [getAP, isAuth];
+  }, [AuthProvider, authSerialized]);
+
+  const inputs = [
     initialLayoutState,
     persistLayout,
     getState,
@@ -260,7 +157,8 @@ export function useNewDashboardContext(
     Comp,
     getAuthProvider,
     isAuthenticated,
-  ]);
+  ];
+  const context = useMemo(() => buildContext(...inputs), inputs);
 
   return context;
 }
