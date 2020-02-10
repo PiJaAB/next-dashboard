@@ -23,11 +23,7 @@ type Props = {
 const Modal = ({ ...props }: Props) => {
   const context = useContext(LayoutContext);
   const initial = useInitialFlag();
-  if (typeof window === 'undefined') return null;
-
-  const modalRoot = document.getElementById('dashboard-modal-root');
-
-  if (!modalRoot) return null;
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const {
     id,
@@ -41,8 +37,6 @@ const Modal = ({ ...props }: Props) => {
     children,
     footer,
   } = props;
-
-  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const click = (event: MouseEvent) => {
     if (!active) return;
@@ -71,6 +65,12 @@ const Modal = ({ ...props }: Props) => {
       document.removeEventListener('keydown', escape);
     };
   }, [active]);
+
+  if (typeof window === 'undefined') return null;
+
+  const modalRoot = document.getElementById('dashboard-modal-root');
+
+  if (!modalRoot) return null;
 
   if (initial) return null;
   return ReactDOM.createPortal(

@@ -31,6 +31,7 @@ const renderBars = barChartKeysAndColor => {
     if (Array.isArray(barChartKeysAndColor)) {
       return barChartKeysAndColor.map(({ key, color, stackId }, index) => (
         <Bar
+          key={key}
           dataKey={key}
           barSize={12}
           stackId={stackId}
