@@ -15,7 +15,7 @@ import displayNameOf from './displayNameOf';
 
 import createPersistentState from './persistentState';
 import { SilentError } from './silentError';
-import DashboardContext, { useNewDashboardContext } from './dashboardContext';
+import DashboardContext, { useCreateDashboardContext } from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
 import errorReporter from './errorReporter';
 import logger from './logger';
@@ -254,7 +254,7 @@ export default function createDashboardHOC({
         }
       }, [initial]);
 
-      const context = useNewDashboardContext(
+      const context = useCreateDashboardContext(
         __INITIAL_DASHBOARD_STATE__,
         __INITIAL_LAYOUT_STATE__,
         persistDashboard,

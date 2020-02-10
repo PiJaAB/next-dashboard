@@ -97,7 +97,7 @@ function buildContext(
   };
 }
 
-export function useNewDashboardContext(
+export function useCreateDashboardContext(
   initialDashboardState: DashboardState,
   initialLayoutState: LayoutState,
   persistDashboard: DashboardState => void,

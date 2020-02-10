@@ -52,7 +52,7 @@ function buildContext(
   };
 }
 
-export function useNewLayoutContext(
+export function useCreateLayoutContext(
   initialState: LayoutState,
   persist: LayoutState => void,
   ctx: IDashboardContext,

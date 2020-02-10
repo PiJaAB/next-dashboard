@@ -4,7 +4,7 @@
 import React, { useEffect, useContext } from 'react';
 import Head from 'next/head';
 
-import LayoutContext, { useNewLayoutContext } from '../../utils/layoutContext';
+import LayoutContext, { useCreateLayoutContext } from '../../utils/layoutContext';
 import DashboardContext, { LAYOUT } from '../../utils/dashboardContext';
 import toClassName from '../../utils/toClassName';
 import useScrollFix from '../../utils/useScrollFix';
@@ -38,7 +38,7 @@ function DashboardLayout({
 }: Props): React$Element<typeof LayoutContext.Provider> {
   const ctx = useContext(DashboardContext);
   const { [LAYOUT]: ctxProps } = ctx;
-  const lctx = useNewLayoutContext(
+  const lctx = useCreateLayoutContext(
     ctxProps.initialState,
     ctxProps.persist,
     ctx,
