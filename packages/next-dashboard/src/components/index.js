@@ -26,3 +26,5 @@ export { default as VerticalBarChart } from './VerticalBarChart';
 export { default as FeatureBox } from './FeatureBox';
 export { default as DropdownView } from './DropdownView';
 export { default as Fader } from './Fader';
+export { default as Form, FormContext } from './Form';
+export { default as FormElement } from './FormElement';

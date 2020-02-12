@@ -32,15 +32,21 @@ select {
   outline: none;
   border: none;
   border-radius: 5px;
-  @include var('background-color', 'background');
-  &::placeholder {
-    @include var('color', 'text-rgb', 'rgba', 0.5);
-  }
+  @include var('background-color', 'background-dark');
   &:focus {
-    @include var('background-color', 'background-dark');
+    @include var('background-color', 'background-darker');
   }
   &:last-child {
     margin-bottom: 0;
+  }
+  .page-content & {
+    @include var('background-color', 'background');
+    &:focus {
+      @include var('background-color', 'background-dark');
+    }
+  }
+  &::placeholder {
+    @include var('color', 'text-rgb', 'rgba', 0.5);
   }
 }
 
@@ -51,6 +57,16 @@ input[type="radio"] {
     }
     &:after {
       border-radius: 50%;
+    }
+  }
+}
+input[type="checkbox"] {
+  +label {
+    &:before {
+      border-radius: 5px;
+    }
+    &:after {
+      border-radius: 2.5px;
     }
   }
 }
@@ -75,8 +91,10 @@ input[type="radio"] {
       left: 0;
       height: 20px;
       width: 20px;
-      border-radius: 5px;
       @include var('background-color', 'background-dark');
+      .page-content & {
+        @include var('background-color', 'background');
+      }
     }
     &:after {
       display: none;
@@ -85,7 +103,6 @@ input[type="radio"] {
       left: 5px;
       height: 10px;
       width: 10px;
-      border-radius: 2.5px;
       background-color: $primary-color;
     }
   }
@@ -94,6 +111,9 @@ input[type="radio"] {
     +label {
       &:before {
         @include var('background-color', 'background-darker');
+        .page-content & {
+          @include var('background-color', 'background-dark');
+        }
       }
     }
   }
