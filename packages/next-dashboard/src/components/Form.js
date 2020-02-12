@@ -43,6 +43,7 @@ FormContext.displayName = 'Form Context';
 
 export default class Form extends React.PureComponent<Props, State> {
   validators: { [string]: (any) => boolean | void };
+
   getters: { [string]: <T>() => T };
 
   constructor() {

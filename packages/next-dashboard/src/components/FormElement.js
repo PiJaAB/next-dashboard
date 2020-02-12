@@ -32,7 +32,7 @@ export default function FormElement<T, U = T>({
       // $FlowIssue: This is impossible to type without runtime typechecking
       getValue: () => valueParser(value),
     });
-  }, [validate, value])
+  }, [validate, value]);
 
   return children(
     value,
