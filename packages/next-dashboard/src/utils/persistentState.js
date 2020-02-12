@@ -32,12 +32,15 @@ export default function createPersistentState<
   version?: number,
 ): {
   getInitialState(ctx: InitialPropsContext | string): PersistentState | null,
-  persist(state: PersistentState, ctx?: InitialPropsContext | string): void,
+  persist(
+    state: PersistentState,
+    noDebounce?: boolean,
+    ctx?: InitialPropsContext | string,
+  ): void,
   serialize(state: PersistentState): string,
 } {
   let latestState: PersistentState | void;
-  let debouncing: boolean = false;
-
+  let debouncing: ?TimeoutID;
   return {
     getInitialState(ctx: InitialPropsContext | string): PersistentState | null {
       try {
@@ -58,7 +61,11 @@ export default function createPersistentState<
       }
     },
 
-    persist(state: PersistentState, ctx?: InitialPropsContext | string) {
+    persist(
+      state: PersistentState,
+      noDebounce?: boolean,
+      ctx?: InitialPropsContext | string,
+    ) {
       if (typeof window === 'undefined' || !window.setTimeout) {
         if (!ctx || typeof ctx === 'string') return;
         const { res } = ctx;
@@ -68,7 +75,8 @@ export default function createPersistentState<
         res.cookie(cookieName, btoa(JSON.stringify({ version, data: state })));
         return;
       }
-      if (!debouncing) {
+      if (debouncing == null || noDebounce) {
+        if (debouncing != null) clearTimeout(debouncing);
         try {
           window.document.cookie = `${cookieName}=${escape(
             btoa(JSON.stringify({ version, data: state })),
@@ -76,12 +84,11 @@ export default function createPersistentState<
         } catch (err) {
           errorReporter.emit('error', err);
         }
-        debouncing = true;
         const debounce = () => {
           const curState = latestState;
           latestState = undefined;
           if (curState === undefined) {
-            debouncing = false;
+            debouncing = null;
             return;
           }
           try {
@@ -91,9 +98,9 @@ export default function createPersistentState<
           } catch (err) {
             errorReporter.emit('error', err);
           }
-          window.setTimeout(debounce, 100);
+          debouncing = window.setTimeout(debounce, 100);
         };
-        window.setTimeout(debounce, 100);
+        debouncing = window.setTimeout(debounce, 100);
       } else {
         latestState = state;
       }

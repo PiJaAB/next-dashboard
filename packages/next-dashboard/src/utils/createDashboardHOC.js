@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
@@ -15,19 +15,22 @@ import displayNameOf from './displayNameOf';
 
 import createPersistentState from './persistentState';
 import { SilentError } from './silentError';
-import DashboardContext, { type IDashboardContext } from './dashboardContext';
+import DashboardContext, {
+  useCreateDashboardContext,
+} from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
 import errorReporter from './errorReporter';
 import logger from './logger';
 
-type PersistentState = {
+type PersistDashboardentState = {
   [string]: any,
 };
 
 type InitialNormProps<I> = {
   ...I,
   __ERRORED__: false,
-  __INITIAL_STATE__: PersistentState,
+  __INITIAL_DASHBOARD_STATE__: PersistDashboardentState,
+  __INITIAL_LAYOUT_STATE__: PersistDashboardentState,
   __ERR_PROPS__: void,
   __AUTH_SERIALIZED__: string,
   __PERFORM_SSR__: boolean | void,
@@ -35,7 +38,8 @@ type InitialNormProps<I> = {
 
 type InitialErrProps = {
   __ERRORED__: true,
-  __INITIAL_STATE__: PersistentState,
+  __INITIAL_DASHBOARD_STATE__: PersistDashboardentState,
+  __INITIAL_LAYOUT_STATE__: PersistDashboardentState,
   __ERR_PROPS__: {} | void,
   __AUTH_SERIALIZED__: string,
   __PERFORM_SSR__: boolean | void,
@@ -44,7 +48,8 @@ type InitialErrProps = {
 type InitialUnified<I> = {
   ...I,
   __ERRORED__: boolean,
-  __INITIAL_STATE__: PersistentState | void,
+  __INITIAL_DASHBOARD_STATE__: PersistDashboardentState | void,
+  __INITIAL_LAYOUT_STATE__: PersistDashboardentState | void,
   __ERR_PROPS__: {} | void,
   __AUTH_SERIALIZED__: string,
   __PERFORM_SSR__: boolean | void,
@@ -124,10 +129,75 @@ export default function createDashboardHOC({
     name: 'PiJa Next',
   };
 
-  const { getInitialState, persist } = createPersistentState<{}>(
-    'dashboardState',
-  );
+  const {
+    getInitialState: getInitialDashboardState,
+    persist: persistDashboard,
+  } = createPersistentState<{}>('dashboardState');
+  const {
+    getInitialState: getInitialLayoutState,
+    persist: persistLayout,
+  } = createPersistentState<{}>('dashboardLayoutState');
   let siteMessages: $ReadOnlyArray<SiteMessageType> = [];
+
+  function makeSiteMessageManipulators(
+    setLocalSiteMessages: (
+      | (($ReadOnlyArray<SiteMessageType>) => $ReadOnlyArray<SiteMessageType>)
+      | $ReadOnlyArray<SiteMessageType>,
+    ) => void,
+  ): [
+    (SiteMessageType | Error) => void,
+    (siteMessage: SiteMessageType) => void,
+  ] {
+    const registerSiteMessage = (siteMessage: SiteMessageType | Error) => {
+      if (siteMessage instanceof Error) {
+        if (siteMessage instanceof SilentError) return;
+        logger.error(siteMessage);
+        registerSiteMessage({
+          title: siteMessage.constructor.name,
+          status: 'error',
+          message: siteMessage.message,
+        });
+        return;
+      }
+      const siteMessageAdder: (
+        $ReadOnlyArray<SiteMessageType>,
+      ) => $ReadOnlyArray<SiteMessageType> = curSiteMessages => {
+        const existingIndex = curSiteMessages.findIndex(m =>
+          compareSitemessages(m, siteMessage),
+        );
+        let newSiteMessages: SiteMessageType[];
+        if (existingIndex > -1) {
+          newSiteMessages = [...curSiteMessages];
+          const updatedMessage = {
+            ...curSiteMessages[existingIndex],
+            count:
+              (curSiteMessages[existingIndex].count != null
+                ? curSiteMessages[existingIndex].count
+                : 1) + 1,
+          };
+          newSiteMessages[existingIndex] = updatedMessage;
+        } else {
+          newSiteMessages = [...curSiteMessages, siteMessage];
+        }
+        siteMessages = newSiteMessages;
+        return newSiteMessages;
+      };
+
+      setLocalSiteMessages(siteMessageAdder);
+    };
+    function dismissSiteMessage(siteMessage: SiteMessageType) {
+      const siteMessageDismisser: (
+        $ReadOnlyArray<SiteMessageType>,
+      ) => $ReadOnlyArray<SiteMessageType> = curSiteMessages => {
+        const newMessages = curSiteMessages.filter(
+          m => !compareSitemessages(m, siteMessage),
+        );
+        return newMessages;
+      };
+      setLocalSiteMessages(siteMessageDismisser);
+    }
+    return [registerSiteMessage, dismissSiteMessage];
+  }
 
   function withDashboard<P: {}, I: {} = {}>(
     Comp: DashboardComponent<P, I>,
@@ -150,88 +220,24 @@ export default function createDashboardHOC({
 
     function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
       const {
-        __INITIAL_STATE__,
+        __INITIAL_DASHBOARD_STATE__,
+        __INITIAL_LAYOUT_STATE__,
         __AUTH_SERIALIZED__,
         __PERFORM_SSR__,
         ...restProps
       } = fullProps;
-      const authProvider = new AuthProvider(__AUTH_SERIALIZED__);
-      const [
-        persistentState,
-        updatePersistentState,
-      ] = useState<PersistentState>(__INITIAL_STATE__);
-      const [localSiteMessages, setLocalSiteMessages] = useState(siteMessages);
+      const [localSiteMessages, setLocalSiteMessages] = useState<
+        $ReadOnlyArray<SiteMessageType>,
+      >(siteMessages);
 
-      const [firstRender, setFirstRender] = useState(true);
-      useEffect(() => setFirstRender(false));
-
-      function getPersistentState<T>(key: string, defaultValue: T): T {
-        if (typeof persistentState[key] !== 'undefined')
-          return persistentState[key];
-        return defaultValue;
-      }
-
-      function setPersistentState<T>(key: string, value: T) {
-        updatePersistentState((curState: PersistentState): PersistentState => {
-          if (curState[key] === value) return curState;
-          const newPersistentState: PersistentState = {
-            ...curState,
-            [key]: value,
-          };
-          persist(newPersistentState);
-          return newPersistentState;
-        });
-      }
-
-      function registerSiteMessage(siteMessage: SiteMessageType | Error) {
-        if (siteMessage instanceof Error) {
-          if (siteMessage instanceof SilentError) return;
-          logger.error(siteMessage);
-          registerSiteMessage({
-            title: siteMessage.constructor.name,
-            status: 'error',
-            message: siteMessage.message,
-          });
-          return;
-        }
-        const siteMessageAdder: (
-          $ReadOnlyArray<SiteMessageType>,
-        ) => $ReadOnlyArray<SiteMessageType> = curSiteMessages => {
-          const existingIndex = curSiteMessages.findIndex(m =>
-            compareSitemessages(m, siteMessage),
-          );
-          let newSiteMessages: SiteMessageType[];
-          if (existingIndex > -1) {
-            newSiteMessages = [...curSiteMessages];
-            const updatedMessage = {
-              ...curSiteMessages[existingIndex],
-              count:
-                (curSiteMessages[existingIndex].count != null
-                  ? curSiteMessages[existingIndex].count
-                  : 1) + 1,
-            };
-            newSiteMessages[existingIndex] = updatedMessage;
-          } else {
-            newSiteMessages = [...curSiteMessages, siteMessage];
-          }
-          siteMessages = newSiteMessages;
-          return newSiteMessages;
-        };
-
-        setLocalSiteMessages(siteMessageAdder);
-      }
-
-      function dismissSiteMessage(siteMessage: SiteMessageType) {
-        const siteMessageDismisser: (
-          $ReadOnlyArray<SiteMessageType>,
-        ) => $ReadOnlyArray<SiteMessageType> = curSiteMessages => {
-          const newMessages = curSiteMessages.filter(
-            m => !compareSitemessages(m, siteMessage),
-          );
-          return newMessages;
-        };
-        setLocalSiteMessages(siteMessageDismisser);
-      }
+      const [registerSiteMessage, dismissSiteMessage] = useMemo<
+        [
+          (SiteMessageType | Error) => void,
+          (siteMessage: SiteMessageType) => void,
+        ],
+      >(() => makeSiteMessageManipulators(setLocalSiteMessages), [
+        setLocalSiteMessages,
+      ]);
 
       useEffect(() => {
         errorReporter.on('error', registerSiteMessage);
@@ -250,34 +256,20 @@ export default function createDashboardHOC({
         }
       }, [initial]);
 
-      const [modalActive, setModalActive] = useState(false);
-
-      const theme: Theme = themes.find(
-        t => t.class === persistentState.theme,
-      ) ||
-        themes[0] || { name: 'Default', class: 'default' };
-      const context: IDashboardContext = {
-        isAuthenticated: () => authProvider.isAuthenticated(),
-        getState: getPersistentState,
-        setState: setPersistentState,
+      const context = useCreateDashboardContext(
+        __INITIAL_DASHBOARD_STATE__,
+        __INITIAL_LAYOUT_STATE__,
+        persistDashboard,
+        persistLayout,
+        themes,
+        localSiteMessages,
         registerSiteMessage,
         dismissSiteMessage,
-        siteMessages: localSiteMessages,
         branding,
-        themes,
-        theme,
         Comp,
-        modalActive,
-        setModalActive,
-        getAuthProvider<A: IAuthProvider>(C: Class<A>): A | void {
-          if (authProvider === undefined) return undefined;
-          if (authProvider instanceof C) return authProvider;
-          logger.error(
-            new Error('AuthProvider mismatch, instance not of requested class'),
-          );
-          return undefined;
-        },
-      };
+        __AUTH_SERIALIZED__,
+        AuthProvider,
+      );
       // eslint-disable-next-line no-underscore-dangle
       if (restProps.__ERRORED__) {
         const { __ERR_PROPS__: errProps } = restProps;
@@ -294,7 +286,7 @@ export default function createDashboardHOC({
       }
       const { __ERRORED__: _, ...rest } = restProps;
       let RenderComp = Comp;
-      if (__PERFORM_SSR__ != null && !__PERFORM_SSR__ && firstRender) {
+      if (__PERFORM_SSR__ != null && !__PERFORM_SSR__ && initial) {
         RenderComp = ClientAuthComp;
       }
 
@@ -335,7 +327,8 @@ export default function createDashboardHOC({
                 typeof errorConf.Component.getInitialProps === 'function'
                   ? await errorConf.Component.getInitialProps(ctx)
                   : null) || {},
-              __INITIAL_STATE__: getInitialState(ctx) || {},
+              __INITIAL_DASHBOARD_STATE__: getInitialDashboardState(ctx) || {},
+              __INITIAL_LAYOUT_STATE__: getInitialLayoutState(ctx) || {},
               __ERRORED__: true,
               __AUTH_SERIALIZED__: authProvider.serialize(),
               __PERFORM_SSR__: isSSR ? performSSR : undefined,
@@ -351,7 +344,8 @@ export default function createDashboardHOC({
               typeof errorConf.Component.getInitialProps === 'function'
                 ? await errorConf.Component.getInitialProps(ctx)
                 : null) || {},
-            __INITIAL_STATE__: getInitialState(ctx) || {},
+            __INITIAL_DASHBOARD_STATE__: getInitialDashboardState(ctx) || {},
+            __INITIAL_LAYOUT_STATE__: getInitialLayoutState(ctx) || {},
             __ERRORED__: true,
             __AUTH_SERIALIZED__: authProvider.serialize(),
             __PERFORM_SSR__: isSSR ? performSSR : undefined,
@@ -372,7 +366,8 @@ export default function createDashboardHOC({
               (typeof errorConf.Component.getInitialProps === 'function'
                 ? await errorConf.Component.getInitialProps(errCtx)
                 : null) || {},
-            __INITIAL_STATE__: getInitialState(ctx) || {},
+            __INITIAL_DASHBOARD_STATE__: getInitialDashboardState(ctx) || {},
+            __INITIAL_LAYOUT_STATE__: getInitialLayoutState(ctx) || {},
             __ERRORED__: true,
             __AUTH_SERIALIZED__: authProvider.serialize(),
             __PERFORM_SSR__: isSSR ? performSSR : undefined,
@@ -386,7 +381,8 @@ export default function createDashboardHOC({
         return ({
           ...CompInit,
           __ERRORED__: false,
-          __INITIAL_STATE__: getInitialState(ctx) || {},
+          __INITIAL_DASHBOARD_STATE__: getInitialDashboardState(ctx) || {},
+          __INITIAL_LAYOUT_STATE__: getInitialLayoutState(ctx) || {},
           __ERR_PROPS__: undefined,
           __AUTH_SERIALIZED__: authProvider.serialize(),
           __PERFORM_SSR__: isSSR ? performSSR : undefined,
@@ -394,7 +390,8 @@ export default function createDashboardHOC({
       }
       return ({
         __ERRORED__: false,
-        __INITIAL_STATE__: getInitialState(ctx) || {},
+        __INITIAL_DASHBOARD_STATE__: getInitialDashboardState(ctx) || {},
+        __INITIAL_LAYOUT_STATE__: getInitialLayoutState(ctx) || {},
         __ERR_PROPS__: undefined,
         __AUTH_SERIALIZED__: authProvider.serialize(),
         __PERFORM_SSR__: isSSR ? performSSR : undefined,

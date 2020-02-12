@@ -4,7 +4,10 @@
 import React, { useEffect, useContext } from 'react';
 import Head from 'next/head';
 
-import DashboardContext from '../../utils/dashboardContext';
+import LayoutContext, {
+  useCreateLayoutContext,
+} from '../../utils/layoutContext';
+import DashboardContext, { LAYOUT } from '../../utils/dashboardContext';
 import toClassName from '../../utils/toClassName';
 import useScrollFix from '../../utils/useScrollFix';
 import Content from './Content';
@@ -34,23 +37,25 @@ function DashboardLayout({
   header,
   sidebar,
   footer,
-}: Props): React$Element<'div'> {
-  const context = useContext(DashboardContext);
-  if (!context) {
-    throw new TypeError('Dashboard Layout needs to be in a Dashboard Context');
-  }
-
+}: Props): React$Element<typeof LayoutContext.Provider> {
+  const ctx = useContext(DashboardContext);
+  const { [LAYOUT]: ctxProps } = ctx;
+  const lctx = useCreateLayoutContext(
+    ctxProps.initialState,
+    ctxProps.persist,
+    ctx,
+  );
   const {
     getState,
     theme: { class: themeClass },
     modalActive,
-  } = context;
+  } = lctx;
 
   const sidebarActive = getState<boolean>('sidebarActive', false);
   const sidebarCompact = getState<boolean>('sidebarCompact', false);
 
   const toggleSidebarActive = () => {
-    context.setState<boolean>('sidebarActive', !sidebarActive);
+    lctx.setState<boolean>('sidebarActive', !sidebarActive);
   };
 
   useEffect(() => {
@@ -112,43 +117,45 @@ function DashboardLayout({
   const scrollRef = useScrollFix(modalActive);
 
   return (
-    <div
-      className={toClassName([
-        'dashboard',
-        id && `dashboard_id-${id}`,
-        themeClass && `dashboard_theme-${themeClass}`,
-      ])}
-      ref={scrollRef}
-    >
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-        />
-      </Head>
-      {header && (
-        <Header
-          sidebarActive={sidebarActive}
-          toggleSidebarActive={toggleSidebarActive}
-        >
-          {sidebar && (
-            <Sidebar
-              sidebarActive={sidebarActive}
-              sidebarCompact={sidebarCompact}
-            >
-              {sidebar}
-            </Sidebar>
-          )}
-          {header}
-        </Header>
-      )}
-      <Content contentContainerWidth={contentContainerWidth} header={header}>
-        <SiteMessages />
-        {children}
-      </Content>
-      {footer && <Footer />}
-      <div id="dashboard-modal-root" />
-    </div>
+    <LayoutContext.Provider value={lctx}>
+      <div
+        className={toClassName([
+          'dashboard',
+          id && `dashboard_id-${id}`,
+          themeClass && `dashboard_theme-${themeClass}`,
+        ])}
+        ref={scrollRef}
+      >
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+          />
+        </Head>
+        {header && (
+          <Header
+            sidebarActive={sidebarActive}
+            toggleSidebarActive={toggleSidebarActive}
+          >
+            {sidebar && (
+              <Sidebar
+                sidebarActive={sidebarActive}
+                sidebarCompact={sidebarCompact}
+              >
+                {sidebar}
+              </Sidebar>
+            )}
+            {header}
+          </Header>
+        )}
+        <Content contentContainerWidth={contentContainerWidth} header={header}>
+          <SiteMessages />
+          {children}
+        </Content>
+        {footer && <Footer />}
+        <div id="dashboard-modal-root" />
+      </div>
+    </LayoutContext.Provider>
   );
 }
 

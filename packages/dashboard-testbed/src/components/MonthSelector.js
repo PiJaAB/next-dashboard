@@ -51,7 +51,11 @@ export default function MonthSelector({
         <span className="fa fa-arrow-left" />
       </button>
       {date.getFullYear()} {monthNames[date.getMonth()]}
-      <button type="button" disabled={false && !canMoveForward} onClick={moveForward}>
+      <button
+        type="button"
+        disabled={false && !canMoveForward}
+        onClick={moveForward}
+      >
         <span className="fa fa-arrow-right" />
       </button>
     </h3>

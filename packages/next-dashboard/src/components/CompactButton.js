@@ -1,32 +1,26 @@
 // @flow
-import React from 'react';
+import React, { useContext } from 'react';
 
 import NavEntry from './NavEntry';
-import DashboardContext from '../utils/dashboardContext';
+import LayoutContext from '../utils/layoutContext';
 
 type Props = { children?: React$Node, icon?: React$Node };
 
 export default function CompactButton({ children, icon }: Props): React$Node {
+  const ctx = useContext(LayoutContext);
+  const { getState, setState } = ctx;
   return (
-    <DashboardContext.Consumer>
-      {ctx => {
-        if (ctx == null) return null;
-        const { getState, setState } = ctx;
-        return (
-          <NavEntry
-            icon={icon || 'exchange-alt'}
-            onClick={() =>
-              setState<boolean>(
-                'sidebarCompact',
-                !getState<boolean>('sidebarCompact', false),
-              )
-            }
-          >
-            {children || 'Compact'}
-          </NavEntry>
-        );
-      }}
-    </DashboardContext.Consumer>
+    <NavEntry
+      icon={icon || 'exchange-alt'}
+      onClick={() =>
+        setState<boolean>(
+          'sidebarCompact',
+          !getState<boolean>('sidebarCompact', false),
+        )
+      }
+    >
+      {children || 'Compact'}
+    </NavEntry>
   );
 }
 

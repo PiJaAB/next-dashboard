@@ -2,6 +2,7 @@
 import React, { useContext, type Node } from 'react';
 import Link from 'next/link';
 
+import LayoutContext from '../../utils/layoutContext';
 import DashboardContext from '../../utils/dashboardContext';
 import HamburgerMenu from '../HamburgerMenu';
 
@@ -20,13 +21,12 @@ const getLogoURL = (conf: ?(string | { [string]: string }), theme: string) => {
 };
 
 function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
-  const ctx = useContext(DashboardContext);
-  if (ctx == null) throw new Error('Header: no dashboard context in scope');
+  const lctx = useContext(LayoutContext);
+  const dctx = useContext(DashboardContext);
 
-  const theme = ctx.theme.class;
+  const theme = lctx.theme.class;
 
-  const { logoURL: logoURLConf, homepageURL = '/', name } =
-    ctx != null ? ctx.branding : {};
+  const { logoURL: logoURLConf, homepageURL = '/', name } = dctx.branding;
   const logoURL = getLogoURL(logoURLConf, theme);
 
   return (

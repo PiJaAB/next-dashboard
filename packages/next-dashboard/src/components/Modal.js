@@ -4,7 +4,7 @@
 import React, { useEffect, useRef, useContext } from 'react';
 import ReactDOM from 'react-dom';
 
-import DashboardContext from '../utils/dashboardContext';
+import LayoutContext from '../utils/layoutContext';
 import useInitialFlag from '../utils/useInitialFlag';
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const Modal = ({ ...props }: Props) => {
-  const context = useContext(DashboardContext);
+  const context = useContext(LayoutContext);
   const initial = useInitialFlag();
   if (typeof window === 'undefined') return null;
 
