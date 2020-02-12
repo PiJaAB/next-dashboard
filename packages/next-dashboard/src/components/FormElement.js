@@ -7,7 +7,6 @@ type Props<T, U = T> = {
     value: T,
     onChange: (val: T) => void,
     isValid: boolean | void,
-    onInput: (val: T, doValidate?: boolean) => void,
   ) => React$Node,
   valueParser?: T => U,
   validate(T): boolean | void,
@@ -25,13 +24,15 @@ export default function FormElement<T, U = T>({
   const ctx = useContext(FormContext);
   const [value, setValue] = useState(initialValue);
   useEffect(() => {
+    return () => ctx.unregister(id);
+  }, [ctx.register, ctx.unregister]);
+  useEffect(() => {
     ctx.register(id, {
       validate: (val: T) => validate(val),
       // $FlowIssue: This is impossible to type without runtime typechecking
       getValue: () => valueParser(value),
     });
-    return () => ctx.unregister(id);
-  }, [ctx.register, ctx.unregister, validate, value]);
+  }, [validate, value])
 
   return children(
     value,
@@ -40,10 +41,6 @@ export default function FormElement<T, U = T>({
       setValue(() => val);
     },
     ctx.valid[id],
-    (val, doValidate) => {
-      if (doValidate) ctx.validate(id, val);
-      setValue(() => val);
-    },
   );
 }
 

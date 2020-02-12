@@ -15,8 +15,8 @@ type FormCTX = {
     },
   ): void,
   unregister(id: string): void,
-  reset(id?: string): void,
   validate<T>(id: string, val: T): boolean | void,
+  validateAll(): { [string | typeof ALL]: boolean },
   valid: { [string]: boolean | void },
 };
 
@@ -33,8 +33,8 @@ const defaultContext: FormCTX = {
   submit: () => {},
   register: () => {},
   unregister: () => {},
-  reset: () => {},
   validate: () => {},
+  validateAll: () => ({}),
   valid: {},
 };
 
@@ -43,35 +43,29 @@ FormContext.displayName = 'Form Context';
 
 export default class Form extends React.PureComponent<Props, State> {
   validators: { [string]: (any) => boolean | void };
+  getters: { [string]: <T>() => T };
 
   constructor() {
     super();
     const self = this;
     this.validators = {};
+    this.getters = {};
     this.state = {
       ctx: {
         submit() {},
         register: (id, element) => {
           self.validators[id] = element.validate;
+          self.getters[id] = element.getValue;
         },
         unregister: id => {
           delete self.validators[id];
+          delete self.getters[id];
           self.setState(state => {
             const { valid } = state;
             if (!(id in valid)) return {};
             const newValid = { ...valid };
             delete newValid[id];
-            return newValid;
-          });
-        },
-        reset(id?: string) {
-          self.setState(state => {
-            if (!id) return { valid: {} };
-            const { valid } = state;
-            if (!(id in valid)) return {};
-            const newValid = { ...valid };
-            delete newValid[id];
-            return newValid;
+            return { valid: newValid };
           });
         },
         validate: (id, val) => this.validate(id, val),
@@ -96,13 +90,13 @@ export default class Form extends React.PureComponent<Props, State> {
   }
 
   validateAll(): { [string | typeof ALL]: boolean } {
-    const { validators } = this;
+    const { validators, getters } = this;
     const ids: string[] = Object.keys(validators);
     let isAllValid = true;
     const valid: { [string]: boolean | void } = {};
 
     const validArr = ids.map(id => {
-      return validators[id]();
+      return validators[id](getters[id]());
     });
 
     for (let i = 0; i < ids.length; i++) {
