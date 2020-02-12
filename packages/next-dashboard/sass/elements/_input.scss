@@ -32,15 +32,21 @@ select {
   outline: none;
   border: none;
   border-radius: 5px;
-  @include var('background-color', 'background');
-  &::placeholder {
-    @include var('color', 'text-rgb', 'rgba', 0.5);
-  }
+  @include var('background-color', 'background-dark');
   &:focus {
-    @include var('background-color', 'background-dark');
+    @include var('background-color', 'background-darker');
   }
   &:last-child {
     margin-bottom: 0;
+  }
+  .page-content & {
+    @include var('background-color', 'background');
+    &:focus {
+      @include var('background-color', 'background-dark');
+    }
+  }
+  &::placeholder {
+    @include var('color', 'text-rgb', 'rgba', 0.5);
   }
 }
 
@@ -77,6 +83,9 @@ input[type="radio"] {
       width: 20px;
       border-radius: 5px;
       @include var('background-color', 'background-dark');
+      .page-content & {
+        @include var('background-color', 'background');
+      }
     }
     &:after {
       display: none;
@@ -94,6 +103,9 @@ input[type="radio"] {
     +label {
       &:before {
         @include var('background-color', 'background-darker');
+        .page-content & {
+          @include var('background-color', 'background-dark');
+        }
       }
     }
   }

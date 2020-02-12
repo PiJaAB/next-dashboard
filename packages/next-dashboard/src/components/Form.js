@@ -1,17 +1,23 @@
 // @flow
 import React from 'react';
 
-import DashboardContext from '../utils/dashboardContext';
 import areEqualShallow from '../utils/areEqualShallow';
 
 export const ALL = Symbol('all');
 
 type FormCTX = {
   submit(): void,
-  onValidate(id: string, func: () => Promise<boolean> | boolean): void,
-  offValidate(id: string): void,
+  register(
+    id: string,
+    element: {
+      validate(any): boolean | void,
+      getValue<T>(): T,
+    },
+  ): void,
+  unregister(id: string): void,
   reset(id?: string): void,
-  valid: { [string]: boolean },
+  validate<T>(id: string, val: T): boolean | void,
+  valid: { [string]: boolean | void },
 };
 
 type State = {
@@ -23,11 +29,20 @@ type Props = {
   children: React$Node,
 };
 
-export const FormContext = React.createContext<void | FormCTX>();
+const defaultContext: FormCTX = {
+  submit: () => {},
+  register: () => {},
+  unregister: () => {},
+  reset: () => {},
+  validate: () => {},
+  valid: {},
+};
+
+export const FormContext = React.createContext<FormCTX>(defaultContext);
 FormContext.displayName = 'Form Context';
 
 export default class Form extends React.PureComponent<Props, State> {
-  validators: { [string]: () => Promise<boolean> | boolean };
+  validators: { [string]: (any) => boolean | void };
 
   constructor() {
     super();
@@ -36,10 +51,10 @@ export default class Form extends React.PureComponent<Props, State> {
     this.state = {
       ctx: {
         submit() {},
-        onValidate(id: string, func: () => Promise<boolean> | boolean) {
-          self.validators[id] = func;
+        register: (id, element) => {
+          self.validators[id] = element.validate;
         },
-        offValidate(id: string) {
+        unregister: id => {
           delete self.validators[id];
           self.setState(state => {
             const { valid } = state;
@@ -59,17 +74,19 @@ export default class Form extends React.PureComponent<Props, State> {
             return newValid;
           });
         },
+        validate: (id, val) => this.validate(id, val),
+        validateAll: () => this.validateAll(),
       },
       valid: {},
     };
   }
 
-  async validate(id: string): Promise<boolean> {
+  validate(id: string, val: any): boolean | void {
     const validator = this.validators[id];
     if (!validator) {
-      throw new Error(`Id \`${id}\` does not have a registered validator.`);
+      return undefined;
     }
-    const isValid = await validator();
+    const isValid = validator(val);
     this.setState(state => {
       const { valid } = state;
       if (valid[id] === isValid) return {};
@@ -78,17 +95,15 @@ export default class Form extends React.PureComponent<Props, State> {
     return isValid;
   }
 
-  async validateAll(): Promise<{ [string | typeof ALL]: boolean }> {
+  validateAll(): { [string | typeof ALL]: boolean } {
     const { validators } = this;
     const ids: string[] = Object.keys(validators);
     let isAllValid = true;
-    const valid: { [string]: boolean } = {};
+    const valid: { [string]: boolean | void } = {};
 
-    const validArr = await Promise.all(
-      ids.map(id => {
-        return validators[id]();
-      }),
-    );
+    const validArr = ids.map(id => {
+      return validators[id]();
+    });
 
     for (let i = 0; i < ids.length; i++) {
       const id = ids[i];
@@ -104,8 +119,6 @@ export default class Form extends React.PureComponent<Props, State> {
 
     return { ...valid, [ALL]: isAllValid };
   }
-
-  static contextType = DashboardContext;
 
   render() {
     const { children } = this.props;

@@ -1,9 +1,16 @@
+$black-dark:                   $black !default;
+$white-dark:                   $white !default;
+$red-dark:                     $red !default;
+$green-dark:                   $green !default;
+
 $primary-color-dark:           #4880ff !default;
 $secondary-color-dark:         #ffffff !default;
 
 $primary-alt-color-dark:       #273142 !default;
 $secondary-alt-color-dark:     #1b2431 !default;
 $tertiary-alt-color-dark:      #323d4e !default;
+
+$primary-alt-tint-red-dark:    mix($red-dark, $primary-alt-color-dark, 15%) !default;
 
 $border-color-dark:            #313D4F !default;
 
@@ -13,25 +20,28 @@ $background-darker-color-dark: darken($background-dark-color-dark, 1.5625%) !def
 $text-color-dark:              $secondary-color-dark !default;
 $text-alt-color-dark:          darken($text-color-dark, 40%) !default;
 
-$error-color-dark:            #ff4f4f !default;
-$warning-color-dark:          orange  !default;
+$error-color-dark:             $red-dark !default;
+$warning-color-dark:           orange  !default;
 
 $colors-dark: (
-  'primary':                 $primary-color-dark,
-  'primary-rgb':             hexToRgb($primary-color-dark),
-  'secondary':               $secondary-color-dark,
-  'primary-alt':             $primary-alt-color-dark,
-  'secondary-alt':           $secondary-alt-color-dark,
-  'tertiary-alt':            $tertiary-alt-color-dark,
-  'black':                   $black,
-  'white':                   $white,
-  'background':              $background-color-dark,
-  'background-dark':         $background-dark-color-dark,
-  'background-darker':       $background-darker-color-dark,
-  'text':                    $text-color-dark,
-  'text-alt':                $text-alt-color-dark,
-  'text-rgb':                hexToRgb($text-color-dark),
-  'error':                   $error-color-dark,
-  'warning':                 $warning-color-dark,
-  'border':                  $border-color-dark,
+  'primary':                   $primary-color-dark,
+  'primary-rgb':               hexToRgb($primary-color-dark),
+  'secondary':                 $secondary-color-dark,
+  'primary-alt':               $primary-alt-color-dark,
+  'primary-alt-tint-red':      $primary-alt-tint-red-dark,
+  'secondary-alt':             $secondary-alt-color-dark,
+  'tertiary-alt':              $tertiary-alt-color-dark,
+  'black':                     $black-dark,
+  'white':                     $white-dark,
+  'red':                       $red-dark,
+  'green':                     $green-dark,
+  'background':                $background-color-dark,
+  'background-dark':           $background-dark-color-dark,
+  'background-darker':         $background-darker-color-dark,
+  'text':                      $text-color-dark,
+  'text-alt':                  $text-alt-color-dark,
+  'text-rgb':                  hexToRgb($text-color-dark),
+  'error':                     $error-color-dark,
+  'warning':                   $warning-color-dark,
+  'border':                    $border-color-dark,
 ) !default;
