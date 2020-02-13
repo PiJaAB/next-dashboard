@@ -3,6 +3,7 @@
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 16px;
+  font-weight: 500;
 }
 
 .pie-chart-types-list {
@@ -11,6 +12,7 @@
   align-items: center;
   padding-top: 10px;
   margin-top: 10px;
+  font-weight: 500;
   border-top: 1px solid rgba(151, 151, 151, 0.4);
 }
 
@@ -35,5 +37,6 @@
 }
 .pie-chart-label-text {
   font-size: 16px;
+  font-weight: 500;
   @include var('fill', 'text');
 }

@@ -17,12 +17,12 @@ const Contact = () => {
         className="no-button contact-image"
         onClick={openContactModal}
       >
-        <img src="/images/contact.png" alt="Anna Evesäter" />
+        <img src="/images/contact.png" alt="Kontaktperson" />
       </button>
-      <div className="contact-content">
+      <div className="contact_content">
         <button
           type="button"
-          className="no-button color-text"
+          className="contact_content_button no-button color-text"
           onClick={openContactModal}
         >
           Contact

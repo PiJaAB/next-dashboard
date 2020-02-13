@@ -15,13 +15,14 @@ h5, .h5, .h5-size {
 }
 h6, .h6, .h6-size {
   font-size: 1.2rem;
+  font-weight: 500;
 }
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   margin: 0 0 20px;
   @include var('color', 'text');
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   word-break: break-word;
   text-rendering: optimizeLegibility;

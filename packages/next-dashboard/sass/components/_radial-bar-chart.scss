@@ -3,6 +3,7 @@
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 16px;
+  font-weight: 500;
 }
 
 .radial-bar-chart-types-list {
@@ -11,6 +12,7 @@
   align-items: center;
   padding-top: 10px;
   margin-top: 10px;
+  font-weight: 500;
   border-top: 1px solid rgba(151, 151, 151, 0.4);
 }
 
@@ -31,6 +33,7 @@
 
 text.radial-bar-chart__center-text {
   @include var('fill', 'text');
+  font-weight: 500;
   text-anchor: middle;
   alignment-baseline: middle; // Valid svg text element property
   &__single, &__top {
