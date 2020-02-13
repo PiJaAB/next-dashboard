@@ -9,7 +9,7 @@ export const PADDING = {
   BOTTOM: 13,
 };
 
-export const INNER_RADIUS = 0.6;
+export const INNER_RADIUS = 0.5;
 export const OUTER_RADIUS = 0.8;
 
 export const pieRadius = (ratio: number, width: number, height: number) =>

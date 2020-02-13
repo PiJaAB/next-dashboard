@@ -4,6 +4,9 @@
   padding-right: 24px;
   padding-top: 16px;
   font-weight: 500;
+  &.label {
+    margin-bottom: 0;
+  }
 }
 
 .pie-chart-types-list {
