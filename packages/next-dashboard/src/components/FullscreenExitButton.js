@@ -37,9 +37,9 @@ export default function FullscreenExitButton(): React$Element<'div'> | null {
   if (!isFullscreen) return null;
 
   const handleClick = () => {
-    const contentEl =
-      typeof document !== 'undefined' && document.firstElementChild;
-    if (contentEl) document.exitFullscreen();
+    if (typeof document !== 'undefined') {
+      document.exitFullscreen();
+    }
   };
 
   return (
