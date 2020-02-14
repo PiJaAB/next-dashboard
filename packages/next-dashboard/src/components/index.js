@@ -5,6 +5,7 @@ import HeaderCell from './HeaderCell';
 export * from './layout';
 export * from './charts';
 
+export { default as FullscreenButton } from './FullscreenButton';
 export { default as SortableTable } from './SortableTable';
 export { default as SortablePageTable } from './SortablePageTable';
 export type { Column as TableColumn } from './ResponsiveTable';

@@ -28,7 +28,6 @@ export type Props = {
   header?: React$Node,
   sidebar?: React$Node,
   footer?: boolean,
-  allowFullscreen?: boolean,
 };
 
 function DashboardLayout({
@@ -38,15 +37,10 @@ function DashboardLayout({
   header: propHeader,
   sidebar,
   footer,
-  allowFullscreen,
 }: Props): React$Element<typeof LayoutContext.Provider> {
   const ctx = useContext(DashboardContext);
   const { [LAYOUT]: ctxProps } = ctx;
-  const lctx = useCreateLayoutContext(
-    ctxProps.initialState,
-    ctxProps.persist,
-    ctx,
-  );
+  const lctx = useCreateLayoutContext(ctxProps.initialState, ctxProps.persist);
   const {
     getState,
     theme: { class: themeClass },
@@ -208,7 +202,6 @@ function DashboardLayout({
           <Header
             sidebarActive={sidebarActive}
             toggleSidebarActive={toggleSidebarActive}
-            allowFullscreen={allowFullscreen}
           >
             {sidebar && (
               <Sidebar

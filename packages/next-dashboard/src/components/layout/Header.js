@@ -2,11 +2,8 @@
 import React, { useContext, type Node } from 'react';
 import Link from 'next/link';
 
-import LayoutContext from '../../utils/layoutContext';
-import DashboardContext from '../../utils/dashboardContext';
+import { LayoutContext, ConfigContext } from '../../utils';
 import HamburgerMenu from '../HamburgerMenu';
-import HeaderCell from '../HeaderCell';
-import FullscreenButton from '../FullscreenButton';
 
 type Props = {
   toggleSidebarActive: () => void,
@@ -23,13 +20,11 @@ const getLogoURL = (conf: ?(string | { [string]: string }), theme: string) => {
 };
 
 function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
-  const lctx = useContext(LayoutContext);
-  const dctx = useContext(DashboardContext);
+  const { theme } = useContext(LayoutContext);
+  const { branding } = useContext(ConfigContext);
 
-  const theme = lctx.theme.class;
-
-  const { logoURL: logoURLConf, homepageURL = '/', name } = dctx.branding;
-  const logoURL = getLogoURL(logoURLConf, theme);
+  const { logoURL: logoURLConf, homepageURL = '/', name } = branding;
+  const logoURL = getLogoURL(logoURLConf, theme.class);
 
   return (
     <header className="dashboard-header">
@@ -49,13 +44,14 @@ function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
             </Link>
           </div>
           {children}
-          <HeaderCell type="fullscreenButton">
-            <FullscreenButton />
-          </HeaderCell>
         </div>
       </div>
     </header>
   );
 }
+
+Header.defaultProps = {
+  allowFullscreen: undefined,
+};
 
 export default Header;

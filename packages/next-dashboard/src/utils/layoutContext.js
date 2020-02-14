@@ -1,8 +1,8 @@
 // @flow
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 
 import type { Theme } from './types';
-import type { IDashboardContext } from './dashboardContext';
+import ConfigContext from './configContext';
 
 const DEFAULT_THEME: Theme = { name: 'Default', class: 'default' };
 
@@ -67,8 +67,8 @@ function buildContext(
 export function useCreateLayoutContext(
   initialState: LayoutState,
   persist: LayoutState => void,
-  ctx: IDashboardContext,
 ): ILayoutContext {
+  const ctx = useContext(ConfigContext);
   const [persistentState, setPersistentState] = useState(initialState);
   const [getState, setState] = useMemo(() => {
     function set<T>(key: string, value: T) {

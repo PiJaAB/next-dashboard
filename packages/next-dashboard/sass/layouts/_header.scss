@@ -23,10 +23,7 @@
   flex: 0 0 auto;
   margin-top: auto;
   margin-bottom: auto;
-  &_separator:first-of-type {
-    margin-left: auto;
-  }
-  &_separator:not(:last-child) {
+  &_separator {
     position: relative;
     &:after {
       @include breakpoint(large) {
@@ -38,6 +35,14 @@
         right: 0;
         height: 50px;
       }
+    }
+    &:last-child {
+      &:after {
+        content: none;
+      }
+    }
+    &:first-of-type {
+      margin-left: auto;
     }
   }
   &_sidebar {
@@ -57,31 +62,6 @@
     @include breakpoint(medium) {
       flex: 0 0 auto;
       max-width: 100%;
-    }
-  }
-  &_search {
-    z-index: 100;
-    flex: 1 0 auto;
-    display: none;
-    @include breakpoint(medium) {
-      display: block;
-    }
-  }
-  &_contact {
-    flex: 0 0 25%;
-    display: flex;
-    max-width: 25%;
-    justify-content: flex-end;
-    @include breakpoint(medium) {
-      flex: 0 0 auto;
-      display: block;
-      max-width: 100%;
-    }
-  }
-  &_profile {
-    display: none;
-    @include breakpoint(large) {
-      display: block;
     }
   }
 }
