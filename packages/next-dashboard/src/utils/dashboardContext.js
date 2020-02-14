@@ -1,13 +1,13 @@
 // @flow
-import React, { useState, useMemo, type Context } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import type {
-  Branding,
   DashboardComponent,
   IAuthProvider,
   SiteMessageType,
-  Theme,
 } from './types';
+import type { InitialPropsContext } from './nextTypes';
+
 import logger from './logger';
 import type { LayoutState } from './layoutContext';
 
@@ -25,9 +25,7 @@ export type IDashboardContext = {
   registerSiteMessage(siteMessages: Error | SiteMessageType): void,
   dismissSiteMessage(siteMessages: SiteMessageType): void,
 
-  +branding: Branding,
   +Comp: DashboardComponent<any>,
-  +themes: $ReadOnlyArray<Theme>,
 
   isAuthenticated(): boolean | Promise<boolean>,
   getAuthProvider<T: IAuthProvider>(Class: Class<T>): T | void,
@@ -49,13 +47,25 @@ const defaultContext: IDashboardContext = {
   registerSiteMessage() {},
   dismissSiteMessage() {},
 
-  branding: { name: 'UNINITIALIZED' },
   Comp: () => null,
-  themes: [{ name: 'Default', class: 'default' }],
 
   isAuthenticated: () => false,
   getAuthProvider: () => {},
 };
+
+const isSSR = typeof window === 'undefined';
+let SINGLETON_AUTH_PROVIDER = null;
+export function getAuthProviderInstance(
+  AuthProvider: Class<IAuthProvider>,
+  ctx: InitialPropsContext | string,
+): IAuthProvider {
+  if (SINGLETON_AUTH_PROVIDER instanceof AuthProvider) {
+    return SINGLETON_AUTH_PROVIDER;
+  }
+  const instance = new AuthProvider(ctx);
+  if (!isSSR) SINGLETON_AUTH_PROVIDER = instance;
+  return instance;
+}
 
 type DashboardState = {
   theme: string,
@@ -66,11 +76,9 @@ function buildContext(
   persistLayout: LayoutState => void,
   getState: <T>(key: string, defaultValue: T) => T,
   setState: <T>(key: string, value: T) => void,
-  themes: $ReadOnlyArray<Theme>,
   siteMessages: $ReadOnlyArray<SiteMessageType>,
   registerSiteMessage: (siteMessages: Error | SiteMessageType) => void,
   dismissSiteMessage: (siteMessages: SiteMessageType) => void,
-  branding: Branding,
   Comp: DashboardComponent<any>,
   getAuthProvider: <T: IAuthProvider>(Class: Class<T>) => T | void,
   isAuthenticated: () => boolean | Promise<boolean>,
@@ -88,9 +96,7 @@ function buildContext(
     registerSiteMessage,
     dismissSiteMessage,
 
-    branding,
     Comp,
-    themes,
 
     getAuthProvider,
     isAuthenticated,
@@ -102,11 +108,9 @@ export function useCreateDashboardContext(
   initialLayoutState: LayoutState,
   persistDashboard: DashboardState => void,
   persistLayout: LayoutState => void,
-  themes: $ReadOnlyArray<Theme>,
   siteMessages: $ReadOnlyArray<SiteMessageType>,
   registerSiteMessage: (siteMessages: Error | SiteMessageType) => void,
   dismissSiteMessage: (siteMessages: SiteMessageType) => void,
-  branding: Branding,
   Comp: DashboardComponent<any>,
   authSerialized: string,
   AuthProvider: Class<IAuthProvider>,
@@ -130,7 +134,7 @@ export function useCreateDashboardContext(
   }, [persistentState, setPersistentState, persistDashboard]);
 
   const [getAuthProvider, isAuthenticated] = useMemo(() => {
-    const authProvider = new AuthProvider(authSerialized);
+    const authProvider = getAuthProviderInstance(AuthProvider, authSerialized);
     function getAP<A: IAuthProvider>(C: Class<A>): A | void {
       if (authProvider === undefined) return undefined;
       if (authProvider instanceof C) return authProvider;
@@ -149,11 +153,9 @@ export function useCreateDashboardContext(
     persistLayout,
     getState,
     setState,
-    themes,
     siteMessages,
     registerSiteMessage,
     dismissSiteMessage,
-    branding,
     Comp,
     getAuthProvider,
     isAuthenticated,
@@ -163,71 +165,7 @@ export function useCreateDashboardContext(
   return context;
 }
 
-// Making a bitmask... bitwise operators are kinda useful :3
-/* eslint-disable no-bitwise */
-const flags = [
-  'STATE',
-  'SITEMESSAGE',
-  'BRANDING',
-  'COMPONENT',
-  'THEMES',
-  'AUTHPROVIDER',
-];
-const makeBitMask = () => {
-  const mask = {};
-  for (let i = 0; i < flags.length; i++) {
-    mask[flags[i]] = 1 << i;
-  }
-  return mask;
-};
-const bitmasks = { ...makeBitMask() };
+const DashboardContext = React.createContext<IDashboardContext>(defaultContext);
 
-type Bitmasks = typeof bitmasks;
-
-type ExtendedContext = {
-  ...Context<IDashboardContext>,
-  ...Bitmasks,
-};
-
-const DashboardContext: $Shape<ExtendedContext> = React.createContext<IDashboardContext>(
-  defaultContext,
-  (oldCtx, newCtx) => {
-    let changedBits = 0;
-    if (
-      oldCtx.setState !== newCtx.setState ||
-      oldCtx.getState !== newCtx.getState
-    ) {
-      changedBits |= bitmasks.STATE;
-    }
-    if (
-      oldCtx.siteMessages !== newCtx.siteMessages ||
-      oldCtx.registerSiteMessage !== newCtx.registerSiteMessage ||
-      oldCtx.dismissSiteMessage !== newCtx.dismissSiteMessage
-    ) {
-      changedBits |= bitmasks.SITEMESSAGE;
-    }
-    if (oldCtx.branding !== newCtx.branding) {
-      changedBits |= bitmasks.BRANDING;
-    }
-    if (oldCtx.Comp !== newCtx.Comp) {
-      changedBits |= bitmasks.COMPONENT;
-    }
-    if (oldCtx.themes !== newCtx.themes) {
-      changedBits |= bitmasks.THEMES;
-    }
-    if (
-      oldCtx.getAuthProvider !== newCtx.getAuthProvider ||
-      oldCtx.isAuthenticated !== newCtx.isAuthenticated
-    ) {
-      changedBits |= bitmasks.AUTHPROVIDER;
-    }
-
-    return changedBits;
-  },
-);
-/* eslint-enable no-bitwise */
-for (let i = 0; i < flags.length; i++) {
-  DashboardContext[flags[i]] = bitmasks[flags[i]];
-}
 DashboardContext.displayName = 'DashboardContext';
-export default (DashboardContext: Context<IDashboardContext> & Bitmasks);
+export default DashboardContext;

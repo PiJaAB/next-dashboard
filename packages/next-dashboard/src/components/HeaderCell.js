@@ -1,30 +1,30 @@
 // @flow
 
 import React from 'react';
-
-import toClassName from '../utils/toClassName';
-
-export type HeaderCellID = 'search' | 'profile' | 'contact';
+import classnames from 'classnames';
 
 type Props = {
   className?: string,
-  cellId?: HeaderCellID,
+  type?: string,
+  separator?: boolean,
   children: React$Node,
 };
 
 export default function HeaderCell({
   children,
-  cellId,
+  type,
   className,
+  separator,
 }: Props): React$Node {
   return (
     <div
-      className={toClassName([
+      className={classnames(
         className,
         'cell',
         'dashboard-header-cell',
-        cellId && `dashboard-header-cell_${cellId}`,
-      ])}
+        type && `dashboard-header-cell_${type}`,
+        separator && 'dashboard-header-cell_separator',
+      )}
     >
       {children}
     </div>
@@ -33,5 +33,6 @@ export default function HeaderCell({
 
 HeaderCell.defaultProps = {
   className: undefined,
-  cellId: undefined,
+  type: undefined,
+  separator: true,
 };

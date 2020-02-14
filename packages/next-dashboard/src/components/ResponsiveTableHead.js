@@ -1,6 +1,6 @@
 // @flow
-import React, { useRef, useEffect } from 'react';
-import { useMutationObserver } from '../utils';
+import React, { useRef, useEffect, useContext } from 'react';
+import { useMutationObserver, LayoutContext } from '../utils';
 import type { TextAlignProps, ColData } from './ResponsiveTable';
 
 export type Column<E, C> = $ReadOnly<{
@@ -19,10 +19,10 @@ type HeadProps<E, C> = {
 
 const HEADER_OFFSET = 80; // Header is 80px tall
 
-const update = (el: HTMLTableSectionElement) => {
+const update = (el: HTMLTableSectionElement, hasHeader: boolean) => {
   const rect = el.getClientRects()[0];
   if (!rect) return;
-  const top = rect.top - HEADER_OFFSET;
+  const top = rect.top - (hasHeader ? HEADER_OFFSET : 0);
   if (top < 0) {
     const { style } = el;
     style.top = `${-top}px`;
@@ -40,10 +40,12 @@ const TableHead = <E: {}, C>({
   onColumnClick,
 }: HeadProps<E, C>) => {
   const headRef = useRef<HTMLTableSectionElement | null>(null);
+  const ctx = useContext(LayoutContext);
+  const hasHeader = ctx.getState('hasHeader', true);
   useEffect(() => {
     const headEl = headRef.current;
     if (!headEl) return undefined;
-    const onscroll = () => update(headEl);
+    const onscroll = () => update(headEl, hasHeader);
     onscroll();
     window.addEventListener('scroll', onscroll);
     window.addEventListener('resize', onscroll);
@@ -64,8 +66,9 @@ const TableHead = <E: {}, C>({
     () => {
       const headEl = headRef.current;
       if (!headEl) return;
-      update(headEl);
+      update(headEl, hasHeader);
     },
+    [headRef.current, hasHeader],
   );
   return (
     <thead ref={headRef}>
