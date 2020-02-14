@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useMemo, type Context } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import type { Theme } from './types';
 import type { IDashboardContext } from './dashboardContext';
@@ -9,6 +9,8 @@ const DEFAULT_THEME: Theme = { name: 'Default', class: 'default' };
 export interface ILayoutContext {
   getState<T>(key: string, defaultValue: T): T;
   setState<T>(key: string, value: T): void;
+  getTemp<T>(key: string, defaultValue: T): T;
+  setTemp<T>(key: string, value: T): void;
   +theme: Theme;
   +themes: $ReadOnlyArray<Theme>;
   +modalActive: boolean;
@@ -20,6 +22,10 @@ const defaultContext: ILayoutContext = {
     return defaultValue;
   },
   setState: (_, __) => {},
+  getTemp<T>(_: string, defaultValue: T): T {
+    return defaultValue;
+  },
+  setTemp: (_, __) => {},
   theme: DEFAULT_THEME,
   themes: [DEFAULT_THEME],
   modalActive: false,
@@ -27,16 +33,19 @@ const defaultContext: ILayoutContext = {
 };
 
 export type LayoutState = {
-  theme: string,
+  theme: Theme,
 };
 
 function buildContext(
   getState: <T>(key: string, defaultValue: T) => T,
   setState: <T>(key: string, value: T) => void,
+  getTemp: <T>(key: string, defaultValue: T) => T,
+  setTemp: <T>(key: string, value: T) => void,
   modalActive: boolean,
   setModalActive: ((boolean => boolean) | boolean) => void,
   persist: LayoutState => void,
   themes: $ReadOnlyArray<Theme>,
+  tempVars: { +[string]: any },
 ): ILayoutContext {
   const theme: Theme =
     themes.find(t => t.class === getState('theme', DEFAULT_THEME).class) ||
@@ -45,10 +54,13 @@ function buildContext(
   return {
     getState,
     setState,
+    getTemp,
+    setTemp,
     theme,
     themes,
     modalActive,
     setModalActive,
+    tempVars,
   };
 }
 
@@ -74,15 +86,38 @@ export function useCreateLayoutContext(
     }
     return [get, set];
   }, [persistentState, setPersistentState, persist]);
+
+  const [tempState, setTempState] = useState<{ +[string]: any }>({});
+  const [getTemp, setTemp] = useMemo(() => {
+    function set<T>(key: string, value: T) {
+      setTempState((oldState: LayoutState) => {
+        if (oldState[key] === value) return oldState;
+        const newState: LayoutState = {
+          ...oldState,
+          [key]: value,
+        };
+        return newState;
+      });
+    }
+    function get<T>(key: string, defaultValue: T): T {
+      if (typeof tempState[key] !== 'undefined') return tempState[key];
+      return defaultValue;
+    }
+    return [get, set];
+  }, [tempState, setTempState]);
+
   const [modalActive, setModalActive] = useState(false);
 
   const inputs = [
     getState,
     setState,
+    getTemp,
+    setTemp,
     modalActive,
     setModalActive,
     persist,
     ctx.themes,
+    tempState,
   ];
 
   const context = useMemo(() => buildContext(...inputs), inputs);
@@ -90,54 +125,7 @@ export function useCreateLayoutContext(
   return context;
 }
 
-// Making a bitmask... bitwise operators are kinda useful :3
-/* eslint-disable no-bitwise */
-const flags = ['STATE', 'MODAL', 'THEME', 'THEMES'];
-const makeBitMask = () => {
-  const mask = {};
-  for (let i = 0; i < flags.length; i++) {
-    mask[flags[i]] = 1 << i;
-  }
-  return mask;
-};
-const bitmasks = { ...makeBitMask() };
+const LayoutContext = React.createContext<ILayoutContext>(defaultContext);
 
-type Bitmasks = typeof bitmasks;
-
-type ExtendedContext = {
-  ...Context<ILayoutContext>,
-  ...Bitmasks,
-};
-
-const LayoutContext: $Shape<ExtendedContext> = React.createContext<ILayoutContext>(
-  defaultContext,
-  (oldCtx, newCtx) => {
-    let changedBits = 0;
-    if (
-      oldCtx.setState !== newCtx.setState ||
-      oldCtx.getState !== newCtx.getState
-    ) {
-      changedBits |= bitmasks.STATE;
-    }
-    if (
-      oldCtx.modalActive !== newCtx.modalActive ||
-      oldCtx.setModalActive !== newCtx.setModalActive
-    ) {
-      changedBits |= bitmasks.MODAL;
-    }
-    if (oldCtx.theme !== newCtx.theme) {
-      changedBits |= bitmasks.THEME;
-    }
-    if (oldCtx.themes !== newCtx.themes) {
-      changedBits |= bitmasks.THEMES;
-    }
-
-    return changedBits;
-  },
-);
-/* eslint-enable no-bitwise */
-for (let i = 0; i < flags.length; i++) {
-  LayoutContext[flags[i]] = bitmasks[flags[i]];
-}
 LayoutContext.displayName = 'LayoutContext';
-export default (LayoutContext: Context<ILayoutContext> & Bitmasks);
+export default LayoutContext;

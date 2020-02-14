@@ -1,5 +1,5 @@
 // @flow
-import { useState, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 
 type Callback = (MutationRecord[], MutationObserver) => void;
 
@@ -14,9 +14,17 @@ export default function useMutationObserver(
   target: ?Node,
   options: MutationObserverInit | void | null,
   callback: ?Callback,
+  inputs: ?$ReadOnlyArray<mixed>,
 ) {
   if (typeof window === 'undefined') return;
-  const [observer] = useState(new MutationObserver(gcb));
+  const observer = useMemo(() => new MutationObserver(gcb));
+  useEffect(() => {
+    return () => {
+      if (observer) {
+        callbacks.delete(observer);
+      }
+    };
+  }, [observer]);
   useEffect(() => {
     if (!target || !options) return undefined;
     // $FlowIssue: I blame flow.
@@ -28,5 +36,5 @@ export default function useMutationObserver(
   useEffect(() => {
     if (!callback) callbacks.delete(observer);
     else callbacks.set(observer, callback);
-  }, [callback]);
+  }, [...(inputs || []), observer]);
 }

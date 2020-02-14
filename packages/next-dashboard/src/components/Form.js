@@ -39,7 +39,7 @@ const defaultContext: FormCTX = {
 };
 
 export const FormContext = React.createContext<FormCTX>(defaultContext);
-FormContext.displayName = 'Form Context';
+FormContext.displayName = 'FormContext';
 
 export default class Form extends React.PureComponent<Props, State> {
   validators: { [string]: (any) => boolean | void };

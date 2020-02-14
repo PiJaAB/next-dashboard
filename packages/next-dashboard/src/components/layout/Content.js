@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
 
+import FullscreenExitButton from '../FullscreenExitButton';
+
 type Props = {
   children?: React$Node,
   contentContainerWidth?:
@@ -14,10 +16,12 @@ type Props = {
 
 const Content = ({ children, contentContainerWidth, header }: Props) => (
   <div
+    id="dashboard-content"
     className={['dashboard-content', !header && 'no-header']
       .filter(className => className)
       .join(' ')}
   >
+    <FullscreenExitButton />
     <div
       className={[
         'container',

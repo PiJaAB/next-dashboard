@@ -1,0 +1,16 @@
+.fullscreenButton {
+  button {
+    margin: 0;
+  }
+}
+
+.fullscreen-exit-button {
+  position: fixed;
+  z-index: 10000;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  .fa {
+    margin-left: 10px;
+  }
+}

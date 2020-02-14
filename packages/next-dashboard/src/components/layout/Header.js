@@ -5,6 +5,8 @@ import Link from 'next/link';
 import LayoutContext from '../../utils/layoutContext';
 import DashboardContext from '../../utils/dashboardContext';
 import HamburgerMenu from '../HamburgerMenu';
+import HeaderCell from '../HeaderCell';
+import FullscreenButton from '../FullscreenButton';
 
 type Props = {
   toggleSidebarActive: () => void,
@@ -47,6 +49,9 @@ function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
             </Link>
           </div>
           {children}
+          <HeaderCell type="fullscreenButton">
+            <FullscreenButton />
+          </HeaderCell>
         </div>
       </div>
     </header>

@@ -3,12 +3,12 @@
 // @flow
 import React, { useEffect, useContext } from 'react';
 import Head from 'next/head';
+import classnames from 'classnames';
 
 import LayoutContext, {
   useCreateLayoutContext,
 } from '../../utils/layoutContext';
 import DashboardContext, { LAYOUT } from '../../utils/dashboardContext';
-import toClassName from '../../utils/toClassName';
 import useScrollFix from '../../utils/useScrollFix';
 import Content from './Content';
 import Footer from './Footer';
@@ -28,15 +28,17 @@ export type Props = {
   header?: React$Node,
   sidebar?: React$Node,
   footer?: boolean,
+  allowFullscreen?: boolean,
 };
 
 function DashboardLayout({
   children,
   id,
   contentContainerWidth,
-  header,
+  header: propHeader,
   sidebar,
   footer,
+  allowFullscreen,
 }: Props): React$Element<typeof LayoutContext.Provider> {
   const ctx = useContext(DashboardContext);
   const { [LAYOUT]: ctxProps } = ctx;
@@ -51,6 +53,11 @@ function DashboardLayout({
     modalActive,
   } = lctx;
 
+  const isFullscreen = lctx.getTemp('isFullscreen', false);
+  const isFullscreenMoving = lctx.getTemp('fullscreen-cursor-moving', false);
+
+  const header = !isFullscreen && propHeader;
+
   const sidebarActive = getState<boolean>('sidebarActive', false);
   const sidebarCompact = getState<boolean>('sidebarCompact', false);
 
@@ -59,14 +66,79 @@ function DashboardLayout({
   };
 
   useEffect(() => {
+    lctx.setTemp('hasHeader', Boolean(header));
+  }, [header]);
+
+  useEffect(() => {
     const { body } = document;
     if (!body) return;
-    if (sidebar && sidebarActive) {
+    if (header && sidebar && sidebarActive) {
       body.classList.add('dashboard_sidebar_active');
     } else {
       body.classList.remove('dashboard_sidebar_active');
     }
-  }, [sidebar, sidebarActive]);
+  }, [sidebar, sidebarActive, header]);
+
+  useEffect(() => {
+    const { body } = document;
+    if (!body) return;
+    if (isFullscreen) {
+      body.classList.add('dashboard_fullscreen');
+    } else {
+      body.classList.remove('dashboard_fullscreen');
+    }
+  }, [isFullscreen]);
+
+  useEffect(() => {
+    const { body } = document;
+    if (!body) return;
+    if (isFullscreenMoving) {
+      body.classList.add('dashboard_fullscreen_moving');
+    } else {
+      body.classList.remove('dashboard_fullscreen_moving');
+    }
+  }, [isFullscreenMoving]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return undefined;
+    const contentEl = document.body;
+    const updateFullscreen = () => {
+      const fullScreenMode = Boolean(
+        document.fullscreenElement ||
+          // $FlowIssue: deprecated backwards compability
+          document.fullscreen ||
+          // $FlowIssue: deprecated backwards compability
+          document.mozFullscreen ||
+          // $FlowIssue: deprecated backwards compability
+          document.webkitIsFullscreen,
+      );
+      if (fullScreenMode !== isFullscreen) {
+        lctx.setTemp('isFullscreen', fullScreenMode);
+      }
+    };
+    updateFullscreen();
+    document.addEventListener('mozfullscreenchange', updateFullscreen);
+    document.addEventListener('webkitfullscreenchange', updateFullscreen);
+    document.addEventListener('fullscreenchange', updateFullscreen);
+    if (contentEl) {
+      contentEl.addEventListener('mozfullscreenchange', updateFullscreen);
+      contentEl.addEventListener('webkitfullscreenchange', updateFullscreen);
+      contentEl.addEventListener('fullscreenchange', updateFullscreen);
+    }
+    return () => {
+      document.removeEventListener('mozfullscreenchange', updateFullscreen);
+      document.removeEventListener('webkitfullscreenchange', updateFullscreen);
+      document.removeEventListener('fullscreenchange', updateFullscreen);
+      if (contentEl) {
+        contentEl.removeEventListener('mozfullscreenchange', updateFullscreen);
+        contentEl.removeEventListener(
+          'webkitfullscreenchange',
+          updateFullscreen,
+        );
+        contentEl.removeEventListener('fullscreenchange', updateFullscreen);
+      }
+    };
+  }, [isFullscreen]);
 
   useEffect(() => {
     const { body } = document;
@@ -117,25 +189,26 @@ function DashboardLayout({
   const scrollRef = useScrollFix(modalActive);
 
   return (
-    <LayoutContext.Provider value={lctx}>
+    <LayoutContext.Provider value={{ ...lctx, hasHeader: Boolean(header) }}>
       <div
-        className={toClassName([
+        className={classnames(
           'dashboard',
           id && `dashboard_id-${id}`,
           themeClass && `dashboard_theme-${themeClass}`,
-        ])}
+        )}
         ref={scrollRef}
       >
         <Head>
           <link
             rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css"
           />
         </Head>
         {header && (
           <Header
             sidebarActive={sidebarActive}
             toggleSidebarActive={toggleSidebarActive}
+            allowFullscreen={allowFullscreen}
           >
             {sidebar && (
               <Sidebar
@@ -166,6 +239,7 @@ DashboardLayout.defaultProps = {
   header: true,
   sidebar: undefined,
   footer: true,
+  allowFullscreen: undefined,
 };
 
 export default DashboardLayout;

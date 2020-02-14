@@ -21,6 +21,25 @@
 
 .dashboard-header-cell {
   flex: 0 0 auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  &_separator:first-of-type {
+    margin-left: auto;
+  }
+  &_separator:not(:last-child) {
+    position: relative;
+    &:after {
+      @include breakpoint(large) {
+        position: absolute;
+        content: '';  
+        border-right: 1px solid rgba(151, 151, 151, 0.4);
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        height: 50px;
+      }
+    }
+  }
   &_sidebar {
     padding: 0 !important;
     flex: 0 0 25%;

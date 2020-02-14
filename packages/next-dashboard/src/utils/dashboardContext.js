@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useMemo, type Context } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import type {
   Branding,
@@ -163,71 +163,7 @@ export function useCreateDashboardContext(
   return context;
 }
 
-// Making a bitmask... bitwise operators are kinda useful :3
-/* eslint-disable no-bitwise */
-const flags = [
-  'STATE',
-  'SITEMESSAGE',
-  'BRANDING',
-  'COMPONENT',
-  'THEMES',
-  'AUTHPROVIDER',
-];
-const makeBitMask = () => {
-  const mask = {};
-  for (let i = 0; i < flags.length; i++) {
-    mask[flags[i]] = 1 << i;
-  }
-  return mask;
-};
-const bitmasks = { ...makeBitMask() };
+const DashboardContext = React.createContext<IDashboardContext>(defaultContext);
 
-type Bitmasks = typeof bitmasks;
-
-type ExtendedContext = {
-  ...Context<IDashboardContext>,
-  ...Bitmasks,
-};
-
-const DashboardContext: $Shape<ExtendedContext> = React.createContext<IDashboardContext>(
-  defaultContext,
-  (oldCtx, newCtx) => {
-    let changedBits = 0;
-    if (
-      oldCtx.setState !== newCtx.setState ||
-      oldCtx.getState !== newCtx.getState
-    ) {
-      changedBits |= bitmasks.STATE;
-    }
-    if (
-      oldCtx.siteMessages !== newCtx.siteMessages ||
-      oldCtx.registerSiteMessage !== newCtx.registerSiteMessage ||
-      oldCtx.dismissSiteMessage !== newCtx.dismissSiteMessage
-    ) {
-      changedBits |= bitmasks.SITEMESSAGE;
-    }
-    if (oldCtx.branding !== newCtx.branding) {
-      changedBits |= bitmasks.BRANDING;
-    }
-    if (oldCtx.Comp !== newCtx.Comp) {
-      changedBits |= bitmasks.COMPONENT;
-    }
-    if (oldCtx.themes !== newCtx.themes) {
-      changedBits |= bitmasks.THEMES;
-    }
-    if (
-      oldCtx.getAuthProvider !== newCtx.getAuthProvider ||
-      oldCtx.isAuthenticated !== newCtx.isAuthenticated
-    ) {
-      changedBits |= bitmasks.AUTHPROVIDER;
-    }
-
-    return changedBits;
-  },
-);
-/* eslint-enable no-bitwise */
-for (let i = 0; i < flags.length; i++) {
-  DashboardContext[flags[i]] = bitmasks[flags[i]];
-}
 DashboardContext.displayName = 'DashboardContext';
-export default (DashboardContext: Context<IDashboardContext> & Bitmasks);
+export default DashboardContext;
