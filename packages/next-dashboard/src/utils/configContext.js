@@ -3,8 +3,7 @@ import React from 'react';
 
 // Types used in comment-notation syntax
 // Some editors freak out if not using comment-notation for typecasting.
-// eslint-disable-next-line no-unused-vars
-import type { Branding, Theme, IAuthProvider } from './types';
+/*:: import type { Branding, Theme, IAuthProvider } from './types';*/
 import type { NextComponent } from './nextTypes';
 
 class DummyAuthProvider implements IAuthProvider {

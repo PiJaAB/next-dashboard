@@ -50,8 +50,4 @@ function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
   );
 }
 
-Header.defaultProps = {
-  allowFullscreen: undefined,
-};
-
 export default Header;

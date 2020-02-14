@@ -1,11 +1,6 @@
 // @flow
 
-import React, {
-  Fragment,
-  type ElementProps,
-  type Node,
-  type Element,
-} from 'react';
+import React, { type ElementProps, type Node } from 'react';
 import type { DataType } from '../utils/types';
 
 type Props<El: string = 'div'> = {
@@ -22,8 +17,8 @@ function Fader<El: string = 'div'>({
   className,
   children,
   ...props
-}: Props<El>): Element<El> | Element<typeof Fragment> {
-  if (as == null) return <Fragment />;
+}: Props<El>): Node {
+  if (as == null) return null;
   const Comp = as;
   return (
     <Comp

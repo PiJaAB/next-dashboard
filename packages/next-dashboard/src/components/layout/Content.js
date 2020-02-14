@@ -16,7 +16,6 @@ type Props = {
 
 const Content = ({ children, contentContainerWidth, header }: Props) => (
   <div
-    id="dashboard-content"
     className={['dashboard-content', !header && 'no-header']
       .filter(className => className)
       .join(' ')}

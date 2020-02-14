@@ -20,9 +20,7 @@ export default function useMutationObserver(
   const observer = useMemo(() => new MutationObserver(gcb));
   useEffect(() => {
     return () => {
-      if (observer) {
-        callbacks.delete(observer);
-      }
+      callbacks.delete(observer);
     };
   }, [observer]);
   useEffect(() => {
