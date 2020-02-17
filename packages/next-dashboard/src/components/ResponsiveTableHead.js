@@ -41,7 +41,7 @@ const TableHead = <E: {}, C>({
 }: HeadProps<E, C>) => {
   const headRef = useRef<HTMLTableSectionElement | null>(null);
   const ctx = useContext(LayoutContext);
-  const hasHeader = ctx.getState('hasHeader', true);
+  const hasHeader = ctx.getTemp('hasHeader', true);
   useEffect(() => {
     const headEl = headRef.current;
     if (!headEl) return undefined;
