@@ -2,6 +2,9 @@
   flex: 1 0 auto;
   padding: (80px + 20px) 0 40px;
   @include var('background-color', 'secondary-alt');
+  > .container {
+    background-color: inherit;
+  }
   transition: padding-left 0.25s ease;
   transition: margin-left 0.25s ease;
   @include breakpoint(medium) {
@@ -17,6 +20,14 @@
 
 }
 
+.dashboard_fullscreen .dashboard-content {
+  cursor: none;
+  transition: none;
+}
+
+.dashboard_fullscreen_moving .dashboard-content {
+  cursor: unset;
+}
 
 .dashboard_sidebar_active {
   .dashboard-content {

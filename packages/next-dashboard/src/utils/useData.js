@@ -12,7 +12,7 @@ function useData<Data: {}, DS: $Keys<Data>>(
 ): DataType<$ElementType<Data, DS>> {
   const [data, setData] = useState<
     DataType<$ElementType<Data, typeof dataSource>>,
-  >({ status: 'loading' });
+  >(subProvider.read(dataSource, extra));
 
   useEffect(() => {
     if (dummy) return undefined;

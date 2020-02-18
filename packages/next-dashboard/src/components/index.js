@@ -1,15 +1,14 @@
 // @flow
 
-import HeaderCell, { type HeaderCellID } from './HeaderCell';
-
-import type { Column as TableColumn } from './ResponsiveTable';
+import HeaderCell from './HeaderCell';
 
 export * from './layout';
 export * from './charts';
 
+export { default as FullscreenButton } from './FullscreenButton';
 export { default as SortableTable } from './SortableTable';
 export { default as SortablePageTable } from './SortablePageTable';
-export type { HeaderCellID, TableColumn };
+export type { Column as TableColumn } from './ResponsiveTable';
 export { HeaderCell };
 export { default as Statistic } from './Statistic';
 export { default as PageContent } from './PageContent';
