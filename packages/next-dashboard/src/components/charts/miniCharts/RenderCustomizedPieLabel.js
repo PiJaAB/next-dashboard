@@ -21,6 +21,9 @@ type Props<T: Plot> = {
 const H_PADDING = 15;
 
 const RADIAN = Math.PI / 180;
+
+const CONSTANT_OFFSET = 10;
+
 const RenderCustomizedPieLabel = <T: Plot>({
   cx,
   cy,
@@ -33,9 +36,9 @@ const RenderCustomizedPieLabel = <T: Plot>({
   valueFormatter,
   payload,
 }: Props<T>) => {
-  let labelRadius = outerRadius * 1.35;
-  if (width > 400) {
-    labelRadius = outerRadius * 1.25;
+  let labelRadius = outerRadius * 1.25;
+  if (width <= 400) {
+    labelRadius += CONSTANT_OFFSET;
   }
   const x = Math.min(
     Math.max(
