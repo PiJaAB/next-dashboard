@@ -14,15 +14,16 @@ type Props<T: Plot> = {
   fill: string,
   value: number,
   width: number,
-  height: number,
   valueFormatter?: (number, T, boolean) => ?string | number,
   payload: T,
 };
 
 const H_PADDING = 15;
-const V_PADDING = 10;
 
 const RADIAN = Math.PI / 180;
+
+const CONSTANT_OFFSET = 10;
+
 const RenderCustomizedPieLabel = <T: Plot>({
   cx,
   cy,
@@ -32,11 +33,13 @@ const RenderCustomizedPieLabel = <T: Plot>({
   fill,
   value,
   width,
-  height,
   valueFormatter,
   payload,
 }: Props<T>) => {
-  const labelRadius = outerRadius * 1.25;
+  let labelRadius = outerRadius * 1.25;
+  if (width <= 400) {
+    labelRadius += CONSTANT_OFFSET;
+  }
   const x = Math.min(
     Math.max(
       cx + labelRadius * Math.cos(-midAngle * RADIAN),
@@ -44,13 +47,7 @@ const RenderCustomizedPieLabel = <T: Plot>({
     ),
     width - H_PADDING - PADDING.RIGHT,
   );
-  const y = Math.min(
-    Math.max(
-      cy + labelRadius * Math.sin(-midAngle * RADIAN),
-      PADDING.TOP + V_PADDING,
-    ),
-    height - V_PADDING - PADDING.BOTTOM,
-  );
+  const y = cy + labelRadius * Math.sin(-midAngle * RADIAN);
 
   return (
     <g transform={`translate(${x}, ${y})`}>

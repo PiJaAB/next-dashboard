@@ -64,3 +64,7 @@
 .recharts-text {
   @include var('fill', 'text');
 }
+.recharts-surface {
+  overflow: visible;
+}
+
