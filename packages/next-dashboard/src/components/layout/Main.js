@@ -5,6 +5,8 @@ import React, { useEffect, useContext } from 'react';
 import Head from 'next/head';
 import classnames from 'classnames';
 
+import FullscreenExitButton from '../FullscreenExitButton';
+
 import LayoutContext, {
   useCreateLayoutContext,
 } from '../../utils/layoutContext';
@@ -219,6 +221,7 @@ function DashboardLayout({
           {children}
         </Content>
         {footer && <Footer />}
+        <FullscreenExitButton />
         <div id="dashboard-modal-root" />
       </div>
     </LayoutContext.Provider>
