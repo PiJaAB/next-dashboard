@@ -8,40 +8,31 @@ import logger from '../utils/logger';
 type Props = {
   href?: string,
   as?: string,
-  children: React$Node,
+  children: string,
   icon?: React$Node,
   onClick?: (ev: MouseEvent) => ?boolean,
   active?: boolean,
-  raw?: boolean,
 };
 
 type LinkProps = {
   href: $PropertyType<Props, 'href'>,
   onClick: ?$PropertyType<Props, 'onClick'>,
   as: ?$PropertyType<Props, 'as'>,
-  children: React$Node,
+  children: string,
   active: $PropertyType<Props, 'active'>,
   icon: ?$PropertyType<Props, 'icon'>,
 };
 
 type ButtonProps = {
-  children: React$Node,
+  children: string,
   onClick: ?$PropertyType<Props, 'onClick'>,
   active: $PropertyType<Props, 'active'>,
   icon: ?$PropertyType<Props, 'icon'>,
   as: ?$PropertyType<Props, 'as'>,
 };
 
-type PropsRaw = {
-  children: React$Node,
-  onClick: ?$PropertyType<Props, 'onClick'>,
-  href: ?$PropertyType<Props, 'href'>,
-  icon: ?$PropertyType<Props, 'icon'>,
-  as: ?$PropertyType<Props, 'as'>,
-};
-
 type InnerProps = {
-  children: React$Node,
+  children: string,
   icon?: $PropertyType<Props, 'icon'>,
 };
 
@@ -83,6 +74,7 @@ function LinkEl({
   return (
     <Link href={href} as={as}>
       <a
+        title={children}
         className={[
           'button',
           'dashboard-sidebar-menu-item-button',
@@ -109,6 +101,7 @@ function ButtonEl({
   }
   return (
     <button
+      title={children}
       type="button"
       onClick={onClick}
       className={[
@@ -124,29 +117,18 @@ function ButtonEl({
   );
 }
 
-function RawEl({ children, onClick, href, icon, as }: PropsRaw): React$Node {
-  if (onClick || href || icon || as) {
-    logger.debug(
-      '`onClick`, `href`, `icon`, `as` unsupported during raw render.',
-    );
-  }
-  return children;
-}
-
 export default function NavEntry({
   href,
   children,
   icon,
   as,
   active: propActive,
-  raw,
   onClick,
 }: Props): React$Node {
   const router = useRouter();
   const active = propActive == null ? href === router.pathname : propActive;
   let Element = ButtonEl;
   if (href) Element = LinkEl;
-  if (raw) Element = RawEl;
   return (
     <div className="dashboard-sidebar-menu-item" key={href}>
       <Element

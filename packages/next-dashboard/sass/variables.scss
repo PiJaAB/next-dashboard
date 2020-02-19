@@ -66,6 +66,7 @@ $primary-alt-tint-red:    mix($red, $primary-alt-color, 25%) !default;
 
 $border-color:            #B9B9B9 !default;
 
+$success-color:           $green !default;
 $error-color:             $red !default;
 $warning-color:           orange  !default;
 
@@ -94,6 +95,7 @@ $colors: (
   'text':                 $text-color,
   'text-alt':             $text-alt-color,
   'text-rgb':             hexToRgb($text-color),
+  'success':              $success-color,
   'error':                $error-color,
   'warning':              $warning-color,
   'border':               $secondary-alt-color,

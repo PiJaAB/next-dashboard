@@ -82,8 +82,11 @@ export type DataExtra =
   | null;
 
 export type PollingFetcher<+Data: {}> = {
-  +runner: $Keys<Data> | ((extra?: DataExtra) => Promise<mixed> | mixed),
-  +parser?: any => any,
+  +runner:
+    | $Keys<Data>
+    | $ReadOnlyArray<$Keys<Data>>
+    | ((extra?: DataExtra) => Promise<mixed> | mixed),
+  +parser?: (...any) => any,
   +interval?: number | ((extra?: DataExtra) => number | void),
   +id: $Keys<Data>,
 };
