@@ -21,6 +21,27 @@
 
 .dashboard-header-cell {
   flex: 0 0 auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  &_separator {
+    position: relative;
+    &:after {
+      @include breakpoint(large) {
+        position: absolute;
+        content: '';  
+        border-right: 1px solid rgba(151, 151, 151, 0.4);
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        height: 50px;
+      }
+    }
+    &:last-child {
+      &:after {
+        content: none;
+      }
+    }
+  }
   &_sidebar {
     padding: 0 !important;
     flex: 0 0 25%;
@@ -38,31 +59,6 @@
     @include breakpoint(medium) {
       flex: 0 0 auto;
       max-width: 100%;
-    }
-  }
-  &_search {
-    z-index: 100;
-    flex: 1 0 auto;
-    display: none;
-    @include breakpoint(medium) {
-      display: block;
-    }
-  }
-  &_contact {
-    flex: 0 0 25%;
-    display: flex;
-    max-width: 25%;
-    justify-content: flex-end;
-    @include breakpoint(medium) {
-      flex: 0 0 auto;
-      display: block;
-      max-width: 100%;
-    }
-  }
-  &_profile {
-    display: none;
-    @include breakpoint(large) {
-      display: block;
     }
   }
 }

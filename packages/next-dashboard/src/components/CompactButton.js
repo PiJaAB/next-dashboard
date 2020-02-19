@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import NavEntry from './NavEntry';
 import LayoutContext from '../utils/layoutContext';
 
-type Props = { children?: React$Node, icon?: React$Node };
+type Props = { children?: string, icon?: React$Node };
 
 export default function CompactButton({ children, icon }: Props): React$Node {
   const ctx = useContext(LayoutContext);

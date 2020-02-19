@@ -4,19 +4,18 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
-import type {
-  Branding,
-  DashboardComponent,
-  IAuthProvider,
-  SiteMessageType,
-  Theme,
-} from './types';
+import type { DashboardComponent, SiteMessageType } from './types';
 import displayNameOf from './displayNameOf';
+import ConfigContext, {
+  type Config,
+  buildConfigContext,
+} from './configContext';
 
 import createPersistentState from './persistentState';
 import { SilentError } from './silentError';
 import DashboardContext, {
   useCreateDashboardContext,
+  getAuthProviderInstance,
 } from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
 import errorReporter from './errorReporter';
@@ -69,21 +68,6 @@ export type WrappedProps<P: {}, I> =
     }
   | InitialErrProps;
 
-export type Config = {
-  AuthProvider: Class<IAuthProvider>,
-  branding: Branding,
-  unauthedRoute?: string,
-  needAuthDefault: boolean,
-  error?: {
-    Component:
-      | (React$ComponentType<any> & { +getInitialProps: void })
-      | NextComponent<any>,
-    withContext?: boolean,
-  },
-  themes?: Theme[],
-  ClientAuthComp?: React$ComponentType<any>,
-};
-
 function makeStatusError(
   statusCode: number,
   message?: string,
@@ -108,26 +92,14 @@ const isSSR = typeof window === 'undefined';
 
 export const CLIENT_AUTH = Symbol('Client Auth');
 
-export default function createDashboardHOC({
-  AuthProvider,
-  needAuthDefault,
-  unauthedRoute,
-  error: errorConf,
-  themes: themesConf,
-  branding: brandingConf,
-  ClientAuthComp,
-}: Config): <U: {}, Q: {} = {}>(
+export default function createDashboardHOC(
+  config: Config,
+): <U: {}, Q: {} = {}>(
   Comp: DashboardComponent<U, Q>,
-  needAuth?: boolean,
+  needAuth: ?boolean,
+  configOverride: ?$Shape<Config>,
 ) => NextComponent<WrappedUnified<U, Q>, InitialUnified<Q>> {
-  const themes: Theme[] = themesConf || [
-    { name: 'Light', class: 'default' },
-    { name: 'Dark', class: 'dark' },
-  ];
-
-  const branding: Branding = brandingConf || {
-    name: 'PiJa Next',
-  };
+  const configCtx = buildConfigContext(config);
 
   const {
     getInitialState: getInitialDashboardState,
@@ -201,7 +173,8 @@ export default function createDashboardHOC({
 
   function withDashboard<P: {}, I: {} = {}>(
     Comp: DashboardComponent<P, I>,
-    needAuth?: boolean,
+    needAuth: ?boolean,
+    configOverride: ?$Shape<Config>,
   ):
     | NextComponent<WrappedUnified<P, I>, InitialUnified<I>>
     | NextComponent<WrappedUnified<P, {}>, InitialUnified<{}>> {
@@ -215,8 +188,13 @@ export default function createDashboardHOC({
         );
       }
     }
+    const overridenConf = configOverride && {
+      ...configCtx,
+      ...configOverride,
+    };
 
-    const parsedNeedAuth = needAuth == null ? needAuthDefault : needAuth;
+    const parsedNeedAuth =
+      needAuth == null ? configCtx.needAuthDefault : needAuth;
 
     function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
       const {
@@ -256,30 +234,30 @@ export default function createDashboardHOC({
         }
       }, [initial]);
 
-      const context = useCreateDashboardContext(
+      const dashboardCtx = useCreateDashboardContext(
         __INITIAL_DASHBOARD_STATE__,
         __INITIAL_LAYOUT_STATE__,
         persistDashboard,
         persistLayout,
-        themes,
         localSiteMessages,
         registerSiteMessage,
         dismissSiteMessage,
-        branding,
         Comp,
         __AUTH_SERIALIZED__,
-        AuthProvider,
+        configCtx.AuthProvider,
       );
       // eslint-disable-next-line no-underscore-dangle
       if (restProps.__ERRORED__) {
         const { __ERR_PROPS__: errProps } = restProps;
-        if (errorConf) {
-          return errorConf.withContext ? (
-            <DashboardContext.Provider value={context}>
-              <errorConf.Component {...errProps} />
-            </DashboardContext.Provider>
+        if (configCtx.error) {
+          return configCtx.error.withContext ? (
+            <ConfigContext.Provider value={overridenConf || configCtx}>
+              <DashboardContext.Provider value={dashboardCtx}>
+                <configCtx.error.Component {...errProps} />
+              </DashboardContext.Provider>
+            </ConfigContext.Provider>
           ) : (
-            <errorConf.Component {...errProps} />
+            <configCtx.error.Component {...errProps} />
           );
         }
         return null;
@@ -287,14 +265,16 @@ export default function createDashboardHOC({
       const { __ERRORED__: _, ...rest } = restProps;
       let RenderComp = Comp;
       if (__PERFORM_SSR__ != null && !__PERFORM_SSR__ && initial) {
-        RenderComp = ClientAuthComp;
+        RenderComp = configCtx.ClientAuthComp;
       }
 
       return (
         RenderComp != null && (
-          <DashboardContext.Provider value={context}>
-            <RenderComp {...rest} />
-          </DashboardContext.Provider>
+          <ConfigContext.Provider value={overridenConf || configCtx}>
+            <DashboardContext.Provider value={dashboardCtx}>
+              <RenderComp {...rest} />
+            </DashboardContext.Provider>
+          </ConfigContext.Provider>
         )
       );
     }
@@ -302,7 +282,7 @@ export default function createDashboardHOC({
     const getInitialProps: InitialPropsContext => Promise<
       InitialProps<$Shape<I> | {}>,
     > = async ctx => {
-      const authProvider = new AuthProvider(ctx);
+      const authProvider = getAuthProviderInstance(configCtx.AuthProvider, ctx);
       await authProvider.ready;
       const { pathname, query, asPath } = ctx;
       const authenticated = await authProvider.isAuthorizedForRoute(
@@ -313,19 +293,19 @@ export default function createDashboardHOC({
       const performSSR = authenticated && authenticated !== CLIENT_AUTH;
       if (parsedNeedAuth && !authenticated) {
         const { res } = ctx;
-        if (unauthedRoute) {
+        if (configCtx.unauthedRoute) {
           if (res) {
             res.writeHead(302, {
-              Location: `${unauthedRoute}?attemptedURI=${encodeURIComponent(
-                asPath,
-              )}`,
+              Location: `${
+                configCtx.unauthedRoute
+              }?attemptedURI=${encodeURIComponent(asPath)}`,
             });
             res.end();
             return {
               __ERR_PROPS__:
-                (errorConf &&
-                typeof errorConf.Component.getInitialProps === 'function'
-                  ? await errorConf.Component.getInitialProps(ctx)
+                (configCtx.error &&
+                typeof configCtx.error.Component.getInitialProps === 'function'
+                  ? await configCtx.error.Component.getInitialProps(ctx)
                   : null) || {},
               __INITIAL_DASHBOARD_STATE__: getInitialDashboardState(ctx) || {},
               __INITIAL_LAYOUT_STATE__: getInitialLayoutState(ctx) || {},
@@ -335,14 +315,14 @@ export default function createDashboardHOC({
             };
           }
           Router.push({
-            pathname: unauthedRoute,
+            pathname: configCtx.unauthedRoute,
             query: { attemptedURI: asPath },
           });
           return {
             __ERR_PROPS__:
-              (errorConf &&
-              typeof errorConf.Component.getInitialProps === 'function'
-                ? await errorConf.Component.getInitialProps(ctx)
+              (configCtx.error &&
+              typeof configCtx.error.Component.getInitialProps === 'function'
+                ? await configCtx.error.Component.getInitialProps(ctx)
                 : null) || {},
             __INITIAL_DASHBOARD_STATE__: getInitialDashboardState(ctx) || {},
             __INITIAL_LAYOUT_STATE__: getInitialLayoutState(ctx) || {},
@@ -359,12 +339,12 @@ export default function createDashboardHOC({
           'Unauthorized, please log in.',
         );
 
-        if (errorConf) {
+        if (configCtx.error) {
           const errCtx = { ...ctx, err };
           return {
             __ERR_PROPS__:
-              (typeof errorConf.Component.getInitialProps === 'function'
-                ? await errorConf.Component.getInitialProps(errCtx)
+              (typeof configCtx.error.Component.getInitialProps === 'function'
+                ? await configCtx.error.Component.getInitialProps(errCtx)
                 : null) || {},
             __INITIAL_DASHBOARD_STATE__: getInitialDashboardState(ctx) || {},
             __INITIAL_LAYOUT_STATE__: getInitialLayoutState(ctx) || {},

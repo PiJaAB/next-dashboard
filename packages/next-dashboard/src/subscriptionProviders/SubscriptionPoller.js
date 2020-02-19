@@ -16,10 +16,10 @@ function wrapExtra<Data: {}>(
   func: $PropertyType<PollingFetcher<Data>, 'runner'>,
   extra: DataExtra,
 ): $PropertyType<PollingFetcher<Data>, 'runner'> {
-  return function runner(): $Call<
-    $PropertyType<PollingFetcher<Data>, 'runner'>,
-    DataExtra,
-  > {
+  if (typeof func !== 'function') {
+    throw new Error('Wrap non-function runner.');
+  }
+  return function runner(): $Call<typeof func, DataExtra> {
     return func.call(this, extra);
   };
 }
@@ -39,7 +39,10 @@ export function makePollingAlias<Data: {}, DS1: $Keys<Data>, DS2: $Keys<Data>>(
 type ParsedPollingFetcher<Data: {}> = {
   +id: string,
   +interval?: number | ((extra?: DataExtra) => number | void),
-  +runner: $Keys<Data> | ((extra?: DataExtra) => mixed),
+  +runner:
+    | $Keys<Data>
+    | $ReadOnlyArray<$Keys<Data>>
+    | ((extra?: DataExtra) => mixed),
   +parser?: any => any,
 };
 
@@ -64,6 +67,9 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     }
     try {
       this.setUpdating(fetcher.id);
+      if (typeof fetcher.runner !== 'function') {
+        throw new Error('Attempting to start fetcher without runner.');
+      }
       const res = await fetcher.runner.call(this);
       if (!this.activeFetchers.has(fetcher.id)) {
         return;
@@ -153,7 +159,9 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
 
   aliasCallbacks: Map<
     string,
-    (DataType<$ElementType<Data, $Keys<Data>>>) => void,
+    $ReadOnlyArray<
+      [$Keys<Data>, (DataType<$ElementType<Data, $Keys<Data>>>) => void],
+    >,
   > = new Map();
 
   subscribeAlias: <DS: $Keys<Data>>(
@@ -167,9 +175,13 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       },
     );
     if (!fetcher) return false;
-    if (typeof fetcher.runner !== 'string') return false;
+    if (typeof fetcher.runner === 'function') return false;
 
-    const parentSource: $Keys<Data> = fetcher.runner;
+    const parentSources: $ReadOnlyArray<$Keys<Data>> = Array.isArray(
+      fetcher.runner,
+    )
+      ? fetcher.runner
+      : [fetcher.runner];
 
     const key = generateDataKey(dataSource, extra);
 
@@ -188,21 +200,49 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     set.add(cb);
     this.activeListeners.set(key, set);
 
-    const runner = data => {
-      let parsed;
-      if (!fetcher.parser || data.status !== 'success') {
-        parsed = data;
-      } else {
-        parsed = {
-          ...data,
-          value: fetcher.parser(data.value),
-        };
-      }
-      this.setData(key, parsed);
-    };
-    runner(this.read(parentSource, extra));
-    this.aliasCallbacks.set(key, runner);
-    this.subscribe<DS>(runner, parentSource, extra);
+    const cache: DataType<
+      $ElementType<Data, DS>,
+    >[] = parentSources.map(source => this.read(source, extra));
+    const runners = parentSources.map((parentSource: $Keys<Data>, i) => {
+      const runner = data => {
+        cache[i] = data;
+        const errorEntry = cache.find(c => c.status === 'error');
+        if (errorEntry) {
+          if (this.dataCache[key] !== errorEntry) {
+            this.setData(key, errorEntry);
+          }
+          return;
+        }
+        const allDone = !cache.some(c => c.status !== 'success');
+        const updating = cache.some(c => c.status === 'success' && c.updating);
+        if (allDone) {
+          const values = cache.map(c => c.value);
+          this.setData(key, {
+            status: 'success',
+            updating,
+            value: fetcher.parser ? fetcher.parser(...values) : values,
+          });
+          return;
+        }
+        if (!this.dataCache[key] || this.dataCache[key].status !== 'loading')
+          this.setData(key, {
+            status: 'loading',
+          });
+      };
+      this.subscribe<DS>(runner, parentSource, extra);
+      return [parentSource, runner];
+    });
+    const allDone = !cache.some(c => c.status !== 'success');
+    const updating = cache.some(c => c.status === 'success' && c.updating);
+    if (allDone) {
+      const values = cache.map(c => c.value);
+      this.setData(key, {
+        status: 'success',
+        updating,
+        value: fetcher.parser ? fetcher.parser(...values) : values,
+      });
+    }
+    this.aliasCallbacks.set(key, runners);
     return true;
   };
 
@@ -217,8 +257,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       },
     );
     if (!fetcher) return false;
-    if (typeof fetcher.runner !== 'string') return false;
-    const parentSource: $Keys<Data> = fetcher.runner;
+    if (typeof fetcher.runner === 'function') return false;
 
     const key = generateDataKey(dataSource, extra);
     const set = this.activeListeners.get(key);
@@ -243,10 +282,12 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
         setTimeout(() => {
           this.stoppingTimers.delete(key);
           delete this.dataCache[key];
-          const runner = this.aliasCallbacks.get(key);
-          if (runner) {
+          const runners = this.aliasCallbacks.get(key);
+          if (runners) {
             this.aliasCallbacks.delete(key);
-            this.unsubscribe<DS>(runner, parentSource, extra);
+            runners.forEach(([parentSource, runner]) => {
+              this.unsubscribe<DS>(runner, parentSource, extra);
+            });
           }
           this.activeListeners.delete(key);
         }, 5000),
