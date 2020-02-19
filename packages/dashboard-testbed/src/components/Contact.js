@@ -19,10 +19,10 @@ const Contact = () => {
       >
         <img src="/images/contact.png" alt="Kontaktperson" />
       </button>
-      <div className="contact_content">
+      <div className="contact-content">
         <button
           type="button"
-          className="contact_content_button no-button color-text"
+          className="contact-content-button no-button color-text"
           onClick={openContactModal}
         >
           Contact
