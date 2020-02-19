@@ -68,6 +68,9 @@ export default function HollowPieChart<T: Plot>({
                 key="pie-chart-key"
                 verticalAlign="bottom"
                 iconType="circle"
+                wrapperStyle={{
+                  bottom: -14,
+                }}
                 content={({ payload }) => (
                   <ul className="pie-chart-types-list">
                     {payload.map(entry => (
