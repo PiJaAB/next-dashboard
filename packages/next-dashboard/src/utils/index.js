@@ -15,6 +15,8 @@ export {
 } from './createDashboardHOC';
 
 export { default as createPersistentState } from './persistentState';
+export type { JSONSerializable } from './persistentState';
+
 export * from './types';
 export { default as useData } from './useData';
 export { default as withData } from './withData';

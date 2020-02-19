@@ -57,14 +57,14 @@ const Modal = ({ ...props }: Props) => {
   };
 
   useEffect(() => {
-    if (context) context.setModalActive(active);
+    context.setModalActive(active);
     document.addEventListener('mousedown', click);
     document.addEventListener('keydown', escape);
     return () => {
       document.removeEventListener('mousedown', click);
       document.removeEventListener('keydown', escape);
     };
-  }, [active]);
+  }, [active, close]);
 
   if (typeof window === 'undefined') return null;
 

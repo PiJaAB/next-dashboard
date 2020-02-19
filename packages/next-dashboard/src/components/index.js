@@ -15,6 +15,7 @@ export { default as PageContent } from './PageContent';
 export { default as Modal } from './Modal';
 export { default as NavEntry } from './NavEntry';
 export { default as NavSection } from './NavSection';
+export { default as NavSeparator } from './NavSeparator';
 export { default as CompactButton } from './CompactButton';
 export { default as ThemeSelector } from './ThemeSelector';
 export { default as PageTable } from './PageTable';

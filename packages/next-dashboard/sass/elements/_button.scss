@@ -48,6 +48,15 @@ input[type='reset'] {
     opacity: 0.5;
     cursor: not-allowed;
   }
+  &.type_error {
+    @include var('background-color', 'error');
+  }
+  &.type_success {
+    @include var('background-color', 'success');
+  }
+  &.type_warning {
+    @include var('background-color', 'warning');
+  }
   &.no-button{
     display: inline;
     margin: 0;
