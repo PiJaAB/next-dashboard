@@ -89,12 +89,13 @@
       border-width: 1px;
       border-style: inset;
     }
-  } 
+  }
 }
 
 .dashboard-sidebar-menu-item {
   position: relative;
   margin: 0 0 10px;
+  font-weight: 500;
   &:last-child {
     margin: 0;
   }

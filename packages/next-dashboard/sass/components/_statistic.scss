@@ -4,6 +4,7 @@
   border-radius: 10px;
   @include add-border;
   @include var('background-color', 'primary-alt');
+  font-weight: 500;
   background-position: right 10px top 10px;
   background-repeat: no-repeat;
   background-size: auto 50%;

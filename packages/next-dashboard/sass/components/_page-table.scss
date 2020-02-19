@@ -14,8 +14,9 @@
       position: relative;
       top: inherit;
       @include var('background-color', 'tertiary-alt');
-      font-weight: 600;
-      text-transform: uppercase;
+      font-weight: 500;
+      text-transform: capitalize;
+      font-size: 1.4rem;
       z-index: 99;
       &.sort:after {
         font-weight: 900;
