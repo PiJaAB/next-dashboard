@@ -67,4 +67,7 @@
 .recharts-surface {
   overflow: visible;
 }
+.recharts-responsive-container {
+  height: calc(100% - 14px) !important;
+}
 

@@ -70,6 +70,9 @@ export default function RadialBarChart<T: Plot>({
                 key="radial-bar-chart-key"
                 verticalAlign="bottom"
                 iconType="circle"
+                wrapperStyle={{
+                  bottom: -14,
+                }}
                 content={({ payload }) => (
                   <ul className="radial-bar-chart-types-list">
                     {payload.map(entry => (
