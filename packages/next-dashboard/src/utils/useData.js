@@ -28,7 +28,7 @@ function useData<Data: {}, DS: $Keys<Data>>(
     };
   }, [dataSource, extra]);
 
-  return data;
+  return !dummy ? data : { status: 'loading' };
 }
 
 export default useData;
