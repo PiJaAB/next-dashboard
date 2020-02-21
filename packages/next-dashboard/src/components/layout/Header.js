@@ -29,7 +29,7 @@ function Header({ toggleSidebarActive, sidebarActive, children }: Props): Node {
   return (
     <header className="dashboard-header">
       <div className="header-content-container">
-        <div className="grid grid-x3-medium grid-x4-large align-items-center">
+        <div className="grid grid-x3-medium grid-x4-large align-items-center flex-wrap-nowrap">
           <div className="cell dashboard-header-cell dashboard-header-cell_sidebar">
             <HamburgerMenu
               sidebarActive={sidebarActive}
