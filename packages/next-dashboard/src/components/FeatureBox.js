@@ -6,7 +6,7 @@ export type Props = {
   icon?: string,
   iconBackgroundColor?: string,
   label?: React$Node,
-  value: string | number,
+  value: string | number | void,
   footerComponent?: React$Node,
   status?: Statuses,
   extraStyles?: { [string]: mixed },
