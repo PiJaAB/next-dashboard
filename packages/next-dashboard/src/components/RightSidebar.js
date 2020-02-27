@@ -13,6 +13,7 @@ type Props = {
   isOpen?: boolean,
   onChange?: boolean => void,
   initialIsOpen?: boolean,
+  className?: string,
 };
 
 const RightSidebar = ({
@@ -21,6 +22,7 @@ const RightSidebar = ({
   isOpen,
   initialIsOpen,
   onChange,
+  className,
 }: Props) => {
   const [isOpenInner, setOpenInner] = useState(
     isOpen != null ? isOpen : Boolean(initialIsOpen),
@@ -60,6 +62,7 @@ const RightSidebar = ({
   return ReactDOM.createPortal(
     <div
       className={classnames(
+        className,
         'right-sidebar',
         isOpenInner && 'right-sidebar_open',
       )}
@@ -88,6 +91,7 @@ RightSidebar.defaultProps = {
   isOpen: undefined,
   onChange: undefined,
   initialIsOpen: undefined,
+  className: undefined,
 };
 
 export default RightSidebar;
