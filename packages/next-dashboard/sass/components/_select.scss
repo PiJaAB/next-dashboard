@@ -1,6 +1,9 @@
 .select {
   &-container {
     position: relative;
+    &_stretch {
+      width: 100%;
+    }
   }
   &__control {
     @include add-border;
