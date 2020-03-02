@@ -50,6 +50,9 @@
 .recharts-tooltip-cursor {
   @include var('stroke', 'text-rgb', 'rgba', 0.25);
 }
+.recharts-tooltip-wrapper {
+  z-index: 100;
+}
 .recharts-default-tooltip {
   padding: 20px !important;
   border: none !important;

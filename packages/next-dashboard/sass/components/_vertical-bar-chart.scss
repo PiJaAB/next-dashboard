@@ -11,3 +11,13 @@
     stroke-opacity: 0;
   }
 }
+
+.stacked-vertical-bar-chart-spacer {
+  padding-bottom: 40%;
+  @include breakpoint(medium) {
+    padding-bottom: 30%;
+  }
+  @include breakpoint(large) {
+    padding-bottom: 20%;
+  }
+}
