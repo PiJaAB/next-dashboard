@@ -12,17 +12,14 @@ import {
 } from 'recharts';
 import { currencyFormat } from '../utils/numberFormatters';
 
-type Props = {
-  data: $ReadOnlyArray<{
-    +Fullname: string,
-    +loggedtime: number,
-    +utilization: number,
-  }>,
+type Props<D: {}> = {
+  data: $ReadOnlyArray<D>,
   loading?: boolean,
-  barChartKeysAndColor?:
-    | null
-    | { key: string, color: string }
-    | { key: string, color: string, stackId?: string }[],
+  barChartKeysAndColor?: $ReadOnlyArray<{
+    +key: string,
+    +color: string,
+    +stackId: string,
+  }>,
 };
 
 const renderBars = barChartKeysAndColor => {
@@ -51,7 +48,7 @@ const renderBars = barChartKeysAndColor => {
   return null;
 };
 
-const Chart = ({ data, loading, barChartKeysAndColor }: Props) => {
+const Chart = <D: {}>({ data, loading, barChartKeysAndColor }: Props<D>) => {
   const chart = (
     <div className="page-chart vertical-bar-chart-container">
       <div className="page-chart-content">
