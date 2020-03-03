@@ -84,7 +84,7 @@ const Chart = <D: {}>({
             />
             <Legend
               content={({ payload }) => (
-                <ul className="line-chart-legend-list">
+                <ul className="stacked-vertical-bar-chart-legends-list">
                   {payload.map(
                     (entry, index) =>
                       index < 3 && (
