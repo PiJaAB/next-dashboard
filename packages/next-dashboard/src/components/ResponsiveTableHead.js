@@ -1,11 +1,12 @@
 // @flow
 import React, { useRef, useEffect, useContext } from 'react';
+/*:: import * as R from 'react'; */
 import { useMutationObserver, LayoutContext } from '../utils';
 import type { TextAlignProps, ColData } from './ResponsiveTable';
 
 export type Column<E, C> = $ReadOnly<{
   ...ColData<E, C>,
-  +renderHead?: (column: Column<E, C>) => ?React$Node,
+  +renderHead?: (column: Column<E, C>) => ?R.Node,
   +textAlign?: string,
 }>;
 
@@ -13,7 +14,7 @@ type HeadProps<E, C> = {
   cols: $ReadOnlyArray<Column<E, C>>,
   columnKeyExtractor: (column: Column<E, C>) => string,
   textAlignClass: (props: TextAlignProps) => void | string,
-  renderHead: (column: Column<E, C>) => ?React$Node,
+  renderHead: (column: Column<E, C>) => ?R.Node,
   onColumnClick?: (column: Column<E, C>) => void,
 };
 

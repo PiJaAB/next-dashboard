@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+/*:: import * as R from 'react'; */
 import SiteMessage from '../SiteMessage';
 import DashboardContext from '../../utils/dashboardContext';
 import type { SiteMessageType } from '../../utils/types';
@@ -11,7 +12,7 @@ function siteMessageKey(m: SiteMessageType): string {
   }${m.message ? m.message : ''}`;
 }
 
-function SiteMessages(): React$Node {
+function SiteMessages(): R.Node {
   return (
     <>
       <noscript>

@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 // Types used in comment-notation syntax
 // Some editors freak out if not using comment-notation for typecasting.
@@ -39,10 +40,10 @@ export const defaultContext = {
 export type FullConfig = {
   ...typeof defaultContext,
   unauthedRoute?: string,
-  ClientAuthComp?: React$ComponentType<any>,
+  ClientAuthComp?: R.ComponentType<any>,
   error?: {
     Component:
-      | (React$ComponentType<any> & { +getInitialProps: void })
+      | (R.ComponentType<any> & { +getInitialProps: void })
       | NextComponent<any>,
     withContext?: boolean,
   },

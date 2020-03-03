@@ -1,6 +1,7 @@
 // @flow
 
 import React, { useState, useEffect, useMemo, useContext } from 'react';
+/*:: import * as R from 'react'; */
 import ReactDOM from 'react-dom';
 
 import classnames from 'classnames';
@@ -8,7 +9,7 @@ import useInitialFlag from '../utils/useInitialFlag';
 import LayoutContext from '../utils/layoutContext';
 
 type Props = {
-  children?: React$Node,
+  children?: R.Node,
   icon?: string,
   isOpen?: boolean,
   onChange?: boolean => void,

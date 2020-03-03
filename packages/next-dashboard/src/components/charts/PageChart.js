@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 type Props = {
-  children: React$Node,
+  children: R.Node,
 };
 
 const PageChart = ({ children }: Props) => (

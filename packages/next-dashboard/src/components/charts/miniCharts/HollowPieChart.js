@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
+
 import {
   Legend,
   Pie,
@@ -26,7 +28,7 @@ import { RENDER_ISSUE_OFFSET_PADDING } from './rechartsCorrections';
 
 type Props<T: Plot> = {
   plots: $ReadOnlyArray<T>,
-  children?: React$Node,
+  children?: R.Node,
   offsetAngle?: number,
   angularSize?: number,
   valueFormatter?: (number, T, boolean) => ?string | number,
@@ -40,7 +42,7 @@ export default function HollowPieChart<T: Plot>({
   angularSize,
   valueFormatter,
   centerText,
-}: Props<T>): React$Element<typeof PageChart> {
+}: Props<T>): R.Element<typeof PageChart> {
   const startAngle = 90 - (offsetAngle || 0);
   const endAngle = startAngle - (angularSize != null ? angularSize : 360);
   return (

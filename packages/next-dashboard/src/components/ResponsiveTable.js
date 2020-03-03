@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 import ReactTooltip from 'react-tooltip';
 
 import FixedScrollbar from './FixedScrollbar';
@@ -16,8 +17,8 @@ export type ColData<-E, -C> = $ReadOnly<{
 
 export type Column<E, -C> = $ReadOnly<{
   ...ColData<E, C>,
-  +renderHead?: (column: ColData<E, C>) => ?React$Node,
-  +renderBody?: (entry: E, column: ColData<E, C>) => ?React$Node,
+  +renderHead?: (column: ColData<E, C>) => ?R.Node,
+  +renderBody?: (entry: E, column: ColData<E, C>) => ?R.Node,
   +textAlign?: string,
 }>;
 
@@ -25,8 +26,8 @@ export type Props<E, C> = {
   className?: string,
   columns: $ReadOnlyArray<Column<E, C>>,
   data: ?$ReadOnlyArray<E>,
-  renderHead?: (column: ColData<E, C>) => ?React$Node,
-  renderBody?: (entry: E, column: ColData<E, C>) => ?React$Node,
+  renderHead?: (column: ColData<E, C>) => ?R.Node,
+  renderBody?: (entry: E, column: ColData<E, C>) => ?R.Node,
   columnKeyExtractor?: (column: ColData<E, C>) => string,
   dataKeyExtractor?: (entry: E) => string,
   onColumnClick?: (column: HeadColumn<E, C>) => void,

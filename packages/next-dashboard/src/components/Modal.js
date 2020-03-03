@@ -2,6 +2,7 @@
 
 // @flow
 import React, { useEffect, useRef, useContext } from 'react';
+/*:: import * as R from 'react'; */
 import ReactDOM from 'react-dom';
 
 import LayoutContext from '../utils/layoutContext';
@@ -14,10 +15,10 @@ type Props = {
   status?: string,
   width?: 'extra-narrow' | 'narrow' | 'normal' | 'wide' | 'extra-wide',
   title?: string,
-  header?: React$Node,
-  content?: React$Node,
-  children?: React$Node,
-  footer?: React$Node,
+  header?: R.Node,
+  content?: R.Node,
+  children?: R.Node,
+  footer?: R.Node,
 };
 
 const Modal = ({ ...props }: Props) => {

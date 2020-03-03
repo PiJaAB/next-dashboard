@@ -1,15 +1,16 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 type Props = {
-  children?: React$Node,
+  children?: R.Node,
   contentContainerWidth?:
     | 'extra-narrow'
     | 'narrow'
     | 'normal'
     | 'wide'
     | 'extra-wide',
-  header?: React$Node,
+  header?: R.Node,
 };
 
 const Content = ({ children, contentContainerWidth, header }: Props) => (

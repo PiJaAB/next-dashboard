@@ -1,12 +1,13 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 import type { InitialPropsContext, NextComponent } from './nextTypes';
 import displayNameOf from './displayNameOf';
 
 type InitialProps = {};
 
-type HasChild = { children?: React$Node };
+type HasChild = { children?: R.Node };
 
 type WithoutChildren<P: {}> = $Diff<P, HasChild>;
 

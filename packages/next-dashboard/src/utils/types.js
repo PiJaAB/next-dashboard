@@ -1,4 +1,5 @@
 // @flow
+/*:: import * as R from 'react'; */
 import type { InitialPropsContext } from './nextTypes';
 
 export class NotImplementedError extends Error {
@@ -116,9 +117,7 @@ type DashboardComponentStatics = {
   url?: string,
 };
 
-export type DashboardComponent<P: {}, I: {} = {}> = React$ComponentType<
-  P & I,
-> & {
+export type DashboardComponent<P: {}, I: {} = {}> = R.ComponentType<P & I> & {
   +getInitialProps?: (ctx: DashboardInitialPropsContext) => Promise<I> | I,
 } & DashboardComponentStatics;
 

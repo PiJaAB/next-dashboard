@@ -1,13 +1,14 @@
 // @flow
 import React, { PureComponent } from 'react';
+/*:: import * as R from 'react'; */
 import type { Statuses } from '../utils/types';
 
 export type Props = {
   icon?: string,
   iconBackgroundColor?: string,
-  label?: React$Node,
+  label?: R.Node,
   value: string | number | void,
-  footerComponent?: React$Node,
+  footerComponent?: R.Node,
   status?: Statuses,
   extraStyles?: { [string]: mixed },
 };

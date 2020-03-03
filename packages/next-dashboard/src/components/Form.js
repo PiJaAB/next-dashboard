@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 import areEqualShallow from '../utils/areEqualShallow';
 
@@ -26,7 +27,7 @@ type State = {
 };
 
 type Props = {
-  children: React$Node,
+  children: R.Node,
 };
 
 const defaultContext: FormCTX = {
