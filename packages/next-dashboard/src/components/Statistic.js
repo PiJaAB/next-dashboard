@@ -1,17 +1,17 @@
 // @flow
-import React, { type Node } from 'react';
+import * as React from 'react';
 import classnames from 'classnames';
 
 import type { Statuses } from '../utils/types';
 
 export type Props = {
-  label?: Node,
-  value: Node,
-  prefix?: Node,
-  suffix?: Node,
-  periodValue?: Node,
-  periodText?: Node,
-  description?: Node,
+  label?: React.Node,
+  value: React.Node,
+  prefix?: React.Node,
+  suffix?: React.Node,
+  periodValue?: React.Node,
+  periodText?: React.Node,
+  description?: React.Node,
   status?: Statuses,
   direction?: 'up' | 'down',
   className?: string,
@@ -29,7 +29,7 @@ function Statistic({
   direction,
   className,
   ...rest
-}: Props): Node {
+}: Props): React.Node {
   return (
     <div
       className={classnames(
