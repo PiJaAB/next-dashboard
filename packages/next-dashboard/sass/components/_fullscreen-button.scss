@@ -5,6 +5,7 @@
     border-style: solid;
     border-width: 1px;
     background: none;
+    @include var('color', 'text');
     &:hover {
       @include var('background-color', 'primary');
     }
