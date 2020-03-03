@@ -30,9 +30,6 @@ function Fader<El: string = 'div'>({
       ]
         .filter(c => c)
         .join(' ')}
-      style={{
-        height: '100%',
-      }}
     >
       {children}
     </Comp>
