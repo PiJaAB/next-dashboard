@@ -10,7 +10,7 @@ export type Props = {
   footerComponent?: React$Node,
   status?: Statuses,
   extraStyles?: { [string]: mixed },
-  smaller?: boolean,
+  smallerTextContent?: boolean,
 };
 
 export const defaultProps = {
@@ -20,7 +20,7 @@ export const defaultProps = {
   status: undefined,
   footerComponent: undefined,
   extraStyles: {},
-  smaller: false,
+  smallerTextContent: false,
 };
 
 export default class FeatureBox extends PureComponent<Props> {
@@ -35,7 +35,7 @@ export default class FeatureBox extends PureComponent<Props> {
       footerComponent,
       status,
       extraStyles,
-      smaller,
+      smallerTextContent,
     } = this.props;
     return (
       <div
@@ -61,7 +61,7 @@ export default class FeatureBox extends PureComponent<Props> {
         <div className="feature-box-value margin-bottom-x1 display-flex align-items-center flex-grow-1">
           <h2
             style={{
-              fontSize: `${smaller ? '2rem' : ''}`,
+              fontSize: `${smallerTextContent ? '2rem' : ''}`,
             }}
           >
             {status === 'loading' ? 'Loading...' : value}
