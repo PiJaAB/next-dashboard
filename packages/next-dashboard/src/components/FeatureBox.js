@@ -10,6 +10,7 @@ export type Props = {
   footerComponent?: React$Node,
   status?: Statuses,
   extraStyles?: { [string]: mixed },
+  smaller?: boolean,
 };
 
 export const defaultProps = {
@@ -19,6 +20,7 @@ export const defaultProps = {
   status: undefined,
   footerComponent: undefined,
   extraStyles: {},
+  smaller: false,
 };
 
 export default class FeatureBox extends PureComponent<Props> {
@@ -33,10 +35,16 @@ export default class FeatureBox extends PureComponent<Props> {
       footerComponent,
       status,
       extraStyles,
+      smaller,
     } = this.props;
     return (
       <div
-        className={['feature_box', status && `feature_box_status_${status}`]
+        className={[
+          'feature-box',
+          'display-flex',
+          'flex-direction-column',
+          status && `feature-box_status_${status}`,
+        ]
           .filter(c => c)
           .join(' ')}
         style={extraStyles}
@@ -49,9 +57,15 @@ export default class FeatureBox extends PureComponent<Props> {
             <i className={`fa ${icon}`} />
           </div>
         )}
-          <h2>{status === 'loading' ? 'Loading...' : value}</h2>
         <div className="feature-box-label label margin-bottom-x1">{label}</div>
-        <div className="feature-box-value margin-bottom-x1">
+        <div className="feature-box-value margin-bottom-x1 display-flex align-items-center flex-grow-1">
+          <h2
+            style={{
+              fontSize: `${smaller ? '2rem' : ''}`,
+            }}
+          >
+            {status === 'loading' ? 'Loading...' : value}
+          </h2>
         </div>
         {footerComponent && (
           <div className="feature-box-footer">{footerComponent}</div>
