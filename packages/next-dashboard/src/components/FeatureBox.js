@@ -10,6 +10,7 @@ export type Props = {
   footerComponent?: React$Node,
   status?: Statuses,
   extraStyles?: { [string]: mixed },
+  smallerTextContent?: boolean,
 };
 
 export const defaultProps = {
@@ -19,6 +20,7 @@ export const defaultProps = {
   status: undefined,
   footerComponent: undefined,
   extraStyles: {},
+  smallerTextContent: false,
 };
 
 export default class FeatureBox extends PureComponent<Props> {
@@ -33,28 +35,40 @@ export default class FeatureBox extends PureComponent<Props> {
       footerComponent,
       status,
       extraStyles,
+      smallerTextContent,
     } = this.props;
     return (
       <div
-        className={['feature_box', status && `feature_box_status_${status}`]
+        className={[
+          'feature-box',
+          'display-flex',
+          'flex-direction-column',
+          status && `feature-box_status_${status}`,
+        ]
           .filter(c => c)
           .join(' ')}
         style={extraStyles}
       >
         {icon && iconBackgroundColor && (
           <div
-            className="feature_box_icon"
+            className="feature-box-icon"
             style={{ backgroundColor: iconBackgroundColor }}
           >
             <i className={`fa ${icon}`} />
           </div>
         )}
-        <div className="feature_box_label label margin-bottom-x1">{label}</div>
-        <div className="feature_box_value margin-bottom-x1">
-          <h2>{status === 'loading' ? 'Loading...' : value}</h2>
+        <div className="feature-box-label label margin-bottom-x1">{label}</div>
+        <div className="feature-box-value margin-bottom-x1 display-flex align-items-center flex-grow-1">
+          <h2
+            style={{
+              fontSize: `${smallerTextContent ? '2rem' : ''}`,
+            }}
+          >
+            {status === 'loading' ? 'Loading...' : value}
+          </h2>
         </div>
         {footerComponent && (
-          <div className="feature_box_footer">{footerComponent}</div>
+          <div className="feature-box-footer">{footerComponent}</div>
         )}
       </div>
     );

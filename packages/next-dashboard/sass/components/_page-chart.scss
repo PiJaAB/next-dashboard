@@ -67,6 +67,11 @@
 .recharts-text {
   @include var('fill', 'text');
 }
+.stacked-vertical-bar-chart {
+  .recharts-text {
+    fill: transparent;
+  }
+}
 .recharts-surface {
   overflow: visible;
 }

@@ -13,6 +13,7 @@ import {
 import { currencyFormat } from '../utils/numberFormatters';
 
 type Props<D: {}> = {
+  title?: string,
   data: $ReadOnlyArray<D>,
   loading?: boolean,
   barChartKeysAndColor?: $ReadOnlyArray<{
@@ -48,10 +49,24 @@ const renderBars = barChartKeysAndColor => {
   return null;
 };
 
-const Chart = <D: {}>({ data, loading, barChartKeysAndColor }: Props<D>) => {
+const Chart = <D: {}>({
+  title,
+  data,
+  loading,
+  barChartKeysAndColor,
+}: Props<D>) => {
   const chart = (
-    <div className="page-chart vertical-bar-chart-container">
+    <div
+      className="page-chart vertical-bar-chart-container stacked-vertical-bar-chart"
+      style={{ height: '100%' }}
+    >
       <div className="page-chart-content">
+        <div
+          className="feature-box-label label margin-bottom-x1"
+          style={{ fontSize: '1.4rem', fontWeight: 500 }}
+        >
+          {title}
+        </div>
         <ResponsiveContainer>
           <BarChart
             data={data}
@@ -66,11 +81,10 @@ const Chart = <D: {}>({ data, loading, barChartKeysAndColor }: Props<D>) => {
               axisLine={false}
               type="category"
               yAxisId={0}
-              width={150}
             />
             <Legend
               content={({ payload }) => (
-                <ul className="line-chart-legend-list">
+                <ul className="stacked-vertical-bar-chart-legends-list">
                   {payload.map(
                     (entry, index) =>
                       index < 3 && (
@@ -109,7 +123,7 @@ const Chart = <D: {}>({ data, loading, barChartKeysAndColor }: Props<D>) => {
   );
 
   return (
-    <div className="page-content" style={{ padding: 0 }}>
+    <div className="page-content" style={{ padding: 0, height: '100%' }}>
       {(!data || data.length < 1) && !loading ? dataNotFound : chart}
     </div>
   );
@@ -118,6 +132,7 @@ const Chart = <D: {}>({ data, loading, barChartKeysAndColor }: Props<D>) => {
 Chart.defaultProps = {
   loading: false,
   barChartKeysAndColor: null,
+  title: undefined,
 };
 
 export default Chart;
