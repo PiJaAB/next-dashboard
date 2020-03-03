@@ -43,18 +43,18 @@ export default class FeatureBox extends PureComponent<Props> {
       >
         {icon && iconBackgroundColor && (
           <div
-            className="feature_box_icon"
+            className="feature-box-icon"
             style={{ backgroundColor: iconBackgroundColor }}
           >
             <i className={`fa ${icon}`} />
           </div>
         )}
-        <div className="feature_box_label label margin-bottom-x1">{label}</div>
-        <div className="feature_box_value margin-bottom-x1">
           <h2>{status === 'loading' ? 'Loading...' : value}</h2>
+        <div className="feature-box-label label margin-bottom-x1">{label}</div>
+        <div className="feature-box-value margin-bottom-x1">
         </div>
         {footerComponent && (
-          <div className="feature_box_footer">{footerComponent}</div>
+          <div className="feature-box-footer">{footerComponent}</div>
         )}
       </div>
     );

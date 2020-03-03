@@ -1,4 +1,4 @@
-.feature_box {
+.feature-box {
   height: 100%;
   padding: 20px;
   border-radius: 10px;
@@ -20,7 +20,7 @@
       opacity: 0.5;
     }
   }
-  .feature_box_icon {
+  .feature-box-icon {
     display: flex;
     position: absolute;
     top: 10px;
@@ -36,7 +36,7 @@
       font-size: 2rem;
     }
   }
-  .feature_box_footer{
+  .feature-box-footer{
     font-size: 1.4rem;
     font-weight: 500;
   }
