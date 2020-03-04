@@ -153,3 +153,9 @@
     }
   }
 }
+
+@each $name, $fw in $font-weights {
+    .font-weight-#{$name} {
+      font-weight: $fw;
+    }
+}
