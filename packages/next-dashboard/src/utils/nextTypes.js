@@ -1,4 +1,5 @@
 // @flow
+/*:: import * as R from 'react'; */
 
 export type InitialPropsContext = {
   res?: http$ServerResponse,
@@ -11,12 +12,12 @@ export type InitialPropsContext = {
     statusCode: number,
   },
   pathname: string,
-  AppTree: () => React$Element<void>,
+  AppTree: () => R.Element<void>,
 };
 
 export type ExtendedPropsContext<E: {}> = InitialPropsContext & E;
 
-export type NextComponent<P: {}, I: {} = {}> = React$ComponentType<P & I> & {
+export type NextComponent<P: {}, I: {} = {}> = R.ComponentType<P & I> & {
   +getInitialProps?: (ctx: InitialPropsContext) => Promise<I> | I,
 };
 

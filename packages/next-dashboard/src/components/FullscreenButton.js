@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 import classnames from 'classnames';
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 
 export default function FullscreenButton({
   className,
-}: Props): React$Element<'div'> {
+}: Props): R.Element<'div'> {
   const handleClick = () => {
     const contentEl =
       typeof document !== 'undefined' && document.firstElementChild;

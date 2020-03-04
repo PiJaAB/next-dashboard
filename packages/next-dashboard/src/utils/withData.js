@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 import type {
   Statuses,
@@ -35,13 +36,13 @@ export default function withData<
   Data: {},
   Props: { value: Type, status: Statuses },
 >(
-  Comp: React$ComponentType<Props>,
+  Comp: R.ComponentType<Props>,
   subProvider: ISubscriptionProvider<Data>,
   { defaults }: Conf<Type>,
-): React$ComponentType<Stripped<Type, Props, Data>> {
+): R.ComponentType<Stripped<Type, Props, Data>> {
   function WrappedComp(
     props: Stripped<Type, Props, Data>,
-  ): React$Element<typeof Comp> {
+  ): R.Element<typeof Comp> {
     const { dataSource, parser, extra, ...restProps } = props;
     const data = useData(subProvider, dataSource, extra);
     if (data.status === 'success') {

@@ -1,10 +1,11 @@
 // @flow
 import React, { useContext, useEffect, useState } from 'react';
+/*:: import * as R from 'react'; */
 import classnames from 'classnames';
 
 import LayoutContext from '../utils/layoutContext';
 
-export default function FullscreenExitButton(): React$Element<'div'> | null {
+export default function FullscreenExitButton(): R.Element<'div'> | null {
   const ctx = useContext(LayoutContext);
   const isFullscreen = ctx.getTemp('isFullscreen', false);
   const [timeoutID, setTimeoutID] = useState<TimeoutID | void>();

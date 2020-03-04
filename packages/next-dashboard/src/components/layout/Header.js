@@ -1,5 +1,6 @@
 // @flow
 import React, { useContext, type Node } from 'react';
+/*:: import * as R from 'react'; */
 import Link from 'next/link';
 
 import { LayoutContext, ConfigContext } from '../../utils';
@@ -8,7 +9,7 @@ import HamburgerMenu from '../HamburgerMenu';
 type Props = {
   toggleSidebarActive: () => void,
   sidebarActive: boolean,
-  children: React$Node,
+  children: R.Node,
 };
 
 const getLogoURL = (conf: ?(string | { [string]: string }), theme: string) => {

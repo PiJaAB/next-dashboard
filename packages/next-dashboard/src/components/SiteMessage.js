@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 import capitalize from '../utils/capitalize';
 import type { SiteMessageType } from '../utils/types';
 
@@ -14,7 +15,7 @@ function SiteMessage({
   status,
   count,
   dismiss,
-}: Props): React$Node {
+}: Props): R.Node {
   return (
     <div
       className={['site-message', status && `site-message_${status}`]

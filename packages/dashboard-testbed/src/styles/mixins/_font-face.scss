@@ -1,5 +1,0 @@
-@mixin font-face-src($path, $type) {
-  src: url('#{$path}/#{$type}/#{$type}.woff2') format('woff2'),
-       url('#{$path}/#{$type}/#{$type}.woff') format('woff');
-}
-// url('#{$path}/#{$type}/#{$type}.ttf') format('truetype');

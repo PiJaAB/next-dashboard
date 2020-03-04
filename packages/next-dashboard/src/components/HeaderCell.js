@@ -1,13 +1,14 @@
 // @flow
 
 import React from 'react';
+/*:: import * as R from 'react'; */
 import classnames from 'classnames';
 
 type Props = {
   className?: string,
   type?: string,
   separator?: boolean,
-  children: React$Node,
+  children: R.Node,
   fullscreenButton?: boolean,
 };
 
@@ -17,7 +18,7 @@ export default function HeaderCell({
   className,
   separator,
   fullscreenButton,
-}: Props): React$Node {
+}: Props): R.Node {
   return (
     <div
       className={classnames(

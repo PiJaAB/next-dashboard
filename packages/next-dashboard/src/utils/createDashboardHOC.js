@@ -1,6 +1,8 @@
 // @flow
 
 import React, { useState, useEffect, useMemo } from 'react';
+/*:: import * as R from 'react'; */
+
 import Router from 'next/router';
 
 import type { NextComponent, InitialPropsContext } from './nextTypes';
@@ -196,7 +198,7 @@ export default function createDashboardHOC(
     const parsedNeedAuth =
       needAuth == null ? configCtx.needAuthDefault : needAuth;
 
-    function WrappedComp(fullProps: WrappedProps<P, I>): React$Node {
+    function WrappedComp(fullProps: WrappedProps<P, I>): R.Node {
       const {
         __INITIAL_DASHBOARD_STATE__,
         __INITIAL_LAYOUT_STATE__,
