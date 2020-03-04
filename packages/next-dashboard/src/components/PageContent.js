@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 type Props = {
   className?: string,
-  children?: React$Node,
+  children?: R.Node,
 };
 
 const PageContent = ({ className, children, ...rest }: Props) => (

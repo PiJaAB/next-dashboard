@@ -1,13 +1,14 @@
 // @flow
 
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 type Props = {
-  children: React$Node,
+  children: R.Node,
   id?: string,
 };
 
-export default function NavEntry({ children, id }: Props): React$Node {
+export default function NavEntry({ children, id }: Props): R.Node {
   return (
     <nav
       className={[

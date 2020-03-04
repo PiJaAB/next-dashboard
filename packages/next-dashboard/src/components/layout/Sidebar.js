@@ -1,10 +1,11 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
 
 type Props = {
   sidebarActive: boolean,
   sidebarCompact: boolean,
-  children?: React$Node,
+  children?: R.Node,
 };
 
 const Sidebar = ({ sidebarActive, sidebarCompact, children }: Props) => {

@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+/*:: import * as R from 'react'; */
+
 import {
   Legend,
   RadialBar,
@@ -18,7 +20,7 @@ import { INNER_RADIUS, OUTER_RADIUS, PADDING, radius } from './utils';
 
 type Props<T: Plot> = {
   plots: $ReadOnlyArray<T>,
-  children?: React$Node,
+  children?: R.Node,
   maxValue?: number,
   offsetAngle?: number,
   angularSize?: number,
@@ -34,7 +36,7 @@ export default function RadialBarChart<T: Plot>({
   angularSize,
   valueFormatter,
   centerText,
-}: Props<T>): React$Element<typeof PageChart> {
+}: Props<T>): R.Element<typeof PageChart> {
   const startAngle = 90 - (offsetAngle || 0);
   const endAngle = startAngle - (angularSize != null ? angularSize : 360);
   const domain = [0, maxValue != null ? maxValue : 'auto'];

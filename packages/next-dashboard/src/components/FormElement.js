@@ -1,5 +1,6 @@
 // @flow
 import { useState, useContext, useEffect } from 'react';
+/*:: import * as R from 'react'; */
 import { FormContext } from './Form';
 
 type Props<T, U = T> = {
@@ -7,7 +8,7 @@ type Props<T, U = T> = {
     value: T,
     onChange: (val: T) => void,
     isValid: boolean | void,
-  ) => React$Node,
+  ) => R.Node,
   valueParser?: T => U,
   validate(T): boolean | void,
   initialValue: T,
@@ -20,7 +21,7 @@ export default function FormElement<T, U = T>({
   initialValue,
   id,
   valueParser = val => val,
-}: Props<T, U>): React$Node {
+}: Props<T, U>): R.Node {
   const ctx = useContext(FormContext);
   const [value, setValue] = useState(initialValue);
   useEffect(() => {

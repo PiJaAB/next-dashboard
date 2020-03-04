@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+/*:: import * as R from 'react'; */
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import logger from '../utils/logger';
@@ -9,7 +10,7 @@ type Props = {
   href?: string,
   as?: string,
   children: string,
-  icon?: React$Node,
+  icon?: R.Node,
   onClick?: (ev: MouseEvent) => ?boolean,
   active?: boolean,
 };
@@ -36,7 +37,7 @@ type InnerProps = {
   icon?: $PropertyType<Props, 'icon'>,
 };
 
-function Inner({ icon, children }: InnerProps): React$Node {
+function Inner({ icon, children }: InnerProps): R.Node {
   return (
     <>
       {icon != null &&
@@ -65,7 +66,7 @@ function LinkEl({
   active,
   onClick,
   icon,
-}: LinkProps): React$Element<Link> {
+}: LinkProps): R.Element<Link> {
   if (onClick) {
     logger.debug(
       '`onClick` not supported with href. If you need both, use raw render.',
@@ -95,7 +96,7 @@ function ButtonEl({
   active,
   icon,
   as,
-}: ButtonProps): React$Element<'button'> {
+}: ButtonProps): R.Element<'button'> {
   if (as) {
     logger.debug('`as` makes no sense without href.');
   }
@@ -124,7 +125,7 @@ export default function NavEntry({
   as,
   active: propActive,
   onClick,
-}: Props): React$Node {
+}: Props): R.Node {
   const router = useRouter();
   const active = propActive == null ? href === router.pathname : propActive;
   let Element = ButtonEl;

@@ -2,6 +2,7 @@
 
 // @flow
 import React, { useEffect, useContext } from 'react';
+/*:: import * as R from 'react'; */
 import Head from 'next/head';
 import classnames from 'classnames';
 
@@ -19,7 +20,7 @@ import Sidebar from './Sidebar';
 import SiteMessages from './SiteMessages';
 
 export type Props = {
-  children?: React$Node,
+  children?: R.Node,
   id?: string,
   contentContainerWidth?:
     | 'extra-narrow'
@@ -27,8 +28,8 @@ export type Props = {
     | 'normal'
     | 'wide'
     | 'extra-wide',
-  header?: React$Node,
-  sidebar?: React$Node,
+  header?: R.Node,
+  sidebar?: R.Node,
   footer?: boolean,
 };
 
@@ -39,7 +40,7 @@ function DashboardLayout({
   header: propHeader,
   sidebar,
   footer,
-}: Props): React$Element<typeof LayoutContext.Provider> {
+}: Props): R.Element<typeof LayoutContext.Provider> {
   const ctx = useContext(DashboardContext);
   const { [LAYOUT]: ctxProps } = ctx;
   const lctx = useCreateLayoutContext(ctxProps.initialState, ctxProps.persist);
