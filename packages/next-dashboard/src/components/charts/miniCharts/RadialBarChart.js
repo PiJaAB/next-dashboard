@@ -26,6 +26,27 @@ type Props<T: Plot> = {
   centerText?: StyledText | [StyledText, StyledText],
 };
 
+const renderCustomLegend = ({ payload }) => (
+  <ul className="radial-bar-chart-types-list">
+    {payload.map(entry => (
+      <li key={entry.value} className="radial-bar-chart-type">
+        <div
+          className="radial-bar-chart-type-color"
+          style={{ backgroundColor: entry.color }}
+        />
+        {entry.value}
+      </li>
+    ))}
+  </ul>
+);
+
+const getTooltipFormatter = valueFormatter => (value, name, { payload }) => [
+  (valueFormatter && valueFormatter(value, payload, true)) || value,
+  payload.name,
+];
+
+const NO_MARGIN = { top: 0, right: 0, bottom: 0, left: 0 };
+
 export default function RadialBarChart<T: Plot>({
   plots,
   children,
@@ -53,39 +74,19 @@ export default function RadialBarChart<T: Plot>({
               outerRadius={radius(OUTER_RADIUS, width, height)}
               width={width}
               height={height}
-              margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              margin={NO_MARGIN}
               barCategoryGap="25%"
             >
               {children}
               <Tooltip
                 labelFormatter={() => null}
-                formatter={(value, name, { payload }) => [
-                  (valueFormatter && valueFormatter(value, payload, true)) ||
-                    value,
-                  payload.name,
-                ]}
+                formatter={getTooltipFormatter(valueFormatter)}
                 isAnimationActive={false}
               />
               <Legend
-                key="radial-bar-chart-key"
                 verticalAlign="bottom"
-                iconType="circle"
-                wrapperStyle={{
-                  bottom: -14,
-                }}
-                content={({ payload }) => (
-                  <ul className="radial-bar-chart-types-list">
-                    {payload.map(entry => (
-                      <li key={entry.value} className="radial-bar-chart-type">
-                        <div
-                          className="radial-bar-chart-type-color"
-                          style={{ backgroundColor: entry.color }}
-                        />
-                        {entry.value}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                wrapperStyle={{ bottom: -14 }}
+                content={renderCustomLegend}
               />
               <PolarAngleAxis type="number" tick={false} domain={domain} />
               <RadialBar
