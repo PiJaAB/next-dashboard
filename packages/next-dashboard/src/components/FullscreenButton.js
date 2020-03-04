@@ -22,7 +22,6 @@ export default function FullscreenButton({
         title="Fullscreen mode"
         type="button"
       />
-      {/* <span className="fa fa-expand-alt" /> */}
     </div>
   );
 }
