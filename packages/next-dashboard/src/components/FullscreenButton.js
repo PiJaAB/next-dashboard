@@ -15,10 +15,14 @@ export default function FullscreenButton({
     if (contentEl) contentEl.requestFullscreen();
   };
   return (
-    <div className={classnames('fullscreen-button', className)}>
-      <button onClick={handleClick} title="Fullscreen mode" type="button">
-        <span className="fa fa-expand-alt" />
-      </button>
+    <div className={classnames('fullscreen-button-container', className)}>
+      <button
+        className="no-button fa fa-expand-alt"
+        onClick={handleClick}
+        title="Fullscreen mode"
+        type="button"
+      />
+      {/* <span className="fa fa-expand-alt" /> */}
     </div>
   );
 }

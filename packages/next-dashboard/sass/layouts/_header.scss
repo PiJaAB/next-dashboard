@@ -28,7 +28,7 @@
     &:after {
       @include breakpoint(large) {
         position: absolute;
-        content: '';  
+        content: '';
         border-right: 1px solid rgba(151, 151, 151, 0.4);
         top: 50%;
         transform: translateY(-50%);

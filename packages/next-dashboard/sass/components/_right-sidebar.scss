@@ -35,9 +35,7 @@
     width: 300px;
   }
   &-icon {
-    &:hover {
-      opacity: 1;
-    }
+    @include var('color', 'text');
     @include var('background-color', 'primary-alt');
     padding: 10px;
     position: fixed;
@@ -47,6 +45,10 @@
     border-radius: 0 0 0 5px;
     z-index: 90;
     transition: right 0.25s ease;
+    &:hover {
+      opacity: 1;
+      @include var('color', 'text');
+    }
   }
   &_open &-icon {
     right: $right-sidebar-width;
