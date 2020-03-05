@@ -18,50 +18,56 @@
   }
 }
 
+@mixin gridEntry ($breakpoint-class, $suffix: '') {
+  @each $grid-size in map-keys($grid-sizes) {
+    .grid-#{$grid-size}#{$breakpoint-class}#{$suffix} {
+      margin: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
+      >.cell {
+        padding: #{(map-get($grid-sizes, $grid-size) / 2)}px;
+      }
+    }
+    .grid-x-#{$grid-size}#{$breakpoint-class}#{$suffix} {
+      margin-left: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
+      margin-right: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
+      >.cell {
+        padding-left: #{(map-get($grid-sizes, $grid-size) / 2)}px;
+        padding-right: #{(map-get($grid-sizes, $grid-size) / 2)}px;
+      }
+    }
+    .grid-y-#{$grid-size}#{$breakpoint-class}#{$suffix} {
+      margin-top: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
+      margin-bottom: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
+      >.cell {
+        padding-top: #{(map-get($grid-sizes, $grid-size) / 2)}px;
+        padding-bottom: #{(map-get($grid-sizes, $grid-size) / 2)}px;
+      }
+    }
+  }
+
+  @for $grid-column from 1 through $grid-columns {
+    .cell.column-#{$grid-column}#{$breakpoint-class}#{$suffix} {
+      flex: 0 0 (100% / $grid-columns) * $grid-column;
+      max-width: (100% / $grid-columns) * $grid-column;
+      &-max{
+        max-width: 300px;
+      }
+    }
+  }
+
+  .cell.column-2-4#{$breakpoint-class}#{$suffix} {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+
 @each $breakpoint in map-keys($breakpoints) {
   $breakpoint-class: if($breakpoint == small, '', '-#{$breakpoint}');
   $breakpoint-param: if($breakpoint == small, false, $breakpoint);
 
   @include breakpoint($breakpoint-param) {
-
-    @each $grid-size in map-keys($grid-sizes) {
-      .grid-#{$grid-size}#{$breakpoint-class} {
-        margin: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
-        >.cell {
-          padding: #{(map-get($grid-sizes, $grid-size) / 2)}px;
-        }
-      }
-      .grid-x-#{$grid-size}#{$breakpoint-class} {
-        margin-left: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
-        margin-right: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
-        >.cell {
-          padding-left: #{(map-get($grid-sizes, $grid-size) / 2)}px;
-          padding-right: #{(map-get($grid-sizes, $grid-size) / 2)}px;
-        }
-      }
-      .grid-y-#{$grid-size}#{$breakpoint-class} {
-        margin-top: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
-        margin-bottom: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
-        >.cell {
-          padding-top: #{(map-get($grid-sizes, $grid-size) / 2)}px;
-          padding-bottom: #{(map-get($grid-sizes, $grid-size) / 2)}px;
-        }
-      }
-    }
-
-    @for $grid-column from 1 through $grid-columns {
-      .cell.column-#{$grid-column}#{$breakpoint-class} {
-        flex: 0 0 (100% / $grid-columns) * $grid-column;
-        max-width: (100% / $grid-columns) * $grid-column;
-        &-max{
-          max-width: 300px;
-        }
-      }
-    }
-
-    .cell.column-2-4#{$breakpoint-class} {
-      flex: 0 0 20%;
-      max-width: 20%;
-    }
+    @include gridEntry($breakpoint-class);
+  }
+  @include breakpoint($breakpoint-param, true) {
+    @include gridEntry($breakpoint-class, '-nosidebar');
   }
 }

@@ -3,19 +3,19 @@
     position: relative; // ?
     >.dashboard-content {
       padding: 40px 0 80px;
-      @include breakpoint(medium) {
+      @include breakpoint(medium, true) {
         padding: 60px 0 120px;
       }
-      @include breakpoint(large) {
+      @include breakpoint(large, true) {
         padding: 80px 0 160px;
       }
     }
     .page-content {
       padding: 40px 20px;
-      @include breakpoint(medium) {
+      @include breakpoint(medium, true) {
         padding: 40px 30px;
       }
-      @include breakpoint(large) {
+      @include breakpoint(large, true) {
         padding: 40px;
       }
     }
