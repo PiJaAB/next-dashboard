@@ -12,9 +12,12 @@ import PageChart from '../PageChart';
 import RenderCustomizedPieLabel from './RenderCustomizedPieLabel';
 import type { Plot } from './types';
 
-import { PADDING, OUTER_RADIUS, pieRadius } from './utils';
-
-import { RENDER_ISSUE_OFFSET_PADDING } from './rechartsCorrections';
+import {
+  OUTER_RADIUS,
+  pieRadius,
+  getCenter,
+  renderCustomLegend,
+} from './utils';
 
 type Props<T: Plot> = {
   plots: $ReadOnlyArray<T>,
@@ -57,31 +60,11 @@ export default function PieChart<T: Plot>({
                 key="pie-chart-key"
                 verticalAlign="bottom"
                 iconType="circle"
-                wrapperStyle={{
-                  bottom: -14,
-                }}
-                content={({ payload }) => (
-                  <ul className="pie-chart-types-list">
-                    {payload.map(entry => (
-                      <li key={entry.value} className="pie-chart-type">
-                        <div
-                          className="pie-chart-type-color"
-                          style={{ backgroundColor: entry.color }}
-                        />
-                        {entry.value}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                wrapperStyle={{ bottom: -14 }}
+                content={renderCustomLegend}
               />
               <Pie
-                cy={
-                  height / 2 -
-                  PADDING.BOTTOM +
-                  PADDING.TOP -
-                  RENDER_ISSUE_OFFSET_PADDING
-                }
-                cx={width / 2 - PADDING.RIGHT + PADDING.LEFT}
+                {...getCenter(width, height)}
                 data={plots}
                 outerRadius={pieRadius(OUTER_RADIUS, width, height)}
                 startAngle={startAngle}

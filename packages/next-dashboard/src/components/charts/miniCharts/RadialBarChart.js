@@ -14,7 +14,13 @@ import PageChart from '../PageChart';
 import TextComp, { type StyledText } from './TextComp';
 import type { Plot } from './types';
 
-import { INNER_RADIUS, OUTER_RADIUS, PADDING, radius } from './utils';
+import {
+  INNER_RADIUS,
+  OUTER_RADIUS,
+  radius,
+  getCenter,
+  renderCustomLegend,
+} from './utils';
 
 type Props<T: Plot> = {
   plots: $ReadOnlyArray<T>,
@@ -25,20 +31,6 @@ type Props<T: Plot> = {
   valueFormatter?: (number, T, boolean) => ?string | number,
   centerText?: StyledText | [StyledText, StyledText],
 };
-
-const renderCustomLegend = ({ payload }) => (
-  <ul className="radial-bar-chart-types-list">
-    {payload.map(entry => (
-      <li key={entry.value} className="radial-bar-chart-type">
-        <div
-          className="radial-bar-chart-type-color"
-          style={{ backgroundColor: entry.color }}
-        />
-        {entry.value}
-      </li>
-    ))}
-  </ul>
-);
 
 const getTooltipFormatter = valueFormatter => (value, name, { payload }) => [
   (valueFormatter && valueFormatter(value, payload, true)) || value,
@@ -68,13 +60,7 @@ export default function RadialBarChart<T: Plot>({
               startAngle={startAngle}
               endAngle={endAngle}
               data={plots}
-              cy={
-                height / 2 -
-                PADDING.BOTTOM +
-                PADDING.TOP -
-                RENDER_ISSUE_OFFSET_PADDING
-              }
-              cx={width / 2 - PADDING.RIGHT + PADDING.LEFT}
+              {...getCenter(width, height)}
               innerRadius={radius(INNER_RADIUS, width, height) * 1.2}
               outerRadius={radius(OUTER_RADIUS, width, height) * 1.2}
               width={width}

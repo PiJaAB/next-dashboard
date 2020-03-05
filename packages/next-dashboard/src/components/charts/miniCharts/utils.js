@@ -1,6 +1,9 @@
 // @flow
-
-import { RENDER_ISSUE_OFFSET_SIZE } from './rechartsCorrections';
+import React from 'react';
+import {
+  RENDER_ISSUE_OFFSET_SIZE,
+  RENDER_ISSUE_OFFSET_PADDING,
+} from './rechartsCorrections';
 
 export const PADDING = {
   TOP: 0,
@@ -27,3 +30,33 @@ export const radius = (ratio: number, width: number, height: number) =>
       width - PADDING.LEFT * 2 - PADDING.RIGHT * 2,
     )) /
   2;
+
+export const getCenter = (width: number, height: number) => ({
+  cy: height / 2 - PADDING.BOTTOM + PADDING.TOP - RENDER_ISSUE_OFFSET_PADDING,
+  cx: width / 2 - PADDING.RIGHT + PADDING.LEFT,
+});
+
+type LegendPayload = {
+  value: string,
+  id: mixed,
+  type: mixed,
+  color: string,
+  inactive?: boolean,
+};
+type CustomLegendProps = {
+  payload: LegendPayload[],
+};
+
+export const renderCustomLegend = ({ payload }: CustomLegendProps) => (
+  <ul className="radial-bar-chart-types-list">
+    {payload.map(entry => (
+      <li key={entry.value} className="radial-bar-chart-type">
+        <div
+          className="radial-bar-chart-type-color"
+          style={{ backgroundColor: entry.color }}
+        />
+        {entry.value}
+      </li>
+    ))}
+  </ul>
+);
