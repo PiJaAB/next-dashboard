@@ -18,7 +18,7 @@ type HeadProps<E, C> = {
   onColumnClick?: (column: Column<E, C>) => void,
 };
 
-const HEADER_OFFSET = 70; // Header is 80px tall
+const HEADER_OFFSET = 70; // Header is 70px tall
 
 const update = (el: HTMLTableSectionElement, hasHeader: boolean) => {
   const rect = el.getClientRects()[0];
