@@ -13,6 +13,7 @@ import {
   Legend,
 } from 'recharts';
 import PageChart from './PageChart';
+import { DataNotFound, DataIsLoading } from '../utils';
 
 type Props = {
   title: string,
@@ -118,29 +119,11 @@ const Chart = ({
     </PageChart>
   );
 
-  const dataNotFound = (
-    <h3
-      className="line-chart-title-container h3-size"
-      style={{ paddingTop: 0, paddingBottom: 38 }}
-    >
-      No Data found
-    </h3>
-  );
-
-  const isLoading = (
-    <h3
-      className="line-chart-title-container h3-size"
-      style={{ paddingTop: 0, paddingBottom: 38 }}
-    >
-      Loading
-    </h3>
-  );
-
   return (
     <div className="page-content" style={{ padding: 0 }}>
       <h2 className="line-chart-title-container h3-size">{title}</h2>
-      {loading ? isLoading : null}
-      {(!data || data.length < 1) && !loading ? dataNotFound : chart}
+      {loading ? <DataIsLoading /> : null}
+      {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
     </div>
   );
 };
