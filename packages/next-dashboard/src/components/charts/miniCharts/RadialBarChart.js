@@ -68,10 +68,15 @@ export default function RadialBarChart<T: Plot>({
               startAngle={startAngle}
               endAngle={endAngle}
               data={plots}
-              cy={height / 2 - PADDING.BOTTOM + PADDING.TOP}
+              cy={
+                height / 2 -
+                PADDING.BOTTOM +
+                PADDING.TOP -
+                RENDER_ISSUE_OFFSET_PADDING
+              }
               cx={width / 2 - PADDING.RIGHT + PADDING.LEFT}
-              innerRadius={radius(INNER_RADIUS, width, height)}
-              outerRadius={radius(OUTER_RADIUS, width, height)}
+              innerRadius={radius(INNER_RADIUS, width, height) * 1.2}
+              outerRadius={radius(OUTER_RADIUS, width, height) * 1.2}
               width={width}
               height={height}
               margin={NO_MARGIN}
