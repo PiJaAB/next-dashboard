@@ -4,11 +4,15 @@
   padding-right: 24px;
   padding-top: 16px;
   font-weight: 500;
+  &.label {
+    margin-bottom: 0;
+  }
 }
 
 .radial-bar-chart-types-list {
   display: flex;
-  justify-content: center;
+  overflow-x: auto;
+  justify-content: safe center;
   align-items: center;
   padding-top: 10px;
   margin-top: 10px;
