@@ -1,14 +1,60 @@
-@mixin breakpoint($breakpoint) {
+@mixin breakpoint($breakpoint, $ignoreMenu: false) {
   @if map-has-key($breakpoints, $breakpoint) {
-    @media #{inspect(map-get($breakpoints, $breakpoint))} {
-      @content;
+    @if $ignoreMenu == false {
+      @at-root body:not(.dashboard_sidebar_active) #{&} {
+        @media #{inspect(map-get($breakpoints, $breakpoint))} {
+          @content;
+        }
+      }
+      @at-root body.dashboard_sidebar_active:not(.sidebar_compact) #{&} {
+        @media #{inspect(map-get($breakpoints-sidebar, $breakpoint))} {
+          @content;
+        }
+      }
+      @at-root body.dashboard_sidebar_active.sidebar_compact #{&} {
+        @media #{inspect(map-get($breakpoints-sidebar-compact, $breakpoint))} {
+          @content;
+        }
+      }
+    } @else if $ignoreMenu == true {
+      @at-root body:not(.dashboard_sidebar_active) #{&}, body.dashboard_sidebar_active:not(.sidebar_compact) #{&}, body.dashboard_sidebar_active.sidebar_compact #{&} {
+        @media #{inspect(map-get($breakpoints, $breakpoint))} {
+          @content;
+        }
+      }
+    } @else if $ignoreMenu == bypass {
+      @media #{inspect(map-get($breakpoints, $breakpoint))} {
+        @content;
+      }
+    } @else {
+      @warn "Error";
     }
   } @else if $breakpoint {
-    @media #{$breakpoint} {
-      @content;
+    @if $ignoreMenu == false or $ignoreMenu == true {
+      @at-root body:not(.dashboard_sidebar_active) #{&}, body.dashboard_sidebar_active:not(.sidebar_compact) #{&}, body.dashboard_sidebar_active.sidebar_compact #{&} {
+        @media #{$breakpoint} {
+          @content;
+        }
+      }
+    } @else if $ignoreMenu == bypass {
+      @media #{$breakpoint} {
+        @content;
+      }
+    } @else {
+      @warn "Error: Invalid argument";
     }
   } @else if $breakpoint == false {
-    @content;
+    @if $ignoreMenu == false or $ignoreMenu == true {
+      @at-root body:not(.dashboard_sidebar_active) #{&}, body.dashboard_sidebar_active:not(.sidebar_compact) #{&}, body.dashboard_sidebar_active.sidebar_compact #{&} {
+        @media (min-width: 0px) {
+          @content;
+        }
+      }
+    } @else if $ignoreMenu == bypass {
+      @content;
+    } @else {
+      @warn "Error: Invalid argument";
+    }
   } @else {
     @warn "Error";
   }

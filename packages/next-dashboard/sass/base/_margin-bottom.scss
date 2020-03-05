@@ -7,12 +7,17 @@
   $breakpoint-param: if($breakpoint == small, false, $breakpoint);
 
   @include breakpoint($breakpoint-param) {
-
     @each $grid-size in map-keys($grid-sizes) {
       .margin-bottom-#{$grid-size}#{$breakpoint-class} {
         margin-bottom: #{(map-get($grid-sizes, $grid-size))}px;
       }
     }
-
+  }
+  @include breakpoint($breakpoint-param, true) {
+    @each $grid-size in map-keys($grid-sizes) {
+      .margin-bottom-#{$grid-size}#{$breakpoint-class}-nosidebar {
+        margin-bottom: #{(map-get($grid-sizes, $grid-size))}px;
+      }
+    }
   }
 }

@@ -42,11 +42,13 @@
 
 .dashboard_sidebar_active {
   .dashboard-content {
-    @include breakpoint(medium) {
-      margin-left: 200px;
-    }
-    @include breakpoint(large) {
-      margin-left: 240px;
+    @each $breakpoint, $size in $sidebar-sizes {
+      $type: type-of($size);
+      @if $type == 'number' {
+        @include breakpoint($breakpoint, bypass) {
+          margin-left: $size;
+        }
+      }
     }
   }
 }
@@ -58,8 +60,10 @@ body.body_resizing .dashboard-content {
 
 .dashboard_sidebar_active.sidebar_compact {
   .dashboard-content {
-    @include breakpoint(medium) {
-      margin-left: 86px;
+    @each $breakpoint, $size in $sidebar-compact-sizes {
+      @include breakpoint($breakpoint, bypass) {
+        margin-left: $size;
+      }
     }
   }
 }
