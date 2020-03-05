@@ -5,7 +5,10 @@
   &:after {
     content: '';
     display: block;
-    padding: 0 0 62.5%;
+    padding: 0 0 20em;
+    @include breakpoint(extra-large) {
+      padding: 0 0 28em;
+    }
   }
 }
 .page-chart-content {
