@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'recharts';
 import { currencyFormat } from '../utils/numberFormatters';
+import { DataNotFound } from './utils';
 
 type Props<D: {}> = {
   title?: string,
@@ -113,18 +114,9 @@ const Chart = <D: {}>({
     </div>
   );
 
-  const dataNotFound = (
-    <h3
-      className="line-chart-title-container h3-size"
-      style={{ paddingTop: 0, paddingBottom: 38 }}
-    >
-      No Data found
-    </h3>
-  );
-
   return (
     <div className="page-content" style={{ padding: 0, height: '100%' }}>
-      {(!data || data.length < 1) && !loading ? dataNotFound : chart}
+      {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
     </div>
   );
 };

@@ -58,4 +58,9 @@
         }
       }
     }
+
+    &.sortable-table th {
+      cursor: pointer;
+      user-select: none;
+    }
   }
