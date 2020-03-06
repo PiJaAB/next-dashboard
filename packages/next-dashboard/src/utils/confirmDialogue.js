@@ -48,6 +48,6 @@ export default function confirm(opts: Options): () => void {
     listener.onDialogue(opts);
     return () => cancel(opts);
   }
-  cache.unshift(opts);
+  cache.push(opts);
   return () => cancel(opts);
 }
