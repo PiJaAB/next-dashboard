@@ -8,7 +8,7 @@ function printWarn(level?: string, ...args: $ReadOnlyArray<mixed>) {
   console.warn(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);
 }
 function printError(level?: string, ...args: mixed[]) {
-  console.log(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);
+  console.error(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);
 }
 function printDir(...args: mixed[]) {
   printLog('DIR');
