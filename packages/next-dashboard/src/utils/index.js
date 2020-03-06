@@ -25,3 +25,4 @@ export * from './silentError';
 export { default as useInitialFlag } from './useInitialFlag';
 export { default as errorReporter } from './errorReporter';
 export { default as useMutationObserver } from './useMutationObserver';
+export { default as confirmDialogue } from './confirmDialogue';
