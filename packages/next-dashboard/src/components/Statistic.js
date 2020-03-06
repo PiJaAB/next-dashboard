@@ -2,12 +2,12 @@
 import React from 'react';
 /*:: import * as R from 'react'; */
 import classnames from 'classnames';
-
+import LoadingIndicator from './LoadingIndicator';
 import type { Statuses } from '../utils/types';
 
 export type Props = {
   label?: R.Node,
-  value: R.Node,
+  value?: R.Node,
   prefix?: R.Node,
   suffix?: R.Node,
   periodValue?: R.Node,
@@ -16,6 +16,7 @@ export type Props = {
   status?: Statuses,
   direction?: 'up' | 'down',
   className?: string,
+  isLoading?: boolean,
 };
 
 function Statistic({
@@ -29,6 +30,7 @@ function Statistic({
   status,
   direction,
   className,
+  isLoading,
   ...rest
 }: Props): R.Node {
   return (
@@ -46,7 +48,7 @@ function Statistic({
       </div>
       <h2 className="margin-bottom-x1">
         {prefix}
-        {value}
+        {isLoading ? <LoadingIndicator /> : value}
         {suffix}
       </h2>
       {(periodValue || periodText) && (
@@ -77,6 +79,8 @@ Statistic.defaultProps = {
   status: undefined,
   direction: undefined,
   className: undefined,
+  isLoading: false,
+  value: undefined,
 };
 
 export default Statistic;
