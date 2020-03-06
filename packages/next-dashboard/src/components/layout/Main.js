@@ -18,6 +18,7 @@ import Footer from './Footer';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import SiteMessages from './SiteMessages';
+import ConfirmDialogue from './ConfirmDialogue';
 
 export type Props = {
   children?: R.Node,
@@ -223,6 +224,7 @@ function DashboardLayout({
         </Content>
         {footer && <Footer />}
         <FullscreenExitButton />
+        <ConfirmDialogue />
         <div id="dashboard-modal-root" />
       </div>
     </LayoutContext.Provider>
