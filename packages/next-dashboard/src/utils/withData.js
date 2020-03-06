@@ -26,11 +26,6 @@ type Stripped<T, P: { status: Statuses, value: T }, Data> = {
   extra?: DataExtra,
 };
 
-const defaultProps = {
-  path: undefined,
-  extra: undefined,
-};
-
 export default function withData<
   Type,
   Data: {},
@@ -59,8 +54,6 @@ export default function withData<
     }
     return <Comp status="loading" value={defaults.loading()} {...restProps} />;
   }
-
-  WrappedComp.defaultProps = defaultProps;
   WrappedComp.displayName = `withData(${displayNameOf(Comp)})`;
 
   return WrappedComp;

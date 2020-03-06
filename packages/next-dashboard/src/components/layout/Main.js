@@ -38,9 +38,9 @@ function DashboardLayout({
   children,
   id,
   contentContainerWidth,
-  header: propHeader,
+  header: propHeader = true,
   sidebar,
-  footer,
+  footer = true,
 }: Props): R.Element<typeof LayoutContext.Provider> {
   const ctx = useContext(DashboardContext);
   const { [LAYOUT]: ctxProps } = ctx;
@@ -230,15 +230,5 @@ function DashboardLayout({
     </LayoutContext.Provider>
   );
 }
-
-DashboardLayout.defaultProps = {
-  children: undefined,
-  id: undefined,
-  contentContainerWidth: undefined,
-  header: true,
-  sidebar: undefined,
-  footer: true,
-  allowFullscreen: undefined,
-};
 
 export default DashboardLayout;

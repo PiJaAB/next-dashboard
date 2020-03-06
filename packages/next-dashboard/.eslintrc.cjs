@@ -49,7 +49,10 @@ module.exports = {
       'jsx-a11y/anchor-is-valid': ['off'],
       'spaced-comment': ['off'],
       'react/prefer-stateless-function': ['error', { ignorePureComponents: true }],
-      'react/default-props-match-prop-types': ['off'],
+      'react/default-props-match-prop-types': ['error'],
+      'react/require-default-props': ['error', {
+        ignoreFunctionalComponents: true,
+      }],
       'flowtype/array-style-complex-type': ['error', 'shorthand'],
       'flowtype/array-style-simple-type': ['error', 'shorthand'],
       'flowtype/no-dupe-keys': ['error'],

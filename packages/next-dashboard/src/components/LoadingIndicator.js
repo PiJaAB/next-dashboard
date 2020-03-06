@@ -58,9 +58,4 @@ const LoadingIndicator = ({
   );
 };
 
-LoadingIndicator.defaultProps = {
-  backgroundColor: undefined,
-  extraStyles: undefined,
-};
-
 export default LoadingIndicator;

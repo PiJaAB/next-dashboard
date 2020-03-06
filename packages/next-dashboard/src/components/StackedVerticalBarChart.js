@@ -53,7 +53,7 @@ const renderBars = barChartKeysAndColor => {
 const Chart = <D: {}>({
   title,
   data,
-  loading,
+  loading = false,
   barChartKeysAndColor,
 }: Props<D>) => {
   const chart = (
@@ -119,12 +119,6 @@ const Chart = <D: {}>({
       {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
     </div>
   );
-};
-
-Chart.defaultProps = {
-  loading: false,
-  barChartKeysAndColor: null,
-  title: undefined,
 };
 
 export default Chart;

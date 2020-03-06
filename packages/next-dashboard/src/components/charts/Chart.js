@@ -52,7 +52,7 @@ const Chart = ({
   title,
   data,
   chartLineColor,
-  loading,
+  loading = false,
   xAxisKey,
   areaChartKey,
   barChartKeysAndColor,
@@ -126,11 +126,6 @@ const Chart = ({
       {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
     </div>
   );
-};
-
-Chart.defaultProps = {
-  loading: false,
-  barChartKeysAndColor: null,
 };
 
 export default Chart;

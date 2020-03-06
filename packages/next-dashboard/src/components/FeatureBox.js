@@ -63,14 +63,4 @@ const FeatureBox = ({
   );
 };
 
-FeatureBox.defaultProps = {
-  icon: undefined,
-  iconBackgroundColor: undefined,
-  label: undefined,
-  status: undefined,
-  footerComponent: undefined,
-  extraStyles: {},
-  contentFontSize: undefined,
-};
-
 export default FeatureBox;

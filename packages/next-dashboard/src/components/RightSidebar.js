@@ -19,7 +19,7 @@ type Props = {
 
 const RightSidebar = ({
   icon = 'cogs',
-  children = null,
+  children,
   isOpen,
   initialIsOpen,
   onChange,
@@ -84,15 +84,6 @@ const RightSidebar = ({
     </div>,
     rightSidebarRoot,
   );
-};
-
-RightSidebar.defaultProps = {
-  children: null,
-  icon: 'cogs',
-  isOpen: undefined,
-  onChange: undefined,
-  initialIsOpen: undefined,
-  className: undefined,
 };
 
 export default RightSidebar;

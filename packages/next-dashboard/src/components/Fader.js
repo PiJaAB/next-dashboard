@@ -13,7 +13,7 @@ type Props<El: string = 'div'> = {
 
 function Fader<El: string = 'div'>({
   data,
-  as,
+  as = 'div',
   className,
   children,
   ...props
@@ -35,11 +35,5 @@ function Fader<El: string = 'div'>({
     </Comp>
   );
 }
-
-Fader.defaultProps = {
-  className: undefined,
-  as: 'div',
-  children: undefined,
-};
 
 export default Fader;

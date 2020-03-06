@@ -55,10 +55,6 @@ function Inner({ icon, children }: InnerProps): R.Node {
   );
 }
 
-Inner.defaultProps = {
-  icon: undefined,
-};
-
 function LinkEl({
   href,
   as,
@@ -144,12 +140,3 @@ export default function NavEntry({
     </div>
   );
 }
-
-NavEntry.defaultProps = {
-  href: undefined,
-  icon: undefined,
-  as: undefined,
-  onClick: undefined,
-  active: undefined,
-  raw: false,
-};
