@@ -52,7 +52,12 @@ const renderBars = barChartKeysAndColor => {
   return null;
 };
 
-const Chart = ({ title, data, loading, barChartKeysAndColor }: Props) => {
+const Chart = ({
+  title,
+  data,
+  loading = false,
+  barChartKeysAndColor,
+}: Props) => {
   const chart = (
     <div className="page-chart vertical-bar-chart-container">
       <div className="page-chart-content">
@@ -114,11 +119,6 @@ const Chart = ({ title, data, loading, barChartKeysAndColor }: Props) => {
       {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
     </div>
   );
-};
-
-Chart.defaultProps = {
-  loading: false,
-  barChartKeysAndColor: null,
 };
 
 export default Chart;

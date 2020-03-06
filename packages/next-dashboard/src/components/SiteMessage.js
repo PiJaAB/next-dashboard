@@ -48,11 +48,4 @@ function SiteMessage({
   );
 }
 
-SiteMessage.defaultProps = {
-  title: undefined,
-  status: 'info',
-  count: 1,
-  dismiss: undefined,
-};
-
 export default SiteMessage;

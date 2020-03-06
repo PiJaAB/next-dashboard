@@ -16,8 +16,8 @@ export default function HeaderCell({
   children,
   type,
   className,
-  separator,
-  fullscreenButton,
+  separator = true,
+  fullscreenButton = false,
 }: Props): R.Node {
   return (
     <div
@@ -34,10 +34,3 @@ export default function HeaderCell({
     </div>
   );
 }
-
-HeaderCell.defaultProps = {
-  className: undefined,
-  type: undefined,
-  separator: true,
-  fullscreenButton: false,
-};

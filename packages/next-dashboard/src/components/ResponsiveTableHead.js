@@ -90,8 +90,4 @@ const TableHead = <E: {}, C>({
   );
 };
 
-TableHead.defaultProps = {
-  onColumnClick: undefined,
-};
-
 export default TableHead;

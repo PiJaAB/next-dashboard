@@ -24,8 +24,4 @@ const Sidebar = ({ sidebarActive, sidebarCompact, children }: Props) => {
   );
 };
 
-Sidebar.defaultProps = {
-  children: undefined,
-};
-
 export default Sidebar;

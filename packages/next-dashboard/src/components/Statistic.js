@@ -30,7 +30,7 @@ function Statistic({
   status,
   direction,
   className,
-  isLoading,
+  isLoading = false,
   ...rest
 }: Props): R.Node {
   return (
@@ -68,19 +68,5 @@ function Statistic({
     </div>
   );
 }
-
-Statistic.defaultProps = {
-  label: undefined,
-  prefix: '',
-  suffix: '',
-  periodValue: undefined,
-  periodText: undefined,
-  description: undefined,
-  status: undefined,
-  direction: undefined,
-  className: undefined,
-  isLoading: false,
-  value: undefined,
-};
 
 export default Statistic;

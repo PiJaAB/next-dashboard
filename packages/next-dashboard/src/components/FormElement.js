@@ -44,8 +44,3 @@ export default function FormElement<T, U = T>({
     ctx.valid[id],
   );
 }
-
-FormElement.defaultProps = {
-  type: 'text',
-  valueParser: val => val,
-};

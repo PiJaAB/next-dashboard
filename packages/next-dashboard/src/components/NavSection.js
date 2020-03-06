@@ -22,7 +22,3 @@ export default function NavEntry({ children, id }: Props): R.Node {
     </nav>
   );
 }
-
-NavEntry.defaultProps = {
-  id: undefined,
-};

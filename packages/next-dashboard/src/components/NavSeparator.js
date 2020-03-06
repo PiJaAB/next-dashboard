@@ -16,7 +16,3 @@ export default function Nav({ children }: Props): R.Node {
     </div>
   );
 }
-
-Nav.defaultProps = {
-  children: undefined,
-};

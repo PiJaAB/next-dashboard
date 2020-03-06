@@ -26,6 +26,3 @@ export default function FullscreenButton({
     </div>
   );
 }
-FullscreenButton.defaultProps = {
-  className: undefined,
-};

@@ -73,8 +73,4 @@ const DropdownView = ({ classPrefix, children, label, isDisabled }: Props) => {
   );
 };
 
-DropdownView.defaultProps = {
-  classPrefix: undefined,
-};
-
 export default DropdownView;

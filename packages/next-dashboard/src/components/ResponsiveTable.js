@@ -109,15 +109,4 @@ const ResponsiveTable = <-E: {}, -C>({
   );
 };
 
-ResponsiveTable.defaultProps = {
-  className: undefined,
-  renderHead: defaultRenderHead,
-  renderBody: defaultRenderBody,
-  columnKeyExtractor: defaultColumnKeyExtractor,
-  dataKeyExtractor: defaultKeyExtractor,
-  onColumnClick: undefined,
-  style: undefined,
-  rowHeight: undefined,
-};
-
 export default ResponsiveTable;

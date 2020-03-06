@@ -27,8 +27,3 @@ export default function ThemeSelector({ children, icon }: Props): R.Node {
     </NavEntry>
   );
 }
-
-ThemeSelector.defaultProps = {
-  children: undefined,
-  icon: undefined,
-};

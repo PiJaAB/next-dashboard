@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 /*:: import * as R from 'react'; */
+import classnames from 'classnames';
 
 type Props = {
   className?: string,
@@ -8,17 +9,9 @@ type Props = {
 };
 
 const PageContent = ({ className, children, ...rest }: Props) => (
-  <div
-    className={['page-content', className].filter(c => c).join(' ')}
-    {...rest}
-  >
+  <div className={classnames('page-content', className)} {...rest}>
     {children}
   </div>
 );
-
-PageContent.defaultProps = {
-  className: '',
-  children: null,
-};
 
 export default PageContent;

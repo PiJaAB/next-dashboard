@@ -127,10 +127,4 @@ const SortableTable = <-E: {} = { +[string]: mixed }, -C: {} = {}>({
   );
 };
 
-SortableTable.defaultProps = {
-  groupPreproccesor: undefined,
-  compare: undefined,
-  compareBy: undefined,
-};
-
 export default SortableTable;

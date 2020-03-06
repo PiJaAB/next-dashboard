@@ -24,8 +24,3 @@ export default function CompactButton({ children, icon }: Props): R.Node {
     </NavEntry>
   );
 }
-
-CompactButton.defaultProps = {
-  children: undefined,
-  icon: undefined,
-};
