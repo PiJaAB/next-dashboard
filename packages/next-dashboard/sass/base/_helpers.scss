@@ -1,156 +1,163 @@
+@mixin helperEntries($breakpoint-class, $suffix: '') {
+  .color-inherit#{$breakpoint-class}#{$suffix} {
+    color: inherit;
+  }
+  .color-primary#{$breakpoint-class} {
+    color: $primary-color;
+  }
+  .color-secondary#{$breakpoint-class} {
+    color: $secondary-color;
+  }
+  .color-black#{$breakpoint-class} {
+    color: $black;
+  }
+  .color-white#{$breakpoint-class} {
+    color: $white;
+  }
+  .color-text#{$breakpoint-class} {
+    @include var('color', 'text');
+  }
+  .color-error#{$breakpoint-class} {
+    @include var('color', 'error');
+  }
+
+  .display-block#{$breakpoint-class} {
+    display: block;
+  }
+  .display-flex#{$breakpoint-class} {
+    display: flex;
+  }
+  .display-inline#{$breakpoint-class} {
+    display: inline;
+  }
+  .display-inline-block#{$breakpoint-class} {
+    display: inline-block;
+  }
+  .display-none#{$breakpoint-class} {
+    display: none;
+  }
+
+  .flex-direction-column#{$breakpoint-class} {
+    flex-direction: column;
+  }
+  .flex-direction-column-reverse#{$breakpoint-class} {
+    flex-direction: column-reverse;
+  }
+  .flex-direction-row#{$breakpoint-class} {
+    flex-direction: row;
+  }
+  .flex-direction-row-reverse#{$breakpoint-class} {
+    flex-direction: row-reverse;
+  }
+
+  .flex-wrap-nowrap#{$breakpoint-class} {
+    flex-wrap: nowrap;
+  }
+
+  .align-items-center#{$breakpoint-class} {
+    align-items: center;
+  }
+  .align-items-flex-start#{$breakpoint-class} {
+    align-items: flex-start;
+  }
+  .align-items-flex-end#{$breakpoint-class} {
+    align-items: flex-end;
+  }
+
+  .align-self-center#{$breakpoint-class} {
+    align-self: center;
+  }
+  .align-self-flex-start#{$breakpoint-class} {
+    align-self: flex-start;
+  }
+  .align-self-flex-end#{$breakpoint-class} {
+    align-self: flex-end;
+  }
+  .align-self-stretch#{$breakpoint-class} {
+    align-self: stretch;
+  }
+
+  .justify-content-center#{$breakpoint-class} {
+    justify-content: center;
+  }
+  .justify-content-flex-start#{$breakpoint-class} {
+    justify-content: flex-start;
+  }
+  .justify-content-flex-end#{$breakpoint-class} {
+    justify-content: flex-end;
+  }
+  .justify-content-space-between#{$breakpoint-class} {
+    justify-content: space-between;
+  }
+
+  .justify-self-center#{$breakpoint-class} {
+    justify-self: center;
+  }
+  .justify-self-flex-start#{$breakpoint-class} {
+    justify-self: flex-start;
+  }
+  .justify-self-flex-end#{$breakpoint-class} {
+    justify-self: flex-end;
+  }
+
+  .flex-grow-1#{$breakpoint-class} {
+    flex-grow: 1;
+  }
+  .flex-shrink-1#{$breakpoint-class} {
+    flex-shrink: 1;
+  }
+  .flex-basis-auto#{$breakpoint-class} {
+    flex-basis: auto;
+  }
+  .flex-basis-0#{$breakpoint-class} {
+    flex-basis: 0;
+  }
+
+  .order--1#{$breakpoint-class} {
+    order: -1;
+  }
+  .order-0#{$breakpoint-class} {
+    order: 0;
+  }
+  .order-1#{$breakpoint-class} {
+    order: 1;
+  }
+
+  .text-align-center#{$breakpoint-class} {
+    text-align: center;
+  }
+  .text-align-left#{$breakpoint-class} {
+    text-align: left;
+  }
+  .text-align-right#{$breakpoint-class} {
+    text-align: right;
+  }
+  .text-align-justify#{$breakpoint-class} {
+    text-align: justify;
+  }
+
+  .font-style-italic#{$breakpoint-class} {
+    font-style: italic;
+  }
+
+  .margin-0#{$breakpoint-class} {
+    margin: 0;
+  }
+
+  .hidden#{$breakpoint-class} {
+    visibility: hidden;
+  }
+}
+
 @each $breakpoint in map-keys($breakpoints) {
   $breakpoint-class: if($breakpoint == small, '', '-#{$breakpoint}');
   $breakpoint-param: if($breakpoint == small, false, $breakpoint);
 
   @include breakpoint($breakpoint-param) {
-    .color-inherit#{$breakpoint-class} {
-      color: inherit;
-    }
-    .color-primary#{$breakpoint-class} {
-      color: $primary-color;
-    }
-    .color-secondary#{$breakpoint-class} {
-      color: $secondary-color;
-    }
-    .color-black#{$breakpoint-class} {
-      color: $black;
-    }
-    .color-white#{$breakpoint-class} {
-      color: $white;
-    }
-    .color-text#{$breakpoint-class} {
-      @include var('color', 'text');
-    }
-    .color-error#{$breakpoint-class} {
-      @include var('color', 'error');
-    }
-
-    .display-block#{$breakpoint-class} {
-      display: block;
-    }
-    .display-flex#{$breakpoint-class} {
-      display: flex;
-    }
-    .display-inline#{$breakpoint-class} {
-      display: inline;
-    }
-    .display-inline-block#{$breakpoint-class} {
-      display: inline-block;
-    }
-    .display-none#{$breakpoint-class} {
-      display: none;
-    }
-
-    .flex-direction-column#{$breakpoint-class} {
-      flex-direction: column;
-    }
-    .flex-direction-column-reverse#{$breakpoint-class} {
-      flex-direction: column-reverse;
-    }
-    .flex-direction-row#{$breakpoint-class} {
-      flex-direction: row;
-    }
-    .flex-direction-row-reverse#{$breakpoint-class} {
-      flex-direction: row-reverse;
-    }
-
-    .flex-wrap-nowrap#{$breakpoint-class} {
-      flex-wrap: nowrap;
-    }
-
-    .align-items-center#{$breakpoint-class} {
-      align-items: center;
-    }
-    .align-items-flex-start#{$breakpoint-class} {
-      align-items: flex-start;
-    }
-    .align-items-flex-end#{$breakpoint-class} {
-      align-items: flex-end;
-    }
-
-    .align-self-center#{$breakpoint-class} {
-      align-self: center;
-    }
-    .align-self-flex-start#{$breakpoint-class} {
-      align-self: flex-start;
-    }
-    .align-self-flex-end#{$breakpoint-class} {
-      align-self: flex-end;
-    }
-    .align-self-stretch#{$breakpoint-class} {
-      align-self: stretch;
-    }
-
-    .justify-content-center#{$breakpoint-class} {
-      justify-content: center;
-    }
-    .justify-content-flex-start#{$breakpoint-class} {
-      justify-content: flex-start;
-    }
-    .justify-content-flex-end#{$breakpoint-class} {
-      justify-content: flex-end;
-    }
-    .justify-content-space-between#{$breakpoint-class} {
-      justify-content: space-between;
-    }
-
-    .justify-self-center#{$breakpoint-class} {
-      justify-self: center;
-    }
-    .justify-self-flex-start#{$breakpoint-class} {
-      justify-self: flex-start;
-    }
-    .justify-self-flex-end#{$breakpoint-class} {
-      justify-self: flex-end;
-    }
-
-    .flex-grow-1#{$breakpoint-class} {
-      flex-grow: 1;
-    }
-    .flex-shrink-1#{$breakpoint-class} {
-      flex-shrink: 1;
-    }
-    .flex-basis-auto#{$breakpoint-class} {
-      flex-basis: auto;
-    }
-    .flex-basis-0#{$breakpoint-class} {
-      flex-basis: 0;
-    }
-
-    .order--1#{$breakpoint-class} {
-      order: -1;
-    }
-    .order-0#{$breakpoint-class} {
-      order: 0;
-    }
-    .order-1#{$breakpoint-class} {
-      order: 1;
-    }
-
-    .text-align-center#{$breakpoint-class} {
-      text-align: center;
-    }
-    .text-align-left#{$breakpoint-class} {
-      text-align: left;
-    }
-    .text-align-right#{$breakpoint-class} {
-      text-align: right;
-    }
-    .text-align-justify#{$breakpoint-class} {
-      text-align: justify;
-    }
-
-    .font-style-italic#{$breakpoint-class} {
-      font-style: italic;
-    }
-
-    .margin-0#{$breakpoint-class} {
-      margin: 0;
-    }
-
-    .hidden#{$breakpoint-class} {
-      visibility: hidden;
-    }
+    @include helperEntries($breakpoint-class);
+  }
+  @include breakpoint($breakpoint-param, true) {
+    @include helperEntries($breakpoint-class, '-nosidebar');
   }
 }
 

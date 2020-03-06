@@ -26,7 +26,7 @@
   &_separator {
     position: relative;
     &:after {
-      @include breakpoint(large) {
+      @include breakpoint(large, true) {
         position: absolute;
         content: '';
         border-right: 1px solid rgba(151, 151, 151, 0.4);
@@ -46,7 +46,7 @@
     padding: 0 !important;
     flex: 0 0 25%;
     max-width: 25%;
-    @include breakpoint(medium) {
+    @include breakpoint(medium, true) {
       flex: 0 0 auto;
       max-width: 100%;
     }
@@ -56,7 +56,7 @@
     display: flex;
     justify-content: center;
     max-width: 50%;
-    @include breakpoint(medium) {
+    @include breakpoint(medium, true) {
       flex: 0 0 auto;
       max-width: 100%;
     }
@@ -97,7 +97,7 @@
 .header-content-container {
   margin-left: 28px;
   width: calc(100% - 38px);
-  @include breakpoint(large) {
+  @include breakpoint(large, true) {
     width: calc(100% - 76px);
   }
 }

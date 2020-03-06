@@ -3,7 +3,6 @@
   $breakpoint-param: if($breakpoint == small, false, $breakpoint);
 
   @include breakpoint($breakpoint-param) {
-
     .container#{$breakpoint-class} {
       max-width: none;
       margin: 0 auto;

@@ -47,18 +47,57 @@ $breakpoint-sizes: (
   'large':       1024px,
   'extra-large': 1440px,
 ) !default;
+$sidebar-sizes: (
+  'small': calc(100% - 80px),
+  'medium':            200px,
+  'large':             240px,
+  'extra-large':       240px,
+) !default;
+$sidebar-compact-sizes: (
+  'small':        0px,
+  'medium':      86px,
+  'large':       86px,
+  'extra-large': 86px,
+) !default;
 // $breakpoint-vertical-sizes: (
 //   'small':          0px,
 //   'medium':       640px,
 //   'large':        640px + (1024px - 640px) / 2,
 //   'extra-large': 1024px,
 // ) !default;
-$breakpoints: (
-  'small':       ( min-width: map-get($breakpoint-sizes,       'small') ),
-  'medium':      ( min-width: map-get($breakpoint-sizes,      'medium') ),
-  'large':       ( min-width: map-get($breakpoint-sizes,       'large') ),
-  'extra-large': ( min-width: map-get($breakpoint-sizes, 'extra-large') ),
-) !default;
+$breakpoints: null !default;
+@if $breakpoints == null {
+  $breakpoints: ();
+  @each $key, $size in $breakpoint-sizes {
+    $breakpoints: map-merge($breakpoints, ($key: (min-width: $size)))
+  }
+}
+$breakpoints-sidebar: null !default;
+@if $breakpoints-sidebar == null {
+  $breakpoints-sidebar: ();
+  @each $key, $size in $breakpoint-sizes {
+    $sidebar-size: map-get($sidebar-sizes, $key);
+    $type: type-of($sidebar-size);
+    @if $type == number {
+      $breakpoints-sidebar: map-merge($breakpoints-sidebar, ($key: (min-width: #{$size + map-get($sidebar-sizes, $key)})))
+    } @else {
+      $breakpoints-sidebar: map-merge($breakpoints-sidebar, ($key: (min-width: $size)))
+    }
+  }
+}
+$breakpoints-sidebar-compact: null !default;
+@if $breakpoints-sidebar-compact == null {
+  $breakpoints-sidebar-compact: ();
+  @each $key, $size in $breakpoint-sizes {
+    $sidebar-size: map-get($sidebar-compact-sizes, $key);
+    $type: type-of($sidebar-size);
+    @if $type == number {
+      $breakpoints-sidebar-compact: map-merge($breakpoints-sidebar-compact, ($key: (min-width: #{$size + map-get($sidebar-compact-sizes, $key)})))
+    } @else {
+      $breakpoints-sidebar-compact: map-merge($breakpoints-sidebar-compact, ($key: (min-width: $size)))
+    }
+  }
+}
 
 $black:                   #000000 !default;
 $white:                   #ffffff !default;

@@ -1,5 +1,5 @@
 .dashboard-sidebar-profile {
-  @include breakpoint(large) {
+  @include breakpoint(large, true) {
     display: none;
   }
   .profile-content {
@@ -12,52 +12,59 @@
 }
 
 .dashboard-sidebar {
+  $max-width: 320px;
   position: fixed;
   top: 70px;
   left: 0;
   height: calc(100% - 70px);
-  width: calc(100% - 80px);
-  max-width: 320px;
   padding: 20px;
   @include var('background-color', 'primary-alt');
   z-index: 90;
   overflow: hidden;
   overflow-y: auto;
   transform: translateX(-100%);
+  max-width: $max-width;
   transition: width 0.25s ease, box-shadow 0.0625s ease 0.1875s, transform 0.25s ease;
-  @include breakpoint(medium) {
-    width: 200px;
-  }
-  @include breakpoint(large) {
-    width: 240px;
+  @each $breakpoint, $size in $sidebar-sizes {
+    @include breakpoint($breakpoint, true) {
+      @if type-of($size) == number AND $size > $max-width {
+        max-width: $size;
+      }
+      width: $size;
+    }
   }
   &_active {
     transform: translateX(0);
     box-shadow: 20px 0px 20px -20px rgba($black, 0.125);
     transition: width 0.25s ease, box-shadow 0.0625s ease, transform 0.25s ease;
-    @include breakpoint(medium) {
+    @include breakpoint(medium, true) {
       box-shadow: none;
     }
   }
   &_compact {
-    @include breakpoint(medium) {
-      width: 86px;
+    @each $breakpoint, $size in $sidebar-compact-sizes {
+      @include breakpoint($breakpoint, true) {
+        @if type-of($size) == number AND $size > $max-width {
+          max-width: $size;
+        }
+        width: $size;
+      }
     }
     .dashboard-sidebar-menu-item-button-text {
-      @include breakpoint(medium) {
+      @include breakpoint(medium, true) {
         opacity: 0;
       }
     }
     .dashboard-sidebar-profile {
       .profile-content {
-        @include breakpoint(medium) {
+        @include breakpoint(medium, true) {
           opacity: 0;
         }
       }
     }
     .nav-separator {
       &-label {
-        @include breakpoint(medium) {
+        @include breakpoint(medium, true) {
           opacity: 0;
         }
       }
@@ -147,7 +154,7 @@
 
 .dashboard-sidebar-search {
   margin: -10px 0 40px;
-  @include breakpoint(medium) {
+  @include breakpoint(medium, true) {
     display: none;
   }
 }
@@ -158,7 +165,7 @@
   }
   &_other {
     display: none;
-    @include breakpoint(medium) {
+    @include breakpoint(medium, true) {
       display: block;
     }
   }

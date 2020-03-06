@@ -1,4 +1,8 @@
 .fullscreen-button-container {
+  display: none;
+  @include breakpoint('medium', true) {
+    display: block;
+  }
   button {
     margin: 0;
     @include var('border-color', 'primary');
