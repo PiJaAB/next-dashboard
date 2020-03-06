@@ -13,6 +13,7 @@ export type { Column as TableColumn } from './ResponsiveTable';
 export { HeaderCell };
 export { default as Statistic } from './Statistic';
 export { default as PageContent } from './PageContent';
+export { default as LoadingIndicator } from './LoadingIndicator';
 export { default as Modal } from './Modal';
 export { default as NavEntry } from './NavEntry';
 export { default as NavSection } from './NavSection';

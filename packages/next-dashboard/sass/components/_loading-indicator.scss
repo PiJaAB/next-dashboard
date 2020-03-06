@@ -1,0 +1,25 @@
+@keyframes loading1 {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
+}
+
+.loading-dot {
+  background-color: #487fff;
+  border-radius: 1rem;
+  display: inline-block;
+  height: 1rem;
+  vertical-align: top;
+  width: 1rem;
+}
+.loading-dot-1 {
+  @extend .loading-dot;
+  animation: loading1 1s ease-in-out 0ms infinite;
+}
+.loading-dot-2 {
+  @extend .loading-dot;
+  animation: loading1 1s ease-in-out 160ms infinite;
+}
+.loading-dot-3 {
+  @extend .loading-dot;
+  animation: loading1 1s ease-in-out 320ms infinite;
+}
