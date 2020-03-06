@@ -23,6 +23,12 @@ module.exports = {
       'class-methods-use-this': [ 'off' ],
       'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
       'no-underscore-dangle': ['error', { allow: ['_id', '__typename'] }],
+      'no-irregular-whitespace': ['error', {
+        'skipStrings': false,
+        'skipComments': false,
+        'skipRegExps': false,
+        'skipTemplates': false,
+      }],
       'no-unused-vars': ['error', { vars: 'all', args: 'after-used', 'argsIgnorePattern': '^_', ignoreRestSiblings: true }],
       'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx'] }],
       'react/jsx-one-expression-per-line': [ 'off' ],
