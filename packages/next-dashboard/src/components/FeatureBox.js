@@ -26,7 +26,6 @@ const FeatureBox = ({
   extraStyles,
   contentFontSize,
 }: Props) => {
-  // console.log(value);
   return (
     <div
       className={[
@@ -54,7 +53,7 @@ const FeatureBox = ({
             fontSize: contentFontSize && contentFontSize,
           }}
         >
-          {status === 'loading' && value == null ? <LoadingIndicator /> : value}
+          {status === 'loading' ? <LoadingIndicator /> : value}
         </h2>
       </div>
       {footerComponent && (
