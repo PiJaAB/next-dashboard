@@ -17,7 +17,7 @@ const LoadingDot = ({
     <span
       className={className}
       style={{
-        marginLeft: offset ? '1rem' : null,
+        marginLeft: offset ? '0.5rem' : null,
         backgroundColor,
         ...extraStyles,
       }}

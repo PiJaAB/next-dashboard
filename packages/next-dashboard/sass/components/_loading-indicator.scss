@@ -5,11 +5,11 @@
 
 .loading-dot {
   background-color: #487fff;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   display: inline-block;
-  height: 1rem;
+  height: 0.5rem;
   vertical-align: top;
-  width: 1rem;
+  width: 0.5rem;
 }
 .loading-dot-1 {
   @extend .loading-dot;
