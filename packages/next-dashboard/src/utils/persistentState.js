@@ -56,7 +56,7 @@ export default function createPersistentState<
         if (dashboardState.version !== version) return null;
         return dashboardState.data;
       } catch (err) {
-        errorReporter.emit('error', err);
+        errorReporter.report(err);
         return null;
       }
     },
@@ -82,7 +82,7 @@ export default function createPersistentState<
             btoa(JSON.stringify({ version, data: state })),
           )}; path=/`;
         } catch (err) {
-          errorReporter.emit('error', err);
+          errorReporter.report(err);
         }
         const debounce = () => {
           const curState = latestState;
@@ -96,7 +96,7 @@ export default function createPersistentState<
               btoa(JSON.stringify({ version, data: curState })),
             )}; path=/`;
           } catch (err) {
-            errorReporter.emit('error', err);
+            errorReporter.report(err);
           }
           debouncing = window.setTimeout(debounce, 100);
         };

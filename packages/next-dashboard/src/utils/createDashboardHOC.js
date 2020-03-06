@@ -20,7 +20,7 @@ import DashboardContext, {
   getAuthProviderInstance,
 } from './dashboardContext';
 import useInitialFlag from './useInitialFlag';
-import errorReporter from './errorReporter';
+import { errorEventEmitter } from './errorReporter';
 import logger from './logger';
 
 type PersistDashboardentState = {
@@ -220,9 +220,9 @@ export default function createDashboardHOC(
       ]);
 
       useEffect(() => {
-        errorReporter.on('error', registerSiteMessage);
+        errorEventEmitter.on('error', registerSiteMessage);
         return () => {
-          errorReporter.off('error', registerSiteMessage);
+          errorEventEmitter.off('error', registerSiteMessage);
         };
       });
 
