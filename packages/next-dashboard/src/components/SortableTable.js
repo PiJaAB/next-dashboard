@@ -21,6 +21,7 @@ export type Props<-E, -C> = {
   ...TableProps<E, C>,
   compare?: Compare<E>,
   compareBy?: CompareBy<E>,
+  title?: string,
 };
 
 function getDefaultCompare<E>(compareBy: CompareBy<E>): Compare<E> {
@@ -69,6 +70,7 @@ const SortableTable = <-E: {} = { +[string]: mixed }, -C: {} = {}>({
   compareBy,
   renderHead,
   className,
+  title,
   ...props
 }: Props<E, C>) => {
   const [data, setData] = useState<Data<E>>(orgData);
@@ -115,15 +117,17 @@ const SortableTable = <-E: {} = { +[string]: mixed }, -C: {} = {}>({
       <SortIcon col={col} sort={sort} />
     </>
   );
-
   return (
-    <ResponsiveTable
-      className={['sortable-table', className].filter(c => c).join(' ')}
-      data={data}
-      renderHead={wrappedRenderHead}
-      onColumnClick={handleColumnClick}
-      {...props}
-    />
+    <div>
+      {title && <h2>{title}</h2>}
+      <ResponsiveTable
+        className={['sortable-table', className].filter(c => c).join(' ')}
+        data={data}
+        renderHead={wrappedRenderHead}
+        onColumnClick={handleColumnClick}
+        {...props}
+      />
+    </div>
   );
 };
 
