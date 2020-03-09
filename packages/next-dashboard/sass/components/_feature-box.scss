@@ -1,4 +1,6 @@
 .feature-box {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 20px;
   border-radius: 10px;
@@ -36,7 +38,16 @@
       font-size: 2rem;
     }
   }
+  .feature-box-value {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
   .feature-box-footer{
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    flex-direction: column;
     font-size: 1.4rem;
     font-weight: 500;
   }

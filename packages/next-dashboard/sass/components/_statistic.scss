@@ -33,6 +33,16 @@
       }
     }
   }
+  .statistic-value {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .statistic-footer {
+    &_loading {
+      visibility: hidden;
+    }
+  }
   p {
     margin: 0 0 10px;
     &:last-child {
