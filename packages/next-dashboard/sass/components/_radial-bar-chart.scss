@@ -47,8 +47,3 @@ text.radial-bar-chart__center-text {
     @include var('fill', 'text-alt');
   }
 }
-
-path.recharts-radial-bar-sector,
-path.recharts-radial-bar-background-sector {
-  filter: drop-shadow(0 5px 7px rgba(0,0,0, 0.20));
-}
