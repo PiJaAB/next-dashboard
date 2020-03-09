@@ -71,8 +71,4 @@ const RenderCustomizedPieLabel = <T: Plot>({
   );
 };
 
-RenderCustomizedPieLabel.defaultProps = {
-  valueFormatter: undefined,
-};
-
 export default RenderCustomizedPieLabel;

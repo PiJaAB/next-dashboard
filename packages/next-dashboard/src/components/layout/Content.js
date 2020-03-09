@@ -13,7 +13,7 @@ type Props = {
   header?: R.Node,
 };
 
-const Content = ({ children, contentContainerWidth, header }: Props) => (
+const Content = ({ children, contentContainerWidth, header = true }: Props) => (
   <div
     className={['dashboard-content', !header && 'no-header']
       .filter(className => className)
@@ -32,11 +32,5 @@ const Content = ({ children, contentContainerWidth, header }: Props) => (
     <div id="right-sidebar-root" />
   </div>
 );
-
-Content.defaultProps = {
-  children: null,
-  contentContainerWidth: undefined,
-  header: true,
-};
 
 export default Content;

@@ -111,11 +111,3 @@ export default function HollowPieChart<T: Plot>({
     </PageChart>
   );
 }
-
-HollowPieChart.defaultProps = {
-  children: undefined,
-  offsetAngle: undefined,
-  angularSize: undefined,
-  valueFormatter: undefined,
-  centerText: undefined,
-};

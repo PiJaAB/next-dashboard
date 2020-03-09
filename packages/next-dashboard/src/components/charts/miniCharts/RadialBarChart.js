@@ -109,12 +109,3 @@ export default function RadialBarChart<T: Plot>({
     </PageChart>
   );
 }
-
-RadialBarChart.defaultProps = {
-  children: undefined,
-  maxValue: undefined,
-  offsetAngle: undefined,
-  angularSize: undefined,
-  valueFormatter: undefined,
-  centerText: undefined,
-};
