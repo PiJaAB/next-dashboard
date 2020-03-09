@@ -24,6 +24,12 @@ td {
 .responsive-table {
   display: flex;
   white-space: nowrap;
+  .loading-indicator-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
 }
 .responsive-table-head,
 .responsive-table-body {

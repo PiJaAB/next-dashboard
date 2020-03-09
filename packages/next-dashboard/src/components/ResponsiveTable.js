@@ -6,6 +6,8 @@ import ReactTooltip from 'react-tooltip';
 import FixedScrollbar from './FixedScrollbar';
 import TableHead from './ResponsiveTableHead';
 
+import LoadingIndicator from './LoadingIndicator';
+
 import type { Column as HeadColumn } from './ResponsiveTableHead';
 
 export type ColData<-E, -C> = $ReadOnly<{
@@ -33,6 +35,7 @@ export type Props<E, C> = {
   onColumnClick?: (column: HeadColumn<E, C>) => void,
   style?: ?{ [string]: mixed },
   rowHeight?: string | number,
+  isLoading?: boolean,
 };
 
 export type TextAlignProps = { +textAlign: string | void };
@@ -56,6 +59,7 @@ const ResponsiveTable = <-E: {}, -C>({
   onColumnClick,
   style,
   rowHeight,
+  isLoading,
 }: Props<E, C>) => {
   const textAlignClass = (props: TextAlignProps) =>
     props.textAlign && `text-align-${props.textAlign}`;
@@ -67,6 +71,7 @@ const ResponsiveTable = <-E: {}, -C>({
         textAlignClass={textAlignClass}
         renderHead={renderHead}
         onColumnClick={onColumnClick}
+        isLoading={isLoading}
       />
       <tbody
         style={{
@@ -98,12 +103,23 @@ const ResponsiveTable = <-E: {}, -C>({
   return (
     <div
       style={style}
-      className={['responsive-table', className].filter(c => c).join(' ')}
+      className={['responsive-table flex-direction-column', className]
+        .filter(c => c)
+        .join(' ')}
     >
-      <div className="responsive-table-head">{table([columns[0]], 'head')}</div>
-      <FixedScrollbar className="responsive-table-body">
-        {table(columns.slice(1), 'body')}
-      </FixedScrollbar>
+      <div className="display-flex">
+        <div className="responsive-table-head">
+          {table([columns[0]], 'head')}
+        </div>
+        <FixedScrollbar className="responsive-table-body">
+          {table(columns.slice(1), 'body')}
+        </FixedScrollbar>
+      </div>
+      {isLoading && (
+        <div className="loading-indicator-container">
+          <LoadingIndicator />
+        </div>
+      )}
       <ReactTooltip className="tooltip-style" />
     </div>
   );
