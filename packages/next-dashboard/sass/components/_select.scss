@@ -1,6 +1,7 @@
 .select {
   &-container {
     position: relative;
+    min-width: 160px;
     &_stretch {
       width: 100%;
     }
@@ -19,7 +20,7 @@
   &__value-container {
     flex: 1;
     position: relative;
-    padding: 10px 15px;
+    padding: 16px;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
     // &--has-value {}
