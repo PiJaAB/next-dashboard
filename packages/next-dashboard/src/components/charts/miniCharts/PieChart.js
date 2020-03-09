@@ -90,10 +90,3 @@ export default function PieChart<T: Plot>({
     </PageChart>
   );
 }
-
-PieChart.defaultProps = {
-  children: undefined,
-  offsetAngle: undefined,
-  angularSize: undefined,
-  valueFormatter: undefined,
-};

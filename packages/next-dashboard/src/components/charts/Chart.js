@@ -52,7 +52,7 @@ const Chart = ({
   title,
   data,
   chartLineColor,
-  loading = false,
+  loading,
   xAxisKey,
   areaChartKey,
   barChartKeysAndColor,

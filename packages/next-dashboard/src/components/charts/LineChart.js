@@ -70,8 +70,4 @@ const LineChart = ({ title, data, chartLineColor, loading }: Props) => {
   );
 };
 
-LineChart.defaultProps = {
-  loading: false,
-};
-
 export default LineChart;
