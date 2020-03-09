@@ -91,10 +91,10 @@
       left: 0;
       right: 0;
       top: 50%;
-      border-color: rgba(151, 151, 151, 0.4);
+      border-top-color: rgba(151, 151, 151, 0.4);
       height: 0;
-      border-width: 1px;
-      border-style: inset;
+      border-top-width: 1px;
+      border-top-style: solid;
     }
   }
 }
