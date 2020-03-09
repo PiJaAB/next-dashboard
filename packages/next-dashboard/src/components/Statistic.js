@@ -15,7 +15,7 @@ export type Props = {
   description?: R.Node,
   status?: Statuses,
   direction?: 'up' | 'down',
-  positive?: 'up' | 'down' | 'n/a',
+  positive?: 'up' | 'down' | null,
   className?: string,
 };
 
@@ -36,12 +36,9 @@ function Statistic({
   const isLoading = status === 'loading';
   let isNegative = false;
   let isPositive = false;
-  if (positive === 'down') {
-    isPositive = direction === 'down';
-    isNegative = direction === 'up';
-  } else if (positive === 'up') {
-    isPositive = direction === 'up';
-    isNegative = direction === 'down';
+  if (positive != null) {
+    isPositive = direction === positive;
+    isNegative = direction !== positive;
   }
   let subjective = 'neutral';
   if (isPositive) subjective = 'positive';
