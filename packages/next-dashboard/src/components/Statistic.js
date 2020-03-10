@@ -16,7 +16,6 @@ export type Props = {
   status?: Statuses,
   direction?: 'up' | 'down',
   className?: string,
-  isLoading?: boolean,
 };
 
 function Statistic({
@@ -30,9 +29,9 @@ function Statistic({
   status,
   direction,
   className,
-  isLoading = false,
   ...rest
 }: Props): R.Node {
+  const isLoading = status === 'loading';
   return (
     <div
       className={classnames(
@@ -46,18 +45,26 @@ function Statistic({
       <div className="label margin-bottom-x1">
         {label != null ? label : <>&nbsp;</>}
       </div>
-      <h2 className="margin-bottom-x1">
-        {prefix}
-        {isLoading ? <LoadingIndicator /> : value}
-        {suffix}
-      </h2>
+      <div className="statistic-value margin-bottom-x1">
+        {isLoading && <LoadingIndicator />}
+        <h2>
+          {prefix}
+          {isLoading ? <>&nbsp;</> : value}
+          {suffix}
+        </h2>
+      </div>
       {(periodValue || periodText) && (
-        <p>
+        <p
+          className={classnames(
+            'statistic-footer',
+            isLoading && 'statistic-footer_loading',
+          )}
+        >
           {direction && (
             <img
               className="statistic-period-icon"
               src={`/images/statistic/statistic-direction-icon-${direction}.svg`}
-              alt=""
+              alt={direction === 'up' ? 'Upp' : 'Ner'}
             />
           )}
           <span className="statistic-period-value">{periodValue}</span>{' '}

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 /*:: import * as R from 'react'; */
+import classnames from 'classnames';
 import LoadingIndicator from './LoadingIndicator';
 
 import type { Statuses } from '../utils/types';
@@ -28,14 +29,10 @@ const FeatureBox = ({
 }: Props) => {
   return (
     <div
-      className={[
+      className={classnames(
         'feature-box',
-        'display-flex',
-        'flex-direction-column',
         status && `feature-box_status_${status}`,
-      ]
-        .filter(c => c)
-        .join(' ')}
+      )}
       style={extraStyles}
     >
       {icon && iconBackgroundColor && (
@@ -47,13 +44,10 @@ const FeatureBox = ({
         </div>
       )}
       <div className="feature-box-label label margin-bottom-x1">{label}</div>
-      <div className="feature-box-value margin-bottom-x1 display-flex align-items-center flex-grow-1">
-        <h2
-          style={{
-            fontSize: contentFontSize && contentFontSize,
-          }}
-        >
-          {status === 'loading' ? <LoadingIndicator /> : value}
+      <div className="feature-box-value margin-bottom-x1">
+        {status === 'loading' && <LoadingIndicator />}
+        <h2 style={{ fontSize: contentFontSize }}>
+          {status === 'loading' ? <>&nbsp;</> : value}
         </h2>
       </div>
       {footerComponent && (
