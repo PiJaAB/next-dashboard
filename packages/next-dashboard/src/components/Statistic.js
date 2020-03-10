@@ -37,8 +37,8 @@ function Statistic({
   let isNegative = false;
   let isPositive = false;
   if (positive != null) {
-    isPositive = direction === positive;
-    isNegative = direction !== positive;
+    isPositive = direction != null && direction === positive;
+    isNegative = direction != null && direction !== positive;
   }
   let subjective = 'neutral';
   if (isPositive) subjective = 'positive';
