@@ -14,19 +14,20 @@ type Sort = void | {|
 
 type Data<E: {}> = ?$ReadOnlyArray<E>;
 
-type Compare<-E> = (E, E, string) => number;
-type CompareBy<-E> = (E, string) => string | number;
+type Compare<-E> = (E, E, string, 'asc' | 'desc') => number;
+type CompareBy<-E> = (E, string, 'asc' | 'desc') => string | number;
 
 export type Props<-E, -C> = {
   ...TableProps<E, C>,
   compare?: Compare<E>,
   compareBy?: CompareBy<E>,
+  title?: string,
 };
 
 function getDefaultCompare<E>(compareBy: CompareBy<E>): Compare<E> {
-  return (a, b, field) => {
-    const av = compareBy(a, field);
-    const bv = compareBy(b, field);
+  return (a, b, field, dir) => {
+    const av = compareBy(a, field, dir);
+    const bv = compareBy(b, field, dir);
 
     // Make string comparisons locale-sensitive by default
     if (typeof av === 'string' || typeof bv === 'string') {
@@ -69,6 +70,7 @@ const SortableTable = <-E: {} = { +[string]: mixed }, -C: {} = {}>({
   compareBy,
   renderHead,
   className,
+  title,
   ...props
 }: Props<E, C>) => {
   const [data, setData] = useState<Data<E>>(orgData);
@@ -86,7 +88,7 @@ const SortableTable = <-E: {} = { +[string]: mixed }, -C: {} = {}>({
 
     setData(
       [...orgData].sort((a, b) => {
-        const comp = comparator(a, b, sort.field);
+        const comp = comparator(a, b, sort.field, sort.dir);
         return sort.dir === 'asc' ? comp : -comp;
       }),
     );
@@ -117,13 +119,16 @@ const SortableTable = <-E: {} = { +[string]: mixed }, -C: {} = {}>({
   );
 
   return (
-    <ResponsiveTable
-      className={['sortable-table', className].filter(c => c).join(' ')}
-      data={data}
-      renderHead={wrappedRenderHead}
-      onColumnClick={handleColumnClick}
-      {...props}
-    />
+    <div>
+      {title && <h2>{title}</h2>}
+      <ResponsiveTable
+        className={['sortable-table', className].filter(c => c).join(' ')}
+        data={data}
+        renderHead={wrappedRenderHead}
+        onColumnClick={handleColumnClick}
+        {...props}
+      />
+    </div>
   );
 };
 

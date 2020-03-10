@@ -11,7 +11,8 @@ import {
   Bar,
   Legend,
 } from 'recharts';
-import { DataNotFound, DataIsLoading } from './utils';
+import LoadingIndicator from './LoadingIndicator';
+import { DataNotFound } from './utils';
 
 type Props = {
   title: string,
@@ -112,10 +113,16 @@ const Chart = ({
     </div>
   );
 
+  const renderLoading = () => (
+    <div className="chart-loading-container">
+      <LoadingIndicator />
+    </div>
+  );
+
   return (
     <div className="page-content" style={{ padding: 0 }}>
       <h2 className="line-chart-title-container h3-size">{title}</h2>
-      {loading ? <DataIsLoading /> : null}
+      {loading && renderLoading()}
       {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
     </div>
   );
