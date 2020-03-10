@@ -15,6 +15,7 @@ export type Props = {
   description?: R.Node,
   status?: Statuses,
   direction?: 'up' | 'down',
+  positive?: 'up' | 'down' | null,
   className?: string,
 };
 
@@ -29,15 +30,27 @@ function Statistic({
   status,
   direction,
   className,
+  positive = 'up',
   ...rest
 }: Props): R.Node {
   const isLoading = status === 'loading';
+  let isNegative = false;
+  let isPositive = false;
+  if (positive != null) {
+    isPositive = direction === positive;
+    isNegative = direction !== positive;
+  }
+  let subjective = 'neutral';
+  if (isPositive) subjective = 'positive';
+  if (isNegative) subjective = 'negative';
   return (
     <div
       className={classnames(
         'statistic',
         status && `statistic_status_${status}`,
         direction && `statistic_direction_${direction}`,
+        isPositive && 'statistic_positive',
+        isNegative && 'statistic_negative',
         className,
       )}
       {...rest}
@@ -63,7 +76,7 @@ function Statistic({
           {direction && (
             <img
               className="statistic-period-icon"
-              src={`/images/statistic/statistic-direction-icon-${direction}.svg`}
+              src={`/images/statistic/statistic-${subjective}-direction-icon-${direction}.svg`}
               alt={direction === 'up' ? 'Upp' : 'Ner'}
             />
           )}
