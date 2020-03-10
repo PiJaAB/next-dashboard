@@ -35,7 +35,7 @@ export type Props<E, C> = {
   onColumnClick?: (column: HeadColumn<E, C>) => void,
   style?: ?{ [string]: mixed },
   rowHeight?: string | number,
-  isLoading?: boolean,
+  loading?: boolean,
 };
 
 export type TextAlignProps = { +textAlign: string | void };
@@ -59,7 +59,7 @@ const ResponsiveTable = <-E: {}, -C>({
   onColumnClick,
   style,
   rowHeight,
-  isLoading,
+  loading,
 }: Props<E, C>) => {
   const textAlignClass = (props: TextAlignProps) =>
     props.textAlign && `text-align-${props.textAlign}`;
@@ -71,7 +71,6 @@ const ResponsiveTable = <-E: {}, -C>({
         textAlignClass={textAlignClass}
         renderHead={renderHead}
         onColumnClick={onColumnClick}
-        isLoading={isLoading}
       />
       <tbody
         style={{
@@ -115,7 +114,7 @@ const ResponsiveTable = <-E: {}, -C>({
           {table(columns.slice(1), 'body')}
         </FixedScrollbar>
       </div>
-      {isLoading && (
+      {loading && (
         <div className="loading-indicator-container">
           <LoadingIndicator />
         </div>
