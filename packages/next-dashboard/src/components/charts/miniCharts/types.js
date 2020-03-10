@@ -5,4 +5,5 @@ export type Plot = {
   +fill: string,
   +stroke: string,
   +value: ?number,
+  +key?: string,
 };
