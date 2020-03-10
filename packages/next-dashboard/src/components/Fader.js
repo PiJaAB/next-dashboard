@@ -5,19 +5,30 @@ import type { DataType } from '../utils/types';
 
 type Props<El: string = 'div'> = {
   ...ElementProps<El>,
-  data: DataType<>,
+  data?: DataType<> | $ReadOnlyArray<DataType<>>,
+  updating?: boolean,
   children?: Node,
   as?: El,
   className?: string,
 };
 
+function dataIsUpdating(
+  data: DataType<> | $ReadOnlyArray<DataType<>>,
+): boolean {
+  return !Array.isArray(data)
+    ? data.status !== 'loading' && Boolean(data.updating)
+    : data.some(d => d.status !== 'loading' && d.updating);
+}
+
 function Fader<El: string = 'div'>({
   data,
+  updating,
   as = 'div',
   className,
   children,
   ...props
 }: Props<El>): Node {
+  const parsedUpdating = updating || (data != null && dataIsUpdating(data));
   if (as == null) return null;
   const Comp = as;
   return (
@@ -25,7 +36,7 @@ function Fader<El: string = 'div'>({
       {...props}
       className={[
         'data-fader',
-        data.updating && 'data-fader__updating',
+        parsedUpdating && 'data-fader__updating',
         className,
       ]
         .filter(c => c)
