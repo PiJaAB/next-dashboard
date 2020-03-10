@@ -26,7 +26,6 @@ type Props = {
     | null
     | { key: string, color: string }
     | { key: string, color: string, stackId?: string }[],
-  isLoading?: boolean,
 };
 
 const renderBars = barChartKeysAndColor => {
