@@ -42,6 +42,7 @@ type LegendPayload = {
   type: mixed,
   color: string,
   inactive?: boolean,
+  dataKey?: string,
 };
 type CustomLegendProps = {
   payload: LegendPayload[],
@@ -50,7 +51,10 @@ type CustomLegendProps = {
 export const renderCustomLegend = ({ payload }: CustomLegendProps) => (
   <ul className="radial-bar-chart-types-list">
     {payload.map(entry => (
-      <li key={entry.value} className="radial-bar-chart-type">
+      <li
+        key={entry.dataKey != null ? entry.dataKey : entry.value}
+        className="radial-bar-chart-type"
+      >
         <div
           className="radial-bar-chart-type-color"
           style={{ backgroundColor: entry.color }}
