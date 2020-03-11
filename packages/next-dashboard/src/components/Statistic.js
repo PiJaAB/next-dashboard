@@ -3,6 +3,7 @@ import React from 'react';
 /*:: import * as R from 'react'; */
 import classnames from 'classnames';
 import LoadingIndicator from './LoadingIndicator';
+import FilterView from './FilterView';
 import type { Statuses } from '../utils/types';
 
 export type Props = {

@@ -71,3 +71,44 @@
   margin: 0 (10px / 1.25) 0 0;
   vertical-align: middle;
 }
+
+.filter-view-container {
+  display: inline-block;
+  @include var('background-color', 'primary-alt');
+  border-radius: 10px;
+  font-weight: 500;
+  .filter-view-button {
+    position: relative;
+    display: inline-block;
+    padding: 25px;
+    border-right: 1px solid rgba(151, 151, 151, 0.4);
+    &:last-child {
+      border: none;
+    }
+    .datepicker-container {
+      .select__menu {
+        width: 350px;
+      }
+    }
+    .select {
+      &__value-container {
+        min-width: 120px;
+      }
+      &__control {
+        border: none;
+        &--is-focused {
+          .select__placeholder {
+            color: hsl(0,0%,50%);
+          }
+        }
+      }
+      &__placeholder {
+        @include var('color', 'text')
+      }
+      &__value-container {
+        padding: 0;
+        position: relative;
+      }
+    }
+  }
+}
