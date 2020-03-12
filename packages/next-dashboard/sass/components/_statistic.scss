@@ -75,6 +75,7 @@
 .filter-view-container {
   display: inline-block;
   @include var('background-color', 'primary-alt');
+  border: 1px solid rgba(151, 151, 151, 0.4);
   border-radius: 10px;
   font-weight: 500;
   .filter-view-button {
