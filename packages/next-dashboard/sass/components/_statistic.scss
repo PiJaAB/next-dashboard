@@ -20,17 +20,17 @@
     }
   }
   &.statistic_direction_up {
-    background-image: url('/images/statistic/statistic-neutral-direction-up.svg');
+    background-image: url('/dashboard-assets/images/statistic/statistic-neutral-direction-up.svg');
   }
   &.statistic_direction_down {
-    background-image: url('/images/statistic/statistic-neutral-direction-down.svg');
+    background-image: url('/dashboard-assets/images/statistic/statistic-neutral-direction-down.svg');
   }
   &_positive {
     &.statistic_direction_up {
-      background-image: url('/images/statistic/statistic-positive-direction-up.svg');
+      background-image: url('/dashboard-assets/images/statistic/statistic-positive-direction-up.svg');
     }
     &.statistic_direction_down {
-      background-image: url('/images/statistic/statistic-positive-direction-down.svg');
+      background-image: url('/dashboard-assets/images/statistic/statistic-positive-direction-down.svg');
     }
     .statistic-period-value {
       color: #00b69b;
@@ -38,10 +38,10 @@
   }
   &_negative {
     &.statistic_direction_up {
-      background-image: url('/images/statistic/statistic-negative-direction-up.svg');
+      background-image: url('/dashboard-assets/images/statistic/statistic-negative-direction-up.svg');
     }
     &.statistic_direction_down {
-      background-image: url('/images/statistic/statistic-negative-direction-down.svg');
+      background-image: url('/dashboard-assets/images/statistic/statistic-negative-direction-down.svg');
     }
     .statistic-period-value {
       color: #f93c65;
