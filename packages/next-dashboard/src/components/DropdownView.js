@@ -9,7 +9,14 @@ type Props = {
   label: string,
 };
 
-const DropdownView = ({ classPrefix, children, label, isDisabled }: Props) => {
+const DropdownView = ({
+  classPrefix,
+  children,
+  label,
+  isDisabled,
+  titleColor,
+  dropdownExtrastyles,
+}: Props) => {
   const [isOpen, setOpen] = useState(false);
 
   useEffect(() => {
@@ -49,7 +56,9 @@ const DropdownView = ({ classPrefix, children, label, isDisabled }: Props) => {
         role="button"
         tabIndex="0"
       >
-        <div className={`${prefix}__label`}>{label}</div>
+        <div className={`${prefix}__label`} style={{ color: titleColor }}>
+          {label}
+        </div>
         <div className={`${prefix}__indicators`}>
           <span className={`${prefix}__indicator-separator`} />
           <div
@@ -65,6 +74,7 @@ const DropdownView = ({ classPrefix, children, label, isDisabled }: Props) => {
           onClick={ev => {
             ev.stopPropagation();
           }}
+          style={dropdownExtrastyles}
         >
           <div className={`${prefix}__content`}>{children}</div>
         </div>

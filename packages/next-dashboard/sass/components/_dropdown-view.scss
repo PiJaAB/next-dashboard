@@ -6,19 +6,19 @@
       display: flex;
       outline: 0 !important; // ?
       border-radius: 5px;
-      @include var('background-color', 'primary');
+      // @include var('background-color', 'primary');
       @include var('color', 'white');
       text-align: center;
       cursor: default;
       &--is-disabled {
-        opacity: .5;
+        // opacity: .5;
         cursor: not-allowed;
       }
     }
     &__label {
       flex: 1;
       position: relative;
-      padding: 10px 15px;
+      // color: orange;
       overflow: hidden;
       -webkit-overflow-scrolling: touch;
     }
@@ -56,3 +56,8 @@
       }
     }
   }
+.toggle-button {
+  border: 1px solid;
+  border-radius: 50px;
+  padding: 10px;
+}
