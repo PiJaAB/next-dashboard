@@ -76,7 +76,7 @@ function Statistic({
           {direction && (
             <img
               className="statistic-period-icon"
-              src={`/images/statistic/statistic-${subjective}-direction-icon-${direction}.svg`}
+              src={`/dashboard-assets/images/statistic/statistic-${subjective}-direction-icon-${direction}.svg`}
               alt={direction === 'up' ? 'Upp' : 'Ner'}
             />
           )}

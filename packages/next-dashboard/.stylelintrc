@@ -6,6 +6,12 @@
       {
         "ignoreAtRules": ["include", "each", "for", "extend", "mixin", "warn", "function", "return", "if", "else", "at-root"]
       }
+    ],
+    "property-no-unknown": [
+      true,
+      {
+        ignoreProperties: ["font-named-instance"],
+      }
     ]
   }
 }
