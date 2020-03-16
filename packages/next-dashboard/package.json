@@ -5,7 +5,6 @@
   "author": "Linn Dahlgren <linn.dahlgren@pija.se>",
   "homepage": "https://github.com/PiJaAB/next-dashboard#readme",
   "license": "MIT",
-  "type": "module",
   "main": "dist/entry.js",
   "directories": {
     "dist": "dist",
@@ -31,7 +30,7 @@
     "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
     "dev:pkg": "nodemon -w src -x \"yarn run -s build:silent\"",
     "lint": "run-p -l --silent --aggregate-output --continue-on-error lint:*",
-    "lint:check-eslint": "eslint --print-config .eslintrc.cjs | eslint-config-prettier-check",
+    "lint:check-eslint": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "lint:prettier": "NODE_ENV=production prettier -c 'src/**/*.js'",
     "lint:eslint": "NODE_ENV=production eslint src --report-unused-disable-directives --color",
     "lint:stylelint": "NODE_ENV=production stylelint sass/**/*.scss -s scss --rd --risd --color",
