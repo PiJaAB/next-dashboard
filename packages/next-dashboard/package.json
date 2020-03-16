@@ -17,7 +17,8 @@
     "dist",
     "sass",
     "src",
-    "styles"
+    "styles",
+    "serveAssets.js"
   ],
   "publishConfig": {
     "access": "public"
