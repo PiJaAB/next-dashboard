@@ -3,7 +3,7 @@
 import React from 'react';
 import type { Plot } from './types';
 
-import { PADDING } from './utils';
+import { PADDING } from '../utils';
 
 type Props<T: Plot> = {
   cx: number,

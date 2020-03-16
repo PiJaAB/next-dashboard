@@ -1,8 +1,6 @@
 .page-content {
+  @extend .page-box;
   padding: 20px;
-  border-radius: 10px;
-  @include add-border;
-  @include var('background-color', 'primary-alt');
   @include breakpoint(medium) {
     padding: 40px;
   }

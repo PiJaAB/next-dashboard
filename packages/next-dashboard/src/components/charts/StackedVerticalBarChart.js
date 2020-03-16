@@ -10,8 +10,9 @@ import {
   Bar,
   Legend,
 } from 'recharts';
-import { currencyFormat } from '../utils/numberFormatters';
-import { DataNotFound } from './utils';
+import { currencyFormat } from '../../utils/numberFormatters';
+import { DataNotFound } from '../utils';
+import WrapChart from './WrapChart';
 
 type Props<D: {}> = {
   title?: string,
@@ -28,21 +29,12 @@ const renderBars = barChartKeysAndColor => {
   if (barChartKeysAndColor) {
     if (Array.isArray(barChartKeysAndColor)) {
       return barChartKeysAndColor.map(({ key, color, stackId }) => {
-        return (
-          <Bar
-            key={key}
-            dataKey={key}
-            barSize={12}
-            stackId={stackId}
-            fill={color}
-          />
-        );
+        return <Bar key={key} dataKey={key} stackId={stackId} fill={color} />;
       });
     }
     return (
       <Bar
         dataKey={barChartKeysAndColor.key}
-        barSize={12}
         fill={barChartKeysAndColor.color}
       />
     );
@@ -57,23 +49,17 @@ const Chart = <D: {}>({
   barChartKeysAndColor,
 }: Props<D>) => {
   const chart = (
-    <div
-      className="page-chart vertical-bar-chart-container stacked-vertical-bar-chart"
-      style={{ height: '100%' }}
-    >
-      <div className="page-chart-content">
-        <div
-          className="feature-box-label label margin-bottom-x1"
-          style={{ fontSize: '1.4rem', fontWeight: 500 }}
-        >
-          {title}
-        </div>
-        <ResponsiveContainer>
+    <ResponsiveContainer>
+      <WrapChart>
+        {(width, height) => (
           <BarChart
             data={data}
-            margin={{ top: 10, right: 30, bottom: 0 }}
+            width={width}
+            height={height}
+            margin={{ top: 0, right: 0, left: 0, bottom: -26 }}
             layout="vertical"
-            className="vertical-bar-chart"
+            maxBarSize={12}
+            stackOffset="expand"
           >
             <XAxis tick={false} type="number" axisLine={false} />
             <YAxis
@@ -82,10 +68,14 @@ const Chart = <D: {}>({
               axisLine={false}
               type="category"
               yAxisId={0}
+              width={0}
             />
             <Legend
               content={({ payload }) => (
-                <ul className="stacked-vertical-bar-chart-legends-list">
+                <ul
+                  className="stacked-vertical-bar-chart-legends-list"
+                  style={{ position: 'relative', bottom: '100%' }}
+                >
                   {payload.map(
                     (entry, index) =>
                       index < 3 && (
@@ -100,23 +90,34 @@ const Chart = <D: {}>({
                   )}
                 </ul>
               )}
+              verticalAlign="bottom"
+              margin={{ top: 0, right: 0, left: 0, bottom: 26 }}
+              height={26}
             />
             <Tooltip
               isAnimationActive={false}
               cursor={false}
               formatter={c => currencyFormat(c)}
+              allowEscapeViewBox={{ x: false, y: true }}
             />
             {renderBars(barChartKeysAndColor)}
           </BarChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="stacked-vertical-bar-chart-spacer" />
-    </div>
+        )}
+      </WrapChart>
+    </ResponsiveContainer>
   );
 
   return (
-    <div className="page-content" style={{ padding: 0, height: '100%' }}>
-      {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
+    <div className="feature-box vertical-bar-chart stacked-vertical-bar-chart">
+      <div
+        className="feature-box-label label margin-bottom-x1"
+        style={{ fontSize: '1.4rem', fontWeight: 500 }}
+      >
+        {title}
+      </div>
+      <div className="vertical-bar-chart-container">
+        {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
+      </div>
     </div>
   );
 };

@@ -25,7 +25,6 @@ export { default as ResponsiveTable } from './ResponsiveTable';
 export { default as SiteMessage } from './SiteMessage';
 export { default as FixedScrollbar } from './FixedScrollbar';
 export { default as VerticalBarChart } from './VerticalBarChart';
-export { default as StackedVerticalBarChart } from './StackedVerticalBarChart';
 export { default as FeatureBox } from './FeatureBox';
 export { default as DropdownView } from './DropdownView';
 export { default as Fader } from './Fader';

@@ -11,18 +11,19 @@ import {
   Tooltip,
   Customized,
 } from 'recharts';
-import WrapChart from './WrapChart';
+import WrapChart from '../WrapChart';
 import PageChart from '../PageChart';
 import TextComp, { type StyledText } from './TextComp';
 import type { Plot } from './types';
 
 import {
+  PADDING,
   INNER_RADIUS,
   OUTER_RADIUS,
   radius,
   getCenter,
   renderCustomLegend,
-} from './utils';
+} from '../utils';
 
 type Props<T: Plot> = {
   plots: $ReadOnlyArray<T>,
@@ -56,7 +57,7 @@ export default function RadialBarChart<T: Plot>({
   return (
     <PageChart>
       <ResponsiveContainer>
-        <WrapChart>
+        <WrapChart hoffset={PADDING.BOTTOM}>
           {(width, height) => (
             <RechartRadialBarChart
               startAngle={startAngle}
