@@ -9,7 +9,7 @@ export const PADDING = {
   TOP: 0,
   LEFT: 0,
   RIGHT: 0,
-  BOTTOM: 13,
+  BOTTOM: 14,
 };
 
 export const INNER_RADIUS = 0.5;

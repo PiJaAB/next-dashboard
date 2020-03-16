@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { PADDING } from './utils';
+import { PADDING } from '../utils';
 
 export type StyledText =
   | string

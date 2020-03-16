@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
-import WrapChart from './WrapChart';
+import WrapChart from '../WrapChart';
 import PageChart from '../PageChart';
 import RenderCustomizedPieLabel from './RenderCustomizedPieLabel';
 import type { Plot } from './types';
@@ -19,7 +19,8 @@ import {
   pieRadius,
   getCenter,
   renderCustomLegend,
-} from './utils';
+  PADDING,
+} from '../utils';
 
 type Props<T: Plot> = {
   plots: $ReadOnlyArray<T>,
@@ -41,7 +42,7 @@ export default function PieChart<T: Plot>({
   return (
     <PageChart>
       <ResponsiveContainer>
-        <WrapChart>
+        <WrapChart hoffset={PADDING.BOTTOM}>
           {(width, height) => (
             <RechartPieChart
               height={height}

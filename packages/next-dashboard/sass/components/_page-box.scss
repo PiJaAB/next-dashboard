@@ -1,0 +1,5 @@
+.page-box {
+  border-radius: 10px;
+  @include add-border;
+  @include var('background-color', 'primary-alt');
+}
