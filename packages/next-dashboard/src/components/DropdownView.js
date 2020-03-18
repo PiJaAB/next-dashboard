@@ -7,6 +7,8 @@ type Props = {
   children: Node,
   isDisabled: boolean,
   label: string,
+  titleColor?: string,
+  dropdownExtraClasses?: string,
 };
 
 const DropdownView = ({
@@ -15,7 +17,7 @@ const DropdownView = ({
   label,
   isDisabled,
   titleColor,
-  dropdownExtrastyles,
+  dropdownExtraClasses,
 }: Props) => {
   const [isOpen, setOpen] = useState(false);
 
@@ -70,11 +72,10 @@ const DropdownView = ({
       {isOpen && (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
         <div
-          className={`${prefix}__content--container`}
+          className={`${prefix}__content--container ${dropdownExtraClasses}`}
           onClick={ev => {
             ev.stopPropagation();
           }}
-          style={dropdownExtrastyles}
         >
           <div className={`${prefix}__content`}>{children}</div>
         </div>
