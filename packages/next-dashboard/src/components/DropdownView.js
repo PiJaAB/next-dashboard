@@ -74,7 +74,7 @@ const DropdownView = ({
         <div
           // FlowIssue can't seem to  get this to work properly with dropdownExtraClasses
           className={`${prefix}__content--container ${dropdownExtraClasses ||
-            null}`}
+            ''}`}
           onClick={ev => {
             ev.stopPropagation();
           }}
