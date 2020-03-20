@@ -1,11 +1,12 @@
 // @flow
 
 import React, { useState, useEffect, type Node } from 'react';
+import classnames from 'classnames';
 
 type Props = {
   classPrefix?: string,
   children: Node,
-  isDisabled: boolean,
+  isDisabled?: boolean,
   label: string,
   titleColor?: string,
   dropdownExtraClasses?: string,
@@ -72,9 +73,10 @@ const DropdownView = ({
       {isOpen && (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
         <div
-          // FlowIssue can't seem to  get this to work properly with dropdownExtraClasses
-          className={`${prefix}__content--container ${dropdownExtraClasses ||
-            ''}`}
+          className={classnames(
+            `${prefix}__content--container`,
+            dropdownExtraClasses,
+          )}
           onClick={ev => {
             ev.stopPropagation();
           }}
