@@ -1,15 +1,25 @@
 // @flow
 
 import React, { useState, useEffect, type Node } from 'react';
+import classnames from 'classnames';
 
 type Props = {
   classPrefix?: string,
   children: Node,
-  isDisabled: boolean,
+  isDisabled?: boolean,
   label: string,
+  titleColor?: string,
+  dropdownExtraClasses?: string,
 };
 
-const DropdownView = ({ classPrefix, children, label, isDisabled }: Props) => {
+const DropdownView = ({
+  classPrefix,
+  children,
+  label,
+  isDisabled,
+  titleColor,
+  dropdownExtraClasses,
+}: Props) => {
   const [isOpen, setOpen] = useState(false);
 
   useEffect(() => {
@@ -49,7 +59,9 @@ const DropdownView = ({ classPrefix, children, label, isDisabled }: Props) => {
         role="button"
         tabIndex="0"
       >
-        <div className={`${prefix}__label`}>{label}</div>
+        <div className={`${prefix}__label`} style={{ color: titleColor }}>
+          {label}
+        </div>
         <div className={`${prefix}__indicators`}>
           <span className={`${prefix}__indicator-separator`} />
           <div
@@ -61,7 +73,10 @@ const DropdownView = ({ classPrefix, children, label, isDisabled }: Props) => {
       {isOpen && (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
         <div
-          className={`${prefix}__content--container`}
+          className={classnames(
+            `${prefix}__content--container`,
+            dropdownExtraClasses,
+          )}
           onClick={ev => {
             ev.stopPropagation();
           }}
