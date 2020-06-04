@@ -1,6 +1,6 @@
 {
   "name": "@pija-ab/next-dashboard",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0",
   "description": "> TODO: description",
   "author": "Linn Dahlgren <linn.dahlgren@pija.se>",
   "homepage": "https://github.com/PiJaAB/next-dashboard#readme",
@@ -92,5 +92,5 @@
     "classnames": "^2.2.5",
     "react-tooltip": "^3.11.2"
   },
-  "gitHead": "aca5c077064ea0f0c30b98ef1ed199708faaa82b"
+  "gitHead": "89641bd58f517a6044efe3b3f7a32979f26731a0"
 }
