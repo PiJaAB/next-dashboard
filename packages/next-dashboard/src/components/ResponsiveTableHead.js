@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useContext } from 'react';
 /*:: import * as R from 'react'; */
 import { useMutationObserver, LayoutContext } from '../utils';
-import type { TextAlignProps, ColData } from './ResponsiveTable';
+import type { ColData } from './ResponsiveTable';
 
 export type Column<E, C> = $ReadOnly<{
   ...ColData<E, C>,
@@ -13,7 +13,7 @@ export type Column<E, C> = $ReadOnly<{
 type HeadProps<E, C> = {
   cols: $ReadOnlyArray<Column<E, C>>,
   columnKeyExtractor: (column: Column<E, C>) => string,
-  textAlignClass: (props: TextAlignProps) => void | string,
+  textAlignClass: (alignment?: string) => void | string,
   renderHead: (column: Column<E, C>) => ?R.Node,
   onColumnClick?: (column: Column<E, C>) => void,
 };
@@ -78,7 +78,7 @@ const TableHead = <E: {}, C>({
           return (
             <th
               key={columnKeyExtractor(column)}
-              className={textAlignClass(column)}
+              className={textAlignClass(column.textAlign)}
               onClick={onColumnClick && (() => onColumnClick(column))}
             >
               {(column.renderHead || renderHead)(column)}

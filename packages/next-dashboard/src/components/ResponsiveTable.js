@@ -38,8 +38,6 @@ export type Props<E, C> = {
   loading?: boolean,
 };
 
-export type TextAlignProps = { +textAlign: string | void };
-
 export const defaultRenderHead = <-E, -C>({ title }: ColData<E, C>) => title;
 const defaultRenderBody = <E: {}, C>(entry: E, { field }: ColData<E, C>) =>
   entry[field] !== null ? String(entry[field]) : null;
@@ -61,8 +59,8 @@ const ResponsiveTable = <-E: {}, -C>({
   rowHeight,
   loading,
 }: Props<E, C>) => {
-  const textAlignClass = (props: TextAlignProps) =>
-    props.textAlign && `text-align-${props.textAlign}`;
+  const textAlignClass = (alignment?: string) =>
+    alignment && `text-align-${alignment}`;
   const table = (cols: $ReadOnlyArray<Column<E, C>>, type: string) => (
     <table>
       <TableHead
@@ -89,7 +87,7 @@ const ResponsiveTable = <-E: {}, -C>({
                       : null
                   }
                   key={columnKeyExtractor(column)}
-                  className={textAlignClass(column)}
+                  className={textAlignClass(column.textAlign)}
                 >
                   {(column.renderBody || renderBody)(entry, column)}
                 </td>
