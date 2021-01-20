@@ -31,7 +31,7 @@ module.exports = {
         targets: {
           node: '12',
         },
-        modules: 'umd',
+        modules: 'amd',
       },
     ],
   ],
