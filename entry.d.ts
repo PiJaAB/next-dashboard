@@ -405,7 +405,7 @@ declare module '@pija-ab/next-dashboard' {
     href?: string;
     as?: string;
     icon?: React.ReactNode;
-    onClick?: (ev: MouseEvent) => boolean | null | undefined;
+    onClick?: (ev: MouseEvent) => boolean | null | undefined | void;
     active?: boolean;
   }>;
   const NavSection: React.FunctionComponent<{
