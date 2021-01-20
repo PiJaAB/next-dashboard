@@ -31,23 +31,13 @@ module.exports = {
         targets: {
           node: '12',
         },
-        modules: 'umd',
+        modules: 'commonjs',
       },
     ],
   ],
   plugins: [
     'babel-plugin-transform-class-properties',
     'transform-flow-strip-types',
-    [
-      '@babel/plugin-transform-runtime',
-      {
-        absoluteRuntime: false,
-        corejs: false,
-        helpers: true,
-        regeneratior: true,
-        useESModules: false,
-      },
-    ],
   ],
   env: {
     production: {

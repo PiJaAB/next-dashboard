@@ -27,8 +27,10 @@
   transition: width 0.25s ease, box-shadow 0.0625s ease 0.1875s, transform 0.25s ease;
   @each $breakpoint, $size in $sidebar-sizes {
     @include breakpoint($breakpoint, true) {
-      @if type-of($size) == number AND $size > $max-width {
-        max-width: $size;
+      @if type-of($size) == number {
+        @if $size > $max-width {
+          max-width: $size;
+        }
       }
       width: $size;
     }
@@ -44,8 +46,10 @@
   &_compact {
     @each $breakpoint, $size in $sidebar-compact-sizes {
       @include breakpoint($breakpoint, true) {
-        @if type-of($size) == number AND $size > $max-width {
-          max-width: $size;
+        @if type-of($size) == number {
+          @if $size > $max-width {
+            max-width: $size;
+          }
         }
         width: $size;
       }
