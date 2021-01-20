@@ -117,8 +117,8 @@ declare module '@pija-ab/next-dashboard' {
 
   type DataPath = Readonly<Record<string, PathFragment>> | PathFragment;
 
-  abstract class AbstractAuthProvider {
-    constructor(ctx: GetInitialPropsContext | string): void;
+  interface IAuthProvider {
+    new (ctx: GetInitialPropsContext | string): this;
     serialize(): string;
     isAuthorizedForRoute(
       href: string,
@@ -130,7 +130,7 @@ declare module '@pija-ab/next-dashboard' {
   }
 
   type DashboardInitialPropsContext = NextPageContext & {
-    authProvider?: AbstractAuthProvider;
+    authProvider?: IAuthProvider;
   };
 
   type DashboardComponent<P extends {}, I extends {} = {}> = NextComponentType<
@@ -572,7 +572,7 @@ declare module '@pija-ab/next-dashboard' {
   }
 
   interface FullConfig {
-    AuthProvider: AbstractAuthProvider;
+    AuthProvider: IAuthProvider;
     branding: Branding;
     themes: readonly Theme[];
     needAuthDefault: boolean;
@@ -601,8 +601,8 @@ declare module '@pija-ab/next-dashboard' {
     readonly Comp: DashboardComponent<any>;
 
     isAuthenticated(): boolean | Promise<boolean>;
-    getAuthProvider<T extends AbstractAuthProvider>(
-      Class: typeof AbstractAuthProvider,
+    getAuthProvider<T extends IAuthProvider>(
+      Class: typeof IAuthProvider,
     ): T | void;
   }
 
