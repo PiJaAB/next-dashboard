@@ -1,5 +1,5 @@
 // @flow
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useCallback } from 'react';
 /*:: import * as R from 'react'; */
 import { useMutationObserver, LayoutContext } from '../utils';
 import type { ColData } from './ResponsiveTable';
@@ -56,6 +56,12 @@ const TableHead = <E: {}, C>({
     };
   }, [headRef]);
 
+  const mutationCallback = useCallback(() => {
+    const headEl = headRef.current;
+    if (!headEl) return;
+    update(headEl, hasHeader);
+  }, [headRef.current, hasHeader]);
+
   useMutationObserver(
     typeof document !== 'undefined' ? document.documentElement : null,
     {
@@ -64,12 +70,7 @@ const TableHead = <E: {}, C>({
       characterData: true,
       attributes: true,
     },
-    () => {
-      const headEl = headRef.current;
-      if (!headEl) return;
-      update(headEl, hasHeader);
-    },
-    [headRef.current, hasHeader],
+    mutationCallback,
   );
   return (
     <thead ref={headRef}>

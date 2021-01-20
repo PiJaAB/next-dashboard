@@ -14,7 +14,6 @@ export default function useMutationObserver(
   target: ?Node,
   options: MutationObserverInit | void | null,
   callback: ?Callback,
-  inputs: ?$ReadOnlyArray<mixed>,
 ) {
   if (typeof window === 'undefined') return;
   const observer = useMemo(() => new MutationObserver(gcb));
@@ -30,9 +29,9 @@ export default function useMutationObserver(
     return () => {
       observer.disconnect();
     };
-  }, [target, options]);
+  }, [observer, target, options]);
   useEffect(() => {
     if (!callback) callbacks.delete(observer);
     else callbacks.set(observer, callback);
-  }, [...(inputs || []), observer]);
+  }, [callback, observer]);
 }

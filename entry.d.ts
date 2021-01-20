@@ -1,6 +1,13 @@
 /// <reference path="react.d.ts" />
+/// <reference types="next" />
 
 declare module '@pija-ab/next-dashboard' {
+  import {
+    GetInitialPropsContext,
+    NextComponentType,
+    NextPageContext,
+  } from 'next';
+
   interface ColData<E, C> extends C {
     readonly key?: string;
     readonly title: string;
@@ -24,6 +31,10 @@ declare module '@pija-ab/next-dashboard' {
     stroke: string;
     value: ?number;
     key?: string;
+  }
+
+  class NotImplementedError extends Error {
+    constructor(message?: string);
   }
 
   interface HeadColumn<E, C> extends ColData<E, C> {
@@ -51,6 +62,101 @@ declare module '@pija-ab/next-dashboard' {
   }
 
   type DataType<T = unknown> = SuccessData<T> | ErrorData | LoadingData;
+
+  interface Branding {
+    /** Site name */
+    name: string;
+    /** Array of keywords globally relevant for the site */
+    keywords?: string[];
+    /** URL to the homepage/index, used e.g. for the logo */
+    homepageURL?: string;
+    /** Base URL for location of logo images, or map from theme class name to logo URL */
+    logoURL?: string | { [string]: string };
+  }
+
+  interface Theme {
+    name: string;
+    class: string;
+  }
+
+  interface SiteMessageType {
+    readonly title?: string;
+    readonly message: string;
+    readonly status?: 'info' | 'warning' | 'error';
+    readonly count?: number;
+  }
+
+  type Statuses = 'loading' | 'success' | 'error';
+
+  interface DataProps<P extends { status?: Statuses }>
+    extends Omit<P, 'status'> {
+    status: Statuses;
+  }
+
+  type DataExtra =
+    | Partial<{
+        readonly [key: string]: DataExtra;
+      }>
+    | readonly DataExtra[]
+    | number
+    | string
+    | boolean
+    | null;
+
+  type PollingFetcher<Data extends {}> = {
+    readonly runner:
+      | keyof Data
+      | readonly (keyof Data)[]
+      | ((extra?: DataExtra) => Promise<unknown> | unknown);
+    readonly parser?: (...args: any[]) => any;
+    readonly interval?: number | ((extra?: DataExtra) => number | void);
+    readonly id: keyof Data;
+  };
+
+  type PathFragment = string | number | (string | number)[];
+
+  type DataPath = Readonly<Record<string, PathFragment>> | PathFragment;
+
+  abstract class AbstractAuthProvider {
+    constructor(ctx: GetInitialPropsContext | string): void;
+    serialize(): string;
+    isAuthorizedForRoute(
+      href: string,
+      asPath: string,
+      query: Partial<Record<string, string>>,
+    ): boolean | Symbol | Promise<boolean | Symbol>;
+    isAuthenticated(): boolean;
+    readonly ready?: Promise<unknown> | unknown;
+  }
+
+  type DashboardInitialPropsContext = NextPageContext & {
+    authProvider?: AbstractAuthProvider;
+  };
+
+  type DashboardComponent<P extends {}, I extends {} = {}> = NextComponentType<
+    DashboardInitialPropsContext,
+    I,
+    P
+  >;
+
+  interface ISubscriptionProvider<Data extends {}> {
+    read<DS extends keyof Data>(
+      dataSource: DS,
+      extra?: DataExtra,
+    ): DataType<Data[DS]>;
+
+    subscribe<DS extends keyof Data>(
+      cb: (val: DataType<Data[DS]>) => void,
+      dataSource: DS,
+      extra?: DataExtra,
+    ): void;
+
+    unsubscribe<DS extends keyof Data>(
+      cb: (val: DataType<Data[DS]>) => void,
+      dataSource: DS,
+      extra?: DataExtra,
+    ): void;
+  }
 
   const FORM_ALL_VALID: unique symbol;
 
@@ -100,25 +206,15 @@ declare module '@pija-ab/next-dashboard' {
     direction: 'asc' | 'desc',
   ) => string | number;
 
-  interface SortableTableProps<E, C>
-    extends ResponsiveTableProps<E, C> {
+  interface SortableTableProps<E, C> extends ResponsiveTableProps<E, C> {
     compare?: SortableTableCompare<E>;
     compareBy?: SortableTableCompareBy<E>;
     title?: string;
   }
 
-  interface SiteMessageType {
-    readonly title?: string;
-    readonly message: string;
-    readonly status?: 'info' | 'warning' | 'error';
-    readonly count?: number;
-  }
-
   interface SiteMessageProps extends SiteMessageType {
     dismiss?: () => void;
   }
-
-  type Statuses = 'loading' | 'success' | 'error';
 
   type StyledText =
     | string
@@ -390,4 +486,217 @@ declare module '@pija-ab/next-dashboard' {
     initialValue: T;
     id: string;
   }): JSX.Element;
+
+  type ParsedPollingFetcher<Data extends {}> = {
+    readonly id: string;
+    readonly interval?: number | ((extra?: DataExtra) => number | void);
+    readonly runner:
+      | keyof Data
+      | readonly (keyof data)[]
+      | ((extra?: DataExtra) => unknown);
+    readonly parser?: (val: any) => any;
+  };
+
+  class SubscribtionPoller<Data extends {} = {}>
+    extends EventEmitter
+    implements ISubscriptionProvider<Data> {
+    public readonly start?: (id: string) => void;
+
+    public readonly stop?: (id: string) => void;
+
+    protected activeListeners: Map<
+      string,
+      Set<(val: DataType<Data, keyof Data>) => void>
+    >;
+
+    protected fetchers: ParsedPollingFetcher<Data>[];
+
+    protected activeFetchers: Map<string, ParsedPollingFetcher<Data>>;
+
+    protected stoppingTimers: Map<string, number>;
+
+    protected dataCache: Partial<{ [key in keyof Data]: DataType<Data[key]> }>;
+
+    protected aliasCallbacks: Map<
+      string,
+      readonly [keyof Data, (val: DataType<Data[keyof Data]>) => void][]
+    > = new Map();
+
+    constructor(
+      fetcher?: PollingFetcher<Data> | $ReadOnlyArray<PollingFetcher<Data>>,
+    );
+
+    async startFetcher(fetcher: ParsedPollingFetcher<Data>): void;
+
+    addFetcher(
+      fetcher: PollingFetcher<Data> | $ReadOnlyArray<PollingFetcher<Data>>,
+    ): void;
+
+    setUpdating(dataSource: string): ?DataType<> {
+      if (!this.dataCache[dataSource]) return;
+      // $FlowIssue: I not sure why flow spazzes out...
+      const newData: DataType<> = {
+        ...this.dataCache[dataSource],
+        updating: true,
+      };
+      this.setData(dataSource, newData);
+    }
+
+    setData<DS extends keyof Data>(
+      dataSource: string,
+      data: DataType<Data[DS]>,
+    ): void;
+
+    getActiveListeners(): readonly string[];
+
+    read<DS extends keyof Data>(
+      dataSource: DS,
+      extra?: DataExtra,
+    ): DataType<Data[DS]>;
+
+    subscribe<DS extends keyof Data>(
+      cb: (data: DataType<Data[DS]>) => void,
+      dataSource: DS,
+      extra?: DataExtra,
+    ): void;
+
+    unsubscribe<DS extends keyof Data>(
+      cb: (data: DataType<Data[DS]>) => void,
+      dataSource: string,
+      extra?: DataExtra,
+    ): void;
+
+    send<T>(_key: string, _data: T, _extra?: mixed): Promise<void> | void {
+      throw new NotImplementedError();
+    }
+  }
+
+  interface FullConfig {
+    AuthProvider: AbstractAuthProvider;
+    branding: Branding;
+    themes: readonly Theme[];
+    needAuthDefault: boolean;
+    unauthedRoute?: string;
+    ClientAuthComp?: React.ComponentType<any>;
+    error?: {
+      Component: NextComponentType;
+      withContext?: boolean;
+    };
+  }
+
+  interface Config extends Partial<Omit<FullConfig, 'AuthProvider'>> {
+    AuthProvider: $PropertyType<FullConfig, 'AuthProvider'>;
+  }
+
+  declare const ConfigContext: React.Context<FullConfig>;
+
+  interface IDashboardContext {
+    getState: <T>(key: string, defaultValue: T) => T;
+    setState: <T>(key: string, value: T) => void;
+
+    readonly siteMessages: readonly SiteMessageType[];
+    registerSiteMessage(siteMessages: Error | SiteMessageType): void;
+    dismissSiteMessage(siteMessages: SiteMessageType): void;
+
+    readonly Comp: DashboardComponent<any>;
+
+    isAuthenticated(): boolean | Promise<boolean>;
+    getAuthProvider<T extends AbstractAuthProvider>(
+      Class: typeof AbstractAuthProvider,
+    ): T | void;
+  }
+
+  const DashboardContext: React.Context<IDashboardContext>;
+
+  function createDashboardHOC(): <U extends {}, Q extends {} = {}>(
+    Comp: DashboardComponent<U, Q>,
+    needAuth?: boolean | null,
+    configOverride?: Partial<Config> | null,
+  ) => NextComponentType<
+    Q & {
+      __ERRORED__: boolean;
+      __INITIAL_DASHBOARD_STATE__: Record<string, any> | void;
+      __INITIAL_LAYOUT_STATE__: Record<string, any> | void;
+      __ERR_PROPS__: {} | void;
+      __AUTH_SERIALIZED__: string;
+      __PERFORM_SSR__: boolean | void;
+    },
+    U
+  >;
+
+  const CLIENT_AUTH: unique symbol;
+
+  function createPersistentState<PersistentState>(
+    cookieName: string,
+    version?: number,
+  ): {
+    getInitialState(
+      ctx: GetInitialPropsContext | string,
+    ): PersistentState | null;
+    persist(
+      state: PersistentState,
+      noDebounce?: boolean,
+      ctx?: GetInitialPropsContext | string,
+    ): void;
+    serialize(state: PersistentState): string;
+  };
+
+  function useData<Data extends {}, DS extends keyof Data>(
+    subProvider: ISubscriptionProvider<Data>,
+    dataSource: DS,
+    extra?: DataExtra,
+    dummy?: boolean,
+  ): DataType<Data[DS]>;
+
+  function withData<
+    Type,
+    Data extends {},
+    Props extends { value: Type; status: Statuses }
+  >(
+    Comp: React.ComponentType<Props>,
+    subProvider: ISubscriptionProvider<Data>,
+    opts: {
+      defaults: {
+        error: (err: Error) => Type;
+        loading: () => Type;
+      };
+    },
+  ): <DS extends keyof Data>(
+    props: Omit<Props, 'status'> & {
+      parser: (data: DataType<Data[DS]>) => T;
+      dataSource: DS;
+      extra?: DataExtra;
+    },
+  ) => JSX.Element;
+
+  class SilentError extends Error {
+    constructor(error?: Error | string | null);
+  }
+
+  function makeSilent(error: Error): never;
+
+  class ConsoleError extends SilentError {
+    constructor(error?: Error | string | null);
+  }
+
+  function makeConsole(error: Error): never;
+
+  const errorReporter: {
+    report(err: Error): Promise<boolean>;
+  };
+
+  function useMutationObserver(
+    target: Node,
+    options: MutationObserverInit | void | null,
+    callback?: Callback | null,
+  ): void;
+
+  function confirmDialogue(opts: {
+    ok: () => void;
+    renderOk?: React.ReactNode | ((confirm: () => void) => React.ReactNode);
+    cancel?: () => void;
+    renderCancel?: React.ReactNode | ((cancel: () => void) => React.ReactNode);
+    title?: string;
+    message?: React.ReactNode;
+  }): () => void;
 }
