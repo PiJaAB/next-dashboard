@@ -9,7 +9,7 @@ import logger from '../utils/logger';
 type Props = {
   href?: string,
   as?: string,
-  children: string,
+  children: R.Node,
   icon?: R.Node,
   onClick?: (ev: MouseEvent) => ?boolean,
   active?: boolean,
@@ -19,13 +19,13 @@ type LinkProps = {
   href: $PropertyType<Props, 'href'>,
   onClick: ?$PropertyType<Props, 'onClick'>,
   as: ?$PropertyType<Props, 'as'>,
-  children: string,
+  children: R.Node,
   active: $PropertyType<Props, 'active'>,
   icon: ?$PropertyType<Props, 'icon'>,
 };
 
 type ButtonProps = {
-  children: string,
+  children: R.Node,
   onClick: ?$PropertyType<Props, 'onClick'>,
   active: $PropertyType<Props, 'active'>,
   icon: ?$PropertyType<Props, 'icon'>,
@@ -33,7 +33,7 @@ type ButtonProps = {
 };
 
 type InnerProps = {
-  children: string,
+  children: R.Node,
   icon?: $PropertyType<Props, 'icon'>,
 };
 
