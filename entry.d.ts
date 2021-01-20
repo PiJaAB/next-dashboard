@@ -2,11 +2,7 @@
 /// <reference types="next" />
 
 declare module '@pija-ab/next-dashboard' {
-  import {
-    GetInitialPropsContext,
-    NextComponentType,
-    NextPageContext,
-  } from 'next';
+  import { NextComponentType, NextPageContext } from 'next';
 
   interface ColData<E, C> extends C {
     readonly key?: string;
@@ -118,13 +114,13 @@ declare module '@pija-ab/next-dashboard' {
   type DataPath = Readonly<Record<string, PathFragment>> | PathFragment;
 
   interface IAuthProvider {
-    new (ctx: GetInitialPropsContext | string): this;
+    new (ctx: NextPageContext | string): this;
     serialize(): string;
     isAuthorizedForRoute(
       href: string,
       asPath: string,
       query: Partial<Record<string, string>>,
-    ): boolean | Symbol | Promise<boolean | Symbol>;
+    ): boolean | symbol | Promise<boolean | symbol>;
     isAuthenticated(): boolean;
     readonly ready?: Promise<unknown> | unknown;
   }
@@ -630,13 +626,11 @@ declare module '@pija-ab/next-dashboard' {
     cookieName: string,
     version?: number,
   ): {
-    getInitialState(
-      ctx: GetInitialPropsContext | string,
-    ): PersistentState | null;
+    getInitialState(ctx: NextPageContext | string): PersistentState | null;
     persist(
       state: PersistentState,
       noDebounce?: boolean,
-      ctx?: GetInitialPropsContext | string,
+      ctx?: NextPageContext | string,
     ): void;
     serialize(state: PersistentState): string;
   };
