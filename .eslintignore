@@ -1,5 +1,6 @@
 # Don't lint flow types from dependencies
 /flow-typed/**/*.js
-/packages/next-dashboard/dist/**/*
+/dist/**/*
 /*.js
-/packages/next-dashboard/exposers/**/*.js
+/exposers/**/*.js
+**/*.d.ts

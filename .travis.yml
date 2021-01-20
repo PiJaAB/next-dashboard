@@ -11,8 +11,7 @@ before_install:
 - npm install -g yarn
 - yarn --version
 install:
-- yarn magic install
-- yarn bootstrap
+- yarn install
 script:
 - yarn build
 - yarn test
