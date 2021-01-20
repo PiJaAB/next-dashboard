@@ -114,7 +114,7 @@ declare module '@pija-ab/next-dashboard' {
   type DataPath = Readonly<Record<string, PathFragment>> | PathFragment;
 
   interface IAuthProvider {
-    new (ctx: NextPageContext | string): this;
+    new (ctx: NextPageContext | string): IAuthProvider;
     serialize(): string;
     isAuthorizedForRoute(
       href: string,
