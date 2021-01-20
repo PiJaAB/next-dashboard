@@ -31,7 +31,7 @@ module.exports = {
         targets: {
           node: '12',
         },
-        modules: 'amd',
+        modules: 'umd',
       },
     ],
   ],
@@ -42,10 +42,10 @@ module.exports = {
       '@babel/plugin-transform-runtime',
       {
         absoluteRuntime: false,
-        corejs: 2,
+        corejs: false,
         helpers: true,
         regeneratior: true,
-        useESModules: true,
+        useESModules: false,
       },
     ],
   ],
