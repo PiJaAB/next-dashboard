@@ -7,7 +7,7 @@ import type { Theme } from '../utils/types';
 import NavEntry from './NavEntry';
 import LayoutContext from '../utils/layoutContext';
 
-type Props = { children?: string, icon?: R.Node };
+type Props = { children?: R.Node, icon?: R.Node };
 
 function rotateTheme(cur: Theme, themes: $ReadOnlyArray<Theme>): Theme {
   return themes[
