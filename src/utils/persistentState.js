@@ -10,8 +10,8 @@ let btoa;
 let atob;
 if (typeof window === 'undefined') {
   /* eslint-disable global-require */
-  btoa = require('btoa');
-  atob = require('atob');
+  btoa = global.require('btoa');
+  atob = global.require('atob');
   /* eslint-enable global-require */
 } else {
   ({ btoa, atob } = window);

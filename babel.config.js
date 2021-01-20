@@ -23,7 +23,18 @@ const minLevel = level => {
 /* BABEL CONFIG */
 
 module.exports = {
-  presets: ['@babel/preset-react'],
+  presets: [
+    '@babel/preset-react',
+    [
+      'babel-preset-env',
+      {
+        targets: {
+          node: '12',
+        },
+        modules: 'umd',
+      },
+    ],
+  ],
   plugins: [
     'babel-plugin-transform-class-properties',
     'transform-flow-strip-types',
