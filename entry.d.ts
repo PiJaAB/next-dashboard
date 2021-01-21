@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable max-classes-per-file */
+/* eslint-disable @typescript-eslint/triple-slash-reference */
 /// <reference path="react.d.ts" />
 /// <reference types="next" />
 
@@ -114,13 +117,12 @@ declare module '@pija-ab/next-dashboard' {
   type DataPath = Readonly<Record<string, PathFragment>> | PathFragment;
 
   interface IAuthProvider {
-    new (ctx: NextPageContext | string): IAuthProvider;
     serialize(): string;
     isAuthorizedForRoute(
       href: string,
       asPath: string,
       query: Partial<Record<string, string>>,
-    ): boolean | symbol | Promise<boolean | symbol>;
+    ): boolean | typeof CLIENT_AUTH | Promise<boolean | typeof CLIENT_AUTH>;
     isAuthenticated(): boolean;
     readonly ready?: Promise<unknown> | unknown;
   }
@@ -129,11 +131,11 @@ declare module '@pija-ab/next-dashboard' {
     authProvider?: IAuthProvider;
   };
 
-  type DashboardComponent<P extends {}, I extends {} = {}> = NextComponentType<
-    DashboardInitialPropsContext,
-    I,
-    P
-  >;
+  interface DashboardComponent<P extends {}, I extends {} = {}>
+    extends NextComponentType<DashboardInitialPropsContext, I, P> {
+    url?: string | ((router: NextRouter) => string) | void;
+    title?: string | (() => string) | void;
+  }
 
   interface ISubscriptionProvider<Data extends {}> {
     read<DS extends keyof Data>(
@@ -597,9 +599,9 @@ declare module '@pija-ab/next-dashboard' {
     readonly Comp: DashboardComponent<any>;
 
     isAuthenticated(): boolean | Promise<boolean>;
-    getAuthProvider<T extends IAuthProvider>(
-      Class: typeof IAuthProvider,
-    ): T | void;
+    getAuthProvider<T extends IAuthProvider>(Class: {
+      new (ctx: NextPageContext | string): T;
+    }): T | void;
   }
 
   const DashboardContext: React.Context<IDashboardContext>;
