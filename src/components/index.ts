@@ -1,5 +1,3 @@
-// @flow
-
 import HeaderCell from './HeaderCell';
 
 export * from './layout';

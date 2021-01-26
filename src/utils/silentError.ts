@@ -1,5 +1,3 @@
-// @flow
-
 // This is an Error proxy, to ensure that the automatic sitewide
 // error reporter does not display this error.
 

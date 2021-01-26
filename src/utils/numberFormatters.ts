@@ -1,4 +1,3 @@
-// @flow
 export const currencyFormat = Intl.NumberFormat('sv-SE', {
   style: 'currency',
   currency: 'SEK',

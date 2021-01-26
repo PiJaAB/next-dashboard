@@ -1,5 +1,3 @@
-// @flow
-
 import { SilentError } from './silentError';
 import logger from './logger';
 

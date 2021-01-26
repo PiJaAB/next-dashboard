@@ -1,5 +1,3 @@
-// @flow
-
 /* eslint-disable no-console */
 function printLog(level?: string, ...args: unknown[]) {
   console.log(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);

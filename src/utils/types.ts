@@ -86,6 +86,7 @@ export type PollingFetcher<Data extends {}> = {
     | keyof Data
     | (keyof Data)[]
     | ((extra?: DataExtra) => Promise<unknown> | unknown);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   parser?: (...args: any[]) => any;
   interval?: number | ((extra?: DataExtra) => number | void);
   id: keyof Data;

@@ -1,4 +1,3 @@
-// @flow
 import { NextComponentType } from 'next';
 import React from 'react';
 
@@ -40,8 +39,10 @@ type DefaultConfig = typeof defaultContext;
 
 export interface FullConfig extends DefaultConfig {
   unauthedRoute?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ClientAuthComp?: React.ComponentType<any>;
   error?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Component: NextComponentType<any>;
     withContext?: boolean;
   };

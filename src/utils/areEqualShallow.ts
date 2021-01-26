@@ -1,4 +1,3 @@
-// @flow
 export default function areEqualShallow(
   a: Readonly<Record<string, unknown>>,
   b: Readonly<Record<string, unknown>>,

@@ -1,4 +1,3 @@
-// @flow
 import React, {
   useState,
   useMemo,
@@ -54,9 +53,11 @@ export function LayoutStateProvider({
   children?: React.ReactNode;
 }): JSX.Element {
   const configCtx = useContext(configContext);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [persistentState, setPersistentState] = useState<Record<string, any>>(
     {},
   );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tempState, setTempState] = useState<Record<string, any>>({});
   const [modalActive, setModalActive] = useState(false);
   const persist = useCallback(() => {

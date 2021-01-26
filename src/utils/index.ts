@@ -1,5 +1,3 @@
-// @flow
-
 export type { Config, FullConfig } from './configContext';
 export { default as ConfigContext } from './configContext';
 

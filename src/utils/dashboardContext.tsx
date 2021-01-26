@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 
 import type {

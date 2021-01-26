@@ -1,5 +1,3 @@
-// @flow
-
 import React, { useMemo } from 'react';
 
 import type { DashboardComponent } from '../utils/types';

@@ -1,45 +1,41 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function useScrollFix(
   shouldFix: boolean,
-): React.RefObject<HTMLElement> {
-  const ref = useRef<HTMLElement>(null);
+): React.RefCallback<HTMLElement> {
+  const [ref, setRef] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el || !shouldFix) return undefined;
-    const oldTop = el.style.top;
-    const oldPos = el.style.position;
-    el.style.top = `-${window.pageYOffset}px`;
-    el.style.position = 'fixed';
+    if (!ref || !shouldFix) return undefined;
+    const oldTop = ref.style.top;
+    const oldPos = ref.style.position;
+    ref.style.top = `-${window.pageYOffset}px`;
+    ref.style.position = 'fixed';
     return () => {
-      const oldScroll = el.style.top
-        ? -Number(el.style.top.replace('px', ''))
+      const oldScroll = ref.style.top
+        ? -Number(ref.style.top.replace('px', ''))
         : NaN;
       if (!Number.isNaN(oldScroll)) {
-        el.style.position = oldPos;
-        el.style.top = oldTop;
+        ref.style.position = oldPos;
+        ref.style.top = oldTop;
         window.scrollTo(0, oldScroll);
       }
     };
-  }, [shouldFix]);
-
-  const onResize = () => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.top = '-0px';
-  };
+  }, [shouldFix, ref]);
 
   useEffect(() => {
-    if (shouldFix) {
-      window.addEventListener('resize', onResize);
-    }
+    if (!shouldFix) return undefined;
+    const onResize = () => {
+      if (!ref) return;
+      ref.style.top = '-0px';
+    };
+    window.addEventListener('resize', onResize);
     return () => {
       if (shouldFix) {
         window.removeEventListener('resize', onResize);
       }
     };
-  }, [shouldFix]);
+  }, [ref, shouldFix]);
 
-  return ref;
+  return setRef;
 }

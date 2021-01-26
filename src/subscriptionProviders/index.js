@@ -1,5 +1,3 @@
-// @flow
-
 export {
   default as SubscriptionPoller,
   makePollingAlias,

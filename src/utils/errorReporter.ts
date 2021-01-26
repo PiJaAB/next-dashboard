@@ -1,5 +1,3 @@
-// @flow
-
 import EventEmitter from 'events';
 
 export const errorEventEmitter = new EventEmitter();
