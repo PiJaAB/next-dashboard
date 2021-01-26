@@ -25,7 +25,7 @@ import {
   renderCustomLegend,
 } from '../utils';
 
-type Props<T: Plot> = {
+type Props<T extends Plot> = {
   plots: $ReadOnlyArray<T>,
   children?: R.Node,
   maxValue?: number,
@@ -42,7 +42,7 @@ const getTooltipFormatter = valueFormatter => (value, name, { payload }) => [
 
 const NO_MARGIN = { top: 0, right: 0, bottom: 0, left: 0 };
 
-export default function RadialBarChart<T: Plot>({
+export default function RadialBarChart<T extends Plot>({
   plots,
   children,
   maxValue,

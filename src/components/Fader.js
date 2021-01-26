@@ -3,7 +3,7 @@
 import React, { type ElementProps, type Node } from 'react';
 import type { DataType } from '../utils/types';
 
-type Props<El: string = 'div'> = {
+type Props<El extends string = 'div'> = {
   ...ElementProps<El>,
   data?: DataType<> | $ReadOnlyArray<DataType<>>,
   updating?: boolean,
@@ -20,7 +20,7 @@ function dataIsUpdating(
     : data.some(d => d.status !== 'loading' && d.updating);
 }
 
-function Fader<El: string = 'div'>({
+function Fader<El extends string = 'div'>({
   data,
   updating,
   as = 'div',

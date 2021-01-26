@@ -583,7 +583,7 @@ declare module '@pija-ab/next-dashboard' {
   }
 
   interface Config extends Partial<Omit<FullConfig, 'AuthProvider'>> {
-    AuthProvider: $PropertyType<FullConfig, 'AuthProvider'>;
+    AuthProvider: FullConfig['AuthProvider'];
   }
 
   declare const ConfigContext: React.Context<FullConfig>;
@@ -600,7 +600,7 @@ declare module '@pija-ab/next-dashboard' {
 
     isAuthenticated(): boolean | Promise<boolean>;
     getAuthProvider<T extends IAuthProvider>(Class: {
-      new (ctx: NextPageContext | string): T;
+      new (): T;
     }): T | void;
   }
 
@@ -659,7 +659,7 @@ declare module '@pija-ab/next-dashboard' {
     },
   ): <DS extends keyof Data>(
     props: Omit<Props, 'status'> & {
-      parser: (data: DataType<Data[DS]>) => T;
+      parser: (data: DataType<Data[DS]>) => Type;
       dataSource: DS;
       extra?: DataExtra;
     },

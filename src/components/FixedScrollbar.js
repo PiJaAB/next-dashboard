@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect, useRef, useState, type ElementProps } from 'react';
+import React, { useEffect, useRef, useState, type ElementProps, useCallback } from 'react';
 import { useMutationObserver } from '../utils';
 
 type Props = ElementProps<'div'>;
@@ -59,14 +59,7 @@ const FixedScrollbar = ({ className, children, ...props }: Props) => {
     };
   }, [containerRef, fakeContainerRef]);
 
-  useMutationObserver(
-    typeof document !== 'undefined' ? document.documentElement : null,
-    {
-      subtree: true,
-      childList: true,
-      characterData: true,
-      attributes: true,
-    },
+  const mutationCallback = useCallback(
     () => {
       const containerEl = containerRef.current;
       const fakeContainerEl = fakeContainerRef.current;
@@ -77,7 +70,17 @@ const FixedScrollbar = ({ className, children, ...props }: Props) => {
         setHide,
         setWidth,
       });
+    }, [containerRef.current, fakeContainerRef.current, setHide, setWidth])
+
+  useMutationObserver(
+    typeof document !== 'undefined' ? document.documentElement : null,
+    {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
     },
+    mutationCallback,
   );
 
   const handleScroll = ev => {

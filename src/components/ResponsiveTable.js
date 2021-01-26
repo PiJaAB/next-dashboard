@@ -39,14 +39,14 @@ export type Props<E, C> = {
 };
 
 export const defaultRenderHead = <-E, -C>({ title }: ColData<E, C>) => title;
-const defaultRenderBody = <E: {}, C>(entry: E, { field }: ColData<E, C>) =>
+const defaultRenderBody = <E extends {}, C>(entry: E, { field }: ColData<E, C>) =>
   entry[field] !== null ? String(entry[field]) : null;
 const defaultKeyExtractor = <E, C>({ key }: { key?: string } | ColData<E, C>) =>
   key;
 const defaultColumnKeyExtractor = <E, C>({ field, key }: ColData<E, C>) =>
   key || field;
 
-const ResponsiveTable = <-E: {}, -C>({
+const ResponsiveTable = <-E extends {}, -C>({
   className,
   columns,
   data,

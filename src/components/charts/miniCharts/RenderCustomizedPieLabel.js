@@ -5,7 +5,7 @@ import type { Plot } from './types';
 
 import { PADDING } from '../utils';
 
-type Props<T: Plot> = {
+type Props<T extends Plot> = {
   cx: number,
   cy: number,
   midAngle: number,
@@ -24,7 +24,7 @@ const RADIAN = Math.PI / 180;
 
 const CONSTANT_OFFSET = 10;
 
-const RenderCustomizedPieLabel = <T: Plot>({
+const RenderCustomizedPieLabel = <T extends Plot>({
   cx,
   cy,
   midAngle,

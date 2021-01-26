@@ -8,7 +8,7 @@ import logger from './logger';
 // automatically log the error to the console.
 
 export class ConsoleError extends SilentError {
-  constructor(error: ?Error | string) {
+  constructor(error?: Error | string) {
     super(error);
     logger.error(this);
   }
@@ -16,6 +16,6 @@ export class ConsoleError extends SilentError {
 
 SilentError.prototype.name = 'ConsoleError';
 
-export function makeConsole(error: Error): empty {
+export function makeConsole(error: Error): never {
   throw new ConsoleError(error);
 }

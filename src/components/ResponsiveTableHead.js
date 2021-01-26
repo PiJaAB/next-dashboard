@@ -33,7 +33,7 @@ const update = (el: HTMLTableSectionElement, hasHeader: boolean) => {
   }
 };
 
-const TableHead = <E: {}, C>({
+const TableHead = <E extends {}, C>({
   cols,
   columnKeyExtractor,
   textAlignClass,

@@ -1,10 +1,10 @@
 // @flow
 export default function areEqualShallow(
-  a: { +[string]: mixed },
-  b: { +[string]: mixed },
+  a: Readonly<Record<string, unknown>>,
+  b: Readonly<Record<string, unknown>>,
 ): boolean {
   return (
     Object.keys(a).length === Object.keys(b).length &&
-    Object.keys(a).every(key => a[key] === b[key])
+    Object.keys(a).every((key) => a[key] === b[key])
   );
 }

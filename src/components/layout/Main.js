@@ -12,7 +12,7 @@ import LayoutContext, {
   useCreateLayoutContext,
 } from '../../utils/layoutContext';
 import DashboardContext, { LAYOUT } from '../../utils/dashboardContext';
-import useScrollFix from '../../utils/useScrollFix';
+import useScrollFix from '../../hooks/useScrollFix';
 import Content from './Content';
 import Footer from './Footer';
 import Header from './Header';

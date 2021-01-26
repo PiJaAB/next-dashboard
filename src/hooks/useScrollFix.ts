@@ -1,11 +1,9 @@
-// @flow
-
 import { useEffect, useRef } from 'react';
 
 export default function useScrollFix(
   shouldFix: boolean,
-): {| current: HTMLElement | null |} {
-  const ref = useRef<HTMLElement | null>(null);
+): React.RefObject<HTMLElement> {
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = ref.current;

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 
 const PlaceholderMessage = ({ message }: { message: string }) => (
@@ -10,8 +9,10 @@ const PlaceholderMessage = ({ message }: { message: string }) => (
   </h3>
 );
 
-export const DataNotFound = () => (
+export const DataNotFound = (): JSX.Element => (
   <PlaceholderMessage message="No data found" />
 );
 
-export const DataIsLoading = () => <PlaceholderMessage message="Loading" />;
+export const DataIsLoading = (): JSX.Element => (
+  <PlaceholderMessage message="Loading" />
+);

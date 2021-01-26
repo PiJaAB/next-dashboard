@@ -14,7 +14,7 @@ import { currencyFormat } from '../../utils/numberFormatters';
 import { DataNotFound } from '../utils';
 import WrapChart from './WrapChart';
 
-type Props<D: {}> = {
+type Props<D extends {}> = {
   title?: string,
   data: $ReadOnlyArray<D>,
   loading?: boolean,
@@ -42,7 +42,7 @@ const renderBars = barChartKeysAndColor => {
   return null;
 };
 
-const Chart = <D: {}>({
+const Chart = <D extends {}>({
   title,
   data,
   loading = false,

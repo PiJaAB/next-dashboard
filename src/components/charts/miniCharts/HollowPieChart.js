@@ -26,7 +26,7 @@ import {
   renderCustomLegend,
 } from '../utils';
 
-type Props<T: Plot> = {
+type Props<T extends Plot> = {
   plots: $ReadOnlyArray<T>,
   children?: R.Node,
   offsetAngle?: number,
@@ -35,7 +35,7 @@ type Props<T: Plot> = {
   centerText?: StyledText | [StyledText, StyledText],
 };
 
-export default function HollowPieChart<T: Plot>({
+export default function HollowPieChart<T extends Plot>({
   plots,
   children,
   offsetAngle,

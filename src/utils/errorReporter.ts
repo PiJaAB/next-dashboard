@@ -11,8 +11,8 @@ class ErrorReporter {
         errorEventEmitter.listenerCount('error') > 0 &&
         this.cache.length > 0
       ) {
-        const event = this.cache.pop();
-        errorEventEmitter.emit('error', event.err);
+        const { err, resolve } = this.cache.pop() as this['cache'][number];
+        resolve(errorEventEmitter.emit('error', err));
       }
     };
     errorEventEmitter.on('newListener', () => {
@@ -23,7 +23,7 @@ class ErrorReporter {
     });
   }
 
-  cache: { resolve: boolean => void, err: Error }[] = [];
+  cache: { resolve: (res: boolean) => void; err: Error }[] = [];
 
   report(err: Error): Promise<boolean> {
     if (errorEventEmitter.listenerCount('error') > 0) {

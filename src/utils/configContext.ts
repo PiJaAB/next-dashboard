@@ -1,59 +1,58 @@
 // @flow
+import { NextComponentType } from 'next';
 import React from 'react';
-/*:: import * as R from 'react'; */
 
-// Types used in comment-notation syntax
-// Some editors freak out if not using comment-notation for typecasting.
-/*:: import type { Branding, Theme, IAuthProvider } from './types';*/
-import type { NextComponent } from './nextTypes';
+import { Branding, IAuthProvider, Theme } from './types';
 
 class DummyAuthProvider implements IAuthProvider {
   constructor() {
     throw new Error("Can't use ConfigContext without a provider.");
   }
 
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     throw new Error("Can't use ConfigContext without a provider.");
   }
 
-  isAuthorizedForRoute() {
+  isAuthorizedForRoute(): boolean {
     throw new Error("Can't use ConfigContext without a provider.");
   }
 
-  serialize() {
+  serialize(): string {
     throw new Error("Can't use ConfigContext without a provider.");
   }
 }
 
 export const defaultContext = {
-  AuthProvider: (DummyAuthProvider /*: Class<IAuthProvider>*/),
-  branding: ({
+  AuthProvider: DummyAuthProvider as {
+    new (): IAuthProvider;
+  },
+  branding: {
     name: 'PiJa Next',
-  } /*: Branding*/),
-  themes: ([
+  } as Branding,
+  themes: [
     { name: 'Light', class: 'default' },
     { name: 'Dark', class: 'dark' },
-  ] /*: $ReadOnlyArray<Theme>*/),
+  ] as readonly Theme[],
   needAuthDefault: false,
 };
 
-export type FullConfig = {
-  ...typeof defaultContext,
-  unauthedRoute?: string,
-  ClientAuthComp?: R.ComponentType<any>,
+type DefaultConfig = typeof defaultContext;
+
+export interface FullConfig extends DefaultConfig {
+  unauthedRoute?: string;
+  ClientAuthComp?: React.ComponentType<any>;
   error?: {
-    Component:
-      | (R.ComponentType<any> & { +getInitialProps: void })
-      | NextComponent<any>,
-    withContext?: boolean,
-  },
-};
+    Component: NextComponentType<any>;
+    withContext?: boolean;
+  };
+}
 
 type RequiredConf = {
-  AuthProvider: $PropertyType<FullConfig, 'AuthProvider'>,
+  [key in 'AuthProvider']: FullConfig[key];
 };
 
-export type Config = $Shape<FullConfig> & RequiredConf;
+export type Config = Partial<Omit<FullConfig, keyof RequiredConf>> &
+  RequiredConf;
 
 export function buildConfigContext(conf: Config): FullConfig {
   return {

@@ -30,3 +30,4 @@ export { default as DropdownView } from './DropdownView';
 export { default as Fader } from './Fader';
 export { default as Form, FormContext, ALL as FORM_ALL_VALID } from './Form';
 export { default as FormElement } from './FormElement';
+export { default as WithDashboard } from './WithDashboard';

@@ -12,7 +12,7 @@ type Sort = void | {|
   dir: 'asc' | 'desc',
 |};
 
-type Data<E: {}> = ?$ReadOnlyArray<E>;
+type Data<E extends {}> = ?$ReadOnlyArray<E>;
 
 type Compare<-E> = (E, E, string, 'asc' | 'desc') => number;
 type CompareBy<-E> = (E, string, 'asc' | 'desc') => string | number;
@@ -43,7 +43,7 @@ function getDefaultCompare<E>(compareBy: CompareBy<E>): Compare<E> {
 
 const defaultCompareBy = (entry, field) => entry[field];
 
-const SortIcon = <-E: {}, C>({
+const SortIcon = <-E extends {}, C>({
   col,
   sort,
 }: {
@@ -63,7 +63,7 @@ const SortIcon = <-E: {}, C>({
   />
 );
 
-const SortableTable = <-E: {} = { +[string]: mixed }, -C: {} = {}>({
+const SortableTable = <-E extends {} = { +[string]: mixed }, -C: {} = {}>({
   data: orgData,
   onColumnClick,
   compare,

@@ -22,8 +22,8 @@ type FormCTX = {
 };
 
 type State = {
-  ctx: $Diff<FormCTX, { valid: $PropertyType<FormCTX, 'valid'> }>,
-  valid: $PropertyType<FormCTX, 'valid'>,
+  ctx: $Diff<FormCTX, { valid: FormCTX['valid'] }>,
+  valid: FormCTX['valid'],
 };
 
 type Props = {

@@ -5,7 +5,7 @@ import React, { useState, useEffect, useMemo, useContext } from 'react';
 import ReactDOM from 'react-dom';
 
 import classnames from 'classnames';
-import useInitialFlag from '../utils/useInitialFlag';
+import useInitialFlag from '../hooks/useInitialFlag';
 import LayoutContext from '../utils/layoutContext';
 
 type Props = {

@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useContext } from 'react';
 import ReactDOM from 'react-dom';
 
 import LayoutContext from '../utils/layoutContext';
-import useInitialFlag from '../utils/useInitialFlag';
+import useInitialFlag from '../hooks/useInitialFlag';
 
 type Props = {
   id: string,

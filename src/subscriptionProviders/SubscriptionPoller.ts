@@ -1,33 +1,38 @@
-// @flow
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-types */
 import EventEmitter from 'events';
 
 import {
-  type DataType,
-  NotImplementedError,
-  type PollingFetcher,
-  type DataExtra,
-  type ISubscriptionProvider,
+  DataType,
+  PollingFetcher,
+  DataExtra,
+  ISubscriptionProvider,
 } from '../utils/types';
 
 import generateDataKey from '../utils/generateDataKey';
 import logger from '../utils/logger';
 
-function wrapExtra<Data: {}>(
-  func: $PropertyType<PollingFetcher<Data>, 'runner'>,
+function wrapExtra<Data extends {}>(
+  func: PollingFetcher<Data>['runner'],
   extra: DataExtra,
-): $PropertyType<PollingFetcher<Data>, 'runner'> {
+): PollingFetcher<Data>['runner'] {
   if (typeof func !== 'function') {
     throw new Error('Wrap non-function runner.');
   }
-  return function runner(): $Call<typeof func, DataExtra> {
+  type RetType = typeof func extends (arg: DataExtra) => infer T ? T : never;
+  return function runner(this: ParsedPollingFetcher<any>): RetType {
     return func.call(this, extra);
   };
 }
 
-export function makePollingAlias<Data: {}, DS1: $Keys<Data>, DS2: $Keys<Data>>(
+export function makePollingAlias<
+  Data extends {},
+  DS1 extends keyof Data,
+  DS2 extends keyof Data
+>(
   parentId: DS1,
   id: DS2,
-  parser: ($ElementType<Data, DS1>) => $ElementType<Data, DS2>,
+  parser: (inputData: Data[DS1]) => Data[DS2],
 ): PollingFetcher<Data> {
   return {
     id,
@@ -36,15 +41,49 @@ export function makePollingAlias<Data: {}, DS1: $Keys<Data>, DS2: $Keys<Data>>(
   };
 }
 
-type ParsedPollingFetcher<Data: {}> = {
-  +id: string,
-  +interval?: number | ((extra?: DataExtra) => number | void),
-  +runner:
-    | $Keys<Data>
-    | $ReadOnlyArray<$Keys<Data>>
-    | ((extra?: DataExtra) => mixed),
-  +parser?: any => any,
-};
+interface ParsedPollingFetcher<Data extends {}> {
+  id: keyof Data;
+  interval?: number | ((extra?: DataExtra) => number | void);
+  runner: keyof Data | (keyof Data)[] | ((extra?: DataExtra) => unknown);
+  parser?: (...inputData: any[]) => any;
+}
+
+interface CallbackMap<Data extends {}>
+  extends Map<keyof Data, Set<(data: DataType<Data[keyof Data]>) => void>> {
+  clear(): void;
+  delete(key: keyof Data): boolean;
+  get<DS extends keyof Data>(
+    key: DS,
+  ): Set<(data: DataType<Data[DS]>) => void> | undefined;
+  has(key: keyof Data): boolean;
+  set<DS extends keyof Data>(
+    key: keyof Data,
+    value: Set<(data: DataType<Data[DS]>) => void>,
+  ): this;
+  readonly size: number;
+}
+
+interface AliasCallbackMap<Data extends {}>
+  extends Map<
+    keyof Data,
+    readonly (readonly [
+      keyof Data,
+      (data: DataType<Data[keyof Data]>) => void,
+    ])[]
+  > {
+  get<DS extends keyof Data>(
+    key: DS,
+  ):
+    | readonly (readonly [keyof Data, (data: DataType<Data[DS]>) => void])[]
+    | undefined;
+  set<DS extends keyof Data>(
+    key: keyof Data,
+    value: readonly (readonly [
+      keyof Data,
+      (data: DataType<Data[DS]>) => void,
+    ])[],
+  ): this;
+}
 
 /**
   Class that handles data subscription and polling for data.
@@ -52,16 +91,15 @@ type ParsedPollingFetcher<Data: {}> = {
   `addFetcher` method, when a component subscribes to data
   that fetcher provides.
 */
-export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
+export default class SubscribtionPoller<Data extends {} = {}>
+  extends EventEmitter
   implements ISubscriptionProvider<Data> {
-  constructor(
-    fetcher?: PollingFetcher<Data> | $ReadOnlyArray<PollingFetcher<Data>>,
-  ) {
+  constructor(fetcher?: PollingFetcher<Data> | PollingFetcher<Data>[]) {
     super();
     if (fetcher) this.addFetcher(fetcher);
   }
 
-  async startFetcher(fetcher: ParsedPollingFetcher<Data>) {
+  async startFetcher(fetcher: ParsedPollingFetcher<Data>): Promise<void> {
     if (!this.activeFetchers.has(fetcher.id)) {
       return;
     }
@@ -74,7 +112,10 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       if (!this.activeFetchers.has(fetcher.id)) {
         return;
       }
-      this.setData(fetcher.id, { status: 'success', value: res });
+      this.setData(fetcher.id, {
+        status: 'success',
+        value: res as Data[keyof Data],
+      });
     } catch (err) {
       if (!this.activeFetchers.has(fetcher.id)) {
         return;
@@ -93,82 +134,73 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     }
   }
 
-  addFetcher(
-    fetcher: PollingFetcher<Data> | $ReadOnlyArray<PollingFetcher<Data>>,
-  ) {
-    const fetchers: $ReadOnlyArray<ParsedPollingFetcher<Data>> = Array.isArray(
-      fetcher,
-    )
-      ? fetcher
-      : [fetcher];
+  addFetcher(fetcher: PollingFetcher<Data> | PollingFetcher<Data>[]): void {
+    const fetchers: ParsedPollingFetcher<Data>[] = Array.isArray(fetcher)
+      ? (fetcher as ParsedPollingFetcher<Data>[])
+      : [fetcher as ParsedPollingFetcher<Data>];
     this.fetchers.push(...fetchers);
   }
 
-  activeListeners: Map<
-    string,
-    Set<(DataType<$ElementType<Data, $Keys<Data>>>) => void>,
-  > = new Map();
+  activeListeners: CallbackMap<Data> = new Map();
 
   fetchers: ParsedPollingFetcher<Data>[] = [];
 
-  activeFetchers: Map<string, ParsedPollingFetcher<Data>> = new Map();
+  activeFetchers: Map<keyof Data, ParsedPollingFetcher<Data>> = new Map();
 
-  stoppingTimers: Map<string, TimeoutID> = new Map();
+  stoppingTimers: Map<keyof Data, number> = new Map();
 
-  dataCache: { [string]: ?DataType<> } = {};
+  dataCache: Partial<{ [key in keyof Data]: DataType<Data[key]> }> = {};
 
-  +start: ?(id: string) => void;
+  readonly start?: (id: string) => void;
 
-  +stop: ?(id: string) => void;
+  readonly stop?: (id: string) => void;
 
-  setUpdating(dataSource: string): ?DataType<> {
-    if (!this.dataCache[dataSource]) return;
-    // $FlowIssue: I not sure why flow spazzes out...
-    const newData: DataType<> = {
-      ...this.dataCache[dataSource],
+  setUpdating<DS extends keyof Data>(
+    dataSource: DS,
+  ): DataType<Data[DS]> | undefined {
+    const oldData = this.dataCache[dataSource];
+    if (oldData == null) return;
+    const newData: DataType<Data[DS]> = {
+      ...(oldData as DataType<Data[DS]>),
       updating: true,
     };
     this.setData(dataSource, newData);
   }
 
-  setData<DS: $Keys<Data>>(
-    dataSource: string,
-    data: DataType<$ElementType<Data, DS>>,
-  ) {
+  setData<DS extends keyof Data>(
+    dataSource: DS,
+    data: DataType<Data[DS]>,
+  ): void {
     this.dataCache[dataSource] = data;
     const listeners = this.activeListeners.get(dataSource);
-    if (listeners) listeners.forEach(listener => listener(data));
+    if (listeners) listeners.forEach((listener) => listener(data));
   }
 
-  getActiveListeners(): $ReadOnlyArray<string> {
+  getActiveListeners(): (keyof Data)[] {
     return [...this.activeListeners.keys()];
   }
 
-  read: <DS: $Keys<Data>>(
+  read<DS extends keyof Data>(
     dataSource: DS,
     extra?: DataExtra,
-  ) => DataType<$ElementType<Data, DS>> = (dataSource, extra) => {
-    const key = generateDataKey(dataSource, extra);
-    if (!this.dataCache[key]) {
+  ): DataType<Data[DS]> {
+    const key = generateDataKey<Data, DS>(dataSource, extra);
+    const cached = this.dataCache[key];
+    if (cached == null) {
       return {
         status: 'loading',
       };
     }
-    return this.dataCache[key];
-  };
+    return cached as DataType<Data[DS]>;
+  }
 
-  aliasCallbacks: Map<
-    string,
-    $ReadOnlyArray<
-      [$Keys<Data>, (DataType<$ElementType<Data, $Keys<Data>>>) => void],
-    >,
-  > = new Map();
+  aliasCallbacks: AliasCallbackMap<Data> = new Map();
 
-  subscribeAlias: <DS: $Keys<Data>>(
-    cb: (DataType<$ElementType<Data, DS>>) => void,
+  subscribeAlias<DS extends keyof Data>(
+    cb: (data: DataType<Data[DS]>) => void,
     dataSource: DS,
     extra?: DataExtra,
-  ) => boolean = <DS: $Keys<Data>>(cb, dataSource, extra) => {
+  ): boolean {
     const fetcher: ParsedPollingFetcher<Data> | void = this.fetchers.find(
       ({ id }) => {
         return id === dataSource;
@@ -176,14 +208,11 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     );
     if (!fetcher) return false;
     if (typeof fetcher.runner === 'function') return false;
-
-    const parentSources: $ReadOnlyArray<$Keys<Data>> = Array.isArray(
-      fetcher.runner,
-    )
+    const parentSources: readonly (keyof Data)[] = Array.isArray(fetcher.runner)
       ? fetcher.runner
       : [fetcher.runner];
 
-    const key = generateDataKey(dataSource, extra);
+    const key = generateDataKey<Data, DS>(dataSource, extra);
 
     const stoppingTimer = this.stoppingTimers.get(key);
     if (stoppingTimer != null) {
@@ -196,27 +225,29 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       return true;
     }
 
-    set = new Set<(DataType<$ElementType<Data, DS>>) => void>();
+    set = new Set<(data: DataType<Data[DS]>) => void>();
     set.add(cb);
     this.activeListeners.set(key, set);
 
-    const cache: DataType<
-      $ElementType<Data, DS>,
-    >[] = parentSources.map(source => this.read(source, extra));
-    const runners = parentSources.map((parentSource: $Keys<Data>, i) => {
-      const runner = data => {
+    const cache: DataType<Data[keyof Data]>[] = parentSources.map((source) =>
+      this.read(source, extra),
+    );
+    const runners = parentSources.map((parentSource: keyof Data, i) => {
+      const runner = (data: DataType<Data[DS]>) => {
         cache[i] = data;
-        const errorEntry = cache.find(c => c.status === 'error');
+        const errorEntry = cache.find((c) => c.status === 'error');
         if (errorEntry) {
           if (this.dataCache[key] !== errorEntry) {
             this.setData(key, errorEntry);
           }
           return;
         }
-        const allDone = !cache.some(c => c.status !== 'success');
-        const updating = cache.some(c => c.status === 'success' && c.updating);
+        const allDone = !cache.some((c) => c.status !== 'success');
+        const updating = cache.some(
+          (c) => c.status === 'success' && c.updating,
+        );
         if (allDone) {
-          const values = cache.map(c => c.value);
+          const values = cache.map((c) => c.value);
           this.setData(key, {
             status: 'success',
             updating,
@@ -224,18 +255,19 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
           });
           return;
         }
-        if (!this.dataCache[key] || this.dataCache[key].status !== 'loading')
+        const cacheEntry = this.dataCache[key];
+        if (cacheEntry == null || cacheEntry.status !== 'loading')
           this.setData(key, {
             status: 'loading',
           });
       };
-      this.subscribe<DS>(runner, parentSource, extra);
-      return [parentSource, runner];
+      this.subscribe<DS>(runner, parentSource as DS, extra);
+      return [parentSource, runner] as const;
     });
-    const allDone = !cache.some(c => c.status !== 'success');
-    const updating = cache.some(c => c.status === 'success' && c.updating);
+    const allDone = !cache.some((c) => c.status !== 'success');
+    const updating = cache.some((c) => c.status === 'success' && c.updating);
     if (allDone) {
-      const values = cache.map(c => c.value);
+      const values = cache.map((c) => c.value);
       this.setData(key, {
         status: 'success',
         updating,
@@ -244,13 +276,13 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     }
     this.aliasCallbacks.set(key, runners);
     return true;
-  };
+  }
 
-  unsubscribeAlias: <DS: $Keys<Data>>(
-    cb: (DataType<$ElementType<Data, DS>>) => void,
-    dataSource: string,
+  unsubscribeAlias<DS extends keyof Data>(
+    cb: (data: DataType<Data[DS]>) => void,
+    dataSource: DS,
     extra?: DataExtra,
-  ) => boolean = <DS: $Keys<Data>>(cb, dataSource, extra) => {
+  ): boolean {
     const fetcher: ParsedPollingFetcher<Data> | void = this.fetchers.find(
       ({ id }) => {
         return id === dataSource;
@@ -259,7 +291,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     if (!fetcher) return false;
     if (typeof fetcher.runner === 'function') return false;
 
-    const key = generateDataKey(dataSource, extra);
+    const key = generateDataKey<Data, DS>(dataSource, extra);
     const set = this.activeListeners.get(key);
 
     if (!set) {
@@ -279,14 +311,14 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     if (set.size === 0) {
       this.stoppingTimers.set(
         key,
-        setTimeout(() => {
+        window.setTimeout(() => {
           this.stoppingTimers.delete(key);
           delete this.dataCache[key];
           const runners = this.aliasCallbacks.get(key);
           if (runners) {
             this.aliasCallbacks.delete(key);
             runners.forEach(([parentSource, runner]) => {
-              this.unsubscribe<DS>(runner, parentSource, extra);
+              this.unsubscribe<DS>(runner, parentSource as DS, extra);
             });
           }
           this.activeListeners.delete(key);
@@ -294,17 +326,17 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       );
     }
     return true;
-  };
+  }
 
-  subscribe: <DS: $Keys<Data>>(
-    cb: (DataType<$ElementType<Data, DS>>) => void,
+  subscribe<DS extends keyof Data>(
+    cb: (data: DataType<Data[DS]>) => void,
     dataSource: DS,
     extra?: DataExtra,
-  ) => void = <DS: $Keys<Data>>(cb, dataSource, extra) => {
+  ): void {
     if (this.subscribeAlias(cb, dataSource, extra)) return;
-    const key = generateDataKey(dataSource, extra);
+    const key = generateDataKey<Data, DS>(dataSource, extra);
     let set = this.activeListeners.get(key);
-    if (set) {
+    if (set != null) {
       set.add(cb);
       return;
     }
@@ -316,7 +348,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       clearTimeout(stoppingTimer);
     }
 
-    set = new Set<(DataType<$ElementType<Data, DS>>) => void>();
+    set = new Set<(data: DataType<Data[DS]>) => void>();
     set.add(cb);
     this.activeListeners.set(key, set);
     if (this.activeFetchers.has(key)) {
@@ -347,30 +379,30 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
         : fetcher.interval;
     if (extra != null) {
       const { runner, ...rest } = fetcher;
-      fetcher = ({
+      fetcher = {
         ...rest,
         id: key,
         runner: wrapExtra(runner, extra),
-      }: ParsedPollingFetcher<Data>);
+      } as ParsedPollingFetcher<Data>;
     }
     if (fetcher.interval !== interval) {
-      fetcher = ({
+      fetcher = {
         ...fetcher,
         interval,
-      }: ParsedPollingFetcher<Data>);
+      } as ParsedPollingFetcher<Data>;
     }
     this.activeFetchers.set(key, fetcher);
     this.startFetcher(fetcher);
     this.emit('start-poll', dataSource, extra);
-  };
+  }
 
-  unsubscribe: <DS: $Keys<Data>>(
-    cb: (DataType<$ElementType<Data, DS>>) => void,
-    dataSource: string,
+  unsubscribe<DS extends keyof Data>(
+    cb: (data: DataType<Data[DS]>) => void,
+    dataSource: DS,
     extra?: DataExtra,
-  ) => void = (cb, dataSource, extra) => {
+  ): void {
     if (this.unsubscribeAlias(cb, dataSource, extra)) return;
-    const key = generateDataKey(dataSource, extra);
+    const key = generateDataKey<Data, DS>(dataSource, extra);
     const set = this.activeListeners.get(key);
     if (!set) {
       logger.warn(
@@ -389,7 +421,7 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
     if (set.size === 0) {
       this.stoppingTimers.set(
         key,
-        setTimeout(() => {
+        window.setTimeout(() => {
           this.stoppingTimers.delete(key);
           this.activeFetchers.delete(key);
           delete this.dataCache[key];
@@ -398,9 +430,5 @@ export default class SubscribtionPoller<Data: {} = {}> extends EventEmitter
       this.activeListeners.delete(key);
       this.emit('stop-poll', dataSource, extra);
     }
-  };
-
-  send<T>(_key: string, _data: T, _extra?: mixed): Promise<void> | void {
-    throw new NotImplementedError();
   }
 }

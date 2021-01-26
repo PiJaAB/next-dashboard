@@ -22,7 +22,7 @@ import {
   PADDING,
 } from '../utils';
 
-type Props<T: Plot> = {
+type Props<T extends Plot> = {
   plots: $ReadOnlyArray<T>,
   children?: R.Node,
   offsetAngle?: number,
@@ -30,7 +30,7 @@ type Props<T: Plot> = {
   valueFormatter?: (number, T, boolean) => ?string | number,
 };
 
-export default function PieChart<T: Plot>({
+export default function PieChart<T extends Plot>({
   plots,
   children,
   offsetAngle,

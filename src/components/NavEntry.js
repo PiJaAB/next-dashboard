@@ -16,25 +16,25 @@ type Props = {
 };
 
 type LinkProps = {
-  href: $PropertyType<Props, 'href'>,
-  onClick: ?$PropertyType<Props, 'onClick'>,
-  as: ?$PropertyType<Props, 'as'>,
+  href: Props['href'],
+  onClick: ?Props['onClick'],
+  as: ?Props['as'],
   children: R.Node,
-  active: $PropertyType<Props, 'active'>,
-  icon: ?$PropertyType<Props, 'icon'>,
+  active: Props['active'],
+  icon: ?Props['icon'],
 };
 
 type ButtonProps = {
   children: R.Node,
-  onClick: ?$PropertyType<Props, 'onClick'>,
-  active: $PropertyType<Props, 'active'>,
-  icon: ?$PropertyType<Props, 'icon'>,
-  as: ?$PropertyType<Props, 'as'>,
+  onClick: ?Props['onClick'],
+  active: Props['active'],
+  icon: ?Props['icon'],
+  as: ?Props['as'],
 };
 
 type InnerProps = {
   children: R.Node,
-  icon?: $PropertyType<Props, 'icon'>,
+  icon?: Props['icon'],
 };
 
 function Inner({ icon, children }: InnerProps): R.Node {

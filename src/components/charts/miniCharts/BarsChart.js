@@ -8,7 +8,7 @@ import PageChart from '../PageChart';
 import type { Plot } from './types';
 import WrapChart from '../WrapChart';
 
-type Props<T: Plot> = {
+type Props<T extends Plot> = {
   plots: $ReadOnlyArray<T>,
   children?: R.Node,
   valueFormatter?: (number, T, boolean) => ?string | number,
@@ -21,7 +21,7 @@ type Props<T: Plot> = {
   pageChart?: boolean,
 };
 
-export default function BarsChart<T: Plot>({
+export default function BarsChart<T extends Plot>({
   plots,
   children,
   valueFormatter,

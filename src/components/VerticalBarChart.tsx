@@ -1,5 +1,3 @@
-// @flow
-
 import React from 'react';
 import {
   ResponsiveContainer,
@@ -15,20 +13,20 @@ import LoadingIndicator from './LoadingIndicator';
 import { DataNotFound } from './utils';
 
 type Props = {
-  title: string,
-  data: $ReadOnlyArray<{
-    +Fullname: string,
-    +loggedtime: number,
-    +utilization: number,
-  }>,
-  loading?: boolean,
+  title: string;
+  data: {
+    Fullname: string;
+    loggedtime: number;
+    utilization: number;
+  }[];
+  loading?: boolean;
   barChartKeysAndColor?:
     | null
-    | { key: string, color: string }
-    | { key: string, color: string, stackId?: string }[],
+    | { key: string; color: string }
+    | { key: string; color: string; stackId?: string }[];
 };
 
-const renderBars = barChartKeysAndColor => {
+function renderBars(barChartKeysAndColor: Props['barChartKeysAndColor']) {
   if (barChartKeysAndColor) {
     if (Array.isArray(barChartKeysAndColor)) {
       return barChartKeysAndColor.map(({ key, color, stackId }, index) => (
@@ -51,14 +49,14 @@ const renderBars = barChartKeysAndColor => {
     );
   }
   return null;
-};
+}
 
-const Chart = ({
+export default function Chart({
   title,
   data,
   loading = false,
   barChartKeysAndColor,
-}: Props) => {
+}: Props): JSX.Element {
   const chart = (
     <div className="page-chart vertical-bar-chart-container">
       <div className="page-chart-content">
@@ -92,7 +90,7 @@ const Chart = ({
             <Legend
               content={({ payload }) => (
                 <ul className="line-chart-legend-list">
-                  {payload.map(entry => (
+                  {payload?.map((entry) => (
                     <li key={entry.value} className="line-chart-type">
                       <div
                         className="line-chart-type-color"
@@ -126,6 +124,4 @@ const Chart = ({
       {(!data || data.length < 1) && !loading ? <DataNotFound /> : chart}
     </div>
   );
-};
-
-export default Chart;
+}
