@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { useEffect, useState } from 'react';
 
 import type {

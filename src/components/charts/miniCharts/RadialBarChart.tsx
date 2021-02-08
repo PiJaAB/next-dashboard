@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import {
   Legend,
@@ -30,7 +30,7 @@ type Props<T extends Plot> = React.PropsWithChildren<{
   offsetAngle?: number;
   angularSize?: number;
   valueFormatter?: (
-    num: string | number | ReadonlyArray<(string | number)>,
+    num: string | number | ReadonlyArray<string | number>,
     plot: T,
     isTooltip: boolean,
   ) => string | number | null | undefined;
@@ -40,7 +40,11 @@ type Props<T extends Plot> = React.PropsWithChildren<{
 function getTooltipFormatter<T extends Plot>(
   valueFormatter?: Props<T>['valueFormatter'],
 ): TooltipFormatter {
-  return (value: string | number | Array<string | number>, name: string, { payload }: TooltipPayload) => [
+  return (
+    value: string | number | Array<string | number>,
+    name: string,
+    { payload }: TooltipPayload,
+  ) => [
     (valueFormatter && valueFormatter(value, payload, true)) || value,
     payload.name,
   ];

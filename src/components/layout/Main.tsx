@@ -7,7 +7,6 @@ import classnames from 'classnames';
 import FullscreenExitButton from '../FullscreenExitButton';
 
 import LayoutContext from '../../utils/layoutContext';
-import DashboardContext from '../../utils/dashboardContext';
 import useScrollFix from '../../hooks/useScrollFix';
 import Content from './Content';
 import Footer from './Footer';
@@ -17,16 +16,16 @@ import SiteMessages from './SiteMessages';
 import ConfirmDialogue from './ConfirmDialogue';
 
 export type Props = React.PropsWithChildren<{
-  id?: string,
+  id?: string;
   contentContainerWidth?:
     | 'extra-narrow'
     | 'narrow'
     | 'normal'
     | 'wide'
-    | 'extra-wide',
-  header?: React.ReactNode,
-  sidebar?: React.ReactNode,
-  footer?: boolean,
+    | 'extra-wide';
+  header?: React.ReactNode;
+  sidebar?: React.ReactNode;
+  footer?: boolean;
 }>;
 
 function DashboardLayout({
@@ -60,7 +59,7 @@ function DashboardLayout({
 
   useEffect(() => {
     setTemp('hasHeader', Boolean(header));
-  }, [header]);
+  }, [header, setTemp]);
 
   useEffect(() => {
     const { body } = document;
@@ -98,7 +97,7 @@ function DashboardLayout({
     const patchedDocument = document as typeof document & {
       mozFullscreen?: boolean;
       webkitIsFullscreen?: boolean;
-    }
+    };
     const updateFullscreen = () => {
       const fullScreenMode = Boolean(
         patchedDocument.fullscreenElement ||
@@ -135,7 +134,7 @@ function DashboardLayout({
         contentEl.removeEventListener('fullscreenchange', updateFullscreen);
       }
     };
-  }, [isFullscreen]);
+  }, [isFullscreen, setTemp]);
 
   useEffect(() => {
     const { body } = document;
@@ -190,45 +189,45 @@ function DashboardLayout({
   const scrollRef = useScrollFix(modalActive);
 
   return (
-      <div
-        className={classnames(
-          'dashboard',
-          id && `dashboard_id-${id}`,
-          themeClass && `dashboard_theme-${themeClass}`,
-        )}
-        ref={scrollRef}
-      >
-        <Head>
-          <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css"
-          />
-        </Head>
-        {header && (
-          <Header
-            sidebarActive={sidebarActive}
-            toggleSidebarActive={toggleSidebarActive}
-          >
-            {sidebar && (
-              <Sidebar
-                sidebarActive={sidebarActive}
-                sidebarCompact={sidebarCompact}
-              >
-                {sidebar}
-              </Sidebar>
-            )}
-            {header}
-          </Header>
-        )}
-        <Content contentContainerWidth={contentContainerWidth} header={header}>
-          <SiteMessages />
-          {children}
-        </Content>
-        {footer && <Footer />}
-        <FullscreenExitButton />
-        <ConfirmDialogue />
-        <div id="dashboard-modal-root" />
-      </div>
+    <div
+      className={classnames(
+        'dashboard',
+        id && `dashboard_id-${id}`,
+        themeClass && `dashboard_theme-${themeClass}`,
+      )}
+      ref={scrollRef}
+    >
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css"
+        />
+      </Head>
+      {header && (
+        <Header
+          sidebarActive={sidebarActive}
+          toggleSidebarActive={toggleSidebarActive}
+        >
+          {sidebar && (
+            <Sidebar
+              sidebarActive={sidebarActive}
+              sidebarCompact={sidebarCompact}
+            >
+              {sidebar}
+            </Sidebar>
+          )}
+          {header}
+        </Header>
+      )}
+      <Content contentContainerWidth={contentContainerWidth} header={header}>
+        <SiteMessages />
+        {children}
+      </Content>
+      {footer && <Footer />}
+      <FullscreenExitButton />
+      <ConfirmDialogue />
+      <div id="dashboard-modal-root" />
+    </div>
   );
 }
 

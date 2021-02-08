@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useContext, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 
 import LayoutContext from '../utils/layoutContext';
-import useInitialFlag from '../hooks/useInitialFlag';
+import useInitialRender from '../hooks/useInitialRender';
 
 type Props = React.PropsWithChildren<{
   id: string;
@@ -20,7 +20,7 @@ type Props = React.PropsWithChildren<{
 
 export default function Modal({ ...props }: Props): React.ReactPortal | null {
   const context = useContext(LayoutContext);
-  const initial = useInitialFlag();
+  const initial = useInitialRender();
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const {

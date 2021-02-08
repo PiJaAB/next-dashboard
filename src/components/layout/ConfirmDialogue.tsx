@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Modal from '../Modal';
 import {
   Options,
@@ -6,7 +6,7 @@ import {
   offConfirmDialogue,
 } from '../../utils/confirmDialogue';
 
-const ConfirmDialogue = () => {
+const ConfirmDialogue = (): JSX.Element => {
   const [queue, setQueue] = useState<readonly Options[]>([]);
   const [current, setCurrent] = useState<Options | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -14,8 +14,8 @@ const ConfirmDialogue = () => {
     if (!isOpen && queue.length > 0) {
       const [next] = queue;
       setCurrent(next);
-      setQueue(oldQueue => {
-        return oldQueue.filter(entry => entry !== next);
+      setQueue((oldQueue) => {
+        return oldQueue.filter((entry) => entry !== next);
       });
       setIsOpen(true);
     }
@@ -23,33 +23,33 @@ const ConfirmDialogue = () => {
   useEffect(() => {
     if (current != null) setIsOpen(true);
   }, [current]);
-  const close = () => {
+  const close = useCallback(() => {
     if (queue.length === 0) {
       setIsOpen(false);
     } else {
       const [next] = queue;
       setCurrent(next);
-      setQueue(oldQueue => {
-        return oldQueue.filter(entry => entry !== next);
+      setQueue((oldQueue) => {
+        return oldQueue.filter((entry) => entry !== next);
       });
     }
-  };
+  }, [queue]);
   useEffect(() => {
     const listener = {
       onDialogue(opts: Options) {
-        setQueue(oldQueue => [...oldQueue, opts]);
+        setQueue((oldQueue) => [...oldQueue, opts]);
       },
       onCancel(opts: Options) {
-        setQueue(oldQueue => oldQueue.filter(entry => entry !== opts));
+        setQueue((oldQueue) => oldQueue.filter((entry) => entry !== opts));
         if (current === opts && isOpen) close();
       },
     };
     const cache = onConfirmDialogue(listener);
-    if (cache.length > 0) setQueue(oldQueue => [...oldQueue, ...cache]);
+    if (cache.length > 0) setQueue((oldQueue) => [...oldQueue, ...cache]);
     return () => {
       offConfirmDialogue(listener);
     };
-  }, [setQueue, setCurrent, isOpen]);
+  }, [setQueue, setCurrent, isOpen, current, close]);
   const confirm = () => {
     if (current) {
       current.ok();

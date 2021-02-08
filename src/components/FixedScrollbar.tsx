@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useMutationObserver } from 'src/hooks';
+import { useMutationObserver } from '../hooks';
 
 function update({
   containerEl,

@@ -7,19 +7,19 @@ import type { Plot } from './types';
 import WrapChart from '../WrapChart';
 
 type Props<T extends Plot> = React.PropsWithChildren<{
-  plots: ReadonlyArray<T>,
+  plots: ReadonlyArray<T>;
   valueFormatter?: (
-    num: string | number | ReadonlyArray<(string | number)>,
+    num: string | number | ReadonlyArray<string | number>,
     plot: T,
     isTooltip: boolean,
   ) => string | number | null | undefined;
-  maxBarSize?: number,
-  maxGapSize?: number,
-  gapSize?: number,
-  barSize?: number,
-  legend?: boolean,
-  valign?: 'left' | 'center' | 'right',
-  pageChart?: boolean,
+  maxBarSize?: number;
+  maxGapSize?: number;
+  gapSize?: number;
+  barSize?: number;
+  legend?: boolean;
+  valign?: 'left' | 'center' | 'right';
+  pageChart?: boolean;
 }>;
 
 export default function BarsChart<T extends Plot>({
@@ -35,7 +35,7 @@ export default function BarsChart<T extends Plot>({
   pageChart = true,
 }: Props<T>): JSX.Element {
   const data: Partial<Record<string, number>>[] = [];
-  plots.forEach(e => {
+  plots.forEach((e) => {
     data.push({ [e.key != null ? e.key : e.name]: e.value });
   });
   const Wrapper = pageChart ? PageChart : React.Fragment;
@@ -95,7 +95,7 @@ export default function BarsChart<T extends Plot>({
                     wrapperStyle={{ left: 0, bottom: -14 }}
                   />
                 )}
-                {plots.map(e => (
+                {plots.map((e) => (
                   <Bar
                     key={e.key != null ? e.key : e.name}
                     dataKey={e.key != null ? e.key : e.name}

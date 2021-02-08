@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 
 import classnames from 'classnames';
-import useInitialFlag from '../hooks/useInitialFlag';
+import useInitialRender from '../hooks/useInitialRender';
 import LayoutContext from '../utils/layoutContext';
 
 type Props = React.PropsWithChildren<{
@@ -53,7 +53,7 @@ const RightSidebar = ({
   );
   const { getTemp } = useContext(LayoutContext);
 
-  if (useInitialFlag()) return null;
+  if (useInitialRender()) return null;
   if (typeof window === 'undefined') return null;
   const rightSidebarRoot = document.getElementById('right-sidebar-root');
   if (!rightSidebarRoot) return null;

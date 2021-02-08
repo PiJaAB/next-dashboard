@@ -14,18 +14,18 @@ import PageChart from './PageChart';
 import { DataNotFound, DataIsLoading } from '../utils';
 
 type Props = {
-  title: string,
+  title: string;
   data: ReadonlyArray<{
-    readonly [key: string]: unknown,
-  }>,
-  chartLineColor: string,
-  loading?: boolean,
-  xAxisKey: string | undefined,
-  areaChartKey: string | undefined | null,
+    readonly [key: string]: unknown;
+  }>;
+  chartLineColor: string;
+  loading?: boolean;
+  xAxisKey: string | undefined;
+  areaChartKey: string | undefined | null;
   barChartKeysAndColor?:
     | null
-    | { key: string, color: string }
-    | { key: string, color: string, stackId?: string }[],
+    | { key: string; color: string }
+    | { key: string; color: string; stackId?: string }[];
 };
 
 const renderBars = (barChartKeysAndColor: Props['barChartKeysAndColor']) => {
@@ -54,7 +54,7 @@ const Chart = ({
   xAxisKey,
   areaChartKey,
   barChartKeysAndColor,
-}: Props) => {
+}: Props): JSX.Element => {
   const chart = (
     <PageChart>
       <ResponsiveContainer className="line-chart">
@@ -100,7 +100,7 @@ const Chart = ({
           <Legend
             content={({ payload }) => (
               <ul className="line-chart-legend-list">
-                {payload?.map(entry => (
+                {payload?.map((entry) => (
                   <li key={entry.value} className="line-chart-type">
                     <div
                       className="line-chart-type-color"

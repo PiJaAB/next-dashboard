@@ -5,6 +5,7 @@ export class SilentError extends Error {
   constructor(error?: Error | string) {
     if (error && typeof error === 'object') {
       super();
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
       Object.defineProperties(this, {
         name: {

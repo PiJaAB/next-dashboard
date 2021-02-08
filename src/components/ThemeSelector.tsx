@@ -5,11 +5,11 @@ import type { Theme } from '../utils/types';
 import NavEntry from './NavEntry';
 import LayoutContext from '../utils/layoutContext';
 
-type Props = { children?: string, icon?: React.ReactNode };
+type Props = { children?: string; icon?: React.ReactNode };
 
 function rotateTheme(cur: Theme, themes: readonly Theme[]): Theme {
   return themes[
-    (themes.findIndex(t => t.class === cur.class) + 1) % themes.length
+    (themes.findIndex((t) => t.class === cur.class) + 1) % themes.length
   ];
 }
 

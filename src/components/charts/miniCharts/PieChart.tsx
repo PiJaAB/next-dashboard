@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
 import {
   Legend,
@@ -21,11 +21,11 @@ import {
 } from '../utils';
 
 type Props<T extends Plot> = React.PropsWithChildren<{
-  plots: ReadonlyArray<T>,
-  offsetAngle?: number,
-  angularSize?: number,
+  plots: ReadonlyArray<T>;
+  offsetAngle?: number;
+  angularSize?: number;
   valueFormatter?: (
-    num: string | number | ReadonlyArray<(string | number)>,
+    num: string | number | ReadonlyArray<string | number>,
     plot: T,
     isTooltip: boolean,
   ) => string | number | null | undefined;
@@ -76,7 +76,7 @@ export default function PieChart<T extends Plot>({
                 dataKey="value"
                 nameKey="name"
                 labelLine={false}
-                label={props =>
+                label={(props) =>
                   RenderCustomizedPieLabel<T>({
                     ...props,
                     valueFormatter,

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
 import { DataExtra } from './types';
 
 export default function generateDataKey<Data extends {}, DS extends keyof Data>(

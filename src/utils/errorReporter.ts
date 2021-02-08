@@ -27,7 +27,7 @@ class ErrorReporter {
     if (errorEventEmitter.listenerCount('error') > 0) {
       return Promise.resolve(errorEventEmitter.emit('error', err));
     }
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.cache.unshift({
         resolve,
         err,

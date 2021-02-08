@@ -47,9 +47,9 @@ export default function createPersistentState<
   }>;
   usePersistentState: UsePersistentState<PersistentState>;
 } {
-  const persistentStateContext = createContext<PersistentContext<
-    PersistentState
-  > | null>(null);
+  const persistentStateContext = createContext<PersistentContext<PersistentState> | null>(
+    null,
+  );
   const persistTimeout: Partial<Record<string, number>> = {};
   function PersistentStateProvider({
     name,
@@ -61,7 +61,7 @@ export default function createPersistentState<
       if (persistTimeout[name] != null) return;
       persistTimeout[name] = window.setTimeout(() => {
         delete persistTimeout[name];
-        setCurState(state => {
+        setCurState((state) => {
           window.localStorage.setItem(
             name,
             JSON.stringify({
@@ -125,7 +125,7 @@ export default function createPersistentState<
           persist();
           setCurState(keyOrState);
         } else {
-          setCurState(state => {
+          setCurState((state) => {
             if (state[keyOrState] === val) return state;
             persist();
             return {

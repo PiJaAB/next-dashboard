@@ -1,6 +1,5 @@
 import React from 'react';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type Props = React.PropsWithChildren<{}>;
 
 export default function Nav({ children }: Props): JSX.Element {

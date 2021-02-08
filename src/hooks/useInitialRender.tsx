@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const initialRenderContext = createContext(true);
 
-export function InitalRenderProvider({
+export function InitialRenderProvider({
   children,
 }: {
   children?: React.ReactNode;

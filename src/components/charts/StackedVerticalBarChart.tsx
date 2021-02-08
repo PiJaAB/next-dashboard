@@ -9,14 +9,13 @@ import {
   Legend,
   TooltipFormatter,
 } from 'recharts';
-import { currencyFormat } from '../../utils/numberFormatters';
 import { DataNotFound } from '../utils';
 import WrapChart from './WrapChart';
 
 interface BarChartKeyAndColor {
-  readonly key: string,
-  readonly color: string,
-  readonly stackId: string,
+  readonly key: string;
+  readonly color: string;
+  readonly stackId: string;
 }
 
 type Props<D extends {}> = {
@@ -27,7 +26,9 @@ type Props<D extends {}> = {
   tooltipFormatter?: TooltipFormatter;
 };
 
-const renderBars = (barChartKeysAndColor: BarChartKeyAndColor | BarChartKeyAndColor[] | undefined) => {
+const renderBars = (
+  barChartKeysAndColor: BarChartKeyAndColor | BarChartKeyAndColor[] | undefined,
+) => {
   if (barChartKeysAndColor) {
     if (Array.isArray(barChartKeysAndColor)) {
       return barChartKeysAndColor.map(({ key, color, stackId }) => {
@@ -50,7 +51,7 @@ const Chart = <D extends {}>({
   loading = false,
   barChartKeysAndColor,
   tooltipFormatter,
-}: Props<D>) => {
+}: Props<D>): JSX.Element => {
   const chart = (
     <ResponsiveContainer>
       <WrapChart>

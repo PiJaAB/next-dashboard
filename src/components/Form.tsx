@@ -26,7 +26,6 @@ interface State {
   valid: FormCTX['valid'];
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type Props = React.PropsWithChildren<{}>;
 
 const defaultContext: FormCTX = {
@@ -77,7 +76,7 @@ export default class Form extends React.PureComponent<Props, State> {
     };
   }
 
-  validate(id: string, val: any): boolean | undefined {
+  validate(id: string, val: unknown): boolean | undefined {
     const validator = this.validators[id];
     if (!validator) {
       return undefined;
@@ -116,7 +115,7 @@ export default class Form extends React.PureComponent<Props, State> {
     return { ...valid, [FORM_ALL_VALID]: isAllValid };
   }
 
-  render() {
+  render(): JSX.Element {
     const { children } = this.props;
     const { ctx, valid } = this.state;
     return (

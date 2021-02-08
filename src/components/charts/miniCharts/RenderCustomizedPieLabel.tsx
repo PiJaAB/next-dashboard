@@ -1,17 +1,17 @@
 import React from 'react';
+import { PieLabelRenderProps } from 'recharts';
 import type { Plot } from './types';
 
 import { PADDING } from '../utils';
-import { PieLabelRenderProps } from 'recharts';
 
 interface Props<T extends Plot> extends PieLabelRenderProps {
   width: number;
   valueFormatter?: (
-    num: string | number | ReadonlyArray<(string | number)>,
+    num: string | number | ReadonlyArray<string | number>,
     plot: T,
     isTooltip: boolean,
   ) => string | number | null | undefined;
-};
+}
 
 const H_PADDING = 15;
 
@@ -30,7 +30,7 @@ const RenderCustomizedPieLabel = <T extends Plot>({
   width,
   valueFormatter,
   payload,
-}: Props<T>) => {
+}: Props<T>): JSX.Element => {
   if (typeof outerRadius !== 'number') throw new Error('Invalid outer radius');
   if (typeof cx !== 'number') throw new Error('Invalid center x');
   if (typeof cy !== 'number') throw new Error('Invalid center y');
@@ -41,7 +41,7 @@ const RenderCustomizedPieLabel = <T extends Plot>({
   }
   const x = Math.min(
     Math.max(
-      cx + labelRadius * Math.cos(-(midAngle) * RADIAN),
+      cx + labelRadius * Math.cos(-midAngle * RADIAN),
       PADDING.LEFT + H_PADDING,
     ),
     width - H_PADDING - PADDING.RIGHT,

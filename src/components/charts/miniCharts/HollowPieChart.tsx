@@ -25,15 +25,15 @@ import {
 } from '../utils';
 
 type Props<T extends Plot> = React.PropsWithChildren<{
-  plots: ReadonlyArray<T>,
-  offsetAngle?: number,
-  angularSize?: number,
+  plots: ReadonlyArray<T>;
+  offsetAngle?: number;
+  angularSize?: number;
   valueFormatter?: (
-    num: string | number | ReadonlyArray<(string | number)>,
+    num: string | number | ReadonlyArray<string | number>,
     plot: T,
     isTooltip: boolean,
   ) => string | number | null | undefined;
-  centerText?: StyledText | [StyledText, StyledText],
+  centerText?: StyledText | [StyledText, StyledText];
 }>;
 
 export default function HollowPieChart<T extends Plot>({
@@ -83,7 +83,7 @@ export default function HollowPieChart<T extends Plot>({
                 dataKey="value"
                 nameKey="name"
                 labelLine={false}
-                label={props =>
+                label={(props) =>
                   RenderCustomizedPieLabel({
                     ...props,
                     valueFormatter,

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useContext, useCallback } from 'react';
-import { useMutationObserver } from 'src/hooks';
+import { useMutationObserver } from '../hooks';
 import { LayoutContext } from '../utils';
 import type { ColData } from './ResponsiveTable';
 
@@ -9,11 +9,11 @@ export type Column<E, C> = ColData<E, C> & {
 };
 
 type HeadProps<E, C> = {
-  cols: readonly Column<E, C>[],
-  columnKeyExtractor: (column: Column<E, C>) => string,
-  textAlignClass: (alignment?: string) => undefined | string,
-  renderHead: (column: Column<E, C>) => JSX.Element | null,
-  onColumnClick?: (column: Column<E, C>) => void,
+  cols: readonly Column<E, C>[];
+  columnKeyExtractor: (column: Column<E, C>) => string;
+  textAlignClass: (alignment?: string) => undefined | string;
+  renderHead: (column: Column<E, C>) => JSX.Element | null;
+  onColumnClick?: (column: Column<E, C>) => void;
 };
 
 const HEADER_OFFSET = 70; // Header is 70px tall
@@ -37,7 +37,7 @@ const TableHead = <E extends {}, C>({
   textAlignClass,
   renderHead,
   onColumnClick,
-}: HeadProps<E, C>) => {
+}: HeadProps<E, C>): JSX.Element => {
   const headRef = useRef<HTMLTableSectionElement | null>(null);
   const ctx = useContext(LayoutContext);
   const hasHeader = ctx.getTemp('hasHeader', true);
@@ -52,13 +52,13 @@ const TableHead = <E extends {}, C>({
       window.removeEventListener('scroll', onscroll);
       window.removeEventListener('resize', onscroll);
     };
-  }, [headRef]);
+  }, [hasHeader, headRef]);
 
   const mutationCallback = useCallback(() => {
     const headEl = headRef.current;
     if (!headEl) return;
     update(headEl, hasHeader);
-  }, [headRef.current, hasHeader]);
+  }, [hasHeader]);
 
   useMutationObserver(
     typeof window !== 'undefined' ? window.document.documentElement : undefined,

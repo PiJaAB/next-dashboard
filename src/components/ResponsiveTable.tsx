@@ -12,7 +12,7 @@ export type ColData<E, C> = C & {
   readonly key?: string;
   readonly title: string;
   readonly field: keyof E;
-}
+};
 
 export type TableColumn<E, C> = ColData<E, C> & {
   readonly renderHead?: (
@@ -23,7 +23,7 @@ export type TableColumn<E, C> = ColData<E, C> & {
     column: ColData<E, C>,
   ) => React.ReactNode | null | undefined;
   readonly textAlign?: string;
-}
+};
 
 export interface Props<E, C> {
   className?: string;
@@ -42,11 +42,11 @@ export interface Props<E, C> {
   loading?: boolean;
 }
 
-export const defaultRenderHead = ({ title }: ColData<any, any>) => title;
+export const defaultRenderHead = ({ title }: ColData<any, any>): JSX.Element =>
+  title;
 const defaultRenderBody = (entry: any, { field }: ColData<any, any>) =>
   entry[field] !== null ? String(entry[field]) : null;
-const defaultKeyExtractor = ({ key }: ColData<any, any>) =>
-  key;
+const defaultKeyExtractor = ({ key }: ColData<any, any>) => key;
 const defaultColumnKeyExtractor = ({ field, key }: ColData<any, any>) =>
   key || field;
 
@@ -62,7 +62,7 @@ const ResponsiveTable = <E extends {}, C>({
   style,
   rowHeight,
   loading,
-}: Props<E, C>) => {
+}: Props<E, C>): JSX.Element => {
   const textAlignClass = (alignment?: string) =>
     alignment && `text-align-${alignment}`;
   const table = (cols: readonly TableColumn<E, C>[], type: string) => (
@@ -81,9 +81,9 @@ const ResponsiveTable = <E extends {}, C>({
         }}
       >
         {data &&
-          data.map(entry => (
+          data.map((entry) => (
             <tr key={dataKeyExtractor(entry)}>
-              {cols.map(column => (
+              {cols.map((column) => (
                 <td
                   data-tip={
                     type === 'head'
@@ -105,7 +105,7 @@ const ResponsiveTable = <E extends {}, C>({
     <div
       style={style}
       className={['responsive-table flex-direction-column', className]
-        .filter(c => c)
+        .filter((c) => c)
         .join(' ')}
     >
       <div className="display-flex">

@@ -12,16 +12,21 @@ import PageChart from './PageChart';
 import { DataNotFound, DataIsLoading } from '../utils';
 
 type Props = {
-  title: string,
+  title: string;
   data: readonly {
-    readonly Period: string,
-    readonly Average: number,
-  }[],
-  chartLineColor: string,
-  loading?: boolean,
+    readonly Period: string;
+    readonly Average: number;
+  }[];
+  chartLineColor: string;
+  loading?: boolean;
 };
 
-const LineChart = ({ title, data, chartLineColor, loading }: Props) => {
+const LineChart = ({
+  title,
+  data,
+  chartLineColor,
+  loading,
+}: Props): JSX.Element => {
   const chart = (
     <PageChart>
       <ResponsiveContainer>

@@ -32,7 +32,7 @@ function defaultBottomTextSize(
   return radius / 4;
 }
 
-const TextComp = ({ text, width, height, radius }: Props) => {
+const TextComp = ({ text, width, height, radius }: Props): JSX.Element => {
   if (!Array.isArray(text)) {
     let size;
     let strText;

@@ -24,7 +24,7 @@ const FeatureBox = ({
   status,
   extraStyles,
   contentFontSize,
-}: Props) => {
+}: Props): JSX.Element => {
   return (
     <div
       className={classnames(

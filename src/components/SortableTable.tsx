@@ -6,20 +6,26 @@ import ResponsiveTable, {
   ColData,
 } from './ResponsiveTable';
 
-type Sort = undefined | {
-  field: string,
-  dir: 'asc' | 'desc',
-};
+type Sort =
+  | undefined
+  | {
+      field: string;
+      dir: 'asc' | 'desc';
+    };
 
 type Data<E extends {}> = readonly E[] | undefined | null;
 
 type Compare<E> = (a: E, b: E, prop: string, dir: 'asc' | 'desc') => number;
-type CompareBy<E> = (entry: E, prop: string, dir: 'asc' | 'desc') => string | number;
+type CompareBy<E> = (
+  entry: E,
+  prop: string,
+  dir: 'asc' | 'desc',
+) => string | number;
 
 export type Props<E, C> = TableProps<E, C> & {
-  compare?: Compare<E>,
-  compareBy?: CompareBy<E>,
-  title?: string,
+  compare?: Compare<E>;
+  compareBy?: CompareBy<E>;
+  title?: string;
 };
 
 function getDefaultCompare<E>(compareBy: CompareBy<E>): Compare<E> {
@@ -45,23 +51,28 @@ function SortIcon<E extends {}, C>({
   col,
   sort,
 }: {
-  col: ColData<E, C>,
-  sort: Sort,
-}): JSX.Element {return (
-  <span
-    className={classnames(
-      'fa',
-      `fa-sort${
-        sort && sort.field === col.field
-          ? `-${sort.dir === 'asc' ? 'up' : 'down'}`
-          : ''
-      }`,
-      (!sort || sort.field !== col.field) && 'hidden',
-    )}
-  />
-)};
+  col: ColData<E, C>;
+  sort: Sort;
+}): JSX.Element {
+  return (
+    <span
+      className={classnames(
+        'fa',
+        `fa-sort${
+          sort && sort.field === col.field
+            ? `-${sort.dir === 'asc' ? 'up' : 'down'}`
+            : ''
+        }`,
+        (!sort || sort.field !== col.field) && 'hidden',
+      )}
+    />
+  );
+}
 
-const SortableTable = <E extends {} = { [key: string]: unknown }, C extends {} = {}>({
+const SortableTable = <
+  E extends {} = { [key: string]: unknown },
+  C extends {} = {}
+>({
   data: orgData,
   onColumnClick,
   compare,
@@ -70,7 +81,7 @@ const SortableTable = <E extends {} = { [key: string]: unknown }, C extends {} =
   className,
   title,
   ...props
-}: Props<E, C>) => {
+}: Props<E, C>): JSX.Element => {
   const [data, setData] = useState<Data<E>>(orgData);
   const [sort, setSort] = useState<Sort>();
 
@@ -90,24 +101,27 @@ const SortableTable = <E extends {} = { [key: string]: unknown }, C extends {} =
         return sort.dir === 'asc' ? comp : -comp;
       }),
     );
-  }, [sort, orgData]);
+  }, [sort, orgData, data, compare, compareBy]);
 
-  const handleColumnClick = useCallback(col => {
-    if (onColumnClick) onColumnClick(col);
-    if (!sort || sort.field !== col.field) {
-      setSort({
-        field: col.field,
-        dir: 'desc',
-      });
-    } else if (sort.dir === 'asc') {
-      setSort(undefined);
-    } else {
-      setSort({
-        ...sort,
-        dir: 'asc',
-      });
-    }
-  }, [sort]);
+  const handleColumnClick = useCallback(
+    (col) => {
+      if (onColumnClick) onColumnClick(col);
+      if (!sort || sort.field !== col.field) {
+        setSort({
+          field: col.field,
+          dir: 'desc',
+        });
+      } else if (sort.dir === 'asc') {
+        setSort(undefined);
+      } else {
+        setSort({
+          ...sort,
+          dir: 'asc',
+        });
+      }
+    },
+    [onColumnClick, sort],
+  );
 
   const wrappedRenderHead = (col: ColData<E, C>) => (
     <>
@@ -120,7 +134,7 @@ const SortableTable = <E extends {} = { [key: string]: unknown }, C extends {} =
     <div>
       {title && <h2>{title}</h2>}
       <ResponsiveTable
-        className={['sortable-table', className].filter(c => c).join(' ')}
+        className={['sortable-table', className].filter((c) => c).join(' ')}
         data={data}
         renderHead={wrappedRenderHead}
         onColumnClick={handleColumnClick}

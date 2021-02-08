@@ -18,23 +18,21 @@ export default function FormElement<T, U = T>({
   validate,
   initialValue,
   id,
-  valueParser = val => val as unknown as U,
+  valueParser = (val) => (val as unknown) as U,
 }: Props<T, U>): JSX.Element {
   const ctx = useContext(FormContext);
   const [value, setValue] = useState(initialValue);
   useEffect(() => {
-    return () => ctx.unregister(id as string);
-  }, [ctx.register, ctx.unregister]);
-  useEffect(() => {
     ctx.register(id as string, {
       validate: (val: T) => validate(val),
-      getValue: (() => valueParser(value)) as <T>() => T ,
+      getValue: (() => valueParser(value)) as <Q>() => Q,
     });
-  }, [validate, value]);
+    return () => ctx.unregister(id as string);
+  }, [ctx, id, validate, value, valueParser]);
 
   return children(
     value,
-    val => {
+    (val) => {
       ctx.validate(id as string, val);
       setValue(() => val);
     },

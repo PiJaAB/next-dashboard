@@ -5,17 +5,17 @@ import LoadingIndicator from './LoadingIndicator';
 import type { Statuses } from '../utils/types';
 
 export type Props = {
-  label?: React.ReactNode,
-  value?: React.ReactNode,
-  prefix?: React.ReactNode,
-  suffix?: React.ReactNode,
-  periodValue?: React.ReactNode,
-  periodText?: React.ReactNode,
-  description?: React.ReactNode,
-  status?: Statuses,
-  direction?: 'up' | 'down',
-  positive?: 'up' | 'down' | null,
-  className?: string,
+  label?: React.ReactNode;
+  value?: React.ReactNode;
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
+  periodValue?: React.ReactNode;
+  periodText?: React.ReactNode;
+  description?: React.ReactNode;
+  status?: Statuses;
+  direction?: 'up' | 'down';
+  positive?: 'up' | 'down' | null;
+  className?: string;
 };
 
 function Statistic({
