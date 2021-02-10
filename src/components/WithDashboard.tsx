@@ -14,13 +14,10 @@ export default function WithDashboard({
   config: Config;
   children: React.ReactElement<unknown, DashboardComponent<any>>;
 }): JSX.Element {
-  const { AuthProvider } = config;
   const configCtx = useMemo(() => buildConfigContext(config), [config]);
   return (
     <ConfigContext.Provider value={configCtx}>
-      <DashboardProvider AuthProvider={AuthProvider}>
-        {children}
-      </DashboardProvider>
+      <DashboardProvider>{children}</DashboardProvider>
     </ConfigContext.Provider>
   );
 }

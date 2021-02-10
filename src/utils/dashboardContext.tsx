@@ -1,10 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 
-import type {
-  DashboardComponent,
-  IAuthProvider,
-  SiteMessageType,
-} from './types';
+import type { DashboardComponent, SiteMessageType } from './types';
 
 import logger from './logger';
 import { LayoutStateProvider } from './layoutContext';
@@ -19,9 +15,6 @@ export interface IDashboardContext {
   dismissSiteMessage(siteMessages: SiteMessageType): void;
 
   readonly Comp: DashboardComponent<any>;
-
-  isAuthenticated(): boolean | Promise<boolean>;
-  getAuthProvider<T extends IAuthProvider>(Class: { new (): T }): T | void;
 }
 
 const defaultContext: IDashboardContext = {
@@ -35,9 +28,6 @@ const defaultContext: IDashboardContext = {
   dismissSiteMessage() {},
 
   Comp: () => null,
-
-  isAuthenticated: () => false,
-  getAuthProvider: () => {},
 };
 
 const DashboardContext = React.createContext<IDashboardContext>(defaultContext);
@@ -56,13 +46,9 @@ function compareSitemessages(
   return true;
 }
 
-export function DashboardProvider<AuthType extends IAuthProvider>({
-  AuthProvider,
+export function DashboardProvider({
   children,
 }: {
-  AuthProvider: {
-    new (): AuthType;
-  };
   children: React.ReactElement<any, DashboardComponent<any>>;
 }): JSX.Element {
   const [persistentState, setPersistentState] = useState<Record<string, any>>(
@@ -136,19 +122,6 @@ export function DashboardProvider<AuthType extends IAuthProvider>({
     },
     [persist, setPersistentState],
   );
-  const [getAuthProvider, isAuthenticated] = useMemo(() => {
-    const authProvider = new AuthProvider();
-    function getAP<A extends IAuthProvider>(C: { new (): A }): A | void {
-      if (authProvider instanceof C) return authProvider;
-      logger.error(
-        new Error('AuthProvider mismatch, instance not of requested class'),
-      );
-      return undefined;
-    }
-
-    const isAuth = () => authProvider.isAuthenticated();
-    return [getAP, isAuth];
-  }, [AuthProvider]);
   const Comp = children.type;
   const [siteMessages, setSiteMessages] = useState<readonly SiteMessageType[]>(
     [],
@@ -213,15 +186,11 @@ export function DashboardProvider<AuthType extends IAuthProvider>({
       registerSiteMessage,
       dismissSiteMessage,
       Comp,
-      getAuthProvider,
-      isAuthenticated,
     }),
     [
       Comp,
       dismissSiteMessage,
-      getAuthProvider,
       getState,
-      isAuthenticated,
       registerSiteMessage,
       setState,
       siteMessages,
