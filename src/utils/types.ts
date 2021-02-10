@@ -95,7 +95,6 @@ export type PathFragment = string | number | (string | number)[];
 export type DataPath = Record<string, PathFragment> | PathFragment;
 
 export interface IAuthProvider {
-  serialize(): string;
   isAuthorizedForRoute(
     _href: string,
     _asPath: string,
