@@ -94,19 +94,7 @@ export type PathFragment = string | number | (string | number)[];
 
 export type DataPath = Record<string, PathFragment> | PathFragment;
 
-export interface IAuthProvider {
-  isAuthorizedForRoute(
-    _href: string,
-    _asPath: string,
-    _query: Partial<Record<string, string>>,
-  ): boolean | symbol | Promise<boolean | symbol>;
-  isAuthenticated(): boolean;
-  ready?: Promise<unknown> | unknown;
-}
-
-export type DashboardInitialPropsContext = NextPageContext & {
-  authProvider?: IAuthProvider;
-};
+export type DashboardInitialPropsContext = NextPageContext;
 
 export type DashboardComponent<
   P extends {},
