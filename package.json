@@ -37,7 +37,7 @@
     "lint:prettier": "NODE_ENV=production prettier -c 'src/**/*.ts' 'src/**/*.tsx'",
     "lint:eslint": "NODE_ENV=production eslint src --report-unused-disable-directives --color",
     "lint:stylelint": "NODE_ENV=production stylelint sass/**/*.scss -s scss --rd --risd --color",
-    "build": "run-s -l --silent build:clean build:clean build:tsc",
+    "build": "run-s -l --silent build:clean build:tsc",
     "build:clean": "rimraf dist",
     "build:tsc": "tsc",
     "prepack": "yarn build",
