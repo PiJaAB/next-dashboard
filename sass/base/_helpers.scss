@@ -17,8 +17,42 @@
   .color-text#{$breakpoint-class} {
     @include var('color', 'text');
   }
+  .color-success#{$breakpoint-class} {
+    @include var('color', 'success');
+  }
   .color-error#{$breakpoint-class} {
     @include var('color', 'error');
+  }
+  .color-warning#{$breakpoint-class} {
+    @include var('color', 'warning');
+  }
+
+  .background-inherit#{$breakpoint-class}#{$suffix} {
+    background-color: inherit;
+  }
+  .background-primary#{$breakpoint-class} {
+    background-color: $primary-color;
+  }
+  .background-secondary#{$breakpoint-class} {
+    background-color: $secondary-color;
+  }
+  .background-black#{$breakpoint-class} {
+    background-color: $black;
+  }
+  .background-white#{$breakpoint-class} {
+    background-color: $white;
+  }
+  .background-text#{$breakpoint-class} {
+    @include var('background-color', 'text');
+  }
+  .background-success#{$breakpoint-class} {
+    @include var('background-color', 'success');
+  }
+  .background-error#{$breakpoint-class} {
+    @include var('background-color', 'error');
+  }
+  .background-warning#{$breakpoint-class} {
+    @include var('background-color', 'warning');
   }
 
   .display-block#{$breakpoint-class} {
