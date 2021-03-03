@@ -14,7 +14,7 @@ td {
     padding-left: 10px;
   }
   &:last-child {
-    padding-left: 10px;
+    padding-right: 10px;
   }
     &:empty::after {
     content: '\00a0';
