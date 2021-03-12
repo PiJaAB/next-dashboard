@@ -5,6 +5,7 @@ import type { DashboardComponent, SiteMessageType } from './types';
 import logger from './logger';
 import { LayoutStateProvider } from './layoutContext';
 import { SilentError } from './silentError';
+import { errorEventEmitter } from './errorReporter';
 
 export interface IDashboardContext {
   getState: <T>(key: string, defaultValue: T) => T;
@@ -178,6 +179,15 @@ export function DashboardProvider({
     }
     return [registerSiteMessageInner, dismissSiteMessageInner];
   }, [setSiteMessages]);
+  useEffect(() => {
+    function onError(err: Error) {
+      registerSiteMessage(err);
+    }
+    errorEventEmitter.on('error', onError);
+    return () => {
+      errorEventEmitter.off('error', onError);
+    };
+  }, [registerSiteMessage]);
   const ctx: IDashboardContext = useMemo(
     () => ({
       getState,
