@@ -7,7 +7,6 @@ import {
   Tooltip,
   Bar,
   Legend,
-  TooltipFormatter,
 } from 'recharts';
 import { DataNotFound } from '../utils';
 import WrapChart from './WrapChart';
@@ -20,10 +19,10 @@ interface BarChartKeyAndColor {
 
 type Props<D extends {}> = {
   title?: string;
-  data: readonly D[];
+  data: D[];
   loading?: boolean;
   barChartKeysAndColor?: BarChartKeyAndColor[];
-  tooltipFormatter?: TooltipFormatter;
+  tooltipFormatter?: Function;
 };
 
 const renderBars = (

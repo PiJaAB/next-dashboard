@@ -8,8 +8,6 @@ import {
   PolarAngleAxis,
   Tooltip,
   Customized,
-  TooltipFormatter,
-  TooltipPayload,
 } from 'recharts';
 import WrapChart from '../WrapChart';
 import PageChart from '../PageChart';
@@ -26,7 +24,7 @@ import {
 } from '../utils';
 
 type Props<T extends Plot> = React.PropsWithChildren<{
-  plots: ReadonlyArray<T>;
+  plots: T[];
   offsetAngle?: number;
   angularSize?: number;
   valueFormatter?: (
@@ -39,11 +37,11 @@ type Props<T extends Plot> = React.PropsWithChildren<{
 
 function getTooltipFormatter<T extends Plot>(
   valueFormatter?: Props<T>['valueFormatter'],
-): TooltipFormatter {
+) {
   return (
     value: string | number | Array<string | number>,
     name: string,
-    { payload }: TooltipPayload,
+    { payload }: { payload: T },
   ) => [
     (valueFormatter && valueFormatter(value, payload, true)) || value,
     payload.name,

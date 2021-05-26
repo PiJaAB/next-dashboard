@@ -47,3 +47,7 @@ $colors-dark: (
   'warning':                   $warning-color-dark,
   'border':                    $border-color-dark,
 ) !default;
+
+$colors-dark-extra: () !default;
+
+$colors-dark: map-merge($colors-dark, $colors-dark-extra);

@@ -30,8 +30,8 @@
     "url": "git+https://github.com/PiJaAB/next-dashboard.git"
   },
   "scripts": {
-    "dev": "nodemon -w src -x \"yarn run -s build:silent\"",
-    "dev:pkg": "nodemon -w src -x \"yarn run -s build:silent\"",
+    "dev": "nodemon -w src -x \"yarn run -s build\"",
+    "dev:pkg": "nodemon -w src -x \"yarn run -s build\"",
     "lint": "run-p -l --silent --aggregate-output --continue-on-error lint:*",
     "lint:eslint-check": "NODE_ENV=production eslint-config-prettier 'src/**/*.js'",
     "lint:prettier": "NODE_ENV=production prettier -c 'src/**/*.ts' 'src/**/*.tsx'",
@@ -47,12 +47,10 @@
     "url": "https://github.com/PiJaAB/next-dashboard/issues"
   },
   "peerDependencies": {
-    "express": "^4.17.1",
     "next": "^10.0.5",
-    "next-cookies": "^2.0.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "recharts": "^1.8.5"
+    "recharts": "^2.0.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",

@@ -13,7 +13,7 @@ import { DataNotFound, DataIsLoading } from '../utils';
 
 type Props = {
   title: string;
-  data: readonly {
+  data: {
     readonly Period: string;
     readonly Average: number;
   }[];

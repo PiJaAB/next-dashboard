@@ -25,7 +25,7 @@ import {
 } from '../utils';
 
 type Props<T extends Plot> = React.PropsWithChildren<{
-  plots: ReadonlyArray<T>;
+  plots: T[];
   offsetAngle?: number;
   angularSize?: number;
   valueFormatter?: (
@@ -59,7 +59,15 @@ export default function HollowPieChart<T extends Plot>({
               {children}
               <Tooltip
                 labelFormatter={() => null}
-                formatter={(value, name, { payload }) => [
+                formatter={(
+                  value: string | number | (string | number)[],
+                  name: string,
+                  {
+                    payload,
+                  }: {
+                    payload: T;
+                  },
+                ) => [
                   (valueFormatter && valueFormatter(value, payload, true)) ||
                     value,
                   payload.name,

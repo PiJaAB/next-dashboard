@@ -1,7 +1,6 @@
 .dashboard-content {
   flex: 1 0 auto;
   @include var('background-color', 'secondary-alt');
-  overflow-x: hidden;
   display: flex;
   > * {
     width: 0 !important;

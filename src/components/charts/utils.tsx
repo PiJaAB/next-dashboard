@@ -1,5 +1,5 @@
 import React from 'react';
-import { LegendPayload, LegendProps } from 'recharts';
+import { ContentType } from 'recharts/types/component/DefaultLegendContent';
 import {
   RENDER_ISSUE_OFFSET_SIZE,
   RENDER_ISSUE_OFFSET_PADDING,
@@ -43,10 +43,12 @@ export const getCenter = (
   cx: width / 2 - PADDING.RIGHT + PADDING.LEFT,
 });
 
-export const renderCustomLegend = ({ payload }: LegendProps): JSX.Element => (
+export const renderCustomLegend: ContentType = ({ payload }) => (
   <ul className="radial-bar-chart-types-list">
     {payload?.map(
-      (entry: LegendPayload & { dataKey?: string | number | null }) => (
+      (
+        entry: typeof payload[number] & { dataKey?: string | number | null },
+      ) => (
         <li
           key={entry.dataKey != null ? entry.dataKey : entry.value}
           className="radial-bar-chart-type"

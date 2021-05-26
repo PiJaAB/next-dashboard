@@ -150,6 +150,10 @@ $colors: (
   'border':               $secondary-alt-color,
 ) !default;
 
+$colors-extra: () !default;
+
+$colors: map-merge($colors, $colors-extra);
+
 $primary-font-family: '' !default;
 
 $border-radius-small:   5px;

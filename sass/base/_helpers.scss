@@ -2,183 +2,183 @@
   .color-inherit#{$breakpoint-class}#{$suffix} {
     color: inherit;
   }
-  .color-primary#{$breakpoint-class} {
+  .color-primary#{$breakpoint-class}#{$suffix} {
     color: $primary-color;
   }
-  .color-secondary#{$breakpoint-class} {
+  .color-secondary#{$breakpoint-class}#{$suffix} {
     color: $secondary-color;
   }
-  .color-black#{$breakpoint-class} {
+  .color-black#{$breakpoint-class}#{$suffix} {
     color: $black;
   }
-  .color-white#{$breakpoint-class} {
+  .color-white#{$breakpoint-class}#{$suffix} {
     color: $white;
   }
-  .color-text#{$breakpoint-class} {
+  .color-text#{$breakpoint-class}#{$suffix} {
     @include var('color', 'text');
   }
-  .color-success#{$breakpoint-class} {
+  .color-success#{$breakpoint-class}#{$suffix} {
     @include var('color', 'success');
   }
-  .color-error#{$breakpoint-class} {
+  .color-error#{$breakpoint-class}#{$suffix} {
     @include var('color', 'error');
   }
-  .color-warning#{$breakpoint-class} {
+  .color-warning#{$breakpoint-class}#{$suffix} {
     @include var('color', 'warning');
   }
 
   .background-inherit#{$breakpoint-class}#{$suffix} {
     background-color: inherit;
   }
-  .background-primary#{$breakpoint-class} {
+  .background-primary#{$breakpoint-class}#{$suffix} {
     background-color: $primary-color;
   }
-  .background-secondary#{$breakpoint-class} {
+  .background-secondary#{$breakpoint-class}#{$suffix} {
     background-color: $secondary-color;
   }
-  .background-black#{$breakpoint-class} {
+  .background-black#{$breakpoint-class}#{$suffix} {
     background-color: $black;
   }
-  .background-white#{$breakpoint-class} {
+  .background-white#{$breakpoint-class}#{$suffix} {
     background-color: $white;
   }
-  .background-text#{$breakpoint-class} {
+  .background-text#{$breakpoint-class}#{$suffix} {
     @include var('background-color', 'text');
   }
-  .background-success#{$breakpoint-class} {
+  .background-success#{$breakpoint-class}#{$suffix} {
     @include var('background-color', 'success');
   }
-  .background-error#{$breakpoint-class} {
+  .background-error#{$breakpoint-class}#{$suffix} {
     @include var('background-color', 'error');
   }
-  .background-warning#{$breakpoint-class} {
+  .background-warning#{$breakpoint-class}#{$suffix} {
     @include var('background-color', 'warning');
   }
 
-  .display-block#{$breakpoint-class} {
+  .display-block#{$breakpoint-class}#{$suffix} {
     display: block;
   }
-  .display-flex#{$breakpoint-class} {
+  .display-flex#{$breakpoint-class}#{$suffix} {
     display: flex;
   }
-  .display-inline#{$breakpoint-class} {
+  .display-inline#{$breakpoint-class}#{$suffix} {
     display: inline;
   }
-  .display-inline-block#{$breakpoint-class} {
+  .display-inline-block#{$breakpoint-class}#{$suffix} {
     display: inline-block;
   }
-  .display-none#{$breakpoint-class} {
+  .display-none#{$breakpoint-class}#{$suffix} {
     display: none;
   }
 
-  .flex-direction-column#{$breakpoint-class} {
+  .flex-direction-column#{$breakpoint-class}#{$suffix} {
     flex-direction: column;
   }
-  .flex-direction-column-reverse#{$breakpoint-class} {
+  .flex-direction-column-reverse#{$breakpoint-class}#{$suffix} {
     flex-direction: column-reverse;
   }
-  .flex-direction-row#{$breakpoint-class} {
+  .flex-direction-row#{$breakpoint-class}#{$suffix} {
     flex-direction: row;
   }
-  .flex-direction-row-reverse#{$breakpoint-class} {
+  .flex-direction-row-reverse#{$breakpoint-class}#{$suffix} {
     flex-direction: row-reverse;
   }
 
-  .flex-wrap-nowrap#{$breakpoint-class} {
+  .flex-wrap-nowrap#{$breakpoint-class}#{$suffix} {
     flex-wrap: nowrap;
   }
 
-  .align-items-center#{$breakpoint-class} {
+  .align-items-center#{$breakpoint-class}#{$suffix} {
     align-items: center;
   }
-  .align-items-flex-start#{$breakpoint-class} {
+  .align-items-flex-start#{$breakpoint-class}#{$suffix} {
     align-items: flex-start;
   }
-  .align-items-flex-end#{$breakpoint-class} {
+  .align-items-flex-end#{$breakpoint-class}#{$suffix} {
     align-items: flex-end;
   }
 
-  .align-self-center#{$breakpoint-class} {
+  .align-self-center#{$breakpoint-class}#{$suffix} {
     align-self: center;
   }
-  .align-self-flex-start#{$breakpoint-class} {
+  .align-self-flex-start#{$breakpoint-class}#{$suffix} {
     align-self: flex-start;
   }
-  .align-self-flex-end#{$breakpoint-class} {
+  .align-self-flex-end#{$breakpoint-class}#{$suffix} {
     align-self: flex-end;
   }
-  .align-self-stretch#{$breakpoint-class} {
+  .align-self-stretch#{$breakpoint-class}#{$suffix} {
     align-self: stretch;
   }
 
-  .justify-content-center#{$breakpoint-class} {
+  .justify-content-center#{$breakpoint-class}#{$suffix} {
     justify-content: center;
   }
-  .justify-content-flex-start#{$breakpoint-class} {
+  .justify-content-flex-start#{$breakpoint-class}#{$suffix} {
     justify-content: flex-start;
   }
-  .justify-content-flex-end#{$breakpoint-class} {
+  .justify-content-flex-end#{$breakpoint-class}#{$suffix} {
     justify-content: flex-end;
   }
-  .justify-content-space-between#{$breakpoint-class} {
+  .justify-content-space-between#{$breakpoint-class}#{$suffix} {
     justify-content: space-between;
   }
 
-  .justify-self-center#{$breakpoint-class} {
+  .justify-self-center#{$breakpoint-class}#{$suffix} {
     justify-self: center;
   }
-  .justify-self-flex-start#{$breakpoint-class} {
+  .justify-self-flex-start#{$breakpoint-class}#{$suffix} {
     justify-self: flex-start;
   }
-  .justify-self-flex-end#{$breakpoint-class} {
+  .justify-self-flex-end#{$breakpoint-class}#{$suffix} {
     justify-self: flex-end;
   }
 
-  .flex-grow-1#{$breakpoint-class} {
+  .flex-grow-1#{$breakpoint-class}#{$suffix} {
     flex-grow: 1;
   }
-  .flex-shrink-1#{$breakpoint-class} {
+  .flex-shrink-1#{$breakpoint-class}#{$suffix} {
     flex-shrink: 1;
   }
-  .flex-basis-auto#{$breakpoint-class} {
+  .flex-basis-auto#{$breakpoint-class}#{$suffix} {
     flex-basis: auto;
   }
-  .flex-basis-0#{$breakpoint-class} {
+  .flex-basis-0#{$breakpoint-class}#{$suffix} {
     flex-basis: 0;
   }
 
-  .order--1#{$breakpoint-class} {
+  .order--1#{$breakpoint-class}#{$suffix} {
     order: -1;
   }
-  .order-0#{$breakpoint-class} {
+  .order-0#{$breakpoint-class}#{$suffix} {
     order: 0;
   }
-  .order-1#{$breakpoint-class} {
+  .order-1#{$breakpoint-class}#{$suffix} {
     order: 1;
   }
 
-  .text-align-center#{$breakpoint-class} {
+  .text-align-center#{$breakpoint-class}#{$suffix} {
     text-align: center;
   }
-  .text-align-left#{$breakpoint-class} {
+  .text-align-left#{$breakpoint-class}#{$suffix} {
     text-align: left;
   }
-  .text-align-right#{$breakpoint-class} {
+  .text-align-right#{$breakpoint-class}#{$suffix} {
     text-align: right;
   }
-  .text-align-justify#{$breakpoint-class} {
+  .text-align-justify#{$breakpoint-class}#{$suffix} {
     text-align: justify;
   }
 
-  .font-style-italic#{$breakpoint-class} {
+  .font-style-italic#{$breakpoint-class}#{$suffix} {
     font-style: italic;
   }
 
-  .margin-0#{$breakpoint-class} {
+  .margin-0#{$breakpoint-class}#{$suffix} {
     margin: 0;
   }
 
-  .hidden#{$breakpoint-class} {
+  .hidden#{$breakpoint-class}#{$suffix} {
     visibility: hidden;
   }
 }

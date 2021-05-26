@@ -15,9 +15,9 @@ import { DataNotFound, DataIsLoading } from '../utils';
 
 type Props = {
   title: string;
-  data: ReadonlyArray<{
+  data: {
     readonly [key: string]: unknown;
-  }>;
+  }[];
   chartLineColor: string;
   loading?: boolean;
   xAxisKey: string | undefined;
