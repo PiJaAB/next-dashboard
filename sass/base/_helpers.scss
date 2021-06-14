@@ -17,6 +17,9 @@
   .color-text#{$breakpoint-class}#{$suffix} {
     @include var('color', 'text');
   }
+  .color-text-alt#{$breakpoint-class}#{$suffix} {
+    @include var('color', 'text-alt');
+  }
   .color-success#{$breakpoint-class}#{$suffix} {
     @include var('color', 'success');
   }
@@ -43,6 +46,9 @@
     background-color: $white;
   }
   .background-text#{$breakpoint-class}#{$suffix} {
+    @include var('background-color', 'text');
+  }
+  .background-text-alt#{$breakpoint-class}#{$suffix} {
     @include var('background-color', 'text');
   }
   .background-success#{$breakpoint-class}#{$suffix} {
