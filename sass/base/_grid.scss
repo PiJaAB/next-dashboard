@@ -1,7 +1,9 @@
+@use "sass:math";
+
 .cell {
   flex: 0 0 100%;
   max-width: 100%;
-  padding: #{map-get($grid-sizes, $grid-default-size) / 2}px;
+  padding: #{math.div(map-get($grid-sizes, $grid-default-size), 2)}px;
   &:empty {
     padding: 0;
   }
@@ -10,7 +12,7 @@
 .grid {
   display: flex;
   flex-wrap: wrap;
-  margin: -#{map-get($grid-sizes, $grid-default-size) / 2}px;
+  margin: -#{math.div(map-get($grid-sizes, $grid-default-size), 2)}px;
   >.cell {
     &:empty {
       padding: 0;
@@ -21,33 +23,33 @@
 @mixin gridEntry ($breakpoint-class, $suffix: '') {
   @each $grid-size in map-keys($grid-sizes) {
     .grid-#{$grid-size}#{$breakpoint-class}#{$suffix} {
-      margin: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
+      margin: -#{math.div(map-get($grid-sizes, $grid-size), 2)}px;
       >.cell {
-        padding: #{(map-get($grid-sizes, $grid-size) / 2)}px;
+        padding: #{math.div(map-get($grid-sizes, $grid-size), 2)}px;
       }
     }
     .grid-x-#{$grid-size}#{$breakpoint-class}#{$suffix} {
-      margin-left: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
-      margin-right: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
+      margin-left: -#{math.div(map-get($grid-sizes, $grid-size), 2)}px;
+      margin-right: -#{math.div(map-get($grid-sizes, $grid-size), 2)}px;
       >.cell {
-        padding-left: #{(map-get($grid-sizes, $grid-size) / 2)}px;
-        padding-right: #{(map-get($grid-sizes, $grid-size) / 2)}px;
+        padding-left: #{math.div(map-get($grid-sizes, $grid-size), 2)}px;
+        padding-right: #{math.div(map-get($grid-sizes, $grid-size), 2)}px;
       }
     }
     .grid-y-#{$grid-size}#{$breakpoint-class}#{$suffix} {
-      margin-top: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
-      margin-bottom: -#{(map-get($grid-sizes, $grid-size) / 2)}px;
+      margin-top: -#{math.div(map-get($grid-sizes, $grid-size), 2)}px;
+      margin-bottom: -#{math.div(map-get($grid-sizes, $grid-size), 2)}px;
       >.cell {
-        padding-top: #{(map-get($grid-sizes, $grid-size) / 2)}px;
-        padding-bottom: #{(map-get($grid-sizes, $grid-size) / 2)}px;
+        padding-top: #{math.div(map-get($grid-sizes, $grid-size), 2)}px;
+        padding-bottom: #{math.div(map-get($grid-sizes, $grid-size), 2)}px;
       }
     }
   }
 
   @for $grid-column from 1 through $grid-columns {
     .cell.column-#{$grid-column}#{$breakpoint-class}#{$suffix} {
-      flex: 0 0 (100% / $grid-columns) * $grid-column;
-      max-width: (100% / $grid-columns) * $grid-column;
+      flex: 0 0 math.div(100%, $grid-columns) * $grid-column;
+      max-width: math.div(100%, $grid-columns) * $grid-column;
       &-max{
         max-width: 300px;
       }

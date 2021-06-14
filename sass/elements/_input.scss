@@ -1,3 +1,5 @@
+@use "sass:math";
+
 select {
   padding: 10px (15px + 12.5px + 15px) 10px 15px;
   background-image: url('/dashboard-assets/images/select-arrow.svg');
@@ -77,7 +79,7 @@ input[type="checkbox"] {
 input[type="checkbox"],
 input[type="radio"] {
   @include visually-hidden;
-  margin: 20px 0 0 (20px / 2);
+  margin: 20px 0 0 math.div(20px, 2);
   +label {
     position: relative;
     padding: 0 0 0 20px + 10px;

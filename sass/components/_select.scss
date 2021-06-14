@@ -167,6 +167,9 @@
         @include var('background-color', 'primary-rgb', 'rgba', 0.25);
       }
     }
+    &--is-disabled {
+      color: hsl(0, 0%, 50%);
+    }
     &--is-selected {
       @include var('background-color', 'primary');
       color: $white;

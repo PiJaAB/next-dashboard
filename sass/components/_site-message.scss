@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .site-messages {
   margin: 0 0 20px;
   @include breakpoint(medium) {
@@ -61,6 +63,6 @@
 .site-message-button {
   display: block;
   width: 100%;
-  max-width: $page-width / 4;
+  max-width: math.div($page-width, 4);
   margin: 0 auto;
 }
