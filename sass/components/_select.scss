@@ -7,11 +7,10 @@
     }
   }
   &__control {
-    @include add-border;
     display: flex;
     outline: 0 !important; // ?
     border-radius: 5px;
-    @include var('background-color', 'primary-alt');
+    @include var('background-color', 'background');
     cursor: default;
     &--is-disabled {
       cursor: not-allowed;
@@ -134,6 +133,19 @@
       margin: 0;
       border-radius: 0;
     }
+  }
+
+  &__group {
+    border-bottom: solid 1px var(--border-color);
+    margin-bottom: 5px;
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+  }
+  &__group-heading {
+    padding: 5px 15px;
+    color: var(--text-alt-color);
   }
 
   &__menu {

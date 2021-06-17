@@ -86,22 +86,19 @@ const SortableTable = <
   const [sort, setSort] = useState<Sort>();
 
   useEffect(() => {
-    if (data === orgData && !sort) return;
-    if (!sort || !orgData) {
-      setData(orgData);
-      return;
-    }
-
-    const comparator =
-      compare || getDefaultCompare<E>(compareBy || defaultCompareBy);
-
-    setData(
-      [...orgData].sort((a, b) => {
+    setData((oldData) => {
+      if (oldData === orgData && !sort) return oldData;
+      if (!sort || !orgData) {
+        return orgData;
+      }
+      const comparator =
+        compare || getDefaultCompare<E>(compareBy || defaultCompareBy);
+      return [...orgData].sort((a, b) => {
         const comp = comparator(a, b, sort.field, sort.dir);
         return sort.dir === 'asc' ? comp : -comp;
-      }),
-    );
-  }, [sort, orgData, data, compare, compareBy]);
+      });
+    });
+  }, [sort, orgData, compare, compareBy]);
 
   const handleColumnClick = useCallback(
     (col) => {
