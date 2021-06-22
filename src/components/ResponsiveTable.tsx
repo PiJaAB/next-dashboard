@@ -34,6 +34,7 @@ export interface Props<E, C> {
   renderBody?: (
     entry: E,
     column: ColData<E, C>,
+    isTooltip: boolean,
   ) => React.ReactNode | null | undefined;
   columnKeyExtractor?: (column: ColData<E, C>) => string;
   dataKeyExtractor?: (entry: E) => string;
