@@ -21,6 +21,7 @@ export type TableColumn<E, C> = ColData<E, C> & {
   readonly renderBody?: (
     entry: E,
     column: ColData<E, C>,
+    isTooltip: boolean,
   ) => React.ReactNode | null | undefined;
   readonly textAlign?: string;
 };
@@ -87,13 +88,13 @@ const ResponsiveTable = <E extends {}, C>({
                 <td
                   data-tip={
                     type === 'head'
-                      ? (column.renderBody || renderBody)(entry, column)
+                      ? (column.renderBody || renderBody)(entry, column, true)
                       : null
                   }
                   key={columnKeyExtractor(column)}
                   className={textAlignClass(column.textAlign)}
                 >
-                  {(column.renderBody || renderBody)(entry, column)}
+                  {(column.renderBody || renderBody)(entry, column, false)}
                 </td>
               ))}
             </tr>
