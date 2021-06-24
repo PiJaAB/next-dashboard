@@ -12,6 +12,7 @@ export type ColData<E, C> = C & {
   readonly key?: string;
   readonly title: string;
   readonly field: keyof E;
+  readonly htmlTooltip?: boolean;
 };
 
 export type TableColumn<E, C> = ColData<E, C> & {
@@ -36,6 +37,7 @@ export interface Props<E, C> {
     column: ColData<E, C>,
     isTooltip: boolean,
   ) => React.ReactNode | null | undefined;
+  htmlTooltip?: boolean;
   columnKeyExtractor?: (column: ColData<E, C>) => string;
   dataKeyExtractor?: (entry: E) => string;
   onColumnClick?: (column: HeadColumn<E, C>) => void;
@@ -63,6 +65,7 @@ const ResponsiveTable = <E extends {}, C>({
   onColumnClick,
   style,
   rowHeight,
+  htmlTooltip = false,
   loading,
 }: Props<E, C>): JSX.Element => {
   const textAlignClass = (alignment?: string) =>
@@ -91,6 +94,11 @@ const ResponsiveTable = <E extends {}, C>({
                     type === 'head'
                       ? (column.renderBody || renderBody)(entry, column, true)
                       : null
+                  }
+                  data-html={
+                    column.htmlTooltip != null
+                      ? column.htmlTooltip
+                      : htmlTooltip
                   }
                   key={columnKeyExtractor(column)}
                   className={textAlignClass(column.textAlign)}
