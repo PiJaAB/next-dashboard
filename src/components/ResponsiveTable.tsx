@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactTooltip from 'react-tooltip';
 
 import FixedScrollbar from './FixedScrollbar';
@@ -13,6 +13,7 @@ export type ColData<E, C> = C & {
   readonly title: string;
   readonly field: keyof E;
   readonly htmlTooltip?: boolean;
+  readonly useTooltip?: boolean;
 };
 
 export type TableColumn<E, C> = ColData<E, C> & {
@@ -70,6 +71,9 @@ const ResponsiveTable = <E extends {}, C>({
 }: Props<E, C>): JSX.Element => {
   const textAlignClass = (alignment?: string) =>
     alignment && `text-align-${alignment}`;
+  useEffect(() => {
+    ReactTooltip.rebuild();
+  }, [data]);
   const table = (cols: readonly TableColumn<E, C>[], type: string) => (
     <table>
       <TableHead
@@ -91,7 +95,11 @@ const ResponsiveTable = <E extends {}, C>({
               {cols.map((column) => (
                 <td
                   data-tip={
-                    type === 'head'
+                    (
+                      column.useTooltip == null
+                        ? type === 'head'
+                        : column.useTooltip
+                    )
                       ? (column.renderBody || renderBody)(entry, column, true)
                       : null
                   }
