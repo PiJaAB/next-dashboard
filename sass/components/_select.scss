@@ -107,6 +107,7 @@
   &__clear-indicator {
     position: relative;
     width: 10px;
+    cursor: pointer;
     &:before,
     &:after {
       content: '';
