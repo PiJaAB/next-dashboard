@@ -20,16 +20,11 @@ export type TableColumn<E, C> = ColData<E, C> & {
   readonly renderHead?: (
     column: ColData<E, C>,
   ) => React.ReactNode | null | undefined;
-  readonly renderBody?: {
-    (entry: E, column: ColData<E, C>, isTooltip?: false):
-      | React.ReactNode
-      | null
-      | undefined;
-    (entry: E, column: ColData<E, C>, isTooltip: true):
-      | string
-      | null
-      | undefined;
-  };
+  readonly renderBody?: (
+    entry: E,
+    column: ColData<E, C>,
+    isTooltip: boolean,
+  ) => React.ReactNode | null | undefined;
   renderCell?: (props: {
     row: E;
     column: ColData<E, C>;
@@ -47,16 +42,11 @@ export interface Props<E, C> {
   columns: readonly TableColumn<E, C>[];
   data?: readonly E[] | null;
   renderHead?: (column: ColData<E, C>) => JSX.Element | null;
-  renderBody?: {
-    (entry: E, column: ColData<E, C>, isTooltip?: false):
-      | React.ReactNode
-      | null
-      | undefined;
-    (entry: E, column: ColData<E, C>, isTooltip: true):
-      | string
-      | null
-      | undefined;
-  };
+  renderBody?: (
+    entry: E,
+    column: ColData<E, C>,
+    isTooltip: boolean,
+  ) => React.ReactNode | null | undefined;
   htmlTooltip?: boolean;
   columnKeyExtractor?: (column: ColData<E, C>) => string;
   dataKeyExtractor?: (entry: E) => string;
@@ -165,7 +155,11 @@ const ResponsiveTable = <E extends {}, C>({
                           ? type === 'head'
                           : column.useTooltip
                       )
-                        ? (column.renderBody || renderBody)(entry, column, true)
+                        ? ((column.renderBody || renderBody)(
+                            entry,
+                            column,
+                            true,
+                          ) as string | undefined | null)
                         : null
                     }
                     dataHtml={
