@@ -199,7 +199,6 @@ const ResponsiveTable = <E extends {}, C>({
           <LoadingIndicator />
         </div>
       )}
-      <ReactTooltip className="tooltip-style" />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import React, { useEffect, useContext } from 'react';
 import Head from 'next/head';
 import classnames from 'classnames';
 
+import ReactTooltip from 'react-tooltip';
 import FullscreenExitButton from '../FullscreenExitButton';
 
 import LayoutContext from '../../utils/layoutContext';
@@ -227,6 +228,7 @@ function DashboardLayout({
       <FullscreenExitButton />
       <ConfirmDialogue />
       <div id="dashboard-modal-root" />
+      <ReactTooltip className="tooltip-style" />
     </div>
   );
 }
