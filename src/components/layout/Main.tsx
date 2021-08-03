@@ -15,6 +15,7 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import SiteMessages from './SiteMessages';
 import ConfirmDialogue from './ConfirmDialogue';
+import useInitialRender from '../../hooks/useInitialRender';
 
 export type Props = React.PropsWithChildren<{
   id?: string;
@@ -48,6 +49,7 @@ function DashboardLayout({
 
   const isFullscreen = getTemp('isFullscreen', false);
   const isFullscreenMoving = getTemp('fullscreen-cursor-moving', false);
+  const isInitial = useInitialRender();
 
   const header = !isFullscreen && propHeader;
 
@@ -228,7 +230,7 @@ function DashboardLayout({
       <FullscreenExitButton />
       <ConfirmDialogue />
       <div id="dashboard-modal-root" />
-      <ReactTooltip className="tooltip-style" />
+      {!isInitial && <ReactTooltip className="tooltip-style" />}
     </div>
   );
 }
