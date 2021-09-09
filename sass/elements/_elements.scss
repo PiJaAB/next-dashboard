@@ -78,7 +78,7 @@ label,
   }
 }
 
-a {
+a, .a {
   @include var('color', 'primary');
   text-decoration: none;
   &:hover {
