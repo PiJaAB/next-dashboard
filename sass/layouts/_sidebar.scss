@@ -28,7 +28,7 @@
   transform: translateX(-100%);
   max-width: $max-width;
   transition: width 0.25s ease, box-shadow 0.0625s ease 0.1875s, transform 0.25s ease;
-  @each $breakpoint, $size in $sidebar-sizes {
+  @each $breakpoint, $size in $sidebar-display-sizes {
     @include breakpoint($breakpoint, true) {
       @if type-of($size) == number {
         @if $size > $max-width {
@@ -47,7 +47,7 @@
     }
   }
   &_compact {
-    @each $breakpoint, $size in $sidebar-compact-sizes {
+    @each $breakpoint, $size in $sidebar-compact-display-sizes {
       @include breakpoint($breakpoint, true) {
         @if type-of($size) == number {
           @if $size > $max-width {

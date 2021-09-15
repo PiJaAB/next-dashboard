@@ -48,13 +48,25 @@ $breakpoint-sizes: (
   'extra-large': 1440px,
 ) !default;
 $sidebar-sizes: (
-  'small': calc(100% - 80px),
+  'small':               0px,
   'medium':            200px,
   'large':             240px,
   'extra-large':       240px,
 ) !default;
 $sidebar-compact-sizes: (
   'small':        0px,
+  'medium':      86px,
+  'large':       86px,
+  'extra-large': 86px,
+) !default;
+$sidebar-display-sizes: (
+  'small': calc(100% - 80px),
+  'medium':            200px,
+  'large':             240px,
+  'extra-large':       240px,
+) !default;
+$sidebar-compact-display-sizes: (
+  'small':       86px,
   'medium':      86px,
   'large':       86px,
   'extra-large': 86px,
