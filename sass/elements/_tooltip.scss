@@ -10,4 +10,19 @@
       border-top-color: var(--primary-alt-color) !important;
     }
   }
+  &.place-right {
+    &:after {
+      border-right-color: var(--primary-alt-color) !important;
+    }
+  }
+  &.place-left {
+    &:after {
+      border-left-color: var(--primary-alt-color) !important;
+    }
+  }
+  &.place-bottom {
+    &:after {
+      border-bottom-color: var(--primary-alt-color) !important;
+    }
+  }
 }

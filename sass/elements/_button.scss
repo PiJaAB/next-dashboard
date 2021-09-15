@@ -34,7 +34,7 @@ input[type='reset'] {
   // &:disabled {
   //   cursor: not-allowed;
   // }
-  .dashboard-sidebar &:last-child {
+  .dashboard-sidebar & {
     margin-bottom: 0;
   }
   // html[data-whatinput='mouse'] & {

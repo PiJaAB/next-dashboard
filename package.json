@@ -30,7 +30,7 @@
     "url": "git+https://github.com/PiJaAB/next-dashboard.git"
   },
   "scripts": {
-    "dev": "nodemon -w src -x \"yarn run -s build\"",
+    "dev": "tsc --watch",
     "dev:pkg": "nodemon -w src -x \"yarn run -s build\"",
     "lint": "run-p -l --silent --aggregate-output --continue-on-error lint:*",
     "lint:eslint-check": "NODE_ENV=production eslint-config-prettier 'src/**/*.js'",
@@ -42,6 +42,12 @@
     "build:tsc": "tsc",
     "prepack": "yarn build",
     "test": "yarn run --silent lint"
+  },
+  "nodemonConfig": {
+    "ext": "js,jsx,ts,tsx,json,css,scss,svg",
+    "watch": [
+      "src"
+    ]
   },
   "bugs": {
     "url": "https://github.com/PiJaAB/next-dashboard/issues"

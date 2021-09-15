@@ -9,6 +9,9 @@
 
 .dashboard-sidebar-menu-item-button-text {
   transition: opacity 0.25s ease;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex-grow: 1;
 }
 
 .dashboard-sidebar {
@@ -110,15 +113,20 @@
   &:last-child {
     margin: 0;
   }
+  &_open {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+  }
 }
 .dashboard-sidebar-menu-item-button {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
   padding: 10px 14px;
   background-color: transparent;
   @include var('color', 'text');
   text-align: left;
-  // text-overflow: ellipsis;
+  position: relative;
   white-space: nowrap;
   // overflow: hidden;
   &:hover {
@@ -154,6 +162,7 @@
   width: 20px;
   margin: 0 10px 0 0;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .dashboard-sidebar-search {
@@ -163,15 +172,18 @@
   }
 }
 .dashboard-sidebar-menu {
-  margin: 0 0 40px;
+  margin-bottom: 40px;
   &:last-child {
-    margin: 0;
+    margin-bottom: 0;
   }
   &_other {
     display: none;
     @include breakpoint(medium, true) {
       display: block;
     }
+  }
+  .dashboard-sidebar-menu {
+    margin-top: 10px;
   }
 }
 

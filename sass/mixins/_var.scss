@@ -19,3 +19,8 @@
     }
   }
 }
+
+@mixin with-var($value) {
+  @content(map-get($colors, $value));
+  @content(var(--#{$value}));
+}

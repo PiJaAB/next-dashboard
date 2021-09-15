@@ -68,6 +68,7 @@ export interface Props<E, C> {
     dataHtml: boolean;
     className?: string;
   }) => JSX.Element;
+  emptyNode?: React.ReactNode;
 }
 
 export const defaultRenderHead = ({ title }: ColData<any, any>): JSX.Element =>
@@ -114,6 +115,7 @@ const ResponsiveTable = <E extends {}, C>({
   loading,
   renderRow: RenderRow = defaultRenderRow,
   renderCell = defaultRenderCell,
+  emptyNode,
 }: Props<E, C>): JSX.Element => {
   const textAlignClass = (alignment?: string) =>
     alignment && `text-align-${alignment}`;
@@ -199,6 +201,7 @@ const ResponsiveTable = <E extends {}, C>({
           <LoadingIndicator />
         </div>
       )}
+      {!loading && (data?.length || 0) === 0 && emptyNode}
     </div>
   );
 };

@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import ReactTooltip from 'react-tooltip';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import type { Theme } from '../utils/types';
 
@@ -16,10 +17,24 @@ function rotateTheme(cur: Theme, themes: readonly Theme[]): Theme {
 export default function ThemeSelector({ children, icon }: Props): JSX.Element {
   const ctx = useContext(LayoutContext);
   const { setState, theme, themes } = ctx;
+  const ref = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
+  const [reshow, setReshow] = useState(false);
+  useEffect(() => {
+    ReactTooltip.rebuild();
+  }, [theme]);
+  useEffect(() => {
+    if (!reshow) return;
+    setReshow(false);
+    if (ref.current != null) ReactTooltip.show(ref.current);
+  }, [reshow]);
   return (
     <NavEntry
       icon={icon || 'palette'}
-      onClick={() => setState<Theme>('theme', rotateTheme(theme, themes))}
+      onClick={() => {
+        setReshow(true);
+        setState<Theme>('theme', rotateTheme(theme, themes));
+      }}
+      tipRef={ref}
     >
       {children || `Theme: ${theme.name}`}
     </NavEntry>

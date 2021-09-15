@@ -1,15 +1,18 @@
-import React from 'react';
+/* eslint-disable react/require-default-props */
+import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import classnames from 'classnames';
 import logger from '../utils/logger';
 
 type Props = {
   href?: string;
   as?: string;
-  children: string;
+  children: string | [string, React.ReactNode];
   icon?: React.ReactNode;
   onClick?: (ev: React.MouseEvent) => void;
   active?: boolean;
+  tipRef?: React.Ref<HTMLAnchorElement | HTMLButtonElement>;
 };
 
 type LinkProps = {
@@ -40,7 +43,7 @@ function Inner({ icon, children }: InnerProps): JSX.Element {
       {icon != null &&
         (typeof icon === 'string' ? (
           <span
-            className={`dashboard-sidebar-menu-item-button-icon fa fa-${icon}`}
+            className={`dashboard-sidebar-menu-item-button-icon fas fa-${icon}`}
           />
         ) : (
           icon
@@ -52,26 +55,50 @@ function Inner({ icon, children }: InnerProps): JSX.Element {
   );
 }
 
-function LinkEl({
-  href,
-  as,
-  children,
-  active,
-  onClick,
-  icon,
-}: LinkProps): React.ReactElement<
-  React.PropsWithChildren<LinkProps>,
-  typeof Link
-> {
-  if (onClick) {
-    logger.debug(
-      '`onClick` not supported with href. If you need both, use raw render.',
+const LinkEl = React.forwardRef(
+  (
+    { onClick, href, as, active, icon, children }: LinkProps,
+    ref: React.ForwardedRef<HTMLAnchorElement | HTMLButtonElement>,
+  ) => {
+    if (onClick) {
+      logger.debug(
+        '`onClick` not supported with href. If you need both, use raw render.',
+      );
+    }
+    return (
+      <Link href={href} as={as}>
+        <a
+          data-tip={children}
+          ref={ref as React.ForwardedRef<HTMLAnchorElement>}
+          className={[
+            'button',
+            'dashboard-sidebar-menu-item-button',
+            active && 'dashboard-sidebar-menu-item-button_active',
+          ]
+            .filter((c) => c)
+            .join(' ')}
+        >
+          <Inner icon={icon}>{children}</Inner>
+        </a>
+      </Link>
     );
-  }
-  return (
-    <Link href={href} as={as}>
-      <a
-        title={children}
+  },
+);
+
+const ButtonEl = React.forwardRef(
+  (
+    { children, onClick, active, icon, as }: ButtonProps,
+    ref: React.ForwardedRef<HTMLAnchorElement | HTMLButtonElement>,
+  ): JSX.Element => {
+    if (as) {
+      logger.debug('`as` makes no sense without href.');
+    }
+    return (
+      <button
+        ref={ref as React.ForwardedRef<HTMLButtonElement>}
+        data-tip={children}
+        type="button"
+        onClick={onClick}
         className={[
           'button',
           'dashboard-sidebar-menu-item-button',
@@ -81,66 +108,80 @@ function LinkEl({
           .join(' ')}
       >
         <Inner icon={icon}>{children}</Inner>
-      </a>
-    </Link>
-  );
-}
-
-function ButtonEl({
-  children,
-  onClick,
-  active,
-  icon,
-  as,
-}: ButtonProps): JSX.Element {
-  if (as) {
-    logger.debug('`as` makes no sense without href.');
-  }
-  return (
-    <button
-      title={children}
-      type="button"
-      onClick={onClick}
-      className={[
-        'button',
-        'dashboard-sidebar-menu-item-button',
-        active && 'dashboard-sidebar-menu-item-button_active',
-      ]
-        .filter((c) => c)
-        .join(' ')}
-    >
-      <Inner icon={icon}>{children}</Inner>
-    </button>
-  );
-}
+      </button>
+    );
+  },
+);
 
 export default function NavEntry({
   href,
-  children,
+  children: rawChildren,
   icon,
   as,
   active: propActive,
   onClick,
+  tipRef,
 }: Props): JSX.Element {
   const router = useRouter();
-  const active = propActive == null ? href === router.pathname : propActive;
+  const pathRef = href?.split('#', 1)?.[0]?.split('?', 1)?.[0];
+  const active = propActive != null ? propActive : pathRef === router.pathname;
+  const open = useMemo(() => {
+    if (propActive != null) return propActive;
+    return pathRef == null ? false : router.pathname.startsWith(pathRef);
+  }, [propActive, pathRef, router.pathname]);
+  const [children, submenu] = useMemo(() => {
+    let c: string;
+    let rest: React.ReactNode = null;
+    if (typeof rawChildren === 'string') {
+      c = rawChildren;
+    } else if (
+      Array.isArray(rawChildren) &&
+      typeof rawChildren[0] === 'string'
+    ) {
+      [c, ...rest] = rawChildren;
+    } else {
+      c = '';
+      rest = rawChildren;
+    }
+    return [c, Array.isArray(rest) && rest.length === 1 ? rest[0] : rest];
+  }, [rawChildren]);
   let child: JSX.Element;
   if (href) {
     child = (
-      <LinkEl active={active} href={href} icon={icon} as={as} onClick={onClick}>
+      <LinkEl
+        active={active}
+        href={href}
+        icon={icon}
+        as={as}
+        onClick={onClick}
+        ref={tipRef}
+      >
         {children}
       </LinkEl>
     );
   } else {
     child = (
-      <ButtonEl active={active} icon={icon} as={as} onClick={onClick}>
+      <ButtonEl
+        active={active}
+        icon={icon}
+        as={as}
+        onClick={onClick}
+        ref={tipRef}
+      >
         {children}
       </ButtonEl>
     );
   }
   return (
-    <div className="dashboard-sidebar-menu-item" key={href}>
+    <div
+      className={classnames(
+        'dashboard-sidebar-menu-item',
+        submenu != null && open && 'dashboard-sidebar-menu-item_open',
+      )}
+      key={href}
+    >
       {child}
+      {open && submenu}
     </div>
   );
 }
