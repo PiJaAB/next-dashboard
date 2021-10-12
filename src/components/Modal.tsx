@@ -1,40 +1,53 @@
 // TODO: Disable body scroll.
 
-import React, { useEffect, useRef, useContext, useCallback } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+  useMemo,
+} from 'react';
 import ReactDOM from 'react-dom';
 
+import { XIcon } from '@heroicons/react/outline';
+
+import classNames from 'classnames';
 import LayoutContext from '../utils/layoutContext';
 import useInitialRender from '../hooks/useInitialRender';
 
 type Props = React.PropsWithChildren<{
-  id: string;
+  id?: string;
   active: boolean;
+  className?: string;
   close: () => void;
-  status?: string;
-  width?: 'extra-narrow' | 'narrow' | 'normal' | 'wide' | 'extra-wide';
   title?: string;
   header?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
+  style?: React.CSSProperties;
 }>;
 
-export default function Modal({ ...props }: Props): React.ReactPortal | null {
+let counter = 0;
+export default function Modal({
+  id: providedId,
+  active,
+  close,
+  title,
+  header,
+  content,
+  children,
+  footer,
+  className,
+  style,
+}: Props): React.ReactPortal | null {
   const context = useContext(LayoutContext);
   const initial = useInitialRender();
   const modalRef = useRef<HTMLDivElement | null>(null);
-
-  const {
-    id,
-    active,
-    close,
-    status,
-    width,
-    title,
-    header,
-    content,
-    children,
-    footer,
-  } = props;
+  const id = useMemo(() => {
+    if (providedId) return providedId;
+    counter += 1;
+    return `modal-${counter}`;
+  }, [providedId]);
 
   const click = useCallback(
     (event: MouseEvent) => {
@@ -78,37 +91,33 @@ export default function Modal({ ...props }: Props): React.ReactPortal | null {
   if (initial) return null;
   return ReactDOM.createPortal(
     <div
-      className={[
-        'modal-overlay',
-        `modal-overlay_id_${id}`,
-        active && 'modal-overlay_active',
-      ]
-        .filter((className) => className)
-        .join(' ')}
+      id={`${id}-wrapper`}
+      className={classNames(
+        'fixed left-0 right-0 top-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60',
+        !active && 'hidden',
+      )}
     >
       <div
-        className={[
-          'modal',
-          `modal_id_${id}`,
-          width && `modal_width_${width}`,
-          status && `modal_status_${status}`,
-          active && 'modal_active',
-        ]
-          .filter((className) => className)
-          .join(' ')}
+        className={classNames('card relative flex flex-col', className)}
+        style={style}
+        id={id}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={`${id}-modal-label`}
+        aria-labelledby={title ? `${id}-label` : undefined}
         ref={modalRef}
       >
-        <div className="modal-header">
+        <div className="mb-4">
           {title && (
-            <h2 id={`${id}-modal-label`} className="h5-size modal-header-title">
+            <h2 id={`${id}-label`} className="text-2xl">
               {title}
             </h2>
           )}
-          <button type="button" className="modal-header-button" onClick={close}>
-            <span className="fa fa-times" />
+          <button
+            type="button"
+            className="absolute top-4 right-4 w-6 h-6"
+            onClick={close}
+          >
+            <XIcon className="w-full h-full" />
           </button>
           {header}
         </div>

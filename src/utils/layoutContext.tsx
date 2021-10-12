@@ -1,25 +1,13 @@
-import React, {
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-  useContext,
-} from 'react';
-
-import { Theme } from './types';
-import configContext from './configContext';
-
-const DEFAULT_THEME: Theme = { name: 'Default', class: 'default' };
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 
 export interface ILayoutContext {
   getState<T>(key: string, defaultValue: T): T;
   setState<T>(key: string, value: T): void;
   getTemp<T>(key: string, defaultValue: T): T;
   setTemp<T>(key: string, value: T): void;
-  readonly theme: Theme;
-  readonly themes: readonly Theme[];
   readonly modalActive: boolean;
   setModalActive(valOrFn: ((oldVal: boolean) => boolean) | boolean): void;
+  defaultColorScheme: 'light' | 'dark';
 }
 
 const defaultContext: ILayoutContext = {
@@ -31,14 +19,9 @@ const defaultContext: ILayoutContext = {
     return defaultValue;
   },
   setTemp: (_, __) => {},
-  theme: DEFAULT_THEME,
-  themes: [DEFAULT_THEME],
   modalActive: false,
   setModalActive: () => {},
-};
-
-export type LayoutState = {
-  theme: Theme;
+  defaultColorScheme: 'light',
 };
 
 const LayoutContext = React.createContext<ILayoutContext>(defaultContext);
@@ -52,7 +35,26 @@ export function LayoutStateProvider({
 }: {
   children?: React.ReactNode;
 }): JSX.Element {
-  const configCtx = useContext(configContext);
+  const [defaultColorScheme, setDefaultColorScheme] = useState<
+    'light' | 'dark'
+  >('light');
+  useEffect(() => {
+    const colorSchemeQuery =
+      typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined'
+        ? window.matchMedia('(prefers-color-scheme: dark)')
+        : null;
+    if (colorSchemeQuery == null) {
+      return undefined;
+    }
+    setDefaultColorScheme(colorSchemeQuery.matches ? 'dark' : 'light');
+    const onChange = (ev: MediaQueryListEvent) => {
+      setDefaultColorScheme(ev.matches ? 'dark' : 'light');
+    };
+    colorSchemeQuery.addEventListener('change', onChange);
+    return () => {
+      colorSchemeQuery.removeEventListener('change', onChange);
+    };
+  }, []);
   const [persistentState, setPersistentState] = useState<Record<string, any>>(
     {},
   );
@@ -152,17 +154,11 @@ export function LayoutStateProvider({
       setState,
       getTemp,
       setTemp,
-      theme:
-        configCtx.themes.find(
-          (t: Theme) => t.class === getState('theme', DEFAULT_THEME).class,
-        ) ||
-        configCtx.themes[0] ||
-        DEFAULT_THEME,
-      themes: configCtx.themes,
       modalActive,
       setModalActive,
+      defaultColorScheme,
     }),
-    [configCtx.themes, getState, getTemp, modalActive, setState, setTemp],
+    [getState, getTemp, modalActive, setState, setTemp, defaultColorScheme],
   );
   return (
     <LayoutContext.Provider value={ctx}>{children}</LayoutContext.Provider>

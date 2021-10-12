@@ -1,5 +1,0 @@
-@mixin add-border {
-  @include var('border-color', 'border');
-  border-width: 1px;
-  border-style: solid;
-}

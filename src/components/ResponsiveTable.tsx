@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactTooltip from 'react-tooltip';
+import classNames from 'classnames';
 
 import FixedScrollbar from './FixedScrollbar';
 import TableHead from './ResponsiveTableHead';
@@ -117,25 +118,24 @@ const ResponsiveTable = <E extends {}, C>({
   renderCell = defaultRenderCell,
   emptyNode,
 }: Props<E, C>): JSX.Element => {
-  const textAlignClass = (alignment?: string) =>
-    alignment && `text-align-${alignment}`;
   useEffect(() => {
     ReactTooltip.rebuild();
   }, [data]);
-  const table = (cols: readonly TableColumn<E, C>[], type: string) => (
-    <table>
+  const table = (cols: readonly TableColumn<E, C>[], type: 'head' | 'body') => (
+    <table className={classNames(type === 'head' && 'table-fixed', 'w-full')}>
       <TableHead
         cols={cols as readonly HeadColumn<E, C>[]}
         columnKeyExtractor={columnKeyExtractor}
-        textAlignClass={textAlignClass}
         renderHead={renderHead}
         onColumnClick={onColumnClick}
+        type={type}
       />
       <tbody
         style={{
           lineHeight:
             typeof rowHeight === 'number' ? `${rowHeight}px` : rowHeight,
         }}
+        className="divide-y divide-gray-500"
       >
         {data &&
           data.map((entry) => (
@@ -170,7 +170,14 @@ const ResponsiveTable = <E extends {}, C>({
                         : htmlTooltip
                     }
                     key={columnKeyExtractor(column)}
-                    className={textAlignClass(column.textAlign)}
+                    className={classNames(
+                      column.textAlign === 'center' && 'text-center',
+                      column.textAlign === 'left' && 'text-left',
+                      column.textAlign === 'right' && 'text-right',
+                      column.textAlign === 'justify' && 'text-justify',
+                      type === 'head' &&
+                        'overflow-hidden overflow-ellipsis whitespace-nowrap',
+                    )}
                   >
                     {(column.renderBody || renderBody)(entry, column, false)}
                   </RenderCell>
@@ -182,22 +189,17 @@ const ResponsiveTable = <E extends {}, C>({
     </table>
   );
   return (
-    <div
-      style={style}
-      className={['responsive-table flex-direction-column', className]
-        .filter((c) => c)
-        .join(' ')}
-    >
-      <div className="display-flex">
-        <div className="responsive-table-head">
+    <div style={style} className={classNames('flex flex-col', className)}>
+      <div className="flex">
+        <div className="w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0 shadow-right z-10">
           {table([columns[0]], 'head')}
         </div>
-        <FixedScrollbar className="responsive-table-body">
+        <FixedScrollbar className="w-3/5 md:w-4/5">
           {table(columns.slice(1), 'body')}
         </FixedScrollbar>
       </div>
       {loading && (
-        <div className="loading-indicator-container">
+        <div className="flex justify-center items-center h-20">
           <LoadingIndicator />
         </div>
       )}

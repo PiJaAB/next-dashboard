@@ -1,21 +1,43 @@
-// TODO: Fix initial "at-top" body class.
-
-import React, { useEffect, useContext } from 'react';
-import Head from 'next/head';
-import classnames from 'classnames';
-
+/*
+  This example requires Tailwind CSS v2.0+ 
+  
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+*/
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import ReactTooltip from 'react-tooltip';
-import FullscreenExitButton from '../FullscreenExitButton';
-
 import LayoutContext from '../../utils/layoutContext';
-import useScrollFix from '../../hooks/useScrollFix';
-import Content from './Content';
-import Footer from './Footer';
-import Header from './Header';
-import Sidebar from './Sidebar';
 import SiteMessages from './SiteMessages';
-import ConfirmDialogue from './ConfirmDialogue';
+import LayoutSidebar from './Sidebar';
+import { UserMenuEntryProps } from './components/UserMenu';
+import Header from './Header';
 import useInitialRender from '../../hooks/useInitialRender';
+
+export const SEPARATOR = Symbol('separator');
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type SEPARATOR = typeof SEPARATOR;
+
+export type UserMenuListEntry =
+  | SEPARATOR
+  | UserMenuEntryProps
+  | null
+  | undefined;
 
 export type Props = React.PropsWithChildren<{
   id?: string;
@@ -26,213 +48,148 @@ export type Props = React.PropsWithChildren<{
     | 'wide'
     | 'extra-wide';
   header?: React.ReactNode;
-  sidebar?: React.ReactNode;
+  Sidebar?: React.ComponentType | boolean;
   footer?: boolean;
+  searchText?: string;
+  onSearchChange?: React.Dispatch<string>;
+  onSearch?: React.Dispatch<string>;
+  userMenu?: UserMenuListEntry[];
+  userTitle?: string;
+  userSubTitle?: string;
+  userProfilePic?: string;
 }>;
 
-function DashboardLayout({
+export default function DashboardLayout({
   children,
-  id,
-  contentContainerWidth,
-  header: propHeader = true,
-  sidebar,
-  footer = true,
+  searchText,
+  onSearchChange,
+  onSearch,
+  userMenu,
+  Sidebar,
+  userTitle,
+  userSubTitle,
+  userProfilePic,
 }: Props): JSX.Element {
-  const {
-    getState,
-    setState,
-    getTemp,
-    setTemp,
-    theme: { class: themeClass },
-    modalActive,
-  } = useContext(LayoutContext);
+  const { getState, getTemp, setTemp, defaultColorScheme } = useContext(
+    LayoutContext,
+  );
+  const colorScheme = getState('colorScheme', defaultColorScheme);
 
-  const isFullscreen = getTemp('isFullscreen', false);
-  const isFullscreenMoving = getTemp('fullscreen-cursor-moving', false);
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    window.document.body.classList.add(colorScheme);
+    return () => {
+      window.document.body.classList.remove(colorScheme);
+    };
+  }, [colorScheme]);
+  const sidebarOpen = getTemp('sidebarOpen', false);
+  const setSidebarOpen = useCallback(
+    (val: boolean) => setTemp('sidebarOpen', val),
+    [setTemp],
+  );
+  // The search elements need to be internally controlled if not
+  // controlled from the outside due to the fact that we have
+  // 2 different elements being search boxes that we want to
+  // be seamlessly in sync.
+  const [internalSearchText, setInternalSearchText] = useState('');
+  const displaySearchText =
+    searchText == null ? internalSearchText : searchText;
+  const controlled = searchText != null;
+  const showSearch = controlled || onSearchChange != null || onSearch != null;
+  const handleSearchChange = useMemo(() => {
+    if (controlled) {
+      return onSearchChange
+        ? (ev: React.ChangeEvent<HTMLInputElement>) => {
+            onSearchChange(ev.target.value);
+          }
+        : undefined;
+    }
+    return onSearchChange
+      ? (ev: React.ChangeEvent<HTMLInputElement>) => {
+          onSearchChange(ev.target.value);
+          setInternalSearchText(ev.target.value);
+        }
+      : (ev: React.ChangeEvent<HTMLInputElement>) => {
+          setInternalSearchText(ev.target.value);
+        };
+  }, [onSearchChange, controlled]);
+  const handleSearchDown = useMemo(() => {
+    return onSearch != null
+      ? (ev: React.KeyboardEvent<HTMLInputElement>) => {
+          if (ev.key === 'Enter' && !ev.shiftKey) {
+            onSearch(ev.currentTarget.value);
+          }
+        }
+      : undefined;
+  }, [onSearch]);
+  const groupedUserMenu = useMemo(() => {
+    const c = userMenu?.filter((m): m is NonNullable<typeof m> => m != null);
+    if (c == null) return [];
+    if (c.length > 0 && c[c.length - 1] === SEPARATOR) c.pop();
+    const grouped: UserMenuEntryProps[][] = [];
+    let current: UserMenuEntryProps[] = [];
+    c.forEach((e) => {
+      if (e === SEPARATOR) {
+        if (current.length > 0) {
+          grouped.push(current);
+          current = [];
+        }
+      } else {
+        current.push(e);
+      }
+    });
+    if (current.length > 0) grouped.push(current);
+    return grouped;
+  }, [userMenu]);
   const isInitial = useInitialRender();
 
-  const header = !isFullscreen && propHeader;
-
-  const sidebarActive = getState<boolean>('sidebarActive', false);
-  const sidebarCompact = getState<boolean>('sidebarCompact', false);
-
-  const toggleSidebarActive = () => {
-    setState<boolean>('sidebarActive', !sidebarActive);
-  };
-
-  useEffect(() => {
-    setTemp('hasHeader', Boolean(header));
-  }, [header, setTemp]);
-
-  useEffect(() => {
-    const { body } = document;
-    if (!body) return;
-    if (header && sidebar && sidebarActive) {
-      body.classList.add('dashboard_sidebar_active');
-    } else {
-      body.classList.remove('dashboard_sidebar_active');
-    }
-  }, [sidebar, sidebarActive, header]);
-
-  useEffect(() => {
-    const { body } = document;
-    if (!body) return;
-    if (isFullscreen) {
-      body.classList.add('dashboard_fullscreen');
-    } else {
-      body.classList.remove('dashboard_fullscreen');
-    }
-  }, [isFullscreen]);
-
-  useEffect(() => {
-    const { body } = document;
-    if (!body) return;
-    if (isFullscreenMoving) {
-      body.classList.add('dashboard_fullscreen_moving');
-    } else {
-      body.classList.remove('dashboard_fullscreen_moving');
-    }
-  }, [isFullscreenMoving]);
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return undefined;
-    const contentEl = document.body;
-    const patchedDocument = document as typeof document & {
-      mozFullscreen?: boolean;
-      webkitIsFullscreen?: boolean;
-    };
-    const updateFullscreen = () => {
-      const fullScreenMode = Boolean(
-        patchedDocument.fullscreenElement ||
-          // $FlowIssue: deprecated backwards compability
-          patchedDocument.fullscreen ||
-          // $FlowIssue: deprecated backwards compability
-          patchedDocument.mozFullscreen ||
-          // $FlowIssue: deprecated backwards compability
-          patchedDocument.webkitIsFullscreen,
-      );
-      if (fullScreenMode !== isFullscreen) {
-        setTemp('isFullscreen', fullScreenMode);
-      }
-    };
-    updateFullscreen();
-    document.addEventListener('mozfullscreenchange', updateFullscreen);
-    document.addEventListener('webkitfullscreenchange', updateFullscreen);
-    document.addEventListener('fullscreenchange', updateFullscreen);
-    if (contentEl) {
-      contentEl.addEventListener('mozfullscreenchange', updateFullscreen);
-      contentEl.addEventListener('webkitfullscreenchange', updateFullscreen);
-      contentEl.addEventListener('fullscreenchange', updateFullscreen);
-    }
-    return () => {
-      document.removeEventListener('mozfullscreenchange', updateFullscreen);
-      document.removeEventListener('webkitfullscreenchange', updateFullscreen);
-      document.removeEventListener('fullscreenchange', updateFullscreen);
-      if (contentEl) {
-        contentEl.removeEventListener('mozfullscreenchange', updateFullscreen);
-        contentEl.removeEventListener(
-          'webkitfullscreenchange',
-          updateFullscreen,
-        );
-        contentEl.removeEventListener('fullscreenchange', updateFullscreen);
-      }
-    };
-  }, [isFullscreen, setTemp]);
-
-  useEffect(() => {
-    const { body } = document;
-    if (!body) return;
-    if (sidebarCompact) {
-      body.classList.add('sidebar_compact');
-    } else {
-      body.classList.remove('sidebar_compact');
-    }
-  }, [sidebarCompact]);
-
-  useEffect(() => {
-    const { body } = document;
-    if (!body) return undefined;
-    let timeoutId: number | null = null;
-    const noTransition = () => {
-      if (timeoutId == null) {
-        body.classList.add('body_resizing');
-      } else {
-        window.clearTimeout(timeoutId);
-      }
-      timeoutId = window.setTimeout(() => {
-        body.classList.remove('body_resizing');
-        timeoutId = null;
-      }, 100);
-    };
-    window.addEventListener('resize', noTransition);
-    return () => {
-      body.classList.remove('body_resizing');
-      window.removeEventListener('resize', noTransition);
-    };
-  }, []);
-
-  useEffect(() => {
-    const atTop = () => {
-      const { body } = document;
-      if (!body) return;
-      if (window.scrollY <= 0) {
-        body.classList.add('body_at-top');
-      } else {
-        body.classList.remove('body_at-top');
-      }
-    };
-    if (modalActive) return undefined;
-    atTop();
-    window.addEventListener('scroll', atTop);
-    return () => {
-      if (!modalActive) window.removeEventListener('scroll', atTop);
-    };
-  }, [modalActive]);
-
-  const scrollRef = useScrollFix(modalActive);
-
   return (
-    <div
-      className={classnames(
-        'dashboard',
-        id && `dashboard_id-${id}`,
-        themeClass && `dashboard_theme-${themeClass}`,
-      )}
-      ref={scrollRef}
-    >
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css"
+    <div className="relative h-screen flex overflow-hidden">
+      {Sidebar !== false && (
+        <LayoutSidebar
+          groupedUserMenu={groupedUserMenu}
+          searchText={displaySearchText}
+          showSearch={showSearch}
+          handleSearchChange={handleSearchChange}
+          handleSearchDown={handleSearchDown}
+          setSidebarOpen={setSidebarOpen}
+          sidebarOpen={sidebarOpen}
+          SidebarComp={typeof Sidebar !== 'boolean' ? Sidebar : undefined}
+          userTitle={userTitle}
+          userSubTitle={userSubTitle}
+          userProfilePic={userProfilePic}
         />
-      </Head>
-      {header && (
-        <Header
-          sidebarActive={sidebarActive}
-          toggleSidebarActive={toggleSidebarActive}
-        >
-          {sidebar && (
-            <Sidebar
-              sidebarActive={sidebarActive}
-              sidebarCompact={sidebarCompact}
-            >
-              {sidebar}
-            </Sidebar>
-          )}
-          {header}
-        </Header>
       )}
-      <Content contentContainerWidth={contentContainerWidth} header={header}>
-        <SiteMessages />
-        {children}
-      </Content>
-      {footer && <Footer />}
-      <FullscreenExitButton />
-      <ConfirmDialogue />
+      {/* Main column */}
+      <div className="flex flex-col w-0 flex-1 min-h-screen overflow-hidden">
+        {/* Search header */}
+        {Sidebar !== false && (
+          <Header
+            setSidebarOpen={setSidebarOpen}
+            groupedUserMenu={groupedUserMenu}
+            searchText={displaySearchText}
+            showSearch={showSearch}
+            handleSearchChange={handleSearchChange}
+            handleSearchDown={handleSearchDown}
+            showMenuButton={Sidebar != null}
+            userTitle={userTitle}
+            userSubTitle={userSubTitle}
+            userProfilePic={userProfilePic}
+          />
+        )}
+        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
+          {children}
+          <SiteMessages />
+        </main>
+      </div>
       <div id="dashboard-modal-root" />
-      {!isInitial && <ReactTooltip className="tooltip-style" />}
+      {!isInitial && (
+        <ReactTooltip
+          className="tooltip-style"
+          type={colorScheme}
+          effect="solid"
+        />
+      )}
     </div>
   );
 }
-
-export default DashboardLayout;

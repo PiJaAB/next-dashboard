@@ -12,30 +12,29 @@ function siteMessageKey(m: SiteMessageType): string {
 function SiteMessages(): JSX.Element {
   return (
     <>
-      <noscript>
-        <div className="site-messages site-messages_no-script">
-          <SiteMessage
-            status="warning"
-            message="You need JavaScript enabled for this dashboard to function properly."
-          />
-        </div>
-      </noscript>
-      <DashboardContext.Consumer>
-        {(ctx) =>
-          ctx != null &&
-          ctx.siteMessages.length > 0 && (
-            <div className="site-messages">
-              {ctx.siteMessages.map((siteMessage) => (
+      <div className="fixed bottom-0 inset-x-0 pb-2 sm:pb-5">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 space-y-3">
+          <noscript>
+            <SiteMessage
+              status="warning"
+              message="You need JavaScript enabled for this dashboard to function properly."
+            />
+          </noscript>
+          <DashboardContext.Consumer>
+            {(ctx) =>
+              ctx != null &&
+              ctx.siteMessages.length > 0 &&
+              ctx.siteMessages.map((siteMessage) => (
                 <SiteMessage
                   key={siteMessageKey(siteMessage)}
                   {...siteMessage}
                   dismiss={() => ctx.dismissSiteMessage(siteMessage)}
                 />
-              ))}
-            </div>
-          )
-        }
-      </DashboardContext.Consumer>
+              ))
+            }
+          </DashboardContext.Consumer>
+        </div>
+      </div>
     </>
   );
 }

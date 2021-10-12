@@ -1,42 +1,41 @@
 import ReactTooltip from 'react-tooltip';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-
-import type { Theme } from '../utils/types';
+import { ColorSwatchIcon } from '@heroicons/react/outline';
 
 import NavEntry from './NavEntry';
 import LayoutContext from '../utils/layoutContext';
+import useS from '../hooks/useS';
 
-type Props = { children?: string; icon?: React.ReactNode };
+type Props = { children?: string };
 
-function rotateTheme(cur: Theme, themes: readonly Theme[]): Theme {
-  return themes[
-    (themes.findIndex((t) => t.class === cur.class) + 1) % themes.length
-  ];
-}
-
-export default function ThemeSelector({ children, icon }: Props): JSX.Element {
-  const ctx = useContext(LayoutContext);
-  const { setState, theme, themes } = ctx;
+export default function ThemeSelector({ children }: Props): JSX.Element {
+  const { getState, setState, defaultColorScheme } = useContext(LayoutContext);
+  const currentColorScheme = getState('colorScheme', defaultColorScheme);
   const ref = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
   const [reshow, setReshow] = useState(false);
   useEffect(() => {
     ReactTooltip.rebuild();
-  }, [theme]);
+  }, [currentColorScheme]);
   useEffect(() => {
     if (!reshow) return;
+    console.log(ref);
     setReshow(false);
     if (ref.current != null) ReactTooltip.show(ref.current);
   }, [reshow]);
+  const s = useS();
   return (
     <NavEntry
-      icon={icon || 'palette'}
+      Icon={ColorSwatchIcon}
       onClick={() => {
         setReshow(true);
-        setState<Theme>('theme', rotateTheme(theme, themes));
+        setState(
+          'colorScheme',
+          currentColorScheme === 'dark' ? 'light' : 'dark',
+        );
       }}
       tipRef={ref}
     >
-      {children || `Theme: ${theme.name}`}
+      {children || s(`theme-${currentColorScheme}`)}
     </NavEntry>
   );
 }

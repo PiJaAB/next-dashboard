@@ -15,7 +15,7 @@ class ErrorReporter {
     };
     errorEventEmitter.on('newListener', () => {
       if (errorEventEmitter.listenerCount('error') === 0) {
-        // "The EventEmitter instance will emit its own 'newListener' event before a listener is added to its internal array of listeners."
+        // The EventEmitter instance will emit its own 'newListener' event before a listener is added to its internal array of listeners.
         setTimeout(runQueue, 0);
       }
     });

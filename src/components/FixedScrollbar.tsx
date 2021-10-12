@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useMutationObserver } from '../hooks';
 
@@ -97,11 +97,14 @@ export default function FixedScrollbar({
   };
 
   return (
-    <div {...props} className={classnames('fixed-scrollbar', className)}>
+    <div
+      {...props}
+      className={classNames('relative overflow-x-hidden', className)}
+    >
       <div
         onScroll={handleScroll}
         ref={containerRef}
-        className="fixed-scrollbar__content"
+        className="overflow-x-auto"
       >
         {children}
       </div>
@@ -109,7 +112,7 @@ export default function FixedScrollbar({
         onScroll={handleFakeScroll}
         ref={fakeContainerRef}
         style={{ visibility: hide ? 'hidden' : 'visible' }}
-        className="fixed-scrollbar__scroll"
+        className="overflow-x-auto absolute w-full bottom-0"
       >
         <div style={{ width }} />
       </div>

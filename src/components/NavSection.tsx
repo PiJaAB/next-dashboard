@@ -1,19 +1,13 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 export type Props = React.PropsWithChildren<{
-  id?: string;
+  className?: string;
 }>;
 
-export default function NavSection({ children, id }: Props): JSX.Element {
-  return (
-    <nav
-      className={classnames(
-        'dashboard-sidebar-menu',
-        id && `dashboard-sidebar-menu_${id}`,
-      )}
-    >
-      {children}
-    </nav>
-  );
+export default function NavSection({
+  children,
+  className,
+}: Props): JSX.Element {
+  return <div className={classNames('space-y-1', className)}>{children}</div>;
 }

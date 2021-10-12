@@ -1,14 +1,10 @@
 import React from 'react';
-import { Branding, Theme } from './types';
+import { Branding } from './types';
 
 export const defaultContext = {
   branding: {
     name: 'PiJa Next',
   } as Branding,
-  themes: [
-    { name: 'Light', class: 'default' },
-    { name: 'Dark', class: 'dark' },
-  ] as readonly Theme[],
 };
 
 type DefaultConfig = typeof defaultContext;

@@ -17,29 +17,6 @@ export class NotImplementedError extends Error {
   }
 }
 
-export interface SuccessData<T = unknown> {
-  status: 'success';
-  error?: never;
-  value: T;
-  updating?: boolean;
-}
-
-export interface ErrorData {
-  status: 'error';
-  error: Error;
-  value?: never;
-  updating?: boolean;
-}
-
-export interface LoadingData {
-  status: 'loading';
-  error?: never;
-  value?: never;
-  updating?: boolean;
-}
-
-export type DataType<T = unknown> = SuccessData<T> | ErrorData | LoadingData;
-
 export interface Branding {
   /** Site name */
   name: string;
@@ -48,12 +25,8 @@ export interface Branding {
   /** URL to the homepage/index, used e.g. for the logo */
   homepageURL?: string;
   /** Base URL for location of logo images, or map from theme class name to logo URL */
-  logoURL?: string | Record<string, string>;
-}
-
-export interface Theme {
-  name: string;
-  class: string;
+  fullLogoURL?: string | Record<'light' | 'dark', string>;
+  squareLogoURL?: string | Record<'light' | 'dark', string>;
 }
 
 export interface SiteMessageType {
@@ -62,33 +35,6 @@ export interface SiteMessageType {
   status?: 'info' | 'warning' | 'error';
   count?: number;
 }
-
-export type Statuses = 'loading' | 'success' | 'error';
-
-export type DataProps<P extends { status?: Statuses }> = P & {
-  status: Statuses;
-};
-
-type DataArray = Array<DataExtra>;
-type DataRecord = Partial<{ [key: string]: DataExtra }>;
-
-export type DataExtra =
-  | DataRecord
-  | DataArray
-  | number
-  | string
-  | boolean
-  | null;
-
-export type PollingFetcher<Data extends {}> = {
-  runner:
-    | keyof Data
-    | (keyof Data)[]
-    | ((extra?: DataExtra) => Promise<unknown> | unknown);
-  parser?: (...args: any[]) => any;
-  interval?: number | ((extra?: DataExtra) => number | void);
-  id: keyof Data;
-};
 
 export type PathFragment = string | number | (string | number)[];
 
@@ -103,22 +49,3 @@ export type DashboardComponent<
   url?: string | ((router: NextRouter) => string) | void;
   title?: string | (() => string) | void;
 };
-
-export interface ISubscriptionProvider<Data extends {}> {
-  read<DS extends keyof Data>(
-    dataSource: DS,
-    extra?: DataExtra,
-  ): DataType<Data[DS]>;
-
-  subscribe<DS extends keyof Data>(
-    cb: (data: DataType<Data[DS]>) => void,
-    dataSource: DS,
-    extra?: DataExtra,
-  ): void;
-
-  unsubscribe<DS extends keyof Data>(
-    cb: (data: DataType<Data[DS]>) => void,
-    dataSource: DS,
-    extra?: DataExtra,
-  ): void;
-}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import ResponsiveTable, {
   defaultRenderHead,
   Props as TableProps,
@@ -56,7 +56,7 @@ function SortIcon<E extends {}, C>({
 }): JSX.Element {
   return (
     <span
-      className={classnames(
+      className={classNames(
         'fa',
         `fa-sort${
           sort && sort.field === col.field
@@ -131,7 +131,7 @@ const SortableTable = <
     <div>
       {title && <h2>{title}</h2>}
       <ResponsiveTable
-        className={['sortable-table', className].filter((c) => c).join(' ')}
+        className={classNames('sortable-table', className)}
         data={data}
         renderHead={wrappedRenderHead}
         onColumnClick={handleColumnClick}

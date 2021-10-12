@@ -1,15 +1,15 @@
 /* eslint-disable react/require-default-props */
-import React, { useMemo } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import logger from '../utils/logger';
 
 type Props = {
   href?: string;
   as?: string;
-  children: string | [string, React.ReactNode];
-  icon?: React.ReactNode;
+  children: string | [string, React.ReactElement<{ className?: string }>];
+  Icon?: React.ComponentType<React.ComponentProps<'svg'>>;
   onClick?: (ev: React.MouseEvent) => void;
   active?: boolean;
   tipRef?: React.Ref<HTMLAnchorElement | HTMLButtonElement>;
@@ -21,34 +21,52 @@ type LinkProps = {
   as?: Props['as'];
   children: string;
   active: Props['active'];
-  icon?: Props['icon'];
+  Icon?: Props['Icon'];
+  isCompact: boolean;
 };
 
 type ButtonProps = {
   children: string;
   onClick?: Props['onClick'];
   active: Props['active'];
-  icon?: Props['icon'];
+  Icon?: Props['Icon'];
   as?: Props['as'];
+  isCompact: boolean;
 };
 
 type InnerProps = {
   children: string;
-  icon?: Props['icon'];
+  Icon?: Props['Icon'];
+  active: Props['active'];
+  isCompact: boolean;
 };
 
-function Inner({ icon, children }: InnerProps): JSX.Element {
+const IsCompactContext = createContext(false);
+
+export const IsCompactProvider = IsCompactContext.Provider;
+
+function Inner({ Icon, children, active, isCompact }: InnerProps): JSX.Element {
   return (
     <>
-      {icon != null &&
-        (typeof icon === 'string' ? (
-          <span
-            className={`dashboard-sidebar-menu-item-button-icon fas fa-${icon}`}
-          />
-        ) : (
-          icon
-        ))}
-      <span className="dashboard-sidebar-menu-item-button-text">
+      {Icon != null && (
+        <Icon
+          className={classNames(
+            active
+              ? 'text-onPrimary-400'
+              : 'text-gray-600 dark:text-gray-300 group-hover:text-onPrimary-100 dark:group-hover:text-onPrimary-900',
+            !isCompact && 'mr-3',
+            'flex-shrink-0 h-6 w-6',
+          )}
+          aria-hidden="true"
+        />
+      )}
+      <span
+        className={classNames(
+          isCompact && 'sr-only',
+          !isCompact &&
+            'overflow-hidden overflow-ellipsis flex-grow flex-shrink text-left',
+        )}
+      >
         {children}
       </span>
     </>
@@ -57,7 +75,7 @@ function Inner({ icon, children }: InnerProps): JSX.Element {
 
 const LinkEl = React.forwardRef(
   (
-    { onClick, href, as, active, icon, children }: LinkProps,
+    { onClick, href, as, active, Icon, children, isCompact }: LinkProps,
     ref: React.ForwardedRef<HTMLAnchorElement | HTMLButtonElement>,
   ) => {
     if (onClick) {
@@ -68,17 +86,21 @@ const LinkEl = React.forwardRef(
     return (
       <Link href={href} as={as}>
         <a
-          data-tip={children}
+          className={classNames(
+            active
+              ? 'bg-primary-400 text-onPrimary-400'
+              : 'text-gray-600 dark:text-gray-300 hover:text-onPrimary-100 dark:hover:text-onPrimary-900 hover:bg-primary-100 dark:hover:bg-primary-900',
+            isCompact && 'justify-center',
+            'w-full group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+          )}
+          data-tip={isCompact ? children : undefined}
+          data-place="right"
+          aria-current={active ? 'page' : undefined}
           ref={ref as React.ForwardedRef<HTMLAnchorElement>}
-          className={[
-            'button',
-            'dashboard-sidebar-menu-item-button',
-            active && 'dashboard-sidebar-menu-item-button_active',
-          ]
-            .filter((c) => c)
-            .join(' ')}
         >
-          <Inner icon={icon}>{children}</Inner>
+          <Inner Icon={Icon} active={active} isCompact={isCompact}>
+            {children}
+          </Inner>
         </a>
       </Link>
     );
@@ -87,7 +109,7 @@ const LinkEl = React.forwardRef(
 
 const ButtonEl = React.forwardRef(
   (
-    { children, onClick, active, icon, as }: ButtonProps,
+    { children, onClick, active, Icon, as, isCompact }: ButtonProps,
     ref: React.ForwardedRef<HTMLAnchorElement | HTMLButtonElement>,
   ): JSX.Element => {
     if (as) {
@@ -96,27 +118,43 @@ const ButtonEl = React.forwardRef(
     return (
       <button
         ref={ref as React.ForwardedRef<HTMLButtonElement>}
-        data-tip={children}
         type="button"
         onClick={onClick}
-        className={[
-          'button',
-          'dashboard-sidebar-menu-item-button',
-          active && 'dashboard-sidebar-menu-item-button_active',
-        ]
-          .filter((c) => c)
-          .join(' ')}
+        className={classNames(
+          active
+            ? 'bg-primary-400 text-onPrimary-400'
+            : 'text-gray-600 dark:text-gray-300 hover:text-onPrimary-100 dark:hover:text-onPrimary-900 hover:bg-primary-100 dark:hover:bg-primary-900',
+          isCompact && 'justify-center',
+          'w-full group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+        )}
+        data-tip={isCompact ? children : undefined}
+        data-place="right"
+        aria-current={active}
       >
-        <Inner icon={icon}>{children}</Inner>
+        <Inner Icon={Icon} active={active} isCompact={isCompact}>
+          {children}
+        </Inner>
       </button>
     );
   },
 );
 
+function ClonedEl({
+  className,
+  el,
+}: {
+  className?: string;
+  el: React.ReactElement<{ className?: string }>;
+}) {
+  return React.cloneElement(el, {
+    className: classNames(el.props.className, className),
+  });
+}
+
 export default function NavEntry({
   href,
   children: rawChildren,
-  icon,
+  Icon,
   as,
   active: propActive,
   onClick,
@@ -125,25 +163,27 @@ export default function NavEntry({
   const router = useRouter();
   const pathRef = href?.split('#', 1)?.[0]?.split('?', 1)?.[0];
   const active = propActive != null ? propActive : pathRef === router.pathname;
+  const isCompact = useContext(IsCompactContext);
   const open = useMemo(() => {
     if (propActive != null) return propActive;
     return pathRef == null ? false : router.pathname.startsWith(pathRef);
   }, [propActive, pathRef, router.pathname]);
   const [children, submenu] = useMemo(() => {
     let c: string;
-    let rest: React.ReactNode = null;
+    let rest: React.ReactElement<{ className?: string }> | null = null;
     if (typeof rawChildren === 'string') {
       c = rawChildren;
     } else if (
       Array.isArray(rawChildren) &&
+      rawChildren.length === 2 &&
       typeof rawChildren[0] === 'string'
     ) {
-      [c, ...rest] = rawChildren;
+      [c, rest] = rawChildren;
     } else {
+      console.warn('Invalid children passed to NavEntry');
       c = '';
-      rest = rawChildren;
     }
-    return [c, Array.isArray(rest) && rest.length === 1 ? rest[0] : rest];
+    return [c, rest];
   }, [rawChildren]);
   let child: JSX.Element;
   if (href) {
@@ -151,10 +191,11 @@ export default function NavEntry({
       <LinkEl
         active={active}
         href={href}
-        icon={icon}
+        Icon={Icon}
         as={as}
         onClick={onClick}
         ref={tipRef}
+        isCompact={isCompact}
       >
         {children}
       </LinkEl>
@@ -163,10 +204,11 @@ export default function NavEntry({
     child = (
       <ButtonEl
         active={active}
-        icon={icon}
+        Icon={Icon}
         as={as}
         onClick={onClick}
         ref={tipRef}
+        isCompact={isCompact}
       >
         {children}
       </ButtonEl>
@@ -174,14 +216,14 @@ export default function NavEntry({
   }
   return (
     <div
-      className={classnames(
-        'dashboard-sidebar-menu-item',
-        submenu != null && open && 'dashboard-sidebar-menu-item_open',
+      className={classNames(
+        open &&
+          submenu != null &&
+          'bg-black bg-opacity-10 dark:bg-opacity-25 rounded-md',
       )}
-      key={href}
     >
       {child}
-      {open && submenu}
+      {open && submenu != null && <ClonedEl el={submenu} />}
     </div>
   );
 }

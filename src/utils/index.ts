@@ -11,8 +11,9 @@ export { default as createPersistentState } from './persistentState';
 export type { JsonType } from './persistentState';
 
 export * from './types';
-export { default as withData } from './withData';
 export * from './consoleError';
 export * from './silentError';
 export { default as errorReporter } from './errorReporter';
 export { default as confirmDialogue } from './confirmDialogue';
+export { default as dashboardStringsEnglish } from './dashboardStringsEnglish';
+export { default as dashboardStringsSwedish } from './dashboardStringsSwedish';

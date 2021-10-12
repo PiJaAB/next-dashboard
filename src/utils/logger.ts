@@ -9,7 +9,6 @@ function printError(level?: string, ...args: unknown[]) {
   console.error(`[NEXT-DASHBOARD]${level ? `[${level}]` : ''}`, ...args);
 }
 function printDir(...args: unknown[]) {
-  printLog('DIR');
   console.dir(...args);
 }
 /* eslint-enable no-console */

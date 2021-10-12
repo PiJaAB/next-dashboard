@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useRef, useEffect, useContext, useCallback } from 'react';
 import { useMutationObserver } from '../hooks';
 import { LayoutContext } from '../utils';
@@ -11,9 +12,9 @@ export type Column<E, C> = ColData<E, C> & {
 type HeadProps<E, C> = {
   cols: readonly Column<E, C>[];
   columnKeyExtractor: (column: Column<E, C>) => string;
-  textAlignClass: (alignment?: string) => undefined | string;
   renderHead: (column: Column<E, C>) => JSX.Element | null;
   onColumnClick?: (column: Column<E, C>) => void;
+  type: 'body' | 'head';
 };
 
 const HEADER_OFFSET = 70; // Header is 70px tall
@@ -34,9 +35,9 @@ const update = (el: HTMLTableSectionElement, hasHeader: boolean) => {
 const TableHead = <E extends {}, C>({
   cols,
   columnKeyExtractor,
-  textAlignClass,
   renderHead,
   onColumnClick,
+  type = 'body',
 }: HeadProps<E, C>): JSX.Element => {
   const headRef = useRef<HTMLTableSectionElement | null>(null);
   const ctx = useContext(LayoutContext);
@@ -77,7 +78,14 @@ const TableHead = <E extends {}, C>({
           return (
             <th
               key={columnKeyExtractor(column)}
-              className={textAlignClass(column.textAlign)}
+              className={classNames(
+                column.textAlign === 'center' && 'text-center',
+                column.textAlign === 'left' && 'text-left',
+                column.textAlign === 'right' && 'text-right',
+                column.textAlign === 'justify' && 'text-justify',
+                type === 'head' &&
+                  'overflow-hidden overflow-ellipsis whitespace-nowrap',
+              )}
               onClick={onColumnClick && (() => onColumnClick(column))}
             >
               {(column.renderHead || renderHead)(column)}
