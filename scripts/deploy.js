@@ -3,8 +3,9 @@
 const execa = require('execa');
 
 (async () => {
+  await execa('git', ['fetch', 'origin', 'build/v4']);
   await execa('git', ['checkout', '--detach']);
-  await execa('git', ['reset', '--soft', 'build/v4']);
+  await execa('git', ['reset', '--soft', 'origin/build/v4']);
   // Understand if it's dist or build folder
   await execa('git', ['add', '--all']);
   await execa('git', ['reset', '--', 'node_modules', 'scripts']);
