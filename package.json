@@ -41,7 +41,8 @@
     "build:clean": "rimraf dist",
     "build:tsc": "tsc",
     "prepack": "yarn build",
-    "test": "yarn run --silent lint"
+    "test": "yarn run --silent lint",
+    "deploy": "node scripts/deploy.js"
   },
   "nodemonConfig": {
     "ext": "js,jsx,ts,tsx,json,css,scss,svg",
@@ -72,6 +73,8 @@
     "@babel/node": "^7.5.5",
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
+    "@headlessui/react": "^1.4.1",
+    "@heroicons/react": "^1.0.4",
     "@types/classnames": "^2.2.11",
     "@types/next": "^9.0.0",
     "@types/node": "^14.14.22",
@@ -101,6 +104,7 @@
     "postcss": "^8.3.8",
     "postcss-import": "^14.0.2",
     "prettier": "^2.2.1",
+    "react-tooltip": "^4.2.21",
     "rimraf": "^3.0.2",
     "stylelint": "^13.0.0",
     "stylelint-config-recommended": "^3.0.0",
