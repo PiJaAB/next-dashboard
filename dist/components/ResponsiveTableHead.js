@@ -73,7 +73,7 @@ var TableHead = function (_a) {
     }, mutationCallback);
     return (react_1.default.createElement("thead", { ref: headRef },
         react_1.default.createElement("tr", null, cols.map(function (column) {
-            return (react_1.default.createElement("th", { key: columnKeyExtractor(column), className: (0, classnames_1.default)(column.textAlign === 'center' && 'text-center', column.textAlign === 'left' && 'text-left', column.textAlign === 'right' && 'text-right', column.textAlign === 'justify' && 'text-justify', type === 'head' &&
+            return (react_1.default.createElement("th", { key: columnKeyExtractor(column), className: (0, classnames_1.default)(column.textAlign === 'center' && 'text-center', column.textAlign === 'left' && 'text-start', column.textAlign === 'right' && 'text-end', column.textAlign === 'justify' && 'text-justify', type === 'head' &&
                     'overflow-hidden overflow-ellipsis whitespace-nowrap'), onClick: onColumnClick && (function () { return onColumnClick(column); }) }, (column.renderHead || renderHead)(column)));
         }))));
 };

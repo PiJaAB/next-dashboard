@@ -202,8 +202,13 @@ function DashboardProvider(_a) {
         function onError(err) {
             registerSiteMessage(err);
         }
+        function onReport(msg) {
+            registerSiteMessage(msg);
+        }
+        errorReporter_1.errorEventEmitter.on('report', onReport);
         errorReporter_1.errorEventEmitter.on('error', onError);
         return function () {
+            errorReporter_1.errorEventEmitter.off('report', onReport);
             errorReporter_1.errorEventEmitter.off('error', onError);
         };
     }, [registerSiteMessage]);

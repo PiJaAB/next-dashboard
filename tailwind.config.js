@@ -30,6 +30,7 @@ module.exports = {
       },
       boxShadow: {
         right: '6px 1px 7px -3px rgb(0 0 0 / 20%)',
+        left: '-6px 1px 7px -3px rgb(0 0 0 / 20%)',
       }
     },
   },
@@ -37,6 +38,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
+    require('tailwindcss-rtl'),
     require('@tailwindcss/forms'),
   ],
 }

@@ -52,9 +52,9 @@ function Inner(_a) {
     return (react_1.default.createElement(react_1.default.Fragment, null,
         Icon != null && (react_1.default.createElement(Icon, { className: (0, classnames_1.default)(active
                 ? 'text-onPrimary-400'
-                : 'text-gray-600 dark:text-gray-300 group-hover:text-onPrimary-100 dark:group-hover:text-onPrimary-900', !isCompact && 'mr-3', 'flex-shrink-0 h-6 w-6'), "aria-hidden": "true" })),
+                : 'text-gray-600 dark:text-gray-300 group-hover:text-onPrimary-100 dark:group-hover:text-onPrimary-900', !isCompact && 'me-3', 'flex-shrink-0 h-6 w-6'), "aria-hidden": "true" })),
         react_1.default.createElement("span", { className: (0, classnames_1.default)(isCompact && 'sr-only', !isCompact &&
-                'overflow-hidden overflow-ellipsis flex-grow flex-shrink text-left') }, children)));
+                'overflow-hidden overflow-ellipsis flex-grow flex-shrink text-start') }, children)));
 }
 var LinkEl = react_1.default.forwardRef(function (_a, ref) {
     var onClick = _a.onClick, href = _a.href, as = _a.as, active = _a.active, Icon = _a.Icon, children = _a.children, isCompact = _a.isCompact;

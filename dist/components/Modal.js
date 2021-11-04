@@ -25,7 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 var react_dom_1 = __importDefault(require("react-dom"));
-var outline_1 = require("@heroicons/react/outline");
+var XIcon_1 = __importDefault(require("@heroicons/react/outline/XIcon"));
 var classnames_1 = __importDefault(require("classnames"));
 var layoutContext_1 = __importDefault(require("../utils/layoutContext"));
 var useInitialRender_1 = __importDefault(require("../hooks/useInitialRender"));
@@ -75,7 +75,7 @@ function Modal(_a) {
             react_1.default.createElement("div", { className: "mb-4" },
                 title && (react_1.default.createElement("h2", { id: id + "-label", className: "text-2xl" }, title)),
                 react_1.default.createElement("button", { type: "button", className: "absolute top-4 right-4 w-6 h-6", onClick: close },
-                    react_1.default.createElement(outline_1.XIcon, { className: "w-full h-full" })),
+                    react_1.default.createElement(XIcon_1.default, { className: "w-full h-full" })),
                 header),
             react_1.default.createElement("div", { className: "modal-content" },
                 content,

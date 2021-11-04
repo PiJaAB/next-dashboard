@@ -22,7 +22,7 @@ function siteMessageKey(m) {
 }
 function SiteMessages() {
     return (react_1.default.createElement(react_1.default.Fragment, null,
-        react_1.default.createElement("div", { className: "fixed bottom-0 inset-x-0 pb-2 sm:pb-5" },
+        react_1.default.createElement("div", { className: "fixed bottom-0 inset-x-0 pb-2 sm:pb-5 z-50" },
             react_1.default.createElement("div", { className: "max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 space-y-3" },
                 react_1.default.createElement("noscript", null,
                     react_1.default.createElement(SiteMessage_1.default, { status: "warning", message: "You need JavaScript enabled for this dashboard to function properly." })),

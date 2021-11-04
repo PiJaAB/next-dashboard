@@ -40,7 +40,7 @@ var NextLink_1 = __importDefault(require("../../NextLink"));
 function UserMenuEntry(_a) {
     var href = _a.href, onClick = _a.onClick, disabled = _a.disabled, label = _a.label;
     var isDisabled = disabled || (href == null && onClick == null);
-    var className = 'block w-full text-left px-4 py-2 text-sm';
+    var className = 'block w-full text-start px-4 py-2 text-sm';
     if (isDisabled) {
         return (react_1.default.createElement(react_2.Menu.Button, { type: "button", className: (0, classnames_1.default)(className, 'text-gray-300 dark:text-gray-500 cursor-default'), disabled: true }, label));
     }
@@ -87,10 +87,10 @@ function UserMenu(_a) {
     }, [keyMap]);
     var cn = (0, classnames_1.default)(className, 'origin-top absolute mt-1 rounded-md shadow-lg bg-white dark:bg-gray-900 ring-1 ring-black ring-opacity-5 focus:outline-none z-10 mx-3 divide-y divide-gray-200 dark:divide-gray-700');
     return (react_1.default.createElement(react_2.Transition, { as: react_1.Fragment, enter: "transition ease-out duration-100", enterFrom: "transform opacity-0 scale-95", enterTo: "transform opacity-100 scale-100", leave: "transition ease-in duration-75", leaveFrom: "transform opacity-100 scale-100", leaveTo: "transform opacity-0 scale-95" }, groupedUserMenu.length > 0 ? (react_1.default.createElement(react_2.Menu.Items, { className: cn },
-        (userTitle != null || userSubTitle != null) && (react_1.default.createElement("div", { className: "w-full text-left px-4 py-2 select-none" },
+        (userTitle != null || userSubTitle != null) && (react_1.default.createElement("div", { className: "w-full text-start px-4 py-2 select-none" },
             userTitle != null && (react_1.default.createElement("span", { title: userTitle, className: "block text-gray-500 dark:text-gray-500 text-sm overflow-ellipsis overflow-hidden" }, userTitle)),
             userSubTitle != null && (react_1.default.createElement("span", { title: userSubTitle, className: "block text-gray-400 dark:text-gray-600 text-xs overflow-ellipsis overflow-hidden" }, userSubTitle)))),
-        groupedUserMenu.map(function (group) { return (react_1.default.createElement("div", { className: "py-1", key: getKey(group) }, group.map(function (entry) { return (react_1.default.createElement(UserMenuEntry, __assign({ key: getKey(entry) }, entry))); }))); }))) : (react_1.default.createElement("div", { className: cn }, (userTitle != null || userSubTitle != null) && (react_1.default.createElement("div", { className: "w-full text-left px-4 py-2 select-none" },
+        groupedUserMenu.map(function (group) { return (react_1.default.createElement("div", { className: "py-1", key: getKey(group) }, group.map(function (entry) { return (react_1.default.createElement(UserMenuEntry, __assign({ key: getKey(entry) }, entry))); }))); }))) : (react_1.default.createElement("div", { className: cn }, (userTitle != null || userSubTitle != null) && (react_1.default.createElement("div", { className: "w-full text-start px-4 py-2 select-none" },
         userTitle != null && (react_1.default.createElement("span", { title: userTitle, className: "block text-gray-500 dark:text-gray-500 text-sm overflow-ellipsis overflow-hidden" }, userTitle)),
         userSubTitle != null && (react_1.default.createElement("span", { title: userSubTitle, className: "block text-gray-400 dark:text-gray-600 text-xs overflow-ellipsis overflow-hidden" }, userSubTitle))))))));
 }

@@ -24,9 +24,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 var react_2 = require("@headlessui/react");
-var outline_1 = require("@heroicons/react/outline");
-var solid_1 = require("@heroicons/react/solid");
+var MenuAlt1Icon_1 = __importDefault(require("@heroicons/react/outline/MenuAlt1Icon"));
+var SearchIcon_1 = __importDefault(require("@heroicons/react/solid/SearchIcon"));
+var UserIcon_1 = __importDefault(require("@heroicons/react/solid/UserIcon"));
 var link_1 = __importDefault(require("next/link"));
+var classnames_1 = __importDefault(require("classnames"));
 var configContext_1 = __importDefault(require("../../utils/configContext"));
 var layoutContext_1 = __importDefault(require("../../utils/layoutContext"));
 var UserMenu_1 = __importDefault(require("./components/UserMenu"));
@@ -49,9 +51,9 @@ function Header(_a) {
     }, [showMenuButton, branding.squareLogoURL, colorScheme]);
     var s = (0, useS_1.default)();
     return (react_1.default.createElement("div", { className: "relative z-10 flex-shrink-0 flex h-16 bg-white dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 lg:hidden" },
-        showMenuButton && (react_1.default.createElement("button", { type: "button", className: "px-4 border-r border-gray-200 dark:border-gray-600 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden", onClick: function () { return setSidebarOpen(true); } },
+        showMenuButton && (react_1.default.createElement("button", { type: "button", className: "px-4 border-e border-gray-200 dark:border-gray-600 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden", onClick: function () { return setSidebarOpen(true); } },
             react_1.default.createElement("span", { className: "sr-only" }, s('open-sidebar')),
-            react_1.default.createElement(outline_1.MenuAlt1Icon, { className: "h-6 w-6", "aria-hidden": "true" }))),
+            react_1.default.createElement(MenuAlt1Icon_1.default, { className: "h-6 w-6", "aria-hidden": "true" }))),
         logoURL && (react_1.default.createElement(link_1.default, { href: branding.homepageURL || '/' },
             react_1.default.createElement("a", { className: "h-full" },
                 react_1.default.createElement("img", { src: logoURL, alt: branding.name, className: "h-full w-auto" })))),
@@ -59,21 +61,17 @@ function Header(_a) {
             showSearch && (react_1.default.createElement("div", { className: "flex-1 flex place-items-center" },
                 react_1.default.createElement("label", { htmlFor: "search-field", className: "sr-only" }, s('search')),
                 react_1.default.createElement("div", { className: "relative w-full text-gray-400 focus-within:text-gray-600 dark:text-gray-600 dark:focus-within:text-gray-300" },
-                    react_1.default.createElement("div", { className: "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" },
-                        react_1.default.createElement(solid_1.SearchIcon, { className: "h-5 w-5", "aria-hidden": "true" })),
-                    react_1.default.createElement("input", { id: "search-field", name: "search-field", className: "block w-full pl-9", placeholder: s('search'), type: "search", value: searchText, onChange: handleSearchChange, onKeyDown: handleSearchDown })))),
-            react_1.default.createElement("div", { className: "flex ml-auto items-center" }, (userTitle != null && userTitle !== '') ||
+                    react_1.default.createElement("div", { className: "absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none" },
+                        react_1.default.createElement(SearchIcon_1.default, { className: "h-5 w-5", "aria-hidden": "true" })),
+                    react_1.default.createElement("input", { id: "search-field", name: "search-field", className: "block w-full ps-9", placeholder: s('search'), type: "search", value: searchText, onChange: handleSearchChange, onKeyDown: handleSearchDown })))),
+            react_1.default.createElement("div", { className: "flex ms-auto items-center" }, (userTitle != null && userTitle !== '') ||
                 (userTitle != null && userTitle !== '') ||
-                groupedUserMenu.length > 0 ? (react_1.default.createElement(react_2.Menu, { as: "div", className: "ml-3 relative" },
+                groupedUserMenu.length > 0 ? (react_1.default.createElement(react_2.Menu, { as: "div", className: "ms-3 relative" },
                 react_1.default.createElement(react_2.Menu.Button, { className: "max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" },
                     react_1.default.createElement("span", { className: "sr-only" }, s('open-user-menu')),
-                    react_1.default.createElement("div", { "data-tip": userTitle, className: "w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 overflow-hidden relative" },
-                        react_1.default.createElement(solid_1.UserIcon, { className: "h-full w-auto text-gray-500" }),
-                        userProfilePic != null && (react_1.default.createElement("div", { className: "absolute inset-0 bg-cover bg-no-repeat", style: { backgroundImage: "url('" + userProfilePic + "')" } })))),
-                react_1.default.createElement(UserMenu_1.default, { className: "right-0 w-48", groupedUserMenu: groupedUserMenu, userTitle: userTitle, userSubTitle: userSubTitle }))) : (react_1.default.createElement("div", { className: "max-w-xs ml-3 relative flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" },
+                    react_1.default.createElement("div", { "data-tip": userTitle, className: (0, classnames_1.default)('w-10 h-10 rounded-full flex-shrink-0 overflow-hidden relative', userProfilePic == null && 'bg-gray-300') }, userProfilePic == null ? (react_1.default.createElement(UserIcon_1.default, { className: "h-full w-auto text-gray-500" })) : (react_1.default.createElement("div", { className: "absolute inset-0 bg-cover bg-no-repeat", style: { backgroundImage: "url('" + userProfilePic + "')" } })))),
+                react_1.default.createElement(UserMenu_1.default, { className: "right-0 w-48", groupedUserMenu: groupedUserMenu, userTitle: userTitle, userSubTitle: userSubTitle }))) : (react_1.default.createElement("div", { className: "max-w-xs ms-3 relative flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" },
                 react_1.default.createElement("span", { className: "sr-only" }, s('profile-picture')),
-                react_1.default.createElement("div", { "data-tip": userTitle, className: "w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 overflow-hidden relative" },
-                    react_1.default.createElement(solid_1.UserIcon, { className: "h-full w-auto text-gray-500" }),
-                    userProfilePic != null && (react_1.default.createElement("div", { className: "absolute inset-0 bg-cover bg-no-repeat", style: { backgroundImage: "url('" + userProfilePic + "')" } })))))))));
+                react_1.default.createElement("div", { "data-tip": userTitle, className: (0, classnames_1.default)('w-10 h-10 rounded-full flex-shrink-0 overflow-hidden relative', userProfilePic == null && 'bg-gray-300') }, userProfilePic == null ? (react_1.default.createElement(UserIcon_1.default, { className: "h-full w-auto text-gray-500" })) : (react_1.default.createElement("div", { className: "absolute inset-0 bg-cover bg-no-repeat", style: { backgroundImage: "url('" + userProfilePic + "')" } })))))))));
 }
 exports.default = Header;

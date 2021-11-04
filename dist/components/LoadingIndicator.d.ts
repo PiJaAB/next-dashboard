@@ -1,6 +1,5 @@
-import React from 'react';
+/// <reference types="react" />
 export declare type LoadingIconProps = {
-    backgroundColor?: string;
-    extraStyles?: React.CSSProperties;
+    className?: string;
 };
-export default function LoadingIndicator({ backgroundColor, extraStyles, }: LoadingIconProps): JSX.Element;
+export default function LoadingIndicator({ className, }: LoadingIconProps): JSX.Element;

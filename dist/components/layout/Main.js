@@ -135,11 +135,11 @@ function DashboardLayout(_a) {
         return grouped;
     }, [userMenu]);
     var isInitial = (0, useInitialRender_1.default)();
-    return (react_1.default.createElement("div", { className: "relative h-screen flex overflow-hidden" },
+    return (react_1.default.createElement("div", { className: "relative flex" },
         Sidebar !== false && (react_1.default.createElement(Sidebar_1.default, { groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, setSidebarOpen: setSidebarOpen, sidebarOpen: sidebarOpen, SidebarComp: typeof Sidebar !== 'boolean' ? Sidebar : undefined, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic })),
-        react_1.default.createElement("div", { className: "flex flex-col w-0 flex-1 min-h-screen overflow-hidden" },
+        react_1.default.createElement("div", { className: "flex flex-col w-0 flex-1 min-h-screen" },
             Sidebar !== false && (react_1.default.createElement(Header_1.default, { setSidebarOpen: setSidebarOpen, groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, showMenuButton: Sidebar != null, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic })),
-            react_1.default.createElement("main", { className: "flex-1 relative z-0 overflow-y-auto focus:outline-none" },
+            react_1.default.createElement("main", { className: "flex-1 focus:outline-none" },
                 children,
                 react_1.default.createElement(SiteMessages_1.default, null))),
         react_1.default.createElement("div", { id: "dashboard-modal-root" }),

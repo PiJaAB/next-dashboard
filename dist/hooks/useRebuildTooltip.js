@@ -38,34 +38,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_tooltip_1 = __importDefault(require("react-tooltip"));
+exports.RebuildTooltipProvider = void 0;
 var react_1 = __importStar(require("react"));
-var ColorSwatchIcon_1 = __importDefault(require("@heroicons/react/outline/ColorSwatchIcon"));
-var NavEntry_1 = __importDefault(require("./NavEntry"));
-var layoutContext_1 = __importDefault(require("../utils/layoutContext"));
-var useS_1 = __importDefault(require("../hooks/useS"));
-var useRebuildTooltip_1 = __importDefault(require("../hooks/useRebuildTooltip"));
-function ThemeSelector(_a) {
+var react_tooltip_1 = __importDefault(require("react-tooltip"));
+var context = (0, react_1.createContext)(function () { });
+function RebuildTooltipProvider(_a) {
     var children = _a.children;
-    var _b = (0, react_1.useContext)(layoutContext_1.default), getState = _b.getState, setState = _b.setState, defaultColorScheme = _b.defaultColorScheme;
-    var currentColorScheme = getState('colorScheme', defaultColorScheme);
-    var ref = (0, react_1.useRef)(null);
-    var _c = __read((0, react_1.useState)(false), 2), reshow = _c[0], setReshow = _c[1];
-    var rebuildTooltip = (0, useRebuildTooltip_1.default)();
+    var _b = __read((0, react_1.useState)(false), 2), shouldRebuild = _b[0], setShouldRebuild = _b[1];
     (0, react_1.useEffect)(function () {
-        rebuildTooltip();
-    }, [currentColorScheme, rebuildTooltip]);
-    (0, react_1.useEffect)(function () {
-        if (!reshow)
-            return;
-        setReshow(false);
-        if (ref.current != null)
-            react_tooltip_1.default.show(ref.current);
-    }, [reshow]);
-    var s = (0, useS_1.default)();
-    return (react_1.default.createElement(NavEntry_1.default, { Icon: ColorSwatchIcon_1.default, onClick: function () {
-            setReshow(true);
-            setState('colorScheme', currentColorScheme === 'dark' ? 'light' : 'dark');
-        }, tipRef: ref }, children || s("theme-" + currentColorScheme)));
+        if (shouldRebuild) {
+            react_tooltip_1.default.rebuild();
+            setShouldRebuild(false);
+        }
+    }, [shouldRebuild]);
+    var value = (0, react_1.useCallback)(function () {
+        setShouldRebuild(true);
+    }, []);
+    return react_1.default.createElement(context.Provider, { value: value }, children);
 }
-exports.default = ThemeSelector;
+exports.RebuildTooltipProvider = RebuildTooltipProvider;
+function useRebuildTooltip() {
+    return (0, react_1.useContext)(context);
+}
+exports.default = useRebuildTooltip;
