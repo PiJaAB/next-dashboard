@@ -1,10 +1,11 @@
 import ReactTooltip from 'react-tooltip';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ColorSwatchIcon } from '@heroicons/react/outline';
+import ColorSwatchIcon from '@heroicons/react/outline/ColorSwatchIcon';
 
 import NavEntry from './NavEntry';
 import LayoutContext from '../utils/layoutContext';
 import useS from '../hooks/useS';
+import useRebuildTooltip from '../hooks/useRebuildTooltip';
 
 type Props = { children?: string };
 
@@ -13,12 +14,12 @@ export default function ThemeSelector({ children }: Props): JSX.Element {
   const currentColorScheme = getState('colorScheme', defaultColorScheme);
   const ref = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
   const [reshow, setReshow] = useState(false);
+  const rebuildTooltip = useRebuildTooltip();
   useEffect(() => {
-    ReactTooltip.rebuild();
-  }, [currentColorScheme]);
+    rebuildTooltip();
+  }, [currentColorScheme, rebuildTooltip]);
   useEffect(() => {
     if (!reshow) return;
-    console.log(ref);
     setReshow(false);
     if (ref.current != null) ReactTooltip.show(ref.current);
   }, [reshow]);

@@ -1,10 +1,8 @@
 import React from 'react';
-import {
-  ExclamationIcon,
-  ExclamationCircleIcon,
-  XCircleIcon,
-  XIcon,
-} from '@heroicons/react/outline';
+import ExclamationIcon from '@heroicons/react/outline/ExclamationIcon';
+import ExclamationCircleIcon from '@heroicons/react/outline/ExclamationCircleIcon';
+import XCircleIcon from '@heroicons/react/outline/XCircleIcon';
+import XIcon from '@heroicons/react/outline/XIcon';
 import classNames from 'classnames';
 import type { SiteMessageType } from '../utils/types';
 import useS from '../hooks/useS';
@@ -56,7 +54,7 @@ function SiteMessage({
               <XCircleIcon className="h-6 w-6 text-white" aria-hidden="true" />
             )}
           </span>
-          <p className="ml-3 font-medium text-white">
+          <p className="ms-3 font-medium text-white">
             {title || s(status)}: {message}
           </p>
         </div>
@@ -75,11 +73,11 @@ function SiteMessage({
           </div>
         )}
         {dismiss && (
-          <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
+          <div className="order-2 flex-shrink-0 sm:order-3 sm:ms-2">
             <button
               type="button"
               className={classNames(
-                '-mr-1 flex p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white',
+                '-me-1 flex p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white',
                 status === 'info' && 'hover:bg-indigo-500',
                 status === 'error' && 'hover:bg-red-500',
                 status === 'warning' && 'hover:bg-yellow-500',

@@ -18,7 +18,7 @@ function UserMenuEntry({
   label,
 }: UserMenuEntryProps): JSX.Element {
   const isDisabled = disabled || (href == null && onClick == null);
-  const className = 'block w-full text-left px-4 py-2 text-sm';
+  const className = 'block w-full text-start px-4 py-2 text-sm';
   if (isDisabled) {
     return (
       <Menu.Button
@@ -133,7 +133,7 @@ export default function UserMenu({
       {groupedUserMenu.length > 0 ? (
         <Menu.Items className={cn}>
           {(userTitle != null || userSubTitle != null) && (
-            <div className="w-full text-left px-4 py-2 select-none">
+            <div className="w-full text-start px-4 py-2 select-none">
               {userTitle != null && (
                 <span
                   title={userTitle}
@@ -163,7 +163,7 @@ export default function UserMenu({
       ) : (
         <div className={cn}>
           {(userTitle != null || userSubTitle != null) && (
-            <div className="w-full text-left px-4 py-2 select-none">
+            <div className="w-full text-start px-4 py-2 select-none">
               {userTitle != null && (
                 <span
                   title={userTitle}

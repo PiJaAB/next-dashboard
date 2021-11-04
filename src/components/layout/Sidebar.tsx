@@ -1,14 +1,14 @@
 import { Dialog, Menu, Transition } from '@headlessui/react';
-import {
-  XIcon,
-  ArrowSmLeftIcon,
-  ArrowSmRightIcon,
-} from '@heroicons/react/outline';
-import { SearchIcon, SelectorIcon, UserIcon } from '@heroicons/react/solid';
+import XIcon from '@heroicons/react/outline/XIcon';
+import ArrowSmLeftIcon from '@heroicons/react/outline/ArrowSmLeftIcon';
+import ArrowSmRightIcon from '@heroicons/react/outline/ArrowSmRightIcon';
+import SearchIcon from '@heroicons/react/solid/SearchIcon';
+import SelectorIcon from '@heroicons/react/solid/SelectorIcon';
+import UserIcon from '@heroicons/react/solid/UserIcon';
 import React, { Fragment, useContext, useEffect } from 'react';
-import ReactTooltip from 'react-tooltip';
 import classNames from 'classnames';
 import Link from 'next/link';
+import useRebuildTooltip from '../../hooks/useRebuildTooltip';
 import ConfigContext from '../../utils/configContext';
 import LayoutContext from '../../utils/layoutContext';
 import useS from '../../hooks/useS';
@@ -47,12 +47,16 @@ function UserInfo({
   if (compact) {
     return (
       <div
-        className="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 overflow-hidden relative"
+        className={classNames(
+          'w-10 h-10 rounded-full flex-shrink-0 overflow-hidden relative',
+          pictureUrl == null && 'bg-gray-300',
+        )}
         data-tip={title}
         data-place="right"
       >
-        <UserIcon className="h-full w-auto text-gray-500" />
-        {pictureUrl != null && (
+        {pictureUrl == null ? (
+          <UserIcon className="h-full w-auto text-gray-500" />
+        ) : (
           <div
             className="absolute inset-0 bg-cover bg-no-repeat"
             style={{ backgroundImage: `url('${pictureUrl}')` }}
@@ -63,10 +67,16 @@ function UserInfo({
   }
   return (
     <>
-      <span className="flex flex-1 min-w-0 items-center justify-center space-x-3">
-        <div className="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 overflow-hidden relative">
-          <UserIcon className="h-full w-auto text-gray-500" />
-          {pictureUrl != null && (
+      <span className="flex flex-1 min-w-0 items-center justify-center space-s-3">
+        <div
+          className={classNames(
+            'w-10 h-10 rounded-full flex-shrink-0 overflow-hidden relative',
+            pictureUrl == null && 'bg-gray-300',
+          )}
+        >
+          {pictureUrl == null ? (
+            <UserIcon className="h-full w-auto text-gray-500" />
+          ) : (
             <div
               className="absolute inset-0 bg-cover bg-no-repeat"
               style={{ backgroundImage: `url('${pictureUrl}')` }}
@@ -116,8 +126,8 @@ function UserAccountArea({
   }
   if (groupedUserMenu.length === 0) {
     return (
-      <div className="px-3 mt-6 relative inline-block text-left">
-        <div className="group w-full rounded-md px-3.5 py-2 text-sm text-left font-medium text-gray-700">
+      <div className="px-3 mt-6 relative inline-block text-start">
+        <div className="group w-full rounded-md px-3.5 py-2 text-sm text-start font-medium text-gray-700">
           <span className="flex w-full justify-between items-center">
             <UserInfo
               title={userTitle}
@@ -131,8 +141,8 @@ function UserAccountArea({
     );
   }
   return (
-    <Menu as="div" className="px-3 mt-6 relative inline-block text-left">
-      <Menu.Button className="group w-full rounded-md px-3.5 py-2 text-sm text-left font-medium text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-purple-500 dark:focus:ring-offset-gray-900 dark:focus:ring-purple-500">
+    <Menu as="div" className="px-3 mt-6 relative inline-block text-start">
+      <Menu.Button className="group w-full rounded-md px-3.5 py-2 text-sm text-start font-medium text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-purple-500 dark:focus:ring-offset-gray-900 dark:focus:ring-purple-500">
         <span className="flex w-full justify-between items-center">
           <UserInfo
             title={userTitle}
@@ -145,8 +155,8 @@ function UserAccountArea({
       </Menu.Button>
       <UserMenu
         className={classNames(
-          compact && 'left-0 w-48',
-          !compact && 'right-0 left-0',
+          compact && 'start-0 w-48',
+          !compact && 'end-0 start-0',
         )}
         userTitle={compact ? userTitle : undefined}
         userSubTitle={compact ? userSubTitle : undefined}
@@ -211,7 +221,7 @@ function Brand({ compact }: { compact: boolean }): JSX.Element | null {
       <Link href={branding.homepageURL || '/'}>
         <a className="flex items-center flex-shrink-0 px-6">
           <img
-            className="h-8 w-auto mr-2"
+            className="h-8 w-auto me-2"
             src={squareLogoUrl}
             alt={branding.name}
           />
@@ -243,12 +253,19 @@ export default function Sidebar({
   const { getState, setState } = useContext(LayoutContext);
   const isCompact = getState('compactSidebar', false);
   const s = useS();
+  const rebuildTooltip = useRebuildTooltip();
   useEffect(() => {
-    ReactTooltip.rebuild();
-  }, [isCompact]);
+    rebuildTooltip();
+  }, [isCompact, rebuildTooltip]);
 
   return (
-    <>
+    <div
+      className={classNames(
+        'z-20',
+        !isCompact && 'lg:w-64',
+        isCompact && 'lg:w-24',
+      )}
+    >
       {SidebarComp != null && (
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
@@ -286,10 +303,10 @@ export default function Sidebar({
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <div className="absolute top-0 right-0 -mr-12 pt-2">
+                  <div className="absolute top-0 right-0 -me-12 pt-2">
                     <button
                       type="button"
-                      className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                      className="ms-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                       onClick={() => setSidebarOpen(false)}
                     >
                       <span className="sr-only">{s('close-sidebar')}</span>
@@ -301,10 +318,11 @@ export default function Sidebar({
                   </div>
                 </Transition.Child>
                 <Brand compact={false} />
-                <div className="mt-5 flex-1 h-0 overflow-y-auto">
-                  <nav className="px-2">
-                    <SidebarComp />
-                  </nav>
+                <div className="px-2 mt-5 divide-y divide-gray-300 dark:divide-gray-500">
+                  <SidebarComp />
+                  <NavSection className="py-2">
+                    <ThemeSelector />
+                  </NavSection>
                 </div>
               </div>
             </Transition.Child>
@@ -317,10 +335,10 @@ export default function Sidebar({
 
       {/* Static sidebar for desktop */}
       <IsCompactProvider value={isCompact}>
-        <div className="hidden lg:flex lg:flex-shrink-0">
+        <div className="hidden h-full lg:flex lg:flex-shrink-0 fixed h-screen">
           <div
             className={classNames(
-              'flex flex-col border-r border-gray-200 dark:border-gray-700 pt-5 pb-4 bg-gray-100 dark:bg-gray-700',
+              'flex flex-col border-e border-gray-200 dark:border-gray-700 pt-5 pb-4 bg-gray-100 dark:bg-gray-700',
               !isCompact && 'w-64',
               isCompact && 'w-24',
             )}
@@ -342,11 +360,11 @@ export default function Sidebar({
                   </label>
                   <div className="mt-1 relative rounded-md shadow-sm">
                     <div
-                      className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                      className="absolute inset-y-0 left-0 ps-3 flex items-center pointer-events-none"
                       aria-hidden="true"
                     >
                       <SearchIcon
-                        className="mr-3 h-4 w-4 text-gray-400"
+                        className="me-3 h-4 w-4 text-gray-400"
                         aria-hidden="true"
                       />
                     </div>
@@ -354,7 +372,7 @@ export default function Sidebar({
                       type="text"
                       name="search"
                       id="search"
-                      className="block w-full pl-9"
+                      className="block w-full ps-9"
                       placeholder={s('search')}
                       value={searchText}
                       onChange={handleSearchChange}
@@ -379,6 +397,6 @@ export default function Sidebar({
           </div>
         </div>
       </IsCompactProvider>
-    </>
+    </div>
   );
 }

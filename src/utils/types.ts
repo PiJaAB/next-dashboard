@@ -44,7 +44,7 @@ export type DashboardInitialPropsContext = NextPageContext;
 
 export type DashboardComponent<
   P extends {},
-  I extends {} = {}
+  I extends {} = {},
 > = NextComponentType<DashboardInitialPropsContext, I, P> & {
   url?: string | ((router: NextRouter) => string) | void;
   title?: string | (() => string) | void;

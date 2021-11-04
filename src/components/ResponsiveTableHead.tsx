@@ -80,8 +80,8 @@ const TableHead = <E extends {}, C>({
               key={columnKeyExtractor(column)}
               className={classNames(
                 column.textAlign === 'center' && 'text-center',
-                column.textAlign === 'left' && 'text-left',
-                column.textAlign === 'right' && 'text-right',
+                column.textAlign === 'left' && 'text-start',
+                column.textAlign === 'right' && 'text-end',
                 column.textAlign === 'justify' && 'text-justify',
                 type === 'head' &&
                   'overflow-hidden overflow-ellipsis whitespace-nowrap',

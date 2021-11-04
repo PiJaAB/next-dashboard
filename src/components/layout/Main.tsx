@@ -70,9 +70,8 @@ export default function DashboardLayout({
   userSubTitle,
   userProfilePic,
 }: Props): JSX.Element {
-  const { getState, getTemp, setTemp, defaultColorScheme } = useContext(
-    LayoutContext,
-  );
+  const { getState, getTemp, setTemp, defaultColorScheme } =
+    useContext(LayoutContext);
   const colorScheme = getState('colorScheme', defaultColorScheme);
 
   useEffect(() => {
@@ -144,7 +143,7 @@ export default function DashboardLayout({
   const isInitial = useInitialRender();
 
   return (
-    <div className="relative h-screen flex overflow-hidden">
+    <div className="relative flex">
       {Sidebar !== false && (
         <LayoutSidebar
           groupedUserMenu={groupedUserMenu}
@@ -161,7 +160,7 @@ export default function DashboardLayout({
         />
       )}
       {/* Main column */}
-      <div className="flex flex-col w-0 flex-1 min-h-screen overflow-hidden">
+      <div className="flex flex-col w-0 flex-1 min-h-screen">
         {/* Search header */}
         {Sidebar !== false && (
           <Header
@@ -177,7 +176,7 @@ export default function DashboardLayout({
             userProfilePic={userProfilePic}
           />
         )}
-        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
+        <main className="flex-1 focus:outline-none">
           {children}
           <SiteMessages />
         </main>

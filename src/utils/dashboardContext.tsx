@@ -183,8 +183,13 @@ export function DashboardProvider({
     function onError(err: Error) {
       registerSiteMessage(err);
     }
+    function onReport(msg: SiteMessageType) {
+      registerSiteMessage(msg);
+    }
+    errorEventEmitter.on('report', onReport);
     errorEventEmitter.on('error', onError);
     return () => {
+      errorEventEmitter.off('report', onReport);
       errorEventEmitter.off('error', onError);
     };
   }, [registerSiteMessage]);

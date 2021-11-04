@@ -54,7 +54,7 @@ function Inner({ Icon, children, active, isCompact }: InnerProps): JSX.Element {
             active
               ? 'text-onPrimary-400'
               : 'text-gray-600 dark:text-gray-300 group-hover:text-onPrimary-100 dark:group-hover:text-onPrimary-900',
-            !isCompact && 'mr-3',
+            !isCompact && 'me-3',
             'flex-shrink-0 h-6 w-6',
           )}
           aria-hidden="true"
@@ -64,7 +64,7 @@ function Inner({ Icon, children, active, isCompact }: InnerProps): JSX.Element {
         className={classNames(
           isCompact && 'sr-only',
           !isCompact &&
-            'overflow-hidden overflow-ellipsis flex-grow flex-shrink text-left',
+            'overflow-hidden overflow-ellipsis flex-grow flex-shrink text-start',
         )}
       >
         {children}

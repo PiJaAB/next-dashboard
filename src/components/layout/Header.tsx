@@ -1,8 +1,10 @@
 import React, { useContext, useMemo } from 'react';
 import { Menu } from '@headlessui/react';
-import { MenuAlt1Icon } from '@heroicons/react/outline';
-import { SearchIcon, UserIcon } from '@heroicons/react/solid';
+import MenuAlt1Icon from '@heroicons/react/outline/MenuAlt1Icon';
+import SearchIcon from '@heroicons/react/solid/SearchIcon';
+import UserIcon from '@heroicons/react/solid/UserIcon';
 import Link from 'next/link';
+import classNames from 'classnames';
 import ConfigContext from '../../utils/configContext';
 import LayoutContext from '../../utils/layoutContext';
 import UserMenu, { UserMenuEntryProps } from './components/UserMenu';
@@ -58,7 +60,7 @@ export default function Header({
       {showMenuButton && (
         <button
           type="button"
-          className="px-4 border-r border-gray-200 dark:border-gray-600 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden"
+          className="px-4 border-e border-gray-200 dark:border-gray-600 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden"
           onClick={() => setSidebarOpen(true)}
         >
           <span className="sr-only">{s('open-sidebar')}</span>
@@ -79,13 +81,13 @@ export default function Header({
               {s('search')}
             </label>
             <div className="relative w-full text-gray-400 focus-within:text-gray-600 dark:text-gray-600 dark:focus-within:text-gray-300">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <div className="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none">
                 <SearchIcon className="h-5 w-5" aria-hidden="true" />
               </div>
               <input
                 id="search-field"
                 name="search-field"
-                className="block w-full pl-9"
+                className="block w-full ps-9"
                 placeholder={s('search')}
                 type="search"
                 value={searchText}
@@ -95,20 +97,24 @@ export default function Header({
             </div>
           </div>
         )}
-        <div className="flex ml-auto items-center">
+        <div className="flex ms-auto items-center">
           {/* Profile dropdown */}
           {(userTitle != null && userTitle !== '') ||
           (userTitle != null && userTitle !== '') ||
           groupedUserMenu.length > 0 ? (
-            <Menu as="div" className="ml-3 relative">
+            <Menu as="div" className="ms-3 relative">
               <Menu.Button className="max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                 <span className="sr-only">{s('open-user-menu')}</span>
                 <div
                   data-tip={userTitle}
-                  className="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 overflow-hidden relative"
+                  className={classNames(
+                    'w-10 h-10 rounded-full flex-shrink-0 overflow-hidden relative',
+                    userProfilePic == null && 'bg-gray-300',
+                  )}
                 >
-                  <UserIcon className="h-full w-auto text-gray-500" />
-                  {userProfilePic != null && (
+                  {userProfilePic == null ? (
+                    <UserIcon className="h-full w-auto text-gray-500" />
+                  ) : (
                     <div
                       className="absolute inset-0 bg-cover bg-no-repeat"
                       style={{ backgroundImage: `url('${userProfilePic}')` }}
@@ -124,14 +130,18 @@ export default function Header({
               />
             </Menu>
           ) : (
-            <div className="max-w-xs ml-3 relative flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+            <div className="max-w-xs ms-3 relative flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
               <span className="sr-only">{s('profile-picture')}</span>
               <div
                 data-tip={userTitle}
-                className="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 overflow-hidden relative"
+                className={classNames(
+                  'w-10 h-10 rounded-full flex-shrink-0 overflow-hidden relative',
+                  userProfilePic == null && 'bg-gray-300',
+                )}
               >
-                <UserIcon className="h-full w-auto text-gray-500" />
-                {userProfilePic != null && (
+                {userProfilePic == null ? (
+                  <UserIcon className="h-full w-auto text-gray-500" />
+                ) : (
                   <div
                     className="absolute inset-0 bg-cover bg-no-repeat"
                     style={{ backgroundImage: `url('${userProfilePic}')` }}

@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 
-import { XIcon } from '@heroicons/react/outline';
+import XIcon from '@heroicons/react/outline/XIcon';
 
 import classNames from 'classnames';
 import LayoutContext from '../utils/layoutContext';

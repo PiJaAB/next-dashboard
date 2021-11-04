@@ -12,7 +12,7 @@ function siteMessageKey(m: SiteMessageType): string {
 function SiteMessages(): JSX.Element {
   return (
     <>
-      <div className="fixed bottom-0 inset-x-0 pb-2 sm:pb-5">
+      <div className="fixed bottom-0 inset-x-0 pb-2 sm:pb-5 z-50">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 space-y-3">
           <noscript>
             <SiteMessage
