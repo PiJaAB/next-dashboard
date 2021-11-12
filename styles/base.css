@@ -74,4 +74,28 @@
       @apply shadow-left; 
     }
   }
+
+  @variants responsive {
+    [dir="rtl"] .rtl {
+      &\:flip {
+        @apply transform;
+        --tw-scale-x: -1;
+      }
+      &\:rotate {
+        @apply transform;
+        --tw-rotate: 180;
+      }
+    }
+
+    [dir="ltr"] .ltr {
+      &\:flip {
+        @apply transform;
+        --tw-scale-x: -1;
+      }
+      &\:rotate {
+        @apply transform;
+        --tw-rotate: 180;
+      }
+    }
+  }
 }

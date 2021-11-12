@@ -44,6 +44,7 @@ function compareSitemessages(
   if (m1.status !== m2.status) return false;
   if (m1.title !== m2.title) return false;
   if (m1.message !== m2.message) return false;
+  if (m1.timer !== m2.timer) return false;
   return true;
 }
 

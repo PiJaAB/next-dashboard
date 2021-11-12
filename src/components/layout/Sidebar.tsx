@@ -1,13 +1,12 @@
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import XIcon from '@heroicons/react/outline/XIcon';
-import ArrowSmLeftIcon from '@heroicons/react/outline/ArrowSmLeftIcon';
-import ArrowSmRightIcon from '@heroicons/react/outline/ArrowSmRightIcon';
 import SearchIcon from '@heroicons/react/solid/SearchIcon';
 import SelectorIcon from '@heroicons/react/solid/SelectorIcon';
 import UserIcon from '@heroicons/react/solid/UserIcon';
 import React, { Fragment, useContext, useEffect } from 'react';
 import classNames from 'classnames';
 import Link from 'next/link';
+import { ArrowSmStartIcon, ArrowSmEndIcon } from '../ArrowSmIcons';
 import useRebuildTooltip from '../../hooks/useRebuildTooltip';
 import ConfigContext from '../../utils/configContext';
 import LayoutContext from '../../utils/layoutContext';
@@ -335,7 +334,7 @@ export default function Sidebar({
 
       {/* Static sidebar for desktop */}
       <IsCompactProvider value={isCompact}>
-        <div className="hidden h-full lg:flex lg:flex-shrink-0 fixed h-screen">
+        <div className="hidden lg:flex lg:flex-shrink-0 fixed h-screen">
           <div
             className={classNames(
               'flex flex-col border-e border-gray-200 dark:border-gray-700 pt-5 pb-4 bg-gray-100 dark:bg-gray-700',
@@ -386,7 +385,7 @@ export default function Sidebar({
                 <NavSection className="py-2">
                   <ThemeSelector />
                   <NavEntry
-                    Icon={isCompact ? ArrowSmRightIcon : ArrowSmLeftIcon}
+                    Icon={isCompact ? ArrowSmEndIcon : ArrowSmStartIcon}
                     onClick={() => setState('compactSidebar', !isCompact)}
                   >
                     {s(isCompact ? 'sidebar-expand' : 'sidebar-compact')}

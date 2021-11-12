@@ -32,7 +32,8 @@ export interface Branding {
 export interface SiteMessageType {
   title?: string;
   message: string;
-  status?: 'info' | 'warning' | 'error';
+  status?: 'info' | 'warning' | 'error' | 'success';
+  timer?: number | boolean;
   count?: number;
 }
 
