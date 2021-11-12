@@ -84,6 +84,8 @@ function compareSitemessages(m1, m2) {
         return false;
     if (m1.message !== m2.message)
         return false;
+    if (m1.timer !== m2.timer)
+        return false;
     return true;
 }
 function DashboardProvider(_a) {

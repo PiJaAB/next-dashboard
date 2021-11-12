@@ -13,6 +13,7 @@ var strings = {
     info: 'Info',
     warning: 'Warning',
     error: 'Error',
+    success: 'Success',
     'sidebar-compact': 'Compact sidebar',
     'sidebar-expand': 'Expand sidebar',
 };

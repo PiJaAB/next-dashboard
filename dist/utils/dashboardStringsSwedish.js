@@ -13,6 +13,7 @@ var strings = {
     info: 'Info',
     warning: 'Varning',
     error: 'Fel',
+    success: '',
     'sidebar-compact': 'Minimera sidopanelen',
     'sidebar-expand': 'Expandera sidopanelen',
 };

@@ -13,6 +13,7 @@ export declare const StringsProvider: import("react").Provider<{
     info: string;
     warning: string;
     error: string;
+    success: string;
     'sidebar-compact': string;
     'sidebar-expand': string;
 }>;

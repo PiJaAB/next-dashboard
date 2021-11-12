@@ -24,14 +24,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("@headlessui/react");
 var XIcon_1 = __importDefault(require("@heroicons/react/outline/XIcon"));
-var ArrowSmLeftIcon_1 = __importDefault(require("@heroicons/react/outline/ArrowSmLeftIcon"));
-var ArrowSmRightIcon_1 = __importDefault(require("@heroicons/react/outline/ArrowSmRightIcon"));
 var SearchIcon_1 = __importDefault(require("@heroicons/react/solid/SearchIcon"));
 var SelectorIcon_1 = __importDefault(require("@heroicons/react/solid/SelectorIcon"));
 var UserIcon_1 = __importDefault(require("@heroicons/react/solid/UserIcon"));
 var react_2 = __importStar(require("react"));
 var classnames_1 = __importDefault(require("classnames"));
 var link_1 = __importDefault(require("next/link"));
+var ArrowSmIcons_1 = require("../ArrowSmIcons");
 var useRebuildTooltip_1 = __importDefault(require("../../hooks/useRebuildTooltip"));
 var configContext_1 = __importDefault(require("../../utils/configContext"));
 var layoutContext_1 = __importDefault(require("../../utils/layoutContext"));
@@ -138,7 +137,7 @@ function Sidebar(_a) {
                                 react_2.default.createElement(ThemeSelector_1.default, null))))),
                 react_2.default.createElement("div", { className: "flex-shrink-0 w-14", "aria-hidden": "true" })))),
         react_2.default.createElement(NavEntry_1.IsCompactProvider, { value: isCompact },
-            react_2.default.createElement("div", { className: "hidden h-full lg:flex lg:flex-shrink-0 fixed h-screen" },
+            react_2.default.createElement("div", { className: "hidden lg:flex lg:flex-shrink-0 fixed h-screen" },
                 react_2.default.createElement("div", { className: (0, classnames_1.default)('flex flex-col border-e border-gray-200 dark:border-gray-700 pt-5 pb-4 bg-gray-100 dark:bg-gray-700', !isCompact && 'w-64', isCompact && 'w-24') },
                     react_2.default.createElement(Brand, { compact: isCompact }),
                     react_2.default.createElement("div", { className: "h-0 flex-1 flex flex-col" },
@@ -153,6 +152,6 @@ function Sidebar(_a) {
                             SidebarComp != null && react_2.default.createElement(SidebarComp, null),
                             react_2.default.createElement(NavSection_1.default, { className: "py-2" },
                                 react_2.default.createElement(ThemeSelector_1.default, null),
-                                react_2.default.createElement(NavEntry_1.default, { Icon: isCompact ? ArrowSmRightIcon_1.default : ArrowSmLeftIcon_1.default, onClick: function () { return setState('compactSidebar', !isCompact); } }, s(isCompact ? 'sidebar-expand' : 'sidebar-compact'))))))))));
+                                react_2.default.createElement(NavEntry_1.default, { Icon: isCompact ? ArrowSmIcons_1.ArrowSmEndIcon : ArrowSmIcons_1.ArrowSmStartIcon, onClick: function () { return setState('compactSidebar', !isCompact); } }, s(isCompact ? 'sidebar-expand' : 'sidebar-compact'))))))))));
 }
 exports.default = Sidebar;

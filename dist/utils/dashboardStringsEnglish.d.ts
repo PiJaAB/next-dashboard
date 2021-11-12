@@ -11,6 +11,7 @@ declare const strings: {
     info: string;
     warning: string;
     error: string;
+    success: string;
     'sidebar-compact': string;
     'sidebar-expand': string;
 };
