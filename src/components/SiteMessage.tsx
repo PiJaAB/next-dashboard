@@ -41,7 +41,7 @@ function SiteMessage({
 }: Props): JSX.Element {
   const timerNum = timer === true ? 5 : timer || 0;
   const s = useS();
-  const label = title || s(status);
+  const label = title == null ? s(status) : title;
   const dismissRef = useRef(dismiss);
   useEffect(() => {
     dismissRef.current = dismiss;
