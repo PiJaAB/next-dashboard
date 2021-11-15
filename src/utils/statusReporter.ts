@@ -1,9 +1,9 @@
 import EventEmitter from 'events';
 import { SiteMessageType } from './types';
 
-export const errorEventEmitter = new EventEmitter();
+export const statusEventEmitter = new EventEmitter();
 
-class ErrorReporter {
+class StatusReporter {
   constructor() {
     const runQueue = () => {
       const unresolved: typeof this.cache = [];
@@ -12,21 +12,21 @@ class ErrorReporter {
         const { err, resolve } = entry;
         if (
           err instanceof Error &&
-          errorEventEmitter.listenerCount('error') > 0
+          statusEventEmitter.listenerCount('error') > 0
         ) {
-          resolve(errorEventEmitter.emit('error', err));
-        } else if (errorEventEmitter.listenerCount('error') > 0) {
-          resolve(errorEventEmitter.emit('report', err));
+          resolve(statusEventEmitter.emit('error', err));
+        } else if (statusEventEmitter.listenerCount('error') > 0) {
+          resolve(statusEventEmitter.emit('report', err));
         } else {
           unresolved.push(entry);
         }
       }
       this.cache.push(...unresolved);
     };
-    errorEventEmitter.on('newListener', () => {
+    statusEventEmitter.on('newListener', () => {
       if (
-        errorEventEmitter.listenerCount('error') === 0 ||
-        errorEventEmitter.listenerCount('report') === 0
+        statusEventEmitter.listenerCount('error') === 0 ||
+        statusEventEmitter.listenerCount('report') === 0
       ) {
         // The EventEmitter instance will emit its own 'newListener' event before a listener is added to its internal array of listeners.
         if (this.timeout == null) {
@@ -46,11 +46,11 @@ class ErrorReporter {
     [];
 
   report(err: Error | SiteMessageType): Promise<boolean> {
-    if (err instanceof Error && errorEventEmitter.listenerCount('error') > 0) {
-      return Promise.resolve(errorEventEmitter.emit('error', err));
+    if (err instanceof Error && statusEventEmitter.listenerCount('error') > 0) {
+      return Promise.resolve(statusEventEmitter.emit('error', err));
     }
-    if (errorEventEmitter.listenerCount('report') > 0) {
-      return Promise.resolve(errorEventEmitter.emit('report', err));
+    if (statusEventEmitter.listenerCount('report') > 0) {
+      return Promise.resolve(statusEventEmitter.emit('report', err));
     }
     return new Promise((resolve) => {
       this.cache.unshift({
@@ -61,4 +61,4 @@ class ErrorReporter {
   }
 }
 
-export default new ErrorReporter();
+export default new StatusReporter();

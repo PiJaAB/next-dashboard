@@ -10,6 +10,7 @@ type Props = {
   as?: string;
   children: string | [string, React.ReactElement<{ className?: string }>];
   Icon?: React.ComponentType<React.ComponentProps<'svg'>>;
+  OpenIcon?: React.ComponentType<React.ComponentProps<'svg'>>;
   onClick?: (ev: React.MouseEvent) => void;
   active?: boolean;
   tipRef?: React.Ref<HTMLAnchorElement | HTMLButtonElement>;
@@ -155,6 +156,7 @@ export default function NavEntry({
   href,
   children: rawChildren,
   Icon,
+  OpenIcon,
   as,
   active: propActive,
   onClick,
@@ -186,12 +188,13 @@ export default function NavEntry({
     return [c, rest];
   }, [rawChildren]);
   let child: JSX.Element;
+  const IconToRender = open ? OpenIcon || Icon : Icon;
   if (href) {
     child = (
       <LinkEl
         active={active}
         href={href}
-        Icon={Icon}
+        Icon={IconToRender}
         as={as}
         onClick={onClick}
         ref={tipRef}
@@ -204,7 +207,7 @@ export default function NavEntry({
     child = (
       <ButtonEl
         active={active}
-        Icon={Icon}
+        Icon={IconToRender}
         as={as}
         onClick={onClick}
         ref={tipRef}
