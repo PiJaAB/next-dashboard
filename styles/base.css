@@ -1,0 +1,101 @@
+@layer base {
+  body {
+    @apply bg-gray-200 text-gray-600;
+  }
+  body.dark {
+    @apply bg-gray-800 text-gray-300;
+  }
+
+  /* Make clicks pass-through */
+  #nprogress {
+    pointer-events: none;
+  }
+
+  #nprogress .bar {
+    @apply bg-primary fixed top-0 left-0 w-full h-1;
+    z-index: 1031;
+  }
+
+  /* Fancy blur effect */
+  #nprogress .peg {
+    @apply block absolute right-0 h-full w-24 opacity-100;
+    box-shadow: 0 0 10px theme('colors.primary.DEFAULT'), 0 0 5px theme('colors.primary.DEFAULT');
+    transform: rotate(3deg) translate(0px, -4px);
+  }
+
+  /* Remove these to get rid of the spinner */
+  #nprogress .spinner {
+    @apply block fixed top-4 right-4;
+    z-index: 1031;
+  }
+
+  #nprogress .spinner-icon {
+    @apply w-5 h-5 box-border border-transparent border-4 border-solid;
+    border-top-color: theme('colors.primary.DEFAULT');
+    border-left-color: theme('colors.primary.DEFAULT');
+    border-radius: 50%;
+    animation: nprogress-spinner 400ms linear infinite;
+  }
+
+  .nprogress-custom-parent {
+    @apply overflow-hidden relative;
+  }
+
+  .nprogress-custom-parent #nprogress .spinner,
+  .nprogress-custom-parent #nprogress .bar {
+    @apply absolute;
+  }
+
+  @keyframes nprogress-spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+@layer utilities {
+  @variants responsive {
+    [dir="rtl"] .shadow-end {
+      @apply shadow-left;
+    }
+
+    [dir="ltr"] .shadow-end {
+      @apply shadow-right; 
+    }
+
+    [dir="rtl"] .shadow-start {
+      @apply shadow-right;
+    }
+
+    [dir="ltr"] .shadow-start {
+      @apply shadow-left; 
+    }
+  }
+
+  @variants responsive {
+    [dir="rtl"] .rtl {
+      &\:flip {
+        @apply transform;
+        --tw-scale-x: -1;
+      }
+      &\:rotate {
+        @apply transform;
+        --tw-rotate: 180;
+      }
+    }
+
+    [dir="ltr"] .ltr {
+      &\:flip {
+        @apply transform;
+        --tw-scale-x: -1;
+      }
+      &\:rotate {
+        @apply transform;
+        --tw-rotate: 180;
+      }
+    }
+  }
+}

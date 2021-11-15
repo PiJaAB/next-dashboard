@@ -1,0 +1,24 @@
+@layer components {
+  .sortable-table th {
+    @apply cursor-pointer select-none;
+  }
+
+  .page-table {
+    @apply rounded bg-gray-200 dark:bg-gray-700 overflow-hidden;
+    th {
+      @apply relative bg-gray-300 dark:bg-gray-500 font-bold capitalize text-lg z-50 text-start;
+    }
+    tr:nth-child(even) {
+      @apply bg-gray-50 dark:bg-gray-600;
+    }
+    td, th {
+      @apply p-1;
+      &:first-child {
+        @apply ps-4;
+      }
+      &:last-child {
+        @apply pe-4;
+      }
+    }
+  }
+}
