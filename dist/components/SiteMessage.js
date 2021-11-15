@@ -63,7 +63,7 @@ function SiteMessage(_a) {
     var title = _a.title, message = _a.message, _b = _a.status, status = _b === void 0 ? 'info' : _b, timer = _a.timer, count = _a.count, dismiss = _a.dismiss;
     var timerNum = timer === true ? 5 : timer || 0;
     var s = (0, useS_1.default)();
-    var label = title || s(status);
+    var label = title == null ? s(status) : title;
     var dismissRef = (0, react_1.useRef)(dismiss);
     (0, react_1.useEffect)(function () {
         dismissRef.current = dismiss;
