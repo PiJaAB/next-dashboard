@@ -120,8 +120,7 @@ function DashboardProvider(_a) {
                 setPersistentState(obj);
             }
             catch (err) {
-                // eslint-disable-next-line no-console
-                console.error(err);
+                logger_1.default.error(err);
             }
         };
         refresh();

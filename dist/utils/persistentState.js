@@ -45,8 +45,12 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
+var logger_1 = __importDefault(require("./logger"));
 function createPersistentState(defaultState) {
     var persistentStateContext = (0, react_1.createContext)(null);
     var persistTimeout = {};
@@ -89,8 +93,7 @@ function createPersistentState(defaultState) {
                     setCurState(obj.state);
                 }
                 catch (err) {
-                    // eslint-disable-next-line no-console
-                    console.error(err);
+                    logger_1.default.error(err);
                 }
             };
             refresh();

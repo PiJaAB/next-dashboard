@@ -108,7 +108,7 @@ function NavEntry(_a) {
             _a = __read(rawChildren, 2), c = _a[0], rest = _a[1];
         }
         else {
-            console.warn('Invalid children passed to NavEntry');
+            logger_1.default.warn('Invalid children passed to NavEntry');
             c = '';
         }
         return [c, rest];

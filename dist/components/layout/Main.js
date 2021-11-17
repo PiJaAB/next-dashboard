@@ -39,29 +39,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SEPARATOR = void 0;
-/*
-  This example requires Tailwind CSS v2.0+
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 var react_1 = __importStar(require("react"));
+var router_1 = __importDefault(require("next/router"));
 var react_tooltip_1 = __importDefault(require("react-tooltip"));
 var layoutContext_1 = __importDefault(require("../../utils/layoutContext"));
 var SiteMessages_1 = __importDefault(require("./SiteMessages"));
 var Sidebar_1 = __importDefault(require("./Sidebar"));
 var Header_1 = __importDefault(require("./Header"));
 var useInitialRender_1 = __importDefault(require("../../hooks/useInitialRender"));
+var ConfirmDialogue_1 = __importDefault(require("./components/ConfirmDialogue"));
 exports.SEPARATOR = Symbol('separator');
 function DashboardLayout(_a) {
     var children = _a.children, searchText = _a.searchText, onSearchChange = _a.onSearchChange, onSearch = _a.onSearch, userMenu = _a.userMenu, Sidebar = _a.Sidebar, userTitle = _a.userTitle, userSubTitle = _a.userSubTitle, userProfilePic = _a.userProfilePic;
@@ -77,6 +63,15 @@ function DashboardLayout(_a) {
     }, [colorScheme]);
     var sidebarOpen = getTemp('sidebarOpen', false);
     var setSidebarOpen = (0, react_1.useCallback)(function (val) { return setTemp('sidebarOpen', val); }, [setTemp]);
+    (0, react_1.useEffect)(function () {
+        var onRouteChangeStart = function () {
+            setSidebarOpen(false);
+        };
+        router_1.default.events.on('routeChangeStart', onRouteChangeStart);
+        return function () {
+            router_1.default.events.off('routeChangeStart', onRouteChangeStart);
+        };
+    }, [setSidebarOpen]);
     // The search elements need to be internally controlled if not
     // controlled from the outside due to the fact that we have
     // 2 different elements being search boxes that we want to
@@ -142,7 +137,8 @@ function DashboardLayout(_a) {
             react_1.default.createElement("main", { className: "flex-1 focus:outline-none" },
                 children,
                 react_1.default.createElement(SiteMessages_1.default, null))),
-        react_1.default.createElement("div", { id: "dashboard-modal-root" }),
+        react_1.default.createElement(ConfirmDialogue_1.default, null),
+        react_1.default.createElement("div", { id: "dashboard-modal-root", style: { zIndex: 9999 } }),
         !isInitial && (react_1.default.createElement(react_tooltip_1.default, { className: "tooltip-style", type: colorScheme, effect: "solid" }))));
 }
 exports.default = DashboardLayout;

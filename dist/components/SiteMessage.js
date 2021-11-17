@@ -73,16 +73,20 @@ function SiteMessage(_a) {
     (0, react_1.useEffect)(function () {
         if (animateEl == null)
             return undefined;
-        animateEl.beginElement();
+        var el = animateEl;
+        el.beginElement();
         function endListener() {
             if (dismissRef.current)
                 dismissRef.current();
         }
-        setTimeout(function () {
-            return animateEl.addEventListener('endEvent', endListener, { passive: true });
-        }, 0);
+        function beginListener() {
+            el.removeEventListener('beginEvent', beginListener);
+            el.addEventListener('endEvent', endListener, { passive: true });
+        }
+        el.addEventListener('beginEvent', beginListener, { passive: true });
         return function () {
-            animateEl.removeEventListener('endEvent', endListener);
+            el.removeEventListener('endEvent', endListener);
+            el.removeEventListener('beginEvent', beginListener);
         };
     }, [animateEl, count]);
     return (react_1.default.createElement("div", { className: (0, classnames_1.default)('p-2 rounded-lg shadow-lg sm:p-3', status === 'info' && 'bg-indigo-600', status === 'error' && 'bg-red-600', status === 'warning' && 'bg-yellow-600', status === 'success' && 'bg-green-600'), onMouseEnter: function () { return setIsHovering(true); }, onMouseLeave: function () { return setIsHovering(false); } },

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StringsProvider = void 0;
 var react_1 = require("react");
+var logger_1 = __importDefault(require("../utils/logger"));
 var dashboardStringsEnglish_1 = __importDefault(require("../utils/dashboardStringsEnglish"));
 var StringsContext = (0, react_1.createContext)(dashboardStringsEnglish_1.default);
 exports.StringsProvider = StringsContext.Provider;
@@ -13,7 +14,7 @@ function useS() {
     return (0, react_1.useCallback)(function (key) {
         if (process.env.NODE_ENV === 'development') {
             if (!(key in strings))
-                console.warn("key '" + key + " is missing in strings");
+                logger_1.default.warn("key '" + key + " is missing in strings");
         }
         var str = strings[key];
         return str == null ? key : str;

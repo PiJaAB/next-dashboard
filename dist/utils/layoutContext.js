@@ -45,9 +45,13 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LayoutStateProvider = void 0;
 var react_1 = __importStar(require("react"));
+var logger_1 = __importDefault(require("./logger"));
 var defaultContext = {
     getState: function (_, defaultValue) {
         return defaultValue;
@@ -115,8 +119,7 @@ function LayoutStateProvider(_a) {
                 setPersistentState(obj);
             }
             catch (err) {
-                // eslint-disable-next-line no-console
-                console.error(err);
+                logger_1.default.error(err);
             }
         };
         refresh();

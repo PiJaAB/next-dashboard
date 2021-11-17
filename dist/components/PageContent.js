@@ -26,8 +26,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
+var classnames_1 = __importDefault(require("classnames"));
 function PageContent(_a) {
-    var className = _a.className, children = _a.children, rest = __rest(_a, ["className", "children"]);
-    return (react_1.default.createElement("div", __assign({ className: "card" }, rest), children));
+    var 
+    // eslint-disable-next-line react/prop-types
+    className = _a.className, children = _a.children, rest = __rest(_a, ["className", "children"]);
+    return (react_1.default.createElement("div", __assign({ className: (0, classnames_1.default)('card', className) }, rest), children));
 }
 exports.default = PageContent;
