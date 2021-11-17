@@ -182,7 +182,7 @@ export default function NavEntry({
     ) {
       [c, rest] = rawChildren;
     } else {
-      console.warn('Invalid children passed to NavEntry');
+      logger.warn('Invalid children passed to NavEntry');
       c = '';
     }
     return [c, rest];

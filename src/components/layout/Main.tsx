@@ -1,19 +1,3 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import React, {
   useCallback,
   useContext,
@@ -21,6 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import Router from 'next/router';
 import ReactTooltip from 'react-tooltip';
 import LayoutContext from '../../utils/layoutContext';
 import SiteMessages from './SiteMessages';
@@ -28,6 +13,7 @@ import LayoutSidebar from './Sidebar';
 import { UserMenuEntryProps } from './components/UserMenu';
 import Header from './Header';
 import useInitialRender from '../../hooks/useInitialRender';
+import ConfirmDialogue from './components/ConfirmDialogue';
 
 export const SEPARATOR = Symbol('separator');
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -86,6 +72,15 @@ export default function DashboardLayout({
     (val: boolean) => setTemp('sidebarOpen', val),
     [setTemp],
   );
+  useEffect(() => {
+    const onRouteChangeStart = () => {
+      setSidebarOpen(false);
+    };
+    Router.events.on('routeChangeStart', onRouteChangeStart);
+    return () => {
+      Router.events.off('routeChangeStart', onRouteChangeStart);
+    };
+  }, [setSidebarOpen]);
   // The search elements need to be internally controlled if not
   // controlled from the outside due to the fact that we have
   // 2 different elements being search boxes that we want to
@@ -181,7 +176,8 @@ export default function DashboardLayout({
           <SiteMessages />
         </main>
       </div>
-      <div id="dashboard-modal-root" />
+      <ConfirmDialogue />
+      <div id="dashboard-modal-root" style={{ zIndex: 9999 }} />
       {!isInitial && (
         <ReactTooltip
           className="tooltip-style"

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import logger from './logger';
 
 export interface ILayoutContext {
   getState<T>(key: string, defaultValue: T): T;
@@ -90,8 +91,7 @@ export function LayoutStateProvider({
         }
         setPersistentState(obj);
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
+        logger.error(err);
       }
     };
     refresh();

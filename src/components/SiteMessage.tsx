@@ -50,17 +50,19 @@ function SiteMessage({
   const [animateEl, setAnimateEl] = useState<SVGElement | null>(null);
   useEffect(() => {
     if (animateEl == null) return undefined;
-    (animateEl as SVGAnimateElement).beginElement();
+    const el = animateEl as SVGAnimateElement;
+    el.beginElement();
     function endListener() {
       if (dismissRef.current) dismissRef.current();
     }
-    setTimeout(
-      () =>
-        animateEl.addEventListener('endEvent', endListener, { passive: true }),
-      0,
-    );
+    function beginListener() {
+      el.removeEventListener('beginEvent', beginListener);
+      el.addEventListener('endEvent', endListener, { passive: true });
+    }
+    el.addEventListener('beginEvent', beginListener, { passive: true });
     return () => {
-      animateEl.removeEventListener('endEvent', endListener);
+      el.removeEventListener('endEvent', endListener);
+      el.removeEventListener('beginEvent', beginListener);
     };
   }, [animateEl, count]);
   return (

@@ -1,16 +1,17 @@
 import React from 'react';
-
-type Props = React.PropsWithChildren<{
-  className?: string;
-}>;
+import classNames from 'classnames';
 
 export default function PageContent({
+  // eslint-disable-next-line react/prop-types
   className,
   children,
   ...rest
-}: Props): JSX.Element {
+}: React.DetailedHTMLProps<
+  React.AnchorHTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>): JSX.Element {
   return (
-    <div className="card" {...rest}>
+    <div className={classNames('card', className)} {...rest}>
       {children}
     </div>
   );

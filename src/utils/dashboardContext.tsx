@@ -86,8 +86,7 @@ export function DashboardProvider({
         }
         setPersistentState(obj);
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
+        logger.error(err);
       }
     };
     refresh();

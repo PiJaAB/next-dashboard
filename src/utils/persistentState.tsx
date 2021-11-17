@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import logger from './logger';
 
 export type JsonType =
   | Partial<{ [key: string]: JsonType }>
@@ -15,7 +16,7 @@ export type JsonType =
   | null;
 
 interface PersistentContext<
-  PersistentState extends Partial<Record<string, JsonType>>
+  PersistentState extends Partial<Record<string, JsonType>>,
 > {
   getState(): PersistentState;
   setState(state: PersistentState): void;
@@ -26,7 +27,7 @@ interface PersistentContext<
 }
 
 interface UsePersistentState<
-  PersistentState extends Partial<Record<string, JsonType>>
+  PersistentState extends Partial<Record<string, JsonType>>,
 > {
   (): PersistentState;
   <K extends keyof PersistentState>(key: K): PersistentState[K];
@@ -37,7 +38,7 @@ interface UsePersistentState<
 }
 
 export default function createPersistentState<
-  PersistentState extends Partial<Record<string, JsonType>>
+  PersistentState extends Partial<Record<string, JsonType>>,
 >(
   defaultState: PersistentState,
 ): {
@@ -47,9 +48,8 @@ export default function createPersistentState<
   }>;
   usePersistentState: UsePersistentState<PersistentState>;
 } {
-  const persistentStateContext = createContext<PersistentContext<PersistentState> | null>(
-    null,
-  );
+  const persistentStateContext =
+    createContext<PersistentContext<PersistentState> | null>(null);
   const persistTimeout: Partial<Record<string, number>> = {};
   function PersistentStateProvider({
     name,
@@ -94,8 +94,7 @@ export default function createPersistentState<
           }
           setCurState((obj as { state: PersistentState }).state);
         } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error(err);
+          logger.error(err);
         }
       };
       refresh();

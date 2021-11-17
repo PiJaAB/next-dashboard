@@ -269,7 +269,8 @@ export default function Sidebar({
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
-            className="fixed inset-0 flex z-40 lg:hidden"
+            className="fixed inset-0 flex lg:hidden"
+            style={{ zIndex: 8888 }}
             onClose={setSidebarOpen}
           >
             <Transition.Child
@@ -292,7 +293,7 @@ export default function Sidebar({
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
-              <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-100 dark:bg-gray-700">
+              <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-200 dark:bg-gray-700">
                 <Transition.Child
                   as={Fragment}
                   enter="ease-in-out duration-300"
@@ -337,7 +338,7 @@ export default function Sidebar({
         <div className="hidden lg:flex lg:flex-shrink-0 fixed h-screen">
           <div
             className={classNames(
-              'flex flex-col border-e border-gray-200 dark:border-gray-700 pt-5 pb-4 bg-gray-100 dark:bg-gray-700',
+              'flex flex-col border-e border-gray-200 dark:border-gray-700 pt-5 pb-4 bg-gray-200 dark:bg-gray-700',
               !isCompact && 'w-64',
               isCompact && 'w-24',
             )}
