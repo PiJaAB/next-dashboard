@@ -72,11 +72,11 @@ function update(_a) {
     var rect = containerEl.getClientRects()[0];
     if (!rect)
         return;
-    setWidth(containerEl.scrollWidth + "px");
+    setWidth("".concat(containerEl.scrollWidth, "px"));
     if (rect.bottom > vh) {
         setHide(false);
         var style = fakeContainerEl.style;
-        style.bottom = rect.bottom - vh + "px";
+        style.bottom = "".concat(rect.bottom - vh, "px");
     }
     else {
         setHide(true);

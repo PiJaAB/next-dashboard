@@ -14,7 +14,7 @@ function useS() {
     return (0, react_1.useCallback)(function (key) {
         if (process.env.NODE_ENV === 'development') {
             if (!(key in strings))
-                logger_1.default.warn("key '" + key + " is missing in strings");
+                logger_1.default.warn("key '".concat(key, " is missing in strings"));
         }
         var str = strings[key];
         return str == null ? key : str;

@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import { Props as TableProps } from './ResponsiveTable';
 declare type Compare<E> = (a: E, b: E, prop: string, dir: 'asc' | 'desc') => number;
-declare type CompareBy<E> = (entry: E, prop: string, dir: 'asc' | 'desc') => string | number;
+declare type CompareBy<E> = (entry: E, prop: string, dir: 'asc' | 'desc') => string | number | null | undefined;
 export declare type Props<E, C> = TableProps<E, C> & {
     compare?: Compare<E>;
     compareBy?: CompareBy<E>;

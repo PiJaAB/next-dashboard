@@ -39,7 +39,7 @@ function Modal(_a) {
         if (providedId)
             return providedId;
         counter += 1;
-        return "modal-" + counter;
+        return "modal-".concat(counter);
     }, [providedId]);
     var click = (0, react_1.useCallback)(function (event) {
         var modalRefEle = modalRef.current;
@@ -70,10 +70,10 @@ function Modal(_a) {
         return null;
     if (initial)
         return null;
-    return react_dom_1.default.createPortal(react_1.default.createElement("div", { id: id + "-wrapper", className: (0, classnames_1.default)('fixed left-0 right-0 top-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60', !active && 'hidden') },
-        react_1.default.createElement("div", { className: (0, classnames_1.default)('card relative flex flex-col', className), style: style, id: id, role: "dialog", "aria-modal": "true", "aria-labelledby": title ? id + "-label" : undefined, ref: modalRef },
+    return react_dom_1.default.createPortal(react_1.default.createElement("div", { id: "".concat(id, "-wrapper"), className: (0, classnames_1.default)('fixed left-0 right-0 top-0 bottom-0 flex justify-center items-center bg-black bg-opacity-60', !active && 'hidden') },
+        react_1.default.createElement("div", { className: (0, classnames_1.default)('card relative flex flex-col', className), style: style, id: id, role: "dialog", "aria-modal": "true", "aria-labelledby": title ? "".concat(id, "-label") : undefined, ref: modalRef },
             react_1.default.createElement("div", { className: "mb-4" },
-                title && (react_1.default.createElement("h2", { id: id + "-label", className: "text-2xl" }, title)),
+                title && (react_1.default.createElement("h2", { id: "".concat(id, "-label"), className: "text-2xl" }, title)),
                 react_1.default.createElement("button", { type: "button", className: "absolute top-4 right-4 w-6 h-6", onClick: close },
                     react_1.default.createElement(XIcon_1.default, { className: "w-full h-full" })),
                 header),

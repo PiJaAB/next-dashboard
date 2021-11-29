@@ -18,7 +18,7 @@ var react_1 = __importDefault(require("react"));
 var SiteMessage_1 = __importDefault(require("../SiteMessage"));
 var dashboardContext_1 = __importDefault(require("../../utils/dashboardContext"));
 function siteMessageKey(m) {
-    return "" + (m.title ? m.title + "-" : '') + (m.status ? m.status + "-" : 'info-') + (m.message ? m.message : '');
+    return "".concat(m.title ? "".concat(m.title, "-") : '').concat(m.status ? "".concat(m.status, "-") : 'info-').concat(m.message ? m.message : '');
 }
 function SiteMessages() {
     return (react_1.default.createElement(react_1.default.Fragment, null,

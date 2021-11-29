@@ -31,21 +31,21 @@ function printLog(level) {
     for (var _i = 1; _i < arguments.length; _i++) {
         args[_i - 1] = arguments[_i];
     }
-    console.log.apply(console, __spreadArray(["[NEXT-DASHBOARD]" + (level ? "[" + level + "]" : '')], __read(args), false));
+    console.log.apply(console, __spreadArray(["[NEXT-DASHBOARD]".concat(level ? "[".concat(level, "]") : '')], __read(args), false));
 }
 function printWarn(level) {
     var args = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         args[_i - 1] = arguments[_i];
     }
-    console.warn.apply(console, __spreadArray(["[NEXT-DASHBOARD]" + (level ? "[" + level + "]" : '')], __read(args), false));
+    console.warn.apply(console, __spreadArray(["[NEXT-DASHBOARD]".concat(level ? "[".concat(level, "]") : '')], __read(args), false));
 }
 function printError(level) {
     var args = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         args[_i - 1] = arguments[_i];
     }
-    console.error.apply(console, __spreadArray(["[NEXT-DASHBOARD]" + (level ? "[" + level + "]" : '')], __read(args), false));
+    console.error.apply(console, __spreadArray(["[NEXT-DASHBOARD]".concat(level ? "[".concat(level, "]") : '')], __read(args), false));
 }
 function printDir() {
     var args = [];

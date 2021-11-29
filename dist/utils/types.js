@@ -24,7 +24,7 @@ var NotImplementedError = /** @class */ (function (_super) {
         var realMessage;
         try {
             var sender = (_a = new Error().stack) === null || _a === void 0 ? void 0 : _a.split('\n')[2].replace(' at ', '');
-            realMessage = "The method " + (sender || 'UNKNOWN_METHOD') + " isn't implemented." + (message ? "\nMessage: " + message : '');
+            realMessage = "The method ".concat(sender || 'UNKNOWN_METHOD', " isn't implemented.").concat(message ? "\nMessage: ".concat(message) : '');
         }
         catch (_) {
             realMessage = message || 'Function not implemented.';

@@ -63,7 +63,7 @@ var ResponsiveTable = function (_a) {
     var table = function (cols, type) { return (react_1.default.createElement("table", { className: (0, classnames_1.default)(type === 'head' && 'table-fixed', 'w-full') },
         react_1.default.createElement(ResponsiveTableHead_1.default, { cols: cols, columnKeyExtractor: columnKeyExtractor, renderHead: renderHead, onColumnClick: onColumnClick, type: type }),
         react_1.default.createElement("tbody", { style: {
-                lineHeight: typeof rowHeight === 'number' ? rowHeight + "px" : rowHeight,
+                lineHeight: typeof rowHeight === 'number' ? "".concat(rowHeight, "px") : rowHeight,
             }, className: "divide-y divide-gray-500" }, data &&
             data.map(function (entry) { return (react_1.default.createElement(RenderRow, { row: entry, isLabel: type === 'head', key: dataKeyExtractor(entry) }, cols.map(function (column) {
                 var RenderCell = column.renderCell || renderCell;

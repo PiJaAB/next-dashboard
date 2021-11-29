@@ -97,7 +97,7 @@ function SiteMessage(_a) {
                     status === 'warning' && (react_1.default.createElement(ExclamationIcon_1.default, { className: "h-6 w-6 text-white", "aria-hidden": "true" })),
                     status === 'success' && (react_1.default.createElement(CheckIcon_1.default, { className: "h-6 w-6 text-white", "aria-hidden": "true" })),
                     status === 'error' && (react_1.default.createElement(XCircleIcon_1.default, { className: "h-6 w-6 text-white", "aria-hidden": "true" }))),
-                react_1.default.createElement("p", { className: "ms-3 font-medium text-white" }, label ? label + ": " + message : message)),
+                react_1.default.createElement("p", { className: "ms-3 font-medium text-white" }, label ? "".concat(label, ": ").concat(message) : message)),
             count != null && count > 1 && (react_1.default.createElement("div", { className: "order-3 mt-2 flex-shrink-0 flex-grow-1 w-full sm:order-2 sm:mt-0 sm:w-auto" },
                 react_1.default.createElement("span", { className: (0, classnames_1.default)('flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-mediu bg-white select-none', status === 'info' && 'text-indigo-600', status === 'error' && 'text-red-600', status === 'warning' && 'text-yellow-600', status === 'success' && 'text-green-600') },
                     "x",
@@ -105,9 +105,9 @@ function SiteMessage(_a) {
             dismiss && (react_1.default.createElement("div", { className: "order-2 flex-shrink-0 sm:order-3 sm:ms-2" },
                 react_1.default.createElement("button", { type: "button", className: (0, classnames_1.default)('-me-1 flex p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white relative', status === 'info' && 'hover:bg-indigo-500', status === 'error' && 'hover:bg-red-500', status === 'warning' && 'hover:bg-yellow-500', status === 'success' && 'hover:bg-green-500'), onClick: dismiss },
                     react_1.default.createElement("span", { className: "sr-only" }, s('dismiss')),
-                    timerNum > 0 && !isHovering && (react_1.default.createElement("svg", { viewBox: "0 0 " + RING_SIZE + " " + RING_SIZE, xmlSpace: "preserve", className: "absolute w-7 h-7 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" },
-                        react_1.default.createElement("circle", { fill: "none", stroke: borderColorMap[status], strokeWidth: RING_STROKE, cx: RING_CENTER, cy: RING_CENTER, r: RING_R, strokeDasharray: RING_C, strokeDashoffset: RING_C, strokeLinecap: "round", transform: "rotate(-90) translate(-" + RING_SIZE + " 0)" },
-                            react_1.default.createElement("animate", { ref: setAnimateEl, attributeName: "stroke-dashoffset", values: RING_C + ";0", dur: timerNum, begin: "indefinite", fill: "freeze" })))),
+                    timerNum > 0 && !isHovering && (react_1.default.createElement("svg", { viewBox: "0 0 ".concat(RING_SIZE, " ").concat(RING_SIZE), xmlSpace: "preserve", className: "absolute w-7 h-7 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" },
+                        react_1.default.createElement("circle", { fill: "none", stroke: borderColorMap[status], strokeWidth: RING_STROKE, cx: RING_CENTER, cy: RING_CENTER, r: RING_R, strokeDasharray: RING_C, strokeDashoffset: RING_C, strokeLinecap: "round", transform: "rotate(-90) translate(-".concat(RING_SIZE, " 0)") },
+                            react_1.default.createElement("animate", { ref: setAnimateEl, attributeName: "stroke-dashoffset", values: "".concat(RING_C, ";0"), dur: timerNum, begin: "indefinite", fill: "freeze" })))),
                     react_1.default.createElement(XIcon_1.default, { className: "h-6 w-6 text-white", "aria-hidden": "true" })))))));
 }
 exports.default = SiteMessage;

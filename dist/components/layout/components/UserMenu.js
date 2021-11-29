@@ -80,7 +80,7 @@ function UserMenu(_a) {
         var cachedKey = keyMap.get(entry);
         if (cachedKey != null)
             return cachedKey;
-        var newKey = "entry-" + keyCounter;
+        var newKey = "entry-".concat(keyCounter);
         keyCounter += 1;
         keyMap.set(entry, newKey);
         return newKey;

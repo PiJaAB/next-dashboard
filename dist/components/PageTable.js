@@ -29,6 +29,6 @@ var react_1 = __importDefault(require("react"));
 var ResponsiveTable_1 = __importDefault(require("./ResponsiveTable"));
 function PageTable(_a) {
     var className = _a.className, props = __rest(_a, ["className"]);
-    return (react_1.default.createElement(ResponsiveTable_1.default, __assign({ className: "page-table " + (className || '') }, props)));
+    return (react_1.default.createElement(ResponsiveTable_1.default, __assign({ className: "page-table ".concat(className || '') }, props)));
 }
 exports.default = PageTable;

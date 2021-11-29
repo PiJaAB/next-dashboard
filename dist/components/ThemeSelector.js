@@ -66,6 +66,6 @@ function ThemeSelector(_a) {
     return (react_1.default.createElement(NavEntry_1.default, { Icon: ColorSwatchIcon_1.default, onClick: function () {
             setReshow(true);
             setState('colorScheme', currentColorScheme === 'dark' ? 'light' : 'dark');
-        }, tipRef: ref }, children || s("theme-" + currentColorScheme)));
+        }, tipRef: ref }, children || s("theme-".concat(currentColorScheme))));
 }
 exports.default = ThemeSelector;

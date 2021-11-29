@@ -63,7 +63,7 @@ var LinkEl = react_1.default.forwardRef(function (_a, ref) {
     }
     return (react_1.default.createElement(link_1.default, { href: href, as: as },
         react_1.default.createElement("a", { className: (0, classnames_1.default)(active
-                ? 'bg-primary-400 text-onPrimary-400'
+                ? 'bg-primary-400 text-onPrimary-400 hover:text-onPrimary-400 dark:text-onPrimary-400 dark:hover:text-onPrimary-400'
                 : 'text-gray-600 dark:text-gray-300 hover:text-onPrimary-100 dark:hover:text-onPrimary-900 hover:bg-primary-100 dark:hover:bg-primary-900', isCompact && 'justify-center', 'w-full group flex items-center px-2 py-2 text-sm font-medium rounded-md'), "data-tip": isCompact ? children : undefined, "data-place": "right", "aria-current": active ? 'page' : undefined, ref: ref },
             react_1.default.createElement(Inner, { Icon: Icon, active: active, isCompact: isCompact }, children))));
 });
@@ -73,7 +73,7 @@ var ButtonEl = react_1.default.forwardRef(function (_a, ref) {
         logger_1.default.debug('`as` makes no sense without href.');
     }
     return (react_1.default.createElement("button", { ref: ref, type: "button", onClick: onClick, className: (0, classnames_1.default)(active
-            ? 'bg-primary-400 text-onPrimary-400'
+            ? 'bg-primary-400 text-onPrimary-400 hover:text-onPrimary-400 dark:text-onPrimary-400 dark:hover:text-onPrimary-400'
             : 'text-gray-600 dark:text-gray-300 hover:text-onPrimary-100 dark:hover:text-onPrimary-900 hover:bg-primary-100 dark:hover:bg-primary-900', isCompact && 'justify-center', 'w-full group flex items-center px-2 py-2 text-sm font-medium rounded-md'), "data-tip": isCompact ? children : undefined, "data-place": "right", "aria-current": active },
         react_1.default.createElement(Inner, { Icon: Icon, active: active, isCompact: isCompact }, children)));
 });

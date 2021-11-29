@@ -32,6 +32,15 @@
     }
   }
 
+  input[type='checkbox'], input[type='radio'] {
+    &:disabled {
+      @apply disabled;
+      & + label {
+        @apply disabled;
+      }
+    }
+  }
+
   button {
     &:disabled {
       @apply disabled;

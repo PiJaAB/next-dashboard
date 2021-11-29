@@ -71,6 +71,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 var classnames_1 = __importDefault(require("classnames"));
+var ChevronUpIcon_1 = __importDefault(require("@heroicons/react/solid/ChevronUpIcon"));
+var ChevronDownIcon_1 = __importDefault(require("@heroicons/react/solid/ChevronDownIcon"));
 var ResponsiveTable_1 = __importStar(require("./ResponsiveTable"));
 function getDefaultCompare(compareBy) {
     return function (a, b, field, dir) {
@@ -80,6 +82,12 @@ function getDefaultCompare(compareBy) {
         if (typeof av === 'string' || typeof bv === 'string') {
             return String(av).localeCompare(String(bv));
         }
+        if (av == null && b == null)
+            return 0;
+        if (av == null)
+            return -1;
+        if (bv == null)
+            return 1;
         // Fall back to generic `<` comparison
         if (av < bv)
             return -1;
@@ -91,9 +99,8 @@ function getDefaultCompare(compareBy) {
 var defaultCompareBy = function (entry, field) { return entry[field]; };
 function SortIcon(_a) {
     var col = _a.col, sort = _a.sort;
-    return (react_1.default.createElement("span", { className: (0, classnames_1.default)('fa', "fa-sort" + (sort && sort.field === col.field
-            ? "-" + (sort.dir === 'asc' ? 'up' : 'down')
-            : ''), (!sort || sort.field !== col.field) && 'hidden') }));
+    var Icon = (sort === null || sort === void 0 ? void 0 : sort.dir) === 'asc' ? ChevronUpIcon_1.default : ChevronDownIcon_1.default;
+    return (react_1.default.createElement(Icon, { className: (0, classnames_1.default)((!sort || sort.field !== col.field) && 'invisible', 'h-6 inline-block') }));
 }
 var SortableTable = function (_a) {
     var orgData = _a.data, onColumnClick = _a.onColumnClick, compare = _a.compare, compareBy = _a.compareBy, renderHead = _a.renderHead, className = _a.className, title = _a.title, props = __rest(_a, ["data", "onColumnClick", "compare", "compareBy", "renderHead", "className", "title"]);

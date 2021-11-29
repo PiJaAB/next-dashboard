@@ -34,7 +34,7 @@ var update = function (el, hasHeader) {
     var top = rect.top - (hasHeader ? HEADER_OFFSET : 0);
     if (top < 0) {
         var style = el.style;
-        style.top = -top + "px";
+        style.top = "".concat(-top, "px");
     }
     else {
         var style = el.style;
