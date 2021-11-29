@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
+import ChevronUpIcon from '@heroicons/react/solid/ChevronUpIcon';
+import ChevronDownIcon from '@heroicons/react/solid/ChevronDownIcon';
 import ResponsiveTable, {
   defaultRenderHead,
   Props as TableProps,
@@ -20,7 +22,7 @@ type CompareBy<E> = (
   entry: E,
   prop: string,
   dir: 'asc' | 'desc',
-) => string | number;
+) => string | number | null | undefined;
 
 export type Props<E, C> = TableProps<E, C> & {
   compare?: Compare<E>;
@@ -38,6 +40,10 @@ function getDefaultCompare<E>(compareBy: CompareBy<E>): Compare<E> {
       return String(av).localeCompare(String(bv));
     }
 
+    if (av == null && b == null) return 0;
+    if (av == null) return -1;
+    if (bv == null) return 1;
+
     // Fall back to generic `<` comparison
     if (av < bv) return -1;
     if (av > bv) return +1;
@@ -54,16 +60,12 @@ function SortIcon<E extends {}, C>({
   col: ColData<E, C>;
   sort: Sort;
 }): JSX.Element {
+  const Icon = sort?.dir === 'asc' ? ChevronUpIcon : ChevronDownIcon;
   return (
-    <span
+    <Icon
       className={classNames(
-        'fa',
-        `fa-sort${
-          sort && sort.field === col.field
-            ? `-${sort.dir === 'asc' ? 'up' : 'down'}`
-            : ''
-        }`,
-        (!sort || sort.field !== col.field) && 'hidden',
+        (!sort || sort.field !== col.field) && 'invisible',
+        'h-6 inline-block',
       )}
     />
   );
@@ -71,7 +73,7 @@ function SortIcon<E extends {}, C>({
 
 const SortableTable = <
   E extends {} = { [key: string]: unknown },
-  C extends {} = {}
+  C extends {} = {},
 >({
   data: orgData,
   onColumnClick,

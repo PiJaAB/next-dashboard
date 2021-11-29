@@ -89,7 +89,7 @@ const LinkEl = React.forwardRef(
         <a
           className={classNames(
             active
-              ? 'bg-primary-400 text-onPrimary-400'
+              ? 'bg-primary-400 text-onPrimary-400 hover:text-onPrimary-400 dark:text-onPrimary-400 dark:hover:text-onPrimary-400'
               : 'text-gray-600 dark:text-gray-300 hover:text-onPrimary-100 dark:hover:text-onPrimary-900 hover:bg-primary-100 dark:hover:bg-primary-900',
             isCompact && 'justify-center',
             'w-full group flex items-center px-2 py-2 text-sm font-medium rounded-md',
@@ -123,7 +123,7 @@ const ButtonEl = React.forwardRef(
         onClick={onClick}
         className={classNames(
           active
-            ? 'bg-primary-400 text-onPrimary-400'
+            ? 'bg-primary-400 text-onPrimary-400 hover:text-onPrimary-400 dark:text-onPrimary-400 dark:hover:text-onPrimary-400'
             : 'text-gray-600 dark:text-gray-300 hover:text-onPrimary-100 dark:hover:text-onPrimary-900 hover:bg-primary-100 dark:hover:bg-primary-900',
           isCompact && 'justify-center',
           'w-full group flex items-center px-2 py-2 text-sm font-medium rounded-md',
