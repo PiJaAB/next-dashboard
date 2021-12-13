@@ -22,7 +22,8 @@
   input[type='tel'],
   input[type='time'],
   input[type='week'],
-  textarea {
+  textarea,
+  select {
     @apply bg-white dark:bg-gray-900 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:border-indigo-500 dark:focus:border-indigo-300 text-base sm:text-sm border-gray-300 dark:border-gray-700 rounded-lg py-2 px-4;
     &:disabled {
       @apply disabled;
@@ -30,6 +31,10 @@
     .no-outline &, &.no-outline {
       @apply ring-transparent border-none !important;
     }
+  }
+
+  select {
+    @apply pe-8;
   }
 
   input[type='checkbox'], input[type='radio'] {
