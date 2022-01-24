@@ -62,7 +62,12 @@ const ConfirmDialogue = (): JSX.Element => {
     }
     close();
   };
-  const { renderCancel, renderOk, message, title } = current || {};
+  const {
+    renderCancel: RenderCancel,
+    renderOk: RenderOk,
+    message,
+    title,
+  } = current || {};
   return (
     <Modal
       id="confirmation-dialogue-modal"
@@ -75,22 +80,22 @@ const ConfirmDialogue = (): JSX.Element => {
           {message != null ? message : 'Är du säker?'}
         </div>
 
-        {typeof renderOk === 'function' ? (
-          renderOk(confirm)
+        {typeof RenderOk === 'function' ? (
+          <RenderOk onClick={confirm} />
         ) : (
           <button type="button" className="button mb-3" onClick={confirm}>
-            {renderOk != null ? renderOk : 'Ok'}
+            {RenderOk != null ? RenderOk : 'Ok'}
           </button>
         )}
-        {typeof renderCancel === 'function' ? (
-          renderCancel(cancel)
+        {typeof RenderCancel === 'function' ? (
+          <RenderCancel onClick={cancel} />
         ) : (
           <button
             type="button"
             className="button text-white dark:text-white bg-red-500 dark:bg-red-500 hover:bg-red-500 dark:hover:bg-red-600 mb-3"
             onClick={cancel}
           >
-            {renderCancel != null ? renderCancel : 'Avbryt'}
+            {RenderCancel != null ? RenderCancel : 'Avbryt'}
           </button>
         )}
       </div>
