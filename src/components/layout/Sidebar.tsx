@@ -204,7 +204,7 @@ function Brand({ compact }: { compact: boolean }): JSX.Element | null {
   if (fullLogoUrl != null) {
     return (
       <Link href={branding.homepageURL || '/'}>
-        <a className="flex items-center flex-shrink-0 px-6">
+        <a className="flex items-center justify-center flex-shrink-0 px-6">
           <img className="h-8 w-auto" src={fullLogoUrl} alt={branding.name} />
         </a>
       </Link>
@@ -218,7 +218,7 @@ function Brand({ compact }: { compact: boolean }): JSX.Element | null {
   if (squareLogoUrl != null) {
     return (
       <Link href={branding.homepageURL || '/'}>
-        <a className="flex items-center flex-shrink-0 px-6">
+        <a className="flex items-center justify-center flex-shrink-0 px-6">
           <img
             className="h-8 w-auto me-2"
             src={squareLogoUrl}

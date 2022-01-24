@@ -110,11 +110,11 @@ var ConfirmDialogue = function () {
         }
         close();
     };
-    var _d = current || {}, renderCancel = _d.renderCancel, renderOk = _d.renderOk, message = _d.message, title = _d.title;
+    var _d = current || {}, RenderCancel = _d.renderCancel, RenderOk = _d.renderOk, message = _d.message, title = _d.title;
     return (react_1.default.createElement(Modal_1.default, { id: "confirmation-dialogue-modal", title: title || 'Bekräfta', active: isOpen, close: cancel },
         react_1.default.createElement("div", { className: "flex flex-wrap justify-between items-start" },
             react_1.default.createElement("div", { className: "w-full mb-3" }, message != null ? message : 'Är du säker?'),
-            typeof renderOk === 'function' ? (renderOk(confirm)) : (react_1.default.createElement("button", { type: "button", className: "button mb-3", onClick: confirm }, renderOk != null ? renderOk : 'Ok')),
-            typeof renderCancel === 'function' ? (renderCancel(cancel)) : (react_1.default.createElement("button", { type: "button", className: "button text-white dark:text-white bg-red-500 dark:bg-red-500 hover:bg-red-500 dark:hover:bg-red-600 mb-3", onClick: cancel }, renderCancel != null ? renderCancel : 'Avbryt')))));
+            typeof RenderOk === 'function' ? (react_1.default.createElement(RenderOk, { onClick: confirm })) : (react_1.default.createElement("button", { type: "button", className: "button mb-3", onClick: confirm }, RenderOk != null ? RenderOk : 'Ok')),
+            typeof RenderCancel === 'function' ? (react_1.default.createElement(RenderCancel, { onClick: cancel })) : (react_1.default.createElement("button", { type: "button", className: "button text-white dark:text-white bg-red-500 dark:bg-red-500 hover:bg-red-500 dark:hover:bg-red-600 mb-3", onClick: cancel }, RenderCancel != null ? RenderCancel : 'Avbryt')))));
 };
 exports.default = ConfirmDialogue;

@@ -96,13 +96,13 @@ function Brand(_a) {
     }
     if (fullLogoUrl != null) {
         return (react_2.default.createElement(link_1.default, { href: branding.homepageURL || '/' },
-            react_2.default.createElement("a", { className: "flex items-center flex-shrink-0 px-6" },
+            react_2.default.createElement("a", { className: "flex items-center justify-center flex-shrink-0 px-6" },
                 react_2.default.createElement("img", { className: "h-8 w-auto", src: fullLogoUrl, alt: branding.name }))));
     }
     var title = (react_2.default.createElement("h1", { className: "text-2xl text-gray-600 dark:text-gray-300" }, branding.name));
     if (squareLogoUrl != null) {
         return (react_2.default.createElement(link_1.default, { href: branding.homepageURL || '/' },
-            react_2.default.createElement("a", { className: "flex items-center flex-shrink-0 px-6" },
+            react_2.default.createElement("a", { className: "flex items-center justify-center flex-shrink-0 px-6" },
                 react_2.default.createElement("img", { className: "h-8 w-auto me-2", src: squareLogoUrl, alt: branding.name }),
                 title)));
     }

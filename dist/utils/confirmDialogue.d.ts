@@ -1,9 +1,13 @@
-/// <reference types="react" />
+import React from 'react';
 export declare type Options = {
     ok: () => void;
-    renderOk?: React.ReactNode | ((confirm: () => void) => React.ReactNode);
+    renderOk?: React.ReactNode | React.FunctionComponent<{
+        onClick: () => void;
+    }>;
     cancel?: () => void;
-    renderCancel?: React.ReactNode | ((cancel: () => void) => React.ReactNode);
+    renderCancel?: React.ReactNode | React.FunctionComponent<{
+        onClick: () => void;
+    }>;
     title?: string;
     message?: React.ReactNode;
 };
