@@ -17,10 +17,9 @@
   "files": [
     "assets",
     "dist",
-    "sass",
-    "src",
     "styles",
-    "serveAssets.js"
+    "tailwind.config.js",
+    "postcss.config.js"
   ],
   "publishConfig": {
     "access": "public"
