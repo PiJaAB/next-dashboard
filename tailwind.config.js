@@ -2,7 +2,7 @@ const path = require('path');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-  purge: [path.join(__dirname, 'src', 'components', '**', '*.{js,ts,jsx,tsx}')],
+  content: [path.join(__dirname, 'src', 'components', '**', '*.{js,ts,jsx,tsx}')],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
