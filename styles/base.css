@@ -57,45 +57,41 @@
 }
 
 @layer utilities {
-  @variants responsive {
-    [dir="rtl"] .shadow-end {
-      @apply shadow-left;
-    }
+  [dir="rtl"] .shadow-end {
+    @apply shadow-left;
+  }
 
-    [dir="ltr"] .shadow-end {
-      @apply shadow-right; 
-    }
+  [dir="ltr"] .shadow-end {
+    @apply shadow-right; 
+  }
 
-    [dir="rtl"] .shadow-start {
-      @apply shadow-right;
-    }
+  [dir="rtl"] .shadow-start {
+    @apply shadow-right;
+  }
 
-    [dir="ltr"] .shadow-start {
-      @apply shadow-left; 
+  [dir="ltr"] .shadow-start {
+    @apply shadow-left; 
+  }
+
+  [dir="rtl"] .rtl {
+    &\:flip {
+      @apply transform;
+      --tw-scale-x: -1;
+    }
+    &\:rotate {
+      @apply transform;
+      --tw-rotate: 180;
     }
   }
 
-  @variants responsive {
-    [dir="rtl"] .rtl {
-      &\:flip {
-        @apply transform;
-        --tw-scale-x: -1;
-      }
-      &\:rotate {
-        @apply transform;
-        --tw-rotate: 180;
-      }
+  [dir="ltr"] .ltr {
+    &\:flip {
+      @apply transform;
+      --tw-scale-x: -1;
     }
-
-    [dir="ltr"] .ltr {
-      &\:flip {
-        @apply transform;
-        --tw-scale-x: -1;
-      }
-      &\:rotate {
-        @apply transform;
-        --tw-rotate: 180;
-      }
+    &\:rotate {
+      @apply transform;
+      --tw-rotate: 180;
     }
   }
 }
