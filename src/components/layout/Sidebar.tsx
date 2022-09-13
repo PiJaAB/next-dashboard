@@ -250,6 +250,7 @@ export default function Sidebar({
   userProfilePic,
 }: SidebarProps): JSX.Element {
   const { getState, setState } = useContext(LayoutContext);
+  const { themeSelect } = useContext(ConfigContext);
   const isCompact = getState('compactSidebar', false);
   const s = useS();
   const rebuildTooltip = useRebuildTooltip();
@@ -320,9 +321,11 @@ export default function Sidebar({
                 <Brand compact={false} />
                 <div className="px-2 mt-5 divide-y divide-gray-300 dark:divide-gray-500">
                   <SidebarComp />
-                  <NavSection className="py-2">
-                    <ThemeSelector />
-                  </NavSection>
+                  {themeSelect && (
+                    <NavSection className="py-2">
+                      <ThemeSelector />
+                    </NavSection>
+                  )}
                 </div>
               </div>
             </Transition.Child>
@@ -384,7 +387,7 @@ export default function Sidebar({
               <div className="px-3 mt-6 divide-y divide-gray-300 dark:divide-gray-500">
                 {SidebarComp != null && <SidebarComp />}
                 <NavSection className="py-2">
-                  <ThemeSelector />
+                  {themeSelect && <ThemeSelector />}
                   <NavEntry
                     Icon={isCompact ? ArrowSmEndIcon : ArrowSmStartIcon}
                     onClick={() => setState('compactSidebar', !isCompact)}
