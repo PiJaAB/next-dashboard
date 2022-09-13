@@ -36,7 +36,7 @@
     "lint:eslint-check": "NODE_ENV=production eslint-config-prettier 'src/**/*.js'",
     "lint:prettier": "NODE_ENV=production prettier -c 'src/**/*.ts' 'src/**/*.tsx'",
     "lint:eslint": "NODE_ENV=production eslint src --report-unused-disable-directives --color",
-    "lint:stylelint": "NODE_ENV=production stylelint sass/**/*.scss -s scss --rd --risd --color",
+    "lint:stylelint": "NODE_ENV=production stylelint styles/**/*.css --rd --risd --color",
     "build": "run-s -l --silent build:clean build:tsc",
     "build:clean": "rimraf dist",
     "build:tsc": "tsc",
@@ -68,7 +68,7 @@
     "tailwindcss-rtl": "^0.7.3"
   },
   "devDependencies": {
-    "@headlessui/react": "^1.4.1",
+    "@headlessui/react": "^1.7.1",
     "@heroicons/react": "^1.0.4",
     "@types/node": "^14.14.22",
     "@types/react": "^17.0.0",
@@ -93,6 +93,7 @@
     "postcss": "^8.3.8",
     "postcss-import": "^14.0.2",
     "prettier": "^2.2.1",
+    "react": "^17.0.1",
     "react-tooltip": "^4.2.21",
     "rimraf": "^3.0.2",
     "stylelint": "^13.0.0",

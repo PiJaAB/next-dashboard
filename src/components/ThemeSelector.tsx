@@ -6,12 +6,13 @@ import NavEntry from './NavEntry';
 import LayoutContext from '../utils/layoutContext';
 import useS from '../hooks/useS';
 import useRebuildTooltip from '../hooks/useRebuildTooltip';
+import useColorScheme from '../hooks/useColorScheme';
 
 type Props = { children?: string };
 
 export default function ThemeSelector({ children }: Props): JSX.Element {
-  const { getState, setState, defaultColorScheme } = useContext(LayoutContext);
-  const currentColorScheme = getState('colorScheme', defaultColorScheme);
+  const { setState } = useContext(LayoutContext);
+  const currentColorScheme = useColorScheme();
   const ref = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
   const [reshow, setReshow] = useState(false);
   const rebuildTooltip = useRebuildTooltip();

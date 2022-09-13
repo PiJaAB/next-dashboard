@@ -13,6 +13,7 @@ import LayoutSidebar from './Sidebar';
 import { UserMenuEntryProps } from './components/UserMenu';
 import Header from './Header';
 import useInitialRender from '../../hooks/useInitialRender';
+import useColorScheme from '../../hooks/useColorScheme';
 import ConfirmDialogue from './components/ConfirmDialogue';
 
 export const SEPARATOR = Symbol('separator');
@@ -56,9 +57,8 @@ export default function DashboardLayout({
   userSubTitle,
   userProfilePic,
 }: Props): JSX.Element {
-  const { getState, getTemp, setTemp, defaultColorScheme } =
-    useContext(LayoutContext);
-  const colorScheme = getState('colorScheme', defaultColorScheme);
+  const { getTemp, setTemp } = useContext(LayoutContext);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;

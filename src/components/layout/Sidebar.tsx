@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { ArrowSmStartIcon, ArrowSmEndIcon } from '../ArrowSmIcons';
 import useRebuildTooltip from '../../hooks/useRebuildTooltip';
+import useColorScheme from '../../hooks/useColorScheme';
 import ConfigContext from '../../utils/configContext';
 import LayoutContext from '../../utils/layoutContext';
 import useS from '../../hooks/useS';
@@ -177,8 +178,7 @@ const getLogoURL = (
 };
 
 function Brand({ compact }: { compact: boolean }): JSX.Element | null {
-  const { defaultColorScheme, getState } = useContext(LayoutContext);
-  const colorScheme = getState('colorScheme', defaultColorScheme);
+  const colorScheme = useColorScheme();
   const { branding } = useContext(ConfigContext);
   const fullLogoUrl = getLogoURL(branding.fullLogoURL, colorScheme);
   const squareLogoUrl = getLogoURL(branding.squareLogoURL, colorScheme);

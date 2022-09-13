@@ -6,9 +6,9 @@ import UserIcon from '@heroicons/react/solid/UserIcon';
 import Link from 'next/link';
 import classNames from 'classnames';
 import ConfigContext from '../../utils/configContext';
-import LayoutContext from '../../utils/layoutContext';
 import UserMenu, { UserMenuEntryProps } from './components/UserMenu';
 import useS from '../../hooks/useS';
+import useColorScheme from '../../hooks/useColorScheme';
 
 export interface HeaderProps {
   groupedUserMenu: UserMenuEntryProps[][];
@@ -46,9 +46,8 @@ export default function Header({
   userSubTitle,
   userProfilePic,
 }: HeaderProps): JSX.Element {
-  const { defaultColorScheme, getState } = useContext(LayoutContext);
   const { branding } = useContext(ConfigContext);
-  const colorScheme = getState('colorScheme', defaultColorScheme);
+  const colorScheme = useColorScheme();
   const logoURL = useMemo(
     () =>
       !showMenuButton ? getLogoURL(branding.squareLogoURL, colorScheme) : null,

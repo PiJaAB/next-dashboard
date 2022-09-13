@@ -10,6 +10,11 @@
       min-height: calc(theme('spacing.4') + theme('fontSize.sm.1.lineHeight') + 2px);
     }
   }
+
+  select {
+    @apply pe-8;
+  }
+
   input[type='text'],
   input[type='email'],
   input[type='url'],
@@ -31,10 +36,6 @@
     .no-outline &, &.no-outline {
       @apply ring-transparent border-none !important;
     }
-  }
-
-  select {
-    @apply pe-8;
   }
 
   input[type='checkbox'], input[type='radio'] {

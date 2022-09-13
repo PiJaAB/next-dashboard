@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from 'classnames';
 
 export default function PageContent({
-  // eslint-disable-next-line react/prop-types
   className,
   children,
   ...rest

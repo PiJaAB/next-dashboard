@@ -1,4 +1,12 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  useContext,
+  useRef,
+} from 'react';
+import ConfigContext, { FullConfig } from './configContext';
 import logger from './logger';
 
 export interface ILayoutContext {
@@ -8,7 +16,7 @@ export interface ILayoutContext {
   setTemp<T>(key: string, value: T): void;
   readonly modalActive: boolean;
   setModalActive(valOrFn: ((oldVal: boolean) => boolean) | boolean): void;
-  defaultColorScheme: 'light' | 'dark';
+  defaultColorScheme: FullConfig['defaultTheme'];
 }
 
 const defaultContext: ILayoutContext = {
@@ -36,10 +44,14 @@ export function LayoutStateProvider({
 }: {
   children?: React.ReactNode;
 }): JSX.Element {
-  const [defaultColorScheme, setDefaultColorScheme] = useState<
-    'light' | 'dark'
-  >('light');
+  const configCtx = useContext(ConfigContext);
+  const configCtxRef = useRef(configCtx);
+  configCtxRef.current = configCtx;
+  const [defaultColorScheme, setDefaultColorScheme] = useState(
+    configCtx.defaultTheme,
+  );
   useEffect(() => {
+    if (!configCtx.autoDetectTheme) return undefined;
     const colorSchemeQuery =
       typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined'
         ? window.matchMedia('(prefers-color-scheme: dark)')
@@ -55,7 +67,14 @@ export function LayoutStateProvider({
     return () => {
       colorSchemeQuery.removeEventListener('change', onChange);
     };
-  }, []);
+  }, [configCtx.autoDetectTheme]);
+
+  useEffect(() => {
+    if (!configCtx.autoDetectTheme) {
+      setDefaultColorScheme(configCtx.defaultTheme);
+    }
+  }, [configCtx.autoDetectTheme, configCtx.defaultTheme]);
+
   const [persistentState, setPersistentState] = useState<Record<string, any>>(
     {},
   );

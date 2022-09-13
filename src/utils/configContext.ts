@@ -2,6 +2,9 @@ import React from 'react';
 import { Branding } from './types';
 
 export const defaultContext = {
+  defaultTheme: 'light' as 'light' | 'dark',
+  autoDetectTheme: true,
+  themeSelect: true,
   branding: {
     name: 'PiJa Next',
   } as Branding,
