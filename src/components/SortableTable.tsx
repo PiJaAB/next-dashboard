@@ -17,7 +17,12 @@ type Sort =
 
 type Data<E extends {}> = readonly E[] | undefined | null;
 
-type Compare<E> = (a: E, b: E, prop: string | number | symbol, dir: 'asc' | 'desc') => number;
+type Compare<E> = (
+  a: E,
+  b: E,
+  prop: string | number | symbol,
+  dir: 'asc' | 'desc',
+) => number;
 type CompareBy<E> = (
   entry: E,
   prop: string | number | symbol,
@@ -51,7 +56,8 @@ function getDefaultCompare<E>(compareBy: CompareBy<E>): Compare<E> {
   };
 }
 
-const defaultCompareBy = (entry: any, field: string | number | symbol) => entry[field];
+const defaultCompareBy = (entry: any, field: string | number | symbol) =>
+  entry[field];
 
 function SortIcon<E extends {}, C>({
   col,
