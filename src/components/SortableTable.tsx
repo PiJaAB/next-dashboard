@@ -11,16 +11,16 @@ import ResponsiveTable, {
 type Sort =
   | undefined
   | {
-      field: string;
+      field: string | number | symbol;
       dir: 'asc' | 'desc';
     };
 
 type Data<E extends {}> = readonly E[] | undefined | null;
 
-type Compare<E> = (a: E, b: E, prop: string, dir: 'asc' | 'desc') => number;
+type Compare<E> = (a: E, b: E, prop: string | number | symbol, dir: 'asc' | 'desc') => number;
 type CompareBy<E> = (
   entry: E,
-  prop: string,
+  prop: string | number | symbol,
   dir: 'asc' | 'desc',
 ) => string | number | null | undefined;
 
@@ -51,7 +51,7 @@ function getDefaultCompare<E>(compareBy: CompareBy<E>): Compare<E> {
   };
 }
 
-const defaultCompareBy = (entry: any, field: string) => entry[field];
+const defaultCompareBy = (entry: any, field: string | number | symbol) => entry[field];
 
 function SortIcon<E extends {}, C>({
   col,
@@ -103,7 +103,7 @@ const SortableTable = <
   }, [sort, orgData, compare, compareBy]);
 
   const handleColumnClick = useCallback(
-    (col) => {
+    (col: ColData<E, C>) => {
       if (onColumnClick) onColumnClick(col);
       if (!sort || sort.field !== col.field) {
         setSort({
