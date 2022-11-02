@@ -8,7 +8,7 @@ const execa = require('execa');
   await execa('git', ['reset', '--soft', 'origin/build/v6']);
   await execa('git', ['add', '--all']);
   await execa('git', ['reset', '--', 'node_modules', 'scripts']);
-  await execa('git', ['commit', '-m', 'build']);
+  await execa('git', ['commit', '--allow-empty', '-m', 'build']);
   console.log('Pushing to build branch...');
   await execa('git', ['push', 'origin', 'HEAD:build/v6', '--force']);
   console.log('Successfully deployed');
