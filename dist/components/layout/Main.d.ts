@@ -1,0 +1,20 @@
+import React from 'react';
+import { UserMenuEntryProps } from './components/UserMenu';
+export declare const SEPARATOR: unique symbol;
+export declare type SEPARATOR = typeof SEPARATOR;
+export declare type UserMenuListEntry = SEPARATOR | UserMenuEntryProps | null | undefined;
+export declare type Props = React.PropsWithChildren<{
+    id?: string;
+    contentContainerWidth?: 'extra-narrow' | 'narrow' | 'normal' | 'wide' | 'extra-wide';
+    header?: React.ReactNode;
+    Sidebar?: React.ComponentType | boolean;
+    footer?: boolean;
+    searchText?: string;
+    onSearchChange?: React.Dispatch<string>;
+    onSearch?: React.Dispatch<string>;
+    userMenu?: UserMenuListEntry[];
+    userTitle?: string;
+    userSubTitle?: string;
+    userProfilePic?: string;
+}>;
+export default function DashboardLayout({ children, searchText, onSearchChange, onSearch, userMenu, Sidebar, userTitle, userSubTitle, userProfilePic, }: Props): JSX.Element;

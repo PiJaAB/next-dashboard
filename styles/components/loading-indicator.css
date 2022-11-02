@@ -1,0 +1,72 @@
+@layer components {
+  .loading-indicator {
+    position: relative;
+    @apply relative w-2 h-2 rounded-full bg-current mx-3 inline-block;
+    animation: loadingIndicator 1s infinite linear; 
+    &::before, &::after {
+      content: '';
+      @apply inline-block absolute top-0;
+    }
+    &::before {
+      @apply w-2 h-2 rounded-full bg-current -start-3;
+      animation: loadingIndicatorBefore 1s infinite linear;
+    }
+    &::after {
+      @apply w-2 h-2 rounded-full bg-current start-3;
+      animation: loadingIndicatorAfter 1s infinite linear;
+    }
+  }
+  @keyframes loadingIndicatorBefore {
+    0% {
+      transform: scale(1, 1);
+    }
+    25% {
+      transform: scale(1, 1.5);
+    }
+    50% {
+      transform: scale(1, 0.67);
+    }
+    75% {
+      transform: scale(1, 1);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
+  }
+  
+  @keyframes loadingIndicator {
+    0% {
+      transform: scale(1, 1);
+    }
+    25% {
+      transform: scale(1, 0.67);
+    }
+    50% {
+      transform: scale(1, 1.5);
+    }
+    75% {
+      transform: scale(1, 0.67);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
+  }
+  
+  @keyframes loadingIndicatorAfter {
+    0% {
+      transform: scale(1, 1);
+    }
+    25% {
+      transform: scale(1, 1);
+    }
+    50% {
+      transform: scale(1, 0.67);
+    }
+    75% {
+      transform: scale(1, 1.5);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
+  }
+}
