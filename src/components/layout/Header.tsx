@@ -59,7 +59,7 @@ export default function Header({
       {showMenuButton && (
         <button
           type="button"
-          className="px-4 border-e border-gray-200 dark:border-gray-600 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden"
+          className="px-4 border-e border-gray-200 dark:border-gray-600 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focus-500 lg:hidden"
           onClick={() => setSidebarOpen(true)}
         >
           <span className="sr-only">{s('open-sidebar')}</span>
@@ -102,7 +102,7 @@ export default function Header({
           (userTitle != null && userTitle !== '') ||
           groupedUserMenu.length > 0 ? (
             <Menu as="div" className="ms-3 relative">
-              <Menu.Button className="max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+              <Menu.Button className="max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focus-500">
                 <span className="sr-only">{s('open-user-menu')}</span>
                 <div
                   data-tip={userTitle}
@@ -129,7 +129,7 @@ export default function Header({
               />
             </Menu>
           ) : (
-            <div className="max-w-xs ms-3 relative flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+            <div className="max-w-xs ms-3 relative flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focus-500">
               <span className="sr-only">{s('profile-picture')}</span>
               <div
                 data-tip={userTitle}
