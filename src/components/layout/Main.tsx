@@ -27,16 +27,7 @@ export type UserMenuListEntry =
   | undefined;
 
 export type Props = React.PropsWithChildren<{
-  id?: string;
-  contentContainerWidth?:
-    | 'extra-narrow'
-    | 'narrow'
-    | 'normal'
-    | 'wide'
-    | 'extra-wide';
-  header?: React.ReactNode;
   Sidebar?: React.ComponentType | boolean;
-  footer?: boolean;
   searchText?: string;
   onSearchChange?: React.Dispatch<string>;
   onSearch?: React.Dispatch<string>;
