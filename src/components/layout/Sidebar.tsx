@@ -142,7 +142,7 @@ function UserAccountArea({
   }
   return (
     <Menu as="div" className="px-3 mt-6 relative inline-block text-start">
-      <Menu.Button className="group w-full rounded-md px-3.5 py-2 text-sm text-start font-medium text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-purple-500 dark:focus:ring-offset-gray-900 dark:focus:ring-purple-500">
+      <Menu.Button className="group w-full rounded-md px-3.5 py-2 text-sm text-start font-medium text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-focus-500 dark:focus:ring-offset-gray-900 dark:focus:ring-focus-500">
         <span className="flex w-full justify-between items-center">
           <UserInfo
             title={userTitle}

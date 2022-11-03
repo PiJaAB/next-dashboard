@@ -14,6 +14,7 @@ module.exports = {
         yellow: colors.amber,
         purple: colors.violet,
         focus: {
+          ...colors.indigo,
           DEFAULT: colors.indigo[500],
           dark: colors.indigo[300],
         },

@@ -72,7 +72,7 @@ function UserAccountArea(_a) {
                     react_2.default.createElement(UserInfo, { title: userTitle, subTitle: userSubTitle, pictureUrl: userProfilePic, compact: compact })))));
     }
     return (react_2.default.createElement(react_1.Menu, { as: "div", className: "px-3 mt-6 relative inline-block text-start" },
-        react_2.default.createElement(react_1.Menu.Button, { className: "group w-full rounded-md px-3.5 py-2 text-sm text-start font-medium text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-purple-500 dark:focus:ring-offset-gray-900 dark:focus:ring-purple-500" },
+        react_2.default.createElement(react_1.Menu.Button, { className: "group w-full rounded-md px-3.5 py-2 text-sm text-start font-medium text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-focus-500 dark:focus:ring-offset-gray-900 dark:focus:ring-focus-500" },
             react_2.default.createElement("span", { className: "flex w-full justify-between items-center" },
                 react_2.default.createElement(UserInfo, { title: userTitle, subTitle: userSubTitle, pictureUrl: userProfilePic, showSelector: true, compact: compact }))),
         react_2.default.createElement(UserMenu_1.default, { className: (0, classnames_1.default)(compact && 'start-0 w-48', !compact && 'end-0 start-0'), userTitle: compact ? userTitle : undefined, userSubTitle: compact ? userSubTitle : undefined, groupedUserMenu: groupedUserMenu })));

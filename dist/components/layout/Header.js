@@ -54,7 +54,7 @@ function Header(_a) {
     }, [showMenuButton, branding.squareLogoURL, colorScheme]);
     var s = (0, useS_1.default)();
     return (react_1.default.createElement("div", { className: "relative z-10 flex-shrink-0 flex h-16 bg-white dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 lg:hidden" },
-        showMenuButton && (react_1.default.createElement("button", { type: "button", className: "px-4 border-e border-gray-200 dark:border-gray-600 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden", onClick: function () { return setSidebarOpen(true); } },
+        showMenuButton && (react_1.default.createElement("button", { type: "button", className: "px-4 border-e border-gray-200 dark:border-gray-600 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focus-500 lg:hidden", onClick: function () { return setSidebarOpen(true); } },
             react_1.default.createElement("span", { className: "sr-only" }, s('open-sidebar')),
             react_1.default.createElement(MenuAlt1Icon_1.default, { className: "h-6 w-6", "aria-hidden": "true" }))),
         logoURL && (react_1.default.createElement(link_1.default, { href: branding.homepageURL || '/' },
@@ -70,10 +70,10 @@ function Header(_a) {
             react_1.default.createElement("div", { className: "flex ms-auto items-center" }, (userTitle != null && userTitle !== '') ||
                 (userTitle != null && userTitle !== '') ||
                 groupedUserMenu.length > 0 ? (react_1.default.createElement(react_2.Menu, { as: "div", className: "ms-3 relative" },
-                react_1.default.createElement(react_2.Menu.Button, { className: "max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" },
+                react_1.default.createElement(react_2.Menu.Button, { className: "max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focus-500" },
                     react_1.default.createElement("span", { className: "sr-only" }, s('open-user-menu')),
                     react_1.default.createElement("div", { "data-tip": userTitle, className: (0, classnames_1.default)('w-10 h-10 rounded-full flex-shrink-0 overflow-hidden relative', userProfilePic == null && 'bg-gray-300') }, userProfilePic == null ? (react_1.default.createElement(UserIcon_1.default, { className: "h-full w-auto text-gray-500" })) : (react_1.default.createElement("div", { className: "absolute inset-0 bg-cover bg-no-repeat", style: { backgroundImage: "url('".concat(userProfilePic, "')") } })))),
-                react_1.default.createElement(UserMenu_1.default, { className: "right-0 w-48", groupedUserMenu: groupedUserMenu, userTitle: userTitle, userSubTitle: userSubTitle }))) : (react_1.default.createElement("div", { className: "max-w-xs ms-3 relative flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" },
+                react_1.default.createElement(UserMenu_1.default, { className: "right-0 w-48", groupedUserMenu: groupedUserMenu, userTitle: userTitle, userSubTitle: userSubTitle }))) : (react_1.default.createElement("div", { className: "max-w-xs ms-3 relative flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focus-500" },
                 react_1.default.createElement("span", { className: "sr-only" }, s('profile-picture')),
                 react_1.default.createElement("div", { "data-tip": userTitle, className: (0, classnames_1.default)('w-10 h-10 rounded-full flex-shrink-0 overflow-hidden relative', userProfilePic == null && 'bg-gray-300') }, userProfilePic == null ? (react_1.default.createElement(UserIcon_1.default, { className: "h-full w-auto text-gray-500" })) : (react_1.default.createElement("div", { className: "absolute inset-0 bg-cover bg-no-repeat", style: { backgroundImage: "url('".concat(userProfilePic, "')") } })))))))));
 }
