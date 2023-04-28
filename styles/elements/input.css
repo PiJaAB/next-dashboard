@@ -1,0 +1,55 @@
+@layer base {
+  .disabled {
+    @apply opacity-60;
+  }
+  textarea {
+    height: calc(theme('spacing.4') + theme('fontSize.base.1.lineHeight') + 2px);
+    min-height: calc(theme('spacing.4') + theme('fontSize.base.1.lineHeight') + 2px);
+    @screen sm {
+      height: calc(theme('spacing.4') + theme('fontSize.sm.1.lineHeight') + 2px);
+      min-height: calc(theme('spacing.4') + theme('fontSize.sm.1.lineHeight') + 2px);
+    }
+  }
+
+  select {
+    @apply pe-8;
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='url'],
+  input[type='password'],
+  input[type='number'],
+  input[type='date'],
+  input[type='datetime-local'],
+  input[type='month'],
+  input[type='search'],
+  input[type='tel'],
+  input[type='time'],
+  input[type='week'],
+  textarea,
+  select {
+    @apply bg-white dark:bg-gray-900 focus:ring-focus dark:focus:ring-focus-dark focus:border-focus dark:focus:border-focus-dark text-base sm:text-sm border-gray-300 dark:border-gray-700 rounded-lg py-2 px-4;
+    &:disabled {
+      @apply disabled;
+    }
+    .no-outline &, &.no-outline {
+      @apply ring-transparent border-none !important;
+    }
+  }
+
+  input[type='checkbox'], input[type='radio'] {
+    &:disabled {
+      @apply disabled;
+      & + label {
+        @apply disabled;
+      }
+    }
+  }
+
+  button {
+    &:disabled {
+      @apply disabled;
+    }
+  }
+}

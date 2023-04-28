@@ -1,0 +1,107 @@
+{
+  "name": "@pija-ab/next-dashboard",
+  "version": "7.0.0",
+  "description": "> TODO: description",
+  "author": "Linn Dahlgren <linn.dahlgren@pija.se>",
+  "homepage": "https://github.com/PiJaAB/next-dashboard#readme",
+  "license": "UNLICENSED",
+  "main": "dist/entry.js",
+  "directories": {
+    "assets": "assets",
+    "dist": "dist",
+    "src": "src",
+    "styles": "styles",
+    "test": "__tests__"
+  },
+  "files": [
+    "assets",
+    "dist",
+    "styles",
+    "src",
+    "tailwind.config.js",
+    "postcss.config.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PiJaAB/next-dashboard.git"
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "dev:pkg": "nodemon -w src -x \"yarn run -s build\"",
+    "lint": "run-p -l --silent --aggregate-output --continue-on-error lint:*",
+    "lint:eslint-check": "NODE_ENV=production eslint-config-prettier 'src/**/*.js'",
+    "lint:prettier": "NODE_ENV=production prettier -c 'src/**/*.ts' 'src/**/*.tsx'",
+    "lint:eslint": "NODE_ENV=production eslint src --report-unused-disable-directives --color",
+    "lint:stylelint": "NODE_ENV=production stylelint styles/**/*.css --rd --risd --color",
+    "build": "run-s -l --silent build:clean build:tsc",
+    "build:clean": "rimraf dist",
+    "build:tsc": "tsc",
+    "prepack": "yarn build",
+    "test": "yarn run --silent lint",
+    "deploy": "node scripts/deploy.js"
+  },
+  "nodemonConfig": {
+    "ext": "js,jsx,ts,tsx,json,css,scss,svg",
+    "watch": [
+      "src"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/PiJaAB/next-dashboard/issues"
+  },
+  "peerDependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.17",
+    "@tailwindcss/forms": "^0.5.3",
+    "autoprefixer": "^10.3.6",
+    "next": "^11.1.2",
+    "postcss": "^8.3.8",
+    "postcss-import": "^14.0.2",
+    "react": "^18.0.1",
+    "react-dom": "^18.0.1",
+    "react-tooltip": "^4.2.7",
+    "tailwindcss": "^3.1.4",
+    "tailwindcss-rtl": "^0.7.3"
+  },
+  "devDependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.17",
+    "@types/node": "^14.14.22",
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@types/recharts": "^1.8.19",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "autoprefixer": "^10.3.6",
+    "copy": "^0.3.2",
+    "eslint": "^7.18.0",
+    "eslint-config-airbnb-typescript": "^12.0.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "next": "^11.1.2",
+    "nodemon": "^1.19.4",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.3.8",
+    "postcss-import": "^14.0.2",
+    "prettier": "^2.2.1",
+    "react": "^17.0.1",
+    "react-tooltip": "^4.2.21",
+    "rimraf": "^3.0.2",
+    "stylelint": "^13.0.0",
+    "stylelint-config-recommended": "^3.0.0",
+    "tailwindcss": "^2.2.16",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5"
+  },
+  "gitHead": "679659219d2024efa11020fa9215cf561468130f"
+}

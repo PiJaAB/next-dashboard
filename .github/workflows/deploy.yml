@@ -1,0 +1,45 @@
+name: Deploy to magic branch
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to build-branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js for use with actions
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Setup caching
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --prefer-offline
+        env:
+          CI: true
+      - name: Build dist
+        run: yarn build
+      - name: Cleanup folder structure
+        run: rm -rf prettier.config.js tsconfig.eslint.json tsconfig.base.json tsconfig.json yarn.lock .prettierignore .gitignore .github .editorconfig .eslintignore .stylelintrc .vscode .eslintrc
+      - name: Run deploy script
+        run: |
+          git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          npm run deploy

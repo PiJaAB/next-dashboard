@@ -1,0 +1,6 @@
+# Don't lint flow types from dependencies
+/flow-typed/**/*.js
+/dist/**/*
+/*.js
+/exposers/**/*.js
+**/*.d.ts
