@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import getConfig from 'next/config';
-import ExclamationIcon from '@heroicons/react/outline/ExclamationIcon';
-import ExclamationCircleIcon from '@heroicons/react/outline/ExclamationCircleIcon';
-import XCircleIcon from '@heroicons/react/outline/XCircleIcon';
-import CheckIcon from '@heroicons/react/outline/CheckIcon';
-import XIcon from '@heroicons/react/outline/XIcon';
+import ExclamationTrianleIcon from '@heroicons/react/24/outline/ExclamationTriangleIcon';
+import ExclamationCircleIcon from '@heroicons/react/24/outline/ExclamationCircleIcon';
+import XCircleIcon from '@heroicons/react/24/outline/XCircleIcon';
+import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
+import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import classNames from 'classnames';
 import type { SiteMessageType } from '../utils/types';
 import useS from '../hooks/useS';
@@ -95,7 +95,7 @@ function SiteMessage({
               />
             )}
             {status === 'warning' && (
-              <ExclamationIcon
+              <ExclamationTrianleIcon
                 className="h-6 w-6 text-white"
                 aria-hidden="true"
               />
@@ -169,7 +169,7 @@ function SiteMessage({
                   </circle>
                 </svg>
               )}
-              <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
             </button>
           </div>
         )}

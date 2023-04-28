@@ -1,6 +1,6 @@
 import ReactTooltip from 'react-tooltip';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import ColorSwatchIcon from '@heroicons/react/outline/ColorSwatchIcon';
+import SwatchIcon from '@heroicons/react/24/outline/SwatchIcon';
 
 import NavEntry from './NavEntry';
 import LayoutContext from '../utils/layoutContext';
@@ -27,7 +27,7 @@ export default function ThemeSelector({ children }: Props): JSX.Element {
   const s = useS();
   return (
     <NavEntry
-      Icon={ColorSwatchIcon}
+      Icon={SwatchIcon}
       onClick={() => {
         setReshow(true);
         setState(

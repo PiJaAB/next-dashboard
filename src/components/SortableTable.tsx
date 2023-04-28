@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
-import ChevronUpIcon from '@heroicons/react/solid/ChevronUpIcon';
-import ChevronDownIcon from '@heroicons/react/solid/ChevronDownIcon';
+import ChevronUpIcon from '@heroicons/react/24/solid/ChevronUpIcon';
+import ChevronDownIcon from '@heroicons/react/24/solid/ChevronDownIcon';
 import ResponsiveTable, {
   defaultRenderHead,
   Props as TableProps,

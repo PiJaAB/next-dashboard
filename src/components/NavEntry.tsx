@@ -9,8 +9,8 @@ type Props = {
   href?: string;
   as?: string;
   children: string | [string, React.ReactElement<{ className?: string }>];
-  Icon?: React.ComponentType<React.ComponentProps<'svg'>>;
-  OpenIcon?: React.ComponentType<React.ComponentProps<'svg'>>;
+  Icon?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>;
+  OpenIcon?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>;
   onClick?: (ev: React.MouseEvent) => void;
   active?: boolean;
   tipRef?: React.Ref<HTMLAnchorElement | HTMLButtonElement>;

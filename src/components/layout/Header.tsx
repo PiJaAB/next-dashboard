@@ -1,8 +1,8 @@
 import React, { useContext, useMemo } from 'react';
 import { Menu } from '@headlessui/react';
-import MenuAlt1Icon from '@heroicons/react/outline/MenuAlt1Icon';
-import SearchIcon from '@heroicons/react/solid/SearchIcon';
-import UserIcon from '@heroicons/react/solid/UserIcon';
+import Bars3CenterLeftIcon from '@heroicons/react/24/outline/Bars3CenterLeftIcon';
+import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
+import UserIcon from '@heroicons/react/24/solid/UserIcon';
 import Link from 'next/link';
 import classNames from 'classnames';
 import ConfigContext from '../../utils/configContext';
@@ -63,7 +63,7 @@ export default function Header({
           onClick={() => setSidebarOpen(true)}
         >
           <span className="sr-only">{s('open-sidebar')}</span>
-          <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
+          <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
         </button>
       )}
       {logoURL && (
@@ -81,7 +81,7 @@ export default function Header({
             </label>
             <div className="relative w-full text-gray-400 focus-within:text-gray-600 dark:text-gray-600 dark:focus-within:text-gray-300">
               <div className="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none">
-                <SearchIcon className="h-5 w-5" aria-hidden="true" />
+                <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
               </div>
               <input
                 id="search-field"

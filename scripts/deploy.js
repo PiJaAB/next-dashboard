@@ -3,14 +3,14 @@
 const execa = require('execa');
 
 (async () => {
-  await execa('git', ['fetch', 'origin', 'build/v6']);
+  await execa('git', ['fetch', 'origin', 'build/v7']);
   await execa('git', ['checkout', '--detach']);
-  await execa('git', ['reset', '--soft', 'origin/build/v6']);
+  await execa('git', ['reset', '--soft', 'origin/build/v7']);
   await execa('git', ['add', '--all']);
   await execa('git', ['reset', '--', 'node_modules', 'scripts']);
   await execa('git', ['commit', '--allow-empty', '-m', 'build']);
   console.log('Pushing to build branch...');
-  await execa('git', ['push', 'origin', 'HEAD:build/v6', '--force']);
+  await execa('git', ['push', 'origin', 'HEAD:build/v7', '--force']);
   console.log('Successfully deployed');
 })().catch((err) => {
   console.error(err);

@@ -1,25 +1,34 @@
-import React from 'react';
-import ArrowSmLeftIcon from '@heroicons/react/outline/ArrowSmLeftIcon';
-import ArrowSmRightIcon from '@heroicons/react/outline/ArrowSmRightIcon';
+import React, { forwardRef } from 'react';
+import ArrowSmallLeftIcon from '@heroicons/react/24/outline/ArrowSmallLeftIcon';
+import ArrowSmallRightIcon from '@heroicons/react/24/outline/ArrowSmallRightIcon';
 import classNames from 'classnames';
 
-export function ArrowSmStartIcon({
-  className,
-  ...props
-}: React.ComponentProps<'svg'>): JSX.Element {
-  return (
-    <ArrowSmLeftIcon {...props} className={classNames(className, 'rtl:flip')} />
-  );
-}
+export const ArrowSmallStartIcon = forwardRef(
+  (
+    { className, ...props }: React.ComponentPropsWithoutRef<'svg'>,
+    ref: React.ForwardedRef<SVGSVGElement>,
+  ): JSX.Element => {
+    return (
+      <ArrowSmallLeftIcon
+        ref={ref}
+        {...props}
+        className={classNames(className, 'rtl:flip')}
+      />
+    );
+  },
+);
 
-export function ArrowSmEndIcon({
-  className,
-  ...props
-}: React.ComponentProps<'svg'>): JSX.Element {
-  return (
-    <ArrowSmRightIcon
-      {...props}
-      className={classNames(className, 'rtl:flip')}
-    />
-  );
-}
+export const ArrowSmallEndIcon = forwardRef(
+  (
+    { className, ...props }: React.ComponentPropsWithoutRef<'svg'>,
+    ref: React.ForwardedRef<SVGSVGElement>,
+  ): JSX.Element => {
+    return (
+      <ArrowSmallRightIcon
+        ref={ref}
+        {...props}
+        className={classNames(className, 'rtl:flip')}
+      />
+    );
+  },
+);

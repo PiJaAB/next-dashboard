@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 
-import XIcon from '@heroicons/react/outline/XIcon';
+import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 
 import classNames from 'classnames';
 import LayoutContext from '../utils/layoutContext';
@@ -117,7 +117,7 @@ export default function Modal({
             className="absolute top-4 right-4 w-6 h-6"
             onClick={close}
           >
-            <XIcon className="w-full h-full" />
+            <XMarkIcon className="w-full h-full" />
           </button>
           {header}
         </div>

@@ -1,12 +1,12 @@
 import { Dialog, Menu, Transition } from '@headlessui/react';
-import XIcon from '@heroicons/react/outline/XIcon';
-import SearchIcon from '@heroicons/react/solid/SearchIcon';
-import SelectorIcon from '@heroicons/react/solid/SelectorIcon';
-import UserIcon from '@heroicons/react/solid/UserIcon';
+import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
+import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
+import ChevronUpDownIcon from '@heroicons/react/24/solid/ChevronUpDownIcon';
+import UserIcon from '@heroicons/react/24/solid/UserIcon';
 import React, { Fragment, useContext, useEffect } from 'react';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { ArrowSmStartIcon, ArrowSmEndIcon } from '../ArrowSmIcons';
+import { ArrowSmallStartIcon, ArrowSmallEndIcon } from '../ArrowSmIcons';
 import useRebuildTooltip from '../../hooks/useRebuildTooltip';
 import useColorScheme from '../../hooks/useColorScheme';
 import ConfigContext from '../../utils/configContext';
@@ -97,7 +97,7 @@ function UserInfo({
         )}
       </span>
       {showSelector && (
-        <SelectorIcon
+        <ChevronUpDownIcon
           className="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
           aria-hidden="true"
         />
@@ -311,7 +311,7 @@ export default function Sidebar({
                       onClick={() => setSidebarOpen(false)}
                     >
                       <span className="sr-only">{s('close-sidebar')}</span>
-                      <XIcon
+                      <XMarkIcon
                         className="h-6 w-6 text-white"
                         aria-hidden="true"
                       />
@@ -366,7 +366,7 @@ export default function Sidebar({
                       className="absolute inset-y-0 left-0 ps-3 flex items-center pointer-events-none"
                       aria-hidden="true"
                     >
-                      <SearchIcon
+                      <MagnifyingGlassIcon
                         className="me-3 h-4 w-4 text-gray-400"
                         aria-hidden="true"
                       />
@@ -389,7 +389,7 @@ export default function Sidebar({
                 <NavSection className="py-2">
                   {themeSelect && <ThemeSelector />}
                   <NavEntry
-                    Icon={isCompact ? ArrowSmEndIcon : ArrowSmStartIcon}
+                    Icon={isCompact ? ArrowSmallEndIcon : ArrowSmallStartIcon}
                     onClick={() => setState('compactSidebar', !isCompact)}
                   >
                     {s(isCompact ? 'sidebar-expand' : 'sidebar-compact')}
