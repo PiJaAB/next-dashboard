@@ -29,6 +29,17 @@ export interface SidebarProps {
   userTitle?: string;
   userSubTitle?: string;
   userProfilePic?: string;
+  showDevelopmentLabel?: boolean;
+}
+
+function DevelopmentLabel() {
+  return (
+    <div className="w-14 inline-block bg-primary-600  dark:bg-primary-600 py-1 px-2 mb-4 rounded-r-3xl">
+      <p className="font-bold uppercase tracking-wide text-primary-100 whitespace-nowrap">
+        DEV
+      </p>
+    </div>
+  );
 }
 
 function UserInfo({
@@ -248,6 +259,7 @@ export default function Sidebar({
   userTitle,
   userSubTitle,
   userProfilePic,
+  showDevelopmentLabel,
 }: SidebarProps): JSX.Element {
   const { getState, setState } = useContext(LayoutContext);
   const { themeSelect } = useContext(ConfigContext);
@@ -346,8 +358,11 @@ export default function Sidebar({
               isCompact && 'w-24',
             )}
           >
-            <Brand compact={isCompact} />
+            {/* Development label */}
+            {showDevelopmentLabel ? <DevelopmentLabel /> : null}
+
             {/* Sidebar component, swap this element with another sidebar if you like */}
+            <Brand compact={isCompact} />
             <div className="h-0 flex-1 flex flex-col">
               <UserAccountArea
                 groupedUserMenu={groupedUserMenu}
