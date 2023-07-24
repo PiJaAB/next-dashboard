@@ -35,6 +35,7 @@ export type Props = React.PropsWithChildren<{
   userTitle?: string;
   userSubTitle?: string;
   userProfilePic?: string;
+  showDevelopmentLabel?: boolean;
 }>;
 
 export default function DashboardLayout({
@@ -47,6 +48,7 @@ export default function DashboardLayout({
   userTitle,
   userSubTitle,
   userProfilePic,
+  showDevelopmentLabel,
 }: Props): JSX.Element {
   const { getTemp, setTemp } = useContext(LayoutContext);
   const colorScheme = useColorScheme();
@@ -130,6 +132,7 @@ export default function DashboardLayout({
 
   return (
     <div className="relative flex">
+      {/* Sidebar */}
       {Sidebar !== false && (
         <LayoutSidebar
           groupedUserMenu={groupedUserMenu}
@@ -143,6 +146,7 @@ export default function DashboardLayout({
           userTitle={userTitle}
           userSubTitle={userSubTitle}
           userProfilePic={userProfilePic}
+          showDevelopmentLabel={showDevelopmentLabel}
         />
       )}
       {/* Main column */}
