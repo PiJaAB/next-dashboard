@@ -24,10 +24,6 @@ jobs:
         run: pnpm install --prefer-offline --no-lockfile
         env:
           CI: true
-      - name: Build dist
-        run: yarn build
-      - name: Cleanup folder structure
-        run: rm -rf prettier.config.js tsconfig.eslint.json tsconfig.base.json tsconfig.json yarn.lock .prettierignore .gitignore .github .editorconfig .eslintignore .stylelintrc .vscode .eslintrc
       - name: Run deploy script
         run: |
           git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

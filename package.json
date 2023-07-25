@@ -10,7 +10,7 @@
     "dev": "node scripts/pnpm-select.js dev",
     "build": "pnpm --silent -C ./package build",
     "lint": "pnpm --silent -C ./package lint",
-    "deploy": "node scripts/deploy.js",
+    "deploy": "node scripts/deploy.mjs",
     "postinstall": "node scripts/prune-lockfile.js"
   },
   "pnpm": {
@@ -19,6 +19,7 @@
     }
   },
   "devDependencies": {
+    "execa": "^7.1.1",
     "js-yaml": "^4.1.0",
     "semver": "^7.5.4"
   }

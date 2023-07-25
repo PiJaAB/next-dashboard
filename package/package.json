@@ -6,6 +6,7 @@
   "homepage": "https://github.com/PiJaAB/next-dashboard#readme",
   "license": "UNLICENSED",
   "main": "dist/entry.js",
+  "type": "commonjs",
   "directories": {
     "assets": "assets",
     "dist": "dist",
@@ -27,17 +28,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PiJaAB/next-dashboard.git"
-  },
-  "scripts": {
-    "dev": "tsc --watch",
-    "lint": "pnpm run --silent \"/^lint:.*/\"",
-    "lint:eslint-check": "eslint-config-prettier 'src/**/*.js'",
-    "lint:prettier": "prettier -c 'src/**/*.ts' 'src/**/*.tsx'",
-    "lint:eslint": "eslint src --report-unused-disable-directives --color",
-    "lint:stylelint": "stylelint styles/**/*.css --rd --risd --color",
-    "build": "pnpm run \"/^build:/\"",
-    "build:clean": "rimraf dist",
-    "build:tsc": "tsc"
   },
   "nodemonConfig": {
     "ext": "js,jsx,ts,tsx,json,css,scss,svg",
@@ -97,5 +87,15 @@
     "stylelint-config-recommended": "^3.0.0",
     "tailwindcss": "^3.3.3",
     "typescript": "~5.0.4"
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "lint": "pnpm run --silent \"/^lint:.*/\"",
+    "lint:eslint-check": "eslint-config-prettier 'src/**/*.js'",
+    "lint:prettier": "prettier -c 'src/**/*.ts' 'src/**/*.tsx'",
+    "lint:eslint": "eslint src --report-unused-disable-directives --color",
+    "lint:stylelint": "stylelint styles/**/*.css --rd --risd --color",
+    "build": "tsc --build",
+    "prepack": "rimraf dist && tsc --build"
   }
 }
