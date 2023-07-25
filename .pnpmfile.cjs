@@ -55,13 +55,21 @@ function afterAllResolved(lockfile, context) {
   const newLockfile = {
     ...lockfile,
   };
-  console.log(projectDependencies);
+  Object.entries(lockfile.packages).forEach(([k, v]) => {
+    if (!libDependencies.has(k)) {
+      newLockfile.packages[k] = {
+        ...v,
+        $DEFUNCT_PROPERTY: true,
+      };
+    }
+  });
+  /* console.log(projectDependencies);
   projectDependencies.forEach((version) => {
     newLockfile.packages[version] = {
       ...newLockfile.packages[version],
       $DEFUNCT_PROPERTY: true,
     };
-  });
+  }); */
   return newLockfile;
 }
 
