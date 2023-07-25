@@ -32,13 +32,13 @@ const update = (el: HTMLTableSectionElement, hasHeader: boolean) => {
   }
 };
 
-const TableHead = <E extends {}, C>({
+export default function TableHead<E extends {}, C>({
   cols,
   columnKeyExtractor,
   renderHead,
   onColumnClick,
   type = 'body',
-}: HeadProps<E, C>): JSX.Element => {
+}: HeadProps<E, C>): JSX.Element {
   const headRef = useRef<HTMLTableSectionElement | null>(null);
   const ctx = useContext(LayoutContext);
   const hasHeader = ctx.getTemp('hasHeader', true);
@@ -95,6 +95,4 @@ const TableHead = <E extends {}, C>({
       </tr>
     </thead>
   );
-};
-
-export default TableHead;
+}

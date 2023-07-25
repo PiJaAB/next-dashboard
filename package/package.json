@@ -1,0 +1,101 @@
+{
+  "name": "@pija-ab/next-dashboard",
+  "version": "8.0.0",
+  "description": "> TODO: description",
+  "author": "Linn Dahlgren <linn.dahlgren@pija.se>",
+  "homepage": "https://github.com/PiJaAB/next-dashboard#readme",
+  "license": "UNLICENSED",
+  "main": "dist/entry.js",
+  "directories": {
+    "assets": "assets",
+    "dist": "dist",
+    "src": "src",
+    "styles": "styles",
+    "test": "__tests__"
+  },
+  "files": [
+    "assets",
+    "dist",
+    "styles",
+    "src",
+    "tailwind.config.js",
+    "postcss.config.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PiJaAB/next-dashboard.git"
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "lint": "pnpm run --silent \"/^lint:.*/\"",
+    "lint:eslint-check": "eslint-config-prettier 'src/**/*.js'",
+    "lint:prettier": "prettier -c 'src/**/*.ts' 'src/**/*.tsx'",
+    "lint:eslint": "eslint src --report-unused-disable-directives --color",
+    "lint:stylelint": "stylelint styles/**/*.css --rd --risd --color",
+    "build": "pnpm run \"/^build:/\"",
+    "build:clean": "rimraf dist",
+    "build:tsc": "tsc"
+  },
+  "nodemonConfig": {
+    "ext": "js,jsx,ts,tsx,json,css,scss,svg",
+    "watch": [
+      "src"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/PiJaAB/next-dashboard/issues"
+  },
+  "peerDependencies": {
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
+    "@tailwindcss/forms": "^0.5.3",
+    "autoprefixer": "^10.3.6",
+    "classnames": "*",
+    "next": "^11.1.4 || ^12.2.6 || ^13.4.12",
+    "postcss": "^8.3.8",
+    "postcss-import": "^14.0.2",
+    "react": "^18.0.1",
+    "react-dom": "^18.0.1",
+    "react-tooltip": "^4.5.1",
+    "tailwindcss": "^3.1.4",
+    "tailwindcss-rtl": "*"
+  },
+  "devDependencies": {
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
+    "@next/swc": "npm:@next/swc-linux-x64-gnu@^13.4.12",
+    "@tailwindcss/forms": "^0.5.4",
+    "@types/node": "^14.18.54",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@types/recharts": "^1.8.24",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "autoprefixer": "^10.4.14",
+    "classnames": "^2.3.2",
+    "eslint": "^8.45.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "next": "^13.4.12",
+    "postcss": "^8.4.27",
+    "postcss-import": "^14.1.0",
+    "prettier": "^3.0.0",
+    "react": "^18.2.0",
+    "react-tooltip": "^4.5.1",
+    "rimraf": "^3.0.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-recommended": "^3.0.0",
+    "tailwindcss": "^3.3.3",
+    "typescript": "~5.0.4"
+  }
+}

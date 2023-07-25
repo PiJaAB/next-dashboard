@@ -101,7 +101,7 @@ const defaultRenderCell = ({
   );
 };
 
-const ResponsiveTable = <E extends {}, C>({
+export default function ResponsiveTable<E extends {}, C>({
   className,
   columns,
   data,
@@ -117,7 +117,7 @@ const ResponsiveTable = <E extends {}, C>({
   renderRow: RenderRow = defaultRenderRow,
   renderCell = defaultRenderCell,
   emptyNode,
-}: Props<E, C>): JSX.Element => {
+}: Props<E, C>): JSX.Element {
   const rebuildTooltip = useRebuildTooltip();
   useEffect(() => {
     rebuildTooltip();
@@ -207,6 +207,4 @@ const ResponsiveTable = <E extends {}, C>({
       {!loading && (data?.length || 0) === 0 && emptyNode}
     </div>
   );
-};
-
-export default ResponsiveTable;
+}

@@ -6,7 +6,7 @@ import {
   offConfirmDialogue,
 } from '../../../utils/confirmDialogue';
 
-const ConfirmDialogue = (): JSX.Element => {
+export default function ConfirmDialogue(): JSX.Element {
   const [queue, setQueue] = useState<readonly Options[]>([]);
   const [current, setCurrent] = useState<Options | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -101,6 +101,4 @@ const ConfirmDialogue = (): JSX.Element => {
       </div>
     </Modal>
   );
-};
-
-export default ConfirmDialogue;
+}
