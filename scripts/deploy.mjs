@@ -15,43 +15,6 @@ const major = semver.major(pkg.version);
     console.error("Working directory is not clean");
     process.exit(1);
   }
-  console.log("Getting git config...");
-  const sha = (await execa("git", ["rev-parse", "--short", "HEAD"])).stdout;
-  const fetchUrls = (
-    await execa("git", ["remote", "get-url", "--all", "origin"])
-  ).stdout
-    .split("\n")
-    .filter((url) => url.trim().length > 0);
-  const pushUrls = (
-    await execa("git", ["remote", "get-url", "--all", "--push", "origin"])
-  ).stdout
-    .split("\n")
-    .filter((url) => url.trim().length > 0);
-
-  console.log(`Current commit: ${sha}`);
-
-  const identical =
-    pushUrls.length === fetchUrls.length &&
-    pushUrls.every((url, i) => url === fetchUrls[i]);
-
-  if (identical) {
-    console.log(`Found remote urls: ${fetchUrls.join(", ")}`);
-  } else {
-    console.log(
-      `Found remote urls: ${fetchUrls.join(", ")} (push: ${pushUrls.join(
-        ", "
-      )})`
-    );
-  }
-
-  if (fetchUrls.length === 0) {
-    console.error("No remote origin found");
-    process.exit(1);
-  }
-  if (pushUrls.length === 0) {
-    console.error("Origin remote is missing push urls");
-    process.exit(1);
-  }
 
   console.log("Setting up deploy working directory...");
   try {
@@ -80,45 +43,9 @@ const major = semver.major(pkg.version);
   ]);
   let newBranch = false;
 
-  console.log("Setting up git repository in package directory...");
-  await execa("git", ["init"], { cwd: ".buildpkg" });
-
-  console.log("Adding origin remote...");
-  await execa("git", ["remote", "add", "origin", fetchUrls[0]], {
-    cwd: ".buildpkg",
-  });
-  if (fetchUrls.length > 1) {
-    console.log(
-      `Adding extra ${!identical ? "fetch " : ""}url${
-        fetchUrls.length > 2 ? "s" : ""
-      } to origin remote...`
-    );
-    for (let i = 1; i < fetchUrls.length; i++) {
-      await execa(
-        "git",
-        ["remote", "set-url", "--add", "origin", fetchUrls[i]],
-        { cwd: ".buildpkg" }
-      );
-    }
-  }
-  if (!identical) {
-    console.log(
-      `Adding push url${pushUrls.length > 1 ? "s" : ""} to origin remote...`
-    );
-    await execa(
-      "git",
-      ["remote", "set-url", "--push", "origin", fetchUrls[0]],
-      { cwd: ".buildpkg" }
-    );
-    for (let i = 1; i < pushUrls.length; i++) {
-      await execa(
-        "git",
-        ["remote", "set-url", "--add", "--push", "origin", pushUrls[i]],
-        { cwd: ".buildpkg" }
-      );
-    }
-  }
-
+  console.log("Copying .git folder...");
+  await execa("cp", ["-r", ".git", ".buildpkg"]);
+  
   try {
     console.log(`Fetching build/v${major} branch...`);
     await execa("git", ["fetch", "origin", `build/v${major}`], {
@@ -144,6 +71,7 @@ const major = semver.major(pkg.version);
     });
   } else {
     console.log(`Checking out detached history of build/v${major}...`);
+    await execa("git", ["checkout", "--detach"], { cwd: ".buildpkg" });
     await execa("git", ["reset", "--soft", `origin/build/v${major}`], {
       cwd: ".buildpkg",
     });
