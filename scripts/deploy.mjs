@@ -83,6 +83,7 @@ const major = semver.major(pkg.version);
   });
 
   console.log("Committing...");
+  const sha = (await execa("git", ["rev-parse", "--short", "HEAD"])).stdout;
   await execa("git", ["commit", "--allow-empty", "-m", `build for ${sha}`], {
     cwd: ".buildpkg",
   });
