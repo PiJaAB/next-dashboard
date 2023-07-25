@@ -26,5 +26,5 @@ jobs:
           CI: true
       - name: Run deploy script
         run: |
-          git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           pnpm run deploy
