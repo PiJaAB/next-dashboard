@@ -55,7 +55,7 @@ var useColorScheme_1 = __importDefault(require("../../hooks/useColorScheme"));
 var ConfirmDialogue_1 = __importDefault(require("./components/ConfirmDialogue"));
 exports.SEPARATOR = Symbol('separator');
 function DashboardLayout(_a) {
-    var children = _a.children, searchText = _a.searchText, onSearchChange = _a.onSearchChange, onSearch = _a.onSearch, userMenu = _a.userMenu, Sidebar = _a.Sidebar, userTitle = _a.userTitle, userSubTitle = _a.userSubTitle, userProfilePic = _a.userProfilePic;
+    var children = _a.children, searchText = _a.searchText, onSearchChange = _a.onSearchChange, onSearch = _a.onSearch, userMenu = _a.userMenu, Sidebar = _a.Sidebar, userTitle = _a.userTitle, userSubTitle = _a.userSubTitle, userProfilePic = _a.userProfilePic, showDevelopmentLabel = _a.showDevelopmentLabel;
     var _b = (0, react_1.useContext)(layoutContext_1.default), getTemp = _b.getTemp, setTemp = _b.setTemp;
     var colorScheme = (0, useColorScheme_1.default)();
     (0, react_1.useEffect)(function () {
@@ -136,7 +136,7 @@ function DashboardLayout(_a) {
     }, [userMenu]);
     var isInitial = (0, useInitialRender_1.default)();
     return (react_1.default.createElement("div", { className: "relative flex" },
-        Sidebar !== false && (react_1.default.createElement(Sidebar_1.default, { groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, setSidebarOpen: setSidebarOpen, sidebarOpen: sidebarOpen, SidebarComp: typeof Sidebar !== 'boolean' ? Sidebar : undefined, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic })),
+        Sidebar !== false && (react_1.default.createElement(Sidebar_1.default, { groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, setSidebarOpen: setSidebarOpen, sidebarOpen: sidebarOpen, SidebarComp: typeof Sidebar !== 'boolean' ? Sidebar : undefined, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic, showDevelopmentLabel: showDevelopmentLabel })),
         react_1.default.createElement("div", { className: "flex flex-col w-0 flex-1 min-h-screen" },
             Sidebar !== false && (react_1.default.createElement(Header_1.default, { setSidebarOpen: setSidebarOpen, groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, showMenuButton: Sidebar != null, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic })),
             react_1.default.createElement("main", { className: "flex-1 focus:outline-none" },

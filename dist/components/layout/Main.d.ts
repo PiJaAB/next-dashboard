@@ -12,5 +12,6 @@ export type Props = React.PropsWithChildren<{
     userTitle?: string;
     userSubTitle?: string;
     userProfilePic?: string;
+    showDevelopmentLabel?: boolean;
 }>;
-export default function DashboardLayout({ children, searchText, onSearchChange, onSearch, userMenu, Sidebar, userTitle, userSubTitle, userProfilePic, }: Props): JSX.Element;
+export default function DashboardLayout({ children, searchText, onSearchChange, onSearch, userMenu, Sidebar, userTitle, userSubTitle, userProfilePic, showDevelopmentLabel, }: Props): JSX.Element;

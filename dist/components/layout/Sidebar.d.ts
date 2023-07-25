@@ -12,5 +12,6 @@ export interface SidebarProps {
     userTitle?: string;
     userSubTitle?: string;
     userProfilePic?: string;
+    showDevelopmentLabel?: boolean;
 }
-export default function Sidebar({ groupedUserMenu, handleSearchChange, handleSearchDown, searchText, showSearch, sidebarOpen, setSidebarOpen, SidebarComp, userTitle, userSubTitle, userProfilePic, }: SidebarProps): JSX.Element;
+export default function Sidebar({ groupedUserMenu, handleSearchChange, handleSearchDown, searchText, showSearch, sidebarOpen, setSidebarOpen, SidebarComp, userTitle, userSubTitle, userProfilePic, showDevelopmentLabel, }: SidebarProps): JSX.Element;

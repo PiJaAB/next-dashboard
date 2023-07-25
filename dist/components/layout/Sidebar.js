@@ -44,6 +44,10 @@ var UserMenu_1 = __importDefault(require("./components/UserMenu"));
 var NavEntry_1 = __importStar(require("../NavEntry"));
 var NavSection_1 = __importDefault(require("../NavSection"));
 var ThemeSelector_1 = __importDefault(require("../ThemeSelector"));
+function DevelopmentLabel() {
+    return (react_2.default.createElement("div", { className: "w-14 inline-block bg-primary-600  dark:bg-primary-600 py-1 px-2 mb-4 rounded-r-3xl" },
+        react_2.default.createElement("p", { className: "font-bold uppercase tracking-wide text-primary-100 whitespace-nowrap" }, "DEV")));
+}
 function UserInfo(_a) {
     var title = _a.title, subTitle = _a.subTitle, pictureUrl = _a.pictureUrl, compact = _a.compact, showSelector = _a.showSelector;
     if (compact) {
@@ -114,7 +118,7 @@ function Brand(_a) {
         react_2.default.createElement("a", { className: "flex items-center flex-shrink-0 px-6" }, "title")));
 }
 function Sidebar(_a) {
-    var groupedUserMenu = _a.groupedUserMenu, handleSearchChange = _a.handleSearchChange, handleSearchDown = _a.handleSearchDown, searchText = _a.searchText, showSearch = _a.showSearch, sidebarOpen = _a.sidebarOpen, setSidebarOpen = _a.setSidebarOpen, SidebarComp = _a.SidebarComp, userTitle = _a.userTitle, userSubTitle = _a.userSubTitle, userProfilePic = _a.userProfilePic;
+    var groupedUserMenu = _a.groupedUserMenu, handleSearchChange = _a.handleSearchChange, handleSearchDown = _a.handleSearchDown, searchText = _a.searchText, showSearch = _a.showSearch, sidebarOpen = _a.sidebarOpen, setSidebarOpen = _a.setSidebarOpen, SidebarComp = _a.SidebarComp, userTitle = _a.userTitle, userSubTitle = _a.userSubTitle, userProfilePic = _a.userProfilePic, showDevelopmentLabel = _a.showDevelopmentLabel;
     var _b = (0, react_2.useContext)(layoutContext_1.default), getState = _b.getState, setState = _b.setState;
     var themeSelect = (0, react_2.useContext)(configContext_1.default).themeSelect;
     var isCompact = getState('compactSidebar', false);
@@ -144,6 +148,7 @@ function Sidebar(_a) {
         react_2.default.createElement(NavEntry_1.IsCompactProvider, { value: isCompact },
             react_2.default.createElement("div", { className: "hidden lg:flex lg:flex-shrink-0 fixed h-screen" },
                 react_2.default.createElement("div", { className: (0, classnames_1.default)('flex flex-col border-e border-gray-200 dark:border-gray-700 pt-5 pb-4 bg-gray-200 dark:bg-gray-700', !isCompact && 'w-64', isCompact && 'w-24') },
+                    showDevelopmentLabel ? react_2.default.createElement(DevelopmentLabel, null) : null,
                     react_2.default.createElement(Brand, { compact: isCompact }),
                     react_2.default.createElement("div", { className: "h-0 flex-1 flex flex-col" },
                         react_2.default.createElement(UserAccountArea, { groupedUserMenu: groupedUserMenu, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic, compact: isCompact }),
