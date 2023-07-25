@@ -10,8 +10,7 @@
     "dev": "node scripts/pnpm-select.js dev",
     "build": "pnpm --silent -C ./package build",
     "lint": "pnpm --silent -C ./package lint",
-    "deploy": "node scripts/deploy.mjs",
-    "postinstall": "node scripts/prune-lockfile.js"
+    "deploy": "node scripts/deploy.mjs"
   },
   "pnpm": {
     "overrides": {
