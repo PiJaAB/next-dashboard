@@ -164,6 +164,30 @@ packages:
         sha512-5UamI7xkUcJ3i9qVDS+KFDEK8/7oJ55/sJMB1Ge7IEapr7KfdfV/HErR+koZwOfd+SgtFKOKRhRakdg++DcJpQ==
     engines:
       node: '>=6.9.0'
+  /@babel/core@7.22.9:
+    resolution:
+      integrity: >-
+        sha512-G2EgeufBcYw27U4hhoIwFcgc1XU7TlXJ3mv04oOv1WCuo900U/anZSPzEqNjwdjgffkk2Gs0AN0dW1CKVLcG7w==
+    engines:
+      node: '>=6.9.0'
+    dependencies:
+      '@ampproject/remapping': 2.2.1
+      '@babel/code-frame': 7.22.5
+      '@babel/generator': 7.22.9
+      '@babel/helper-compilation-targets': 7.22.9(@babel/core@7.22.9)
+      '@babel/helper-module-transforms': 7.22.9(@babel/core@7.22.9)
+      '@babel/helpers': 7.22.6
+      '@babel/parser': 7.22.7
+      '@babel/template': 7.22.5
+      '@babel/traverse': 7.22.8
+      '@babel/types': 7.22.5
+      convert-source-map: 1.9.0
+      debug: 4.3.4
+      gensync: 1.0.0-beta.2
+      json5: 2.2.3
+      semver: 6.3.1
+    transitivePeerDependencies:
+      - supports-color
   /@babel/generator@7.22.9:
     resolution:
       integrity: >-
@@ -2408,7 +2432,7 @@ packages:
       '@firebase/logger': 0.3.4
       '@firebase/util': 1.7.3
       '@firebase/webchannel-wrapper': 0.8.1
-      '@grpc/grpc-js': 1.7.3
+      '@grpc/grpc-js': 1.8.20
       '@grpc/proto-loader': 0.6.13
       node-fetch: 2.6.7
       tslib: 2.6.1
@@ -2682,10 +2706,10 @@ packages:
     resolution:
       integrity: >-
         sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
-  /@grpc/grpc-js@1.7.3:
+  /@grpc/grpc-js@1.8.20:
     resolution:
       integrity: >-
-        sha512-H9l79u4kJ2PVSxUNA08HMYAnUBLj9v6KjYQ7SQ71hOZcEXhShE/y5iQCesP8+6/Ik/7i2O0a10bPquIcYfufog==
+        sha512-SPse1wE4PcIFojOISsAnrWXCBsCBwDdcDqz2SS0T8nBSxg9jwmCK70Jy7ypRn2nIspwLy3Ls5TNaKNHo+6dF8A==
     engines:
       node: ^8.13.0 || >=10.10.0
     dependencies:
@@ -3125,6 +3149,9 @@ packages:
     resolution:
       integrity: >-
         sha512-scLk3cSH1H9KggSniseb2KNAU5D9FWc3H7BxCSAIdtU9OWIyw0zkEZ9qEKHryRM+SExYXRKNb7tOOVNAsQ3iwg==
+    deprecated: >-
+      Package no longer supported. Contact Support at
+      https://www.npmjs.com/support for more info.
     peerDependencies:
       postcss: '>=7.0.0'
       postcss-syntax: '>=0.36.2'
@@ -3139,6 +3166,7 @@ packages:
     resolution:
       integrity: >-
         sha512-2kGbqUVJUGE8dM+bMzXG/PYUWKkjLIkRLWNh39OaADkiabDRdw8ATFCgbMz5xdIcvwspPAluSL7uY+ZiTWdWmQ==
+    deprecated: 'Use the original unforked package instead: postcss-markdown'
     peerDependencies:
       postcss: '>=7.0.0'
       postcss-syntax: '>=0.36.2'
@@ -7048,6 +7076,7 @@ packages:
         sha512-otgSPpUmdWJ43VXyiNgEYE4luzHCL2pz4wQ0OnDluC6Eg4Ko3Vexy/SrSynglw/eR+OhkzmqFCZa/OFa/RgAOQ==
     engines:
       node: '>=0.6.0'
+    hasBin: true
     dependencies:
       minimist: 1.2.8
     dev: true
@@ -7564,6 +7593,7 @@ packages:
         sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ==
     engines:
       node: '>=8'
+    hasBin: true
     dev: true
   /is-docker@3.0.0:
     resolution:
@@ -7571,6 +7601,7 @@ packages:
         sha512-eljcgEDlEns/7AXFosB5K/2nCM4P7FQPkGc/DWLy5rmFEWvZayGrik1d9/QIY5nJ4f9YsVvBkA6kJpHn9rISdQ==
     engines:
       node: ^12.20.0 || ^14.13.1 || >=16.0.0
+    hasBin: true
     dev: true
   /is-extglob@2.1.1:
     resolution:
@@ -7799,6 +7830,7 @@ packages:
     resolution:
       integrity: >-
         sha512-oVhqoRDaBXf7sjkll95LHVS6Myyyb1zaunVwk4Z0+WPSW4gjS0pl01zYKHScTuyEhQsFxV5L4DR5r+YqSyqyyg==
+    hasBin: true
   /js-tokens@4.0.0:
     resolution:
       integrity: >-
@@ -7807,6 +7839,7 @@ packages:
     resolution:
       integrity: >-
         sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
+    hasBin: true
     dependencies:
       argparse: 2.0.1
   /jsesc@0.5.0:
@@ -8110,6 +8143,7 @@ packages:
     resolution:
       integrity: >-
         sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
+    hasBin: true
     dependencies:
       js-tokens: 4.0.0
   /lowercase-keys@2.0.0:
@@ -10532,6 +10566,7 @@ packages:
     resolution:
       integrity: >-
         sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==
+    hasBin: true
     dependencies:
       glob: 7.2.3
   /rollup@3.26.3:
@@ -10914,6 +10949,7 @@ packages:
     resolution:
       integrity: >-
         sha512-1klA3Gi5PD1Wv9Q0wUoOQN1IWAuPu0D1U03ThXTr0cJ20+/iq2tHSDnK7Kk/0LXJ1ztUB2/1Os0wKmfyNgUQfg==
+    hasBin: true
     dev: true
   /ssri@8.0.1:
     resolution:
@@ -11118,6 +11154,7 @@ packages:
         sha512-Mv+BQr5XTUrKqAXmpqm6Ddli6Ief+AiPZkRsIrAoUKFuq/ElkUh9ZMYxXD0iQNZ5ADghZKLOWz1h7hTClB7zgQ==
     engines:
       node: '>=10.13.0'
+    hasBin: true
     dependencies:
       '@stylelint/postcss-css-in-js': 0.37.3(postcss-syntax@0.36.2)(postcss@7.0.39)
       '@stylelint/postcss-markdown': 0.36.2(postcss-syntax@0.36.2)(postcss@7.0.39)
@@ -11183,6 +11220,7 @@ packages:
         sha512-70/LQEZ07TEcxiU2dz51FKaE6hCTWC6vr7FOk3Gr0U60C3shtAN+H+BFr9XlYe5xqf3RA8nrc+VIwzCfnxuXJw==
     engines:
       node: '>=8'
+    hasBin: true
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
       commander: 4.1.1
@@ -11660,6 +11698,7 @@ packages:
         sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
     engines:
       node: '>=12.20'
+    hasBin: true
     dev: true
   /ua-parser-js@0.7.35:
     resolution:
@@ -11899,6 +11938,7 @@ packages:
     resolution:
       integrity: >-
         sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
+    hasBin: true
   /uvu@0.5.6:
     resolution:
       integrity: >-

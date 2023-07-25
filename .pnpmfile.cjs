@@ -12,6 +12,7 @@ function afterAllResolved(lockfile, context) {
   const libDependencies = new Set();
   Object.entries(lockfile.importers).forEach(([k, v]) => {
     function addLibDependency([name, version]) {
+      [...version.matchAll(/\(([^)]+)\)/g)].map(([,g]) => { const index = g.lastIndexOf('@'); return [g.substr(0, index), g.substr(index + 1)];}).forEach(addLibDependency);
       if (
         lockfile.packages[version] &&
         lockfile.packages[version].name === name
@@ -25,6 +26,7 @@ function afterAllResolved(lockfile, context) {
       }
     }
     function addProjectDependency([name, version]) {
+      [...version.matchAll(/\(([^)]+)\)/g)].map(([,g]) => { const index = g.lastIndexOf('@'); return [g.substr(0, index), g.substr(index + 1)];}).forEach(addProjectDependency);
       if (
         lockfile.packages[version] &&
         lockfile.packages[version].name === name &&
@@ -53,6 +55,7 @@ function afterAllResolved(lockfile, context) {
   const newLockfile = {
     ...lockfile,
   };
+  console.log(projectDependencies);
   projectDependencies.forEach((version) => {
     newLockfile.packages[version] = {
       ...newLockfile.packages[version],
