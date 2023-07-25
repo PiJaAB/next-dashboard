@@ -13,7 +13,7 @@ type Props = { children?: string };
 export default function ThemeSelector({ children }: Props): JSX.Element {
   const { setState } = useContext(LayoutContext);
   const currentColorScheme = useColorScheme();
-  const ref = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
   const [reshow, setReshow] = useState(false);
   const rebuildTooltip = useRebuildTooltip();
   useEffect(() => {

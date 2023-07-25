@@ -77,7 +77,7 @@ function SortIcon<E extends {}, C>({
   );
 }
 
-const SortableTable = <
+export default function SortableTable<
   E extends {} = { [key: string]: unknown },
   C extends {} = {},
 >({
@@ -89,7 +89,7 @@ const SortableTable = <
   className,
   title,
   ...props
-}: Props<E, C>): JSX.Element => {
+}: Props<E, C>): JSX.Element {
   const [data, setData] = useState<Data<E>>(orgData);
   const [sort, setSort] = useState<Sort>();
 
@@ -147,6 +147,4 @@ const SortableTable = <
       />
     </div>
   );
-};
-
-export default SortableTable;
+}

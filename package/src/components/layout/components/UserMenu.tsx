@@ -1,8 +1,7 @@
 import React, { Fragment, useCallback, useEffect, useMemo } from 'react';
-import type { LinkProps } from 'next/link';
+import Link, { LinkProps } from 'next/link';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import NextLink from '../../NextLink';
 
 export type UserMenuEntryProps = {
   label: string;
@@ -50,7 +49,7 @@ function UserMenuEntry({
             {label}
           </button>
         ) : (
-          <NextLink
+          <Link
             onClick={onClick}
             href={href}
             className={classNames(
@@ -61,7 +60,7 @@ function UserMenuEntry({
             )}
           >
             {label}
-          </NextLink>
+          </Link>
         )
       }
     </Menu.Item>

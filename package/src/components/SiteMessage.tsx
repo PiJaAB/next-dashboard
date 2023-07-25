@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import getConfig from 'next/config';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import ExclamationTrianleIcon from '@heroicons/react/24/outline/ExclamationTriangleIcon';
 import ExclamationCircleIcon from '@heroicons/react/24/outline/ExclamationCircleIcon';
 import XCircleIcon from '@heroicons/react/24/outline/XCircleIcon';
@@ -9,18 +8,6 @@ import classNames from 'classnames';
 import type { SiteMessageType } from '../utils/types';
 import useS from '../hooks/useS';
 
-const {
-  publicRuntimeConfig: {
-    tailwindTheme: { colors },
-  },
-} = getConfig();
-
-const borderColorMap: Record<NonNullable<SiteMessageType['status']>, string> = {
-  info: colors.indigo['800'],
-  error: colors.red['800'],
-  warning: colors.yellow['800'],
-  success: colors.green['800'],
-};
 interface Props extends SiteMessageType {
   dismiss?: () => void;
 }
@@ -31,22 +18,57 @@ const RING_CENTER = RING_SIZE / 2;
 const RING_R = RING_CENTER - RING_STROKE;
 const RING_C = 2 * RING_R * Math.PI;
 
-function SiteMessage({
-  title,
-  message,
-  status = 'info',
+function StatusCircle({
+  className,
+  timer,
+  animateRef,
+}: {
+  className: string;
+  timer: number;
+  animateRef:
+    | RefObject<SVGAnimateElement>
+    | ((el: SVGAnimateElement | null) => void);
+}): JSX.Element {
+  return (
+    <circle
+      fill="none"
+      className={className}
+      strokeWidth={RING_STROKE}
+      cx={RING_CENTER}
+      cy={RING_CENTER}
+      r={RING_R}
+      strokeDasharray={RING_C}
+      strokeDashoffset={RING_C}
+      strokeLinecap="round"
+      transform={`rotate(-90) translate(-${RING_SIZE} 0)`}
+    >
+      <animate
+        ref={animateRef}
+        attributeName="stroke-dashoffset"
+        values={`${RING_C};0`}
+        dur={timer}
+        begin="indefinite"
+        fill="freeze"
+      />
+    </circle>
+  );
+}
+
+function StatusCircleSvg({
+  status,
+  dismiss,
   timer,
   count,
-  dismiss,
-}: Props): JSX.Element {
-  const timerNum = timer === true ? 5 : timer || 0;
-  const s = useS();
-  const label = title == null ? s(status) : title;
+}: {
+  status: NonNullable<SiteMessageType['status']>;
+  dismiss: () => void;
+  timer: number;
+  count: number;
+}): JSX.Element {
   const dismissRef = useRef(dismiss);
   useEffect(() => {
     dismissRef.current = dismiss;
   }, [dismiss]);
-  const [isHovering, setIsHovering] = useState(false);
   const [animateEl, setAnimateEl] = useState<SVGElement | null>(null);
   useEffect(() => {
     if (animateEl == null) return undefined;
@@ -65,6 +87,70 @@ function SiteMessage({
       el.removeEventListener('beginEvent', beginListener);
     };
   }, [animateEl, count]);
+  let circleEl: JSX.Element | null = null;
+  switch (status) {
+    case 'info':
+      circleEl = (
+        <StatusCircle
+          className="stroke-indigo-800"
+          timer={timer}
+          animateRef={setAnimateEl}
+        />
+      );
+      break;
+    case 'error':
+      circleEl = (
+        <StatusCircle
+          className="stroke-red-800"
+          timer={timer}
+          animateRef={setAnimateEl}
+        />
+      );
+      break;
+    case 'warning':
+      circleEl = (
+        <StatusCircle
+          className="stroke-yellow-800"
+          timer={timer}
+          animateRef={setAnimateEl}
+        />
+      );
+      break;
+    case 'success':
+      circleEl = (
+        <StatusCircle
+          className="stroke-green-800"
+          timer={timer}
+          animateRef={setAnimateEl}
+        />
+      );
+      break;
+    default:
+      throw new Error(`Unknown status: ${status}`);
+  }
+  return (
+    <svg
+      viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
+      xmlSpace="preserve"
+      className="absolute w-7 h-7 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    >
+      {circleEl}
+    </svg>
+  );
+}
+
+function SiteMessage({
+  title,
+  message,
+  status = 'info',
+  timer,
+  count,
+  dismiss,
+}: Props): JSX.Element {
+  const timerNum = timer === true ? 5 : timer || 0;
+  const s = useS();
+  const label = title == null ? s(status) : title;
+  const [isHovering, setIsHovering] = useState(false);
   return (
     <div
       className={classNames(
@@ -141,33 +227,12 @@ function SiteMessage({
             >
               <span className="sr-only">{s('dismiss')}</span>
               {timerNum > 0 && !isHovering && (
-                <svg
-                  viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
-                  xmlSpace="preserve"
-                  className="absolute w-7 h-7 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                >
-                  <circle
-                    fill="none"
-                    stroke={borderColorMap[status]}
-                    strokeWidth={RING_STROKE}
-                    cx={RING_CENTER}
-                    cy={RING_CENTER}
-                    r={RING_R}
-                    strokeDasharray={RING_C}
-                    strokeDashoffset={RING_C}
-                    strokeLinecap="round"
-                    transform={`rotate(-90) translate(-${RING_SIZE} 0)`}
-                  >
-                    <animate
-                      ref={setAnimateEl}
-                      attributeName="stroke-dashoffset"
-                      values={`${RING_C};0`}
-                      dur={timerNum}
-                      begin="indefinite"
-                      fill="freeze"
-                    />
-                  </circle>
-                </svg>
+                <StatusCircleSvg
+                  status={status}
+                  dismiss={dismiss}
+                  timer={timerNum}
+                  count={count != null && count > 1 ? count : 1}
+                />
               )}
               <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
             </button>

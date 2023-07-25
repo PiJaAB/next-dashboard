@@ -196,28 +196,28 @@ function Brand({ compact }: { compact: boolean }): JSX.Element | null {
   if (compact) {
     if (squareLogoUrl)
       return (
-        <Link href={branding.homepageURL || '/'}>
-          <a
-            className="flex justify-center items-center flex-shrink-0 px-6"
-            data-tip={branding.name}
-            data-place="right"
-          >
-            <img
-              className="h-auto w-10"
-              src={squareLogoUrl}
-              alt={branding.name}
-            />
-          </a>
+        <Link
+          href={branding.homepageURL || '/'}
+          className="flex justify-center items-center flex-shrink-0 px-6"
+          data-tip={branding.name}
+          data-place="right"
+        >
+          <img
+            className="h-auto w-10"
+            src={squareLogoUrl}
+            alt={branding.name}
+          />
         </Link>
       );
     return null;
   }
   if (fullLogoUrl != null) {
     return (
-      <Link href={branding.homepageURL || '/'}>
-        <a className="flex items-center justify-center flex-shrink-0 px-6">
-          <img className="h-8 w-auto" src={fullLogoUrl} alt={branding.name} />
-        </a>
+      <Link
+        href={branding.homepageURL || '/'}
+        className="flex items-center justify-center flex-shrink-0 px-6"
+      >
+        <img className="h-8 w-auto" src={fullLogoUrl} alt={branding.name} />
       </Link>
     );
   }
@@ -228,21 +228,25 @@ function Brand({ compact }: { compact: boolean }): JSX.Element | null {
   );
   if (squareLogoUrl != null) {
     return (
-      <Link href={branding.homepageURL || '/'}>
-        <a className="flex items-center justify-center flex-shrink-0 px-6">
-          <img
-            className="h-8 w-auto me-2"
-            src={squareLogoUrl}
-            alt={branding.name}
-          />
-          {title}
-        </a>
+      <Link
+        href={branding.homepageURL || '/'}
+        className="flex items-center justify-center flex-shrink-0 px-6"
+      >
+        <img
+          className="h-8 w-auto me-2"
+          src={squareLogoUrl}
+          alt={branding.name}
+        />
+        {title}
       </Link>
     );
   }
   return (
-    <Link href={branding.homepageURL || '/'}>
-      <a className="flex items-center flex-shrink-0 px-6">title</a>
+    <Link
+      href={branding.homepageURL || '/'}
+      className="flex items-center flex-shrink-0 px-6"
+    >
+      title
     </Link>
   );
 }

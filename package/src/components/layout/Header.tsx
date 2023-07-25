@@ -67,10 +67,8 @@ export default function Header({
         </button>
       )}
       {logoURL && (
-        <Link href={branding.homepageURL || '/'}>
-          <a className="h-full">
-            <img src={logoURL} alt={branding.name} className="h-full w-auto" />
-          </a>
+        <Link href={branding.homepageURL || '/'} className="h-full">
+          <img src={logoURL} alt={branding.name} className="h-full w-auto" />
         </Link>
       )}
       <div className="flex-1 flex justify-between px-4 sm:px-6 lg:px-8">
