@@ -12,6 +12,9 @@ export type Props = React.PropsWithChildren<{
     userTitle?: string;
     userSubTitle?: string;
     userProfilePic?: string;
-    showDevelopmentLabel?: boolean;
+    environmentBadge?: string | boolean | {
+        className?: string;
+        text: string;
+    } | null;
 }>;
-export default function DashboardLayout({ children, searchText, onSearchChange, onSearch, userMenu, Sidebar, userTitle, userSubTitle, userProfilePic, showDevelopmentLabel, }: Props): JSX.Element;
+export default function DashboardLayout({ children, searchText, onSearchChange, onSearch, userMenu, Sidebar, userTitle, userSubTitle, userProfilePic, environmentBadge, }: Props): JSX.Element;

@@ -74,6 +74,29 @@ var defaultContext = {
 var LayoutContext = react_1.default.createContext(defaultContext);
 LayoutContext.displayName = 'LayoutContext';
 var persistTimeout = null;
+var defaultTempState = {
+    sidebarOpen: false,
+    hasHeader: true,
+};
+var defaultPersistentState = {
+    compactSidebar: false,
+};
+var colorSchemeQuery = typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined'
+    ? window.matchMedia('(prefers-color-scheme: dark)')
+    : null;
+function autoDetectTheme() {
+    if (colorSchemeQuery == null) {
+        return undefined;
+    }
+    return colorSchemeQuery.matches ? 'dark' : 'light';
+}
+function getDefaultColorScheme(config) {
+    var _a;
+    if (config.autoDetectTheme) {
+        return (_a = autoDetectTheme()) !== null && _a !== void 0 ? _a : config.defaultTheme;
+    }
+    return config.defaultTheme;
+}
 function LayoutStateProvider(_a) {
     var children = _a.children;
     var configCtx = (0, react_1.useContext)(configContext_1.default);
@@ -83,13 +106,12 @@ function LayoutStateProvider(_a) {
     (0, react_1.useEffect)(function () {
         if (!configCtx.autoDetectTheme)
             return undefined;
-        var colorSchemeQuery = typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined'
-            ? window.matchMedia('(prefers-color-scheme: dark)')
-            : null;
         if (colorSchemeQuery == null) {
             return undefined;
         }
-        setDefaultColorScheme(colorSchemeQuery.matches ? 'dark' : 'light');
+        var detected = autoDetectTheme();
+        if (detected != null)
+            setDefaultColorScheme(detected);
         var onChange = function (ev) {
             setDefaultColorScheme(ev.matches ? 'dark' : 'light');
         };
@@ -103,8 +125,8 @@ function LayoutStateProvider(_a) {
             setDefaultColorScheme(configCtx.defaultTheme);
         }
     }, [configCtx.autoDetectTheme, configCtx.defaultTheme]);
-    var _c = __read((0, react_1.useState)({}), 2), persistentState = _c[0], setPersistentState = _c[1];
-    var _d = __read((0, react_1.useState)({}), 2), tempState = _d[0], setTempState = _d[1];
+    var _c = __read((0, react_1.useState)(function () { return (__assign(__assign({}, defaultPersistentState), { colorScheme: getDefaultColorScheme(configCtx) })); }), 2), persistentState = _c[0], setPersistentState = _c[1];
+    var _d = __read((0, react_1.useState)(function () { return (__assign({}, defaultTempState)); }), 2), tempState = _d[0], setTempState = _d[1];
     var _e = __read((0, react_1.useState)(false), 2), modalActive = _e[0], setModalActive = _e[1];
     var persist = (0, react_1.useCallback)(function () {
         if (persistTimeout != null)
@@ -116,7 +138,7 @@ function LayoutStateProvider(_a) {
                 return state;
             });
         }, 100);
-    }, [setPersistentState]);
+    }, []);
     (0, react_1.useEffect)(function () {
         if (typeof window === undefined)
             return undefined;
@@ -151,7 +173,7 @@ function LayoutStateProvider(_a) {
         return function () {
             window.removeEventListener('storage', storageListener);
         };
-    }, [setPersistentState]);
+    }, []);
     var getState = (0, react_1.useCallback)(function (key, defaultValue) {
         var val = persistentState[key];
         if (val == null)
@@ -166,7 +188,7 @@ function LayoutStateProvider(_a) {
             persist();
             return __assign(__assign({}, state), (_a = {}, _a[key] = val, _a));
         });
-    }, [persist, setPersistentState]);
+    }, [persist]);
     var getTemp = (0, react_1.useCallback)(function (key, defaultValue) {
         var val = tempState[key];
         if (val == null)
@@ -180,7 +202,7 @@ function LayoutStateProvider(_a) {
                 return state;
             return __assign(__assign({}, state), (_a = {}, _a[key] = val, _a));
         });
-    }, [setTempState]);
+    }, []);
     var ctx = (0, react_1.useMemo)(function () { return ({
         getState: getState,
         setState: setState,

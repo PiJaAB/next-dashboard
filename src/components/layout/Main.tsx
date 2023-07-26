@@ -35,7 +35,11 @@ export type Props = React.PropsWithChildren<{
   userTitle?: string;
   userSubTitle?: string;
   userProfilePic?: string;
-  showDevelopmentLabel?: boolean;
+  environmentBadge?:
+    | string
+    | boolean
+    | { className?: string; text: string }
+    | null;
 }>;
 
 export default function DashboardLayout({
@@ -48,7 +52,7 @@ export default function DashboardLayout({
   userTitle,
   userSubTitle,
   userProfilePic,
-  showDevelopmentLabel,
+  environmentBadge,
 }: Props): JSX.Element {
   const { getTemp, setTemp } = useContext(LayoutContext);
   const colorScheme = useColorScheme();
@@ -67,13 +71,13 @@ export default function DashboardLayout({
   );
   useEffect(() => {
     const onRouteChangeStart = () => {
-      setSidebarOpen(false);
+      setTemp('sidebarOpen', false);
     };
     Router.events.on('routeChangeStart', onRouteChangeStart);
     return () => {
       Router.events.off('routeChangeStart', onRouteChangeStart);
     };
-  }, [setSidebarOpen]);
+  }, [setTemp]);
   // The search elements need to be internally controlled if not
   // controlled from the outside due to the fact that we have
   // 2 different elements being search boxes that we want to
@@ -129,7 +133,6 @@ export default function DashboardLayout({
     return grouped;
   }, [userMenu]);
   const isInitial = useInitialRender();
-
   return (
     <div className="relative flex">
       {/* Sidebar */}
@@ -146,7 +149,7 @@ export default function DashboardLayout({
           userTitle={userTitle}
           userSubTitle={userSubTitle}
           userProfilePic={userProfilePic}
-          showDevelopmentLabel={showDevelopmentLabel}
+          environmentBadge={environmentBadge}
         />
       )}
       {/* Main column */}

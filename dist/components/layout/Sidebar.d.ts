@@ -12,6 +12,13 @@ export interface SidebarProps {
     userTitle?: string;
     userSubTitle?: string;
     userProfilePic?: string;
-    showDevelopmentLabel?: boolean;
+    environmentBadge?: string | {
+        className?: string;
+        text: string;
+    } | {
+        className?: string;
+        shortText: string;
+        longText: string;
+    } | boolean | null;
 }
-export default function Sidebar({ groupedUserMenu, handleSearchChange, handleSearchDown, searchText, showSearch, sidebarOpen, setSidebarOpen, SidebarComp, userTitle, userSubTitle, userProfilePic, showDevelopmentLabel, }: SidebarProps): JSX.Element;
+export default function Sidebar({ groupedUserMenu, handleSearchChange, handleSearchDown, searchText, showSearch, sidebarOpen, setSidebarOpen, SidebarComp, userTitle, userSubTitle, userProfilePic, environmentBadge, }: SidebarProps): JSX.Element;

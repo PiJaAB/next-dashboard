@@ -10,6 +10,20 @@ export interface ILayoutContext {
     defaultColorScheme: FullConfig['defaultTheme'];
 }
 declare const LayoutContext: React.Context<ILayoutContext>;
+export interface BaseTempState {
+    sidebarOpen: boolean;
+    hasHeader: boolean;
+}
+export interface TempState extends BaseTempState {
+    [key: string]: any;
+}
+export interface BasePersistentState {
+    compactSidebar: boolean;
+    colorScheme: 'light' | 'dark';
+}
+export interface PersistentState extends BasePersistentState {
+    [key: string]: any;
+}
 export declare function LayoutStateProvider({ children, }: {
     children?: React.ReactNode;
 }): JSX.Element;

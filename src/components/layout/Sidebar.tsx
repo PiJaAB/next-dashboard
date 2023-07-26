@@ -3,7 +3,7 @@ import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
 import ChevronUpDownIcon from '@heroicons/react/24/solid/ChevronUpDownIcon';
 import UserIcon from '@heroicons/react/24/solid/UserIcon';
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment, useContext, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { ArrowSmallStartIcon, ArrowSmallEndIcon } from '../ArrowSmIcons';
@@ -29,15 +29,104 @@ export interface SidebarProps {
   userTitle?: string;
   userSubTitle?: string;
   userProfilePic?: string;
-  showDevelopmentLabel?: boolean;
+  environmentBadge?:
+    | string
+    | {
+        className?: string;
+        text: string;
+      }
+    | {
+        className?: string;
+        shortText: string;
+        longText: string;
+      }
+    | boolean
+    | null;
 }
 
-function DevelopmentLabel() {
+function inferBadge(size: 'small' | 'large'):
+  | string
+  | false
+  | {
+      className?: string;
+      text: string;
+      shortText?: string;
+      longText?: string;
+    }
+  | {
+      className?: string;
+      text?: string;
+      shortText: string;
+      longText: string;
+    } {
+  const env = process.env.VERCEL_ENV ?? process.env.NODE_ENV;
+  if (env == null || env === '') {
+    return size === 'small' ? 'UKNW' : 'UNKNOWN ENV';
+  }
+  switch (env) {
+    case 'production':
+      return 'LIVE';
+    case 'preview':
+      return size === 'small' ? 'PRVW' : 'PREVIEW';
+    case 'development':
+      return size === 'small' ? 'DEV' : 'DEVELOPMENT';
+    default:
+      return env.toUpperCase();
+  }
+}
+
+const defaultBadgeClassName = 'bg-primary-600 text-primary-100';
+
+function EnvironmentBadge({
+  size,
+  environmentBadge,
+}: {
+  size: 'small' | 'large';
+  environmentBadge:
+    | boolean
+    | string
+    | {
+        className?: string;
+        text: string;
+        shortText?: string;
+        longText?: string;
+      }
+    | {
+        className?: string;
+        text?: string;
+        shortText: string;
+        longText: string;
+      };
+}) {
+  const badge = useMemo(() => {
+    const toParse =
+      environmentBadge === true ? inferBadge(size) : environmentBadge;
+    if (!toParse) return null;
+    if (typeof toParse === 'string') {
+      return {
+        text: toParse,
+        className: defaultBadgeClassName,
+      };
+    }
+    if (size === 'small') {
+      return {
+        text: toParse.shortText ?? (toParse.text as string),
+        className: toParse.className ?? defaultBadgeClassName,
+      };
+    }
+    return {
+      text: toParse.longText ?? (toParse.text as string),
+      className: toParse.className ?? defaultBadgeClassName,
+    };
+  }, [environmentBadge, size]);
+  if (badge == null) return null;
   return (
-    <div className="w-14 inline-block bg-primary-600  dark:bg-primary-600 py-1 px-2 mb-4 rounded-r-3xl">
-      <p className="font-bold uppercase tracking-wide text-primary-100 whitespace-nowrap">
-        DEV
-      </p>
+    <div className="inline-block mb-4 rounded-r-3xl font-bold uppercase tracking-wide whitespace-nowrap overflow-hidden max-w-full self-start">
+      <div className={badge.className}>
+        <div className="py-1 px-2 text-ellipsis overflow-hidden">
+          {badge.text}
+        </div>
+      </div>
     </div>
   );
 }
@@ -263,7 +352,7 @@ export default function Sidebar({
   userTitle,
   userSubTitle,
   userProfilePic,
-  showDevelopmentLabel,
+  environmentBadge,
 }: SidebarProps): JSX.Element {
   const { getState, setState } = useContext(LayoutContext);
   const { themeSelect } = useContext(ConfigContext);
@@ -334,6 +423,13 @@ export default function Sidebar({
                     </button>
                   </div>
                 </Transition.Child>
+                {/* Development label */}
+                {environmentBadge ? (
+                  <EnvironmentBadge
+                    environmentBadge={environmentBadge}
+                    size="small"
+                  />
+                ) : null}
                 <Brand compact={false} />
                 <div className="px-2 mt-5 divide-y divide-gray-300 dark:divide-gray-500">
                   <SidebarComp />
@@ -363,7 +459,12 @@ export default function Sidebar({
             )}
           >
             {/* Development label */}
-            {showDevelopmentLabel ? <DevelopmentLabel /> : null}
+            {environmentBadge ? (
+              <EnvironmentBadge
+                environmentBadge={environmentBadge}
+                size={isCompact ? 'small' : 'large'}
+              />
+            ) : null}
 
             {/* Sidebar component, swap this element with another sidebar if you like */}
             <Brand compact={isCompact} />

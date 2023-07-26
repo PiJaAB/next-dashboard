@@ -44,7 +44,7 @@ var useColorScheme_1 = __importDefault(require("../../hooks/useColorScheme"));
 var ConfirmDialogue_1 = __importDefault(require("./components/ConfirmDialogue"));
 exports.SEPARATOR = Symbol('separator');
 function DashboardLayout(_a) {
-    var children = _a.children, searchText = _a.searchText, onSearchChange = _a.onSearchChange, onSearch = _a.onSearch, userMenu = _a.userMenu, Sidebar = _a.Sidebar, userTitle = _a.userTitle, userSubTitle = _a.userSubTitle, userProfilePic = _a.userProfilePic, showDevelopmentLabel = _a.showDevelopmentLabel;
+    var children = _a.children, searchText = _a.searchText, onSearchChange = _a.onSearchChange, onSearch = _a.onSearch, userMenu = _a.userMenu, Sidebar = _a.Sidebar, userTitle = _a.userTitle, userSubTitle = _a.userSubTitle, userProfilePic = _a.userProfilePic, environmentBadge = _a.environmentBadge;
     var _b = (0, react_1.useContext)(layoutContext_1.default), getTemp = _b.getTemp, setTemp = _b.setTemp;
     var colorScheme = (0, useColorScheme_1.default)();
     (0, react_1.useEffect)(function () {
@@ -59,13 +59,13 @@ function DashboardLayout(_a) {
     var setSidebarOpen = (0, react_1.useCallback)(function (val) { return setTemp('sidebarOpen', val); }, [setTemp]);
     (0, react_1.useEffect)(function () {
         var onRouteChangeStart = function () {
-            setSidebarOpen(false);
+            setTemp('sidebarOpen', false);
         };
         router_1.default.events.on('routeChangeStart', onRouteChangeStart);
         return function () {
             router_1.default.events.off('routeChangeStart', onRouteChangeStart);
         };
-    }, [setSidebarOpen]);
+    }, [setTemp]);
     // The search elements need to be internally controlled if not
     // controlled from the outside due to the fact that we have
     // 2 different elements being search boxes that we want to
@@ -124,6 +124,6 @@ function DashboardLayout(_a) {
         return grouped;
     }, [userMenu]);
     var isInitial = (0, useInitialRender_1.default)();
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "relative flex" }, { children: [Sidebar !== false && ((0, jsx_runtime_1.jsx)(Sidebar_1.default, { groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, setSidebarOpen: setSidebarOpen, sidebarOpen: sidebarOpen, SidebarComp: typeof Sidebar !== 'boolean' ? Sidebar : undefined, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic, showDevelopmentLabel: showDevelopmentLabel })), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "flex flex-col w-0 flex-1 min-h-screen" }, { children: [Sidebar !== false && ((0, jsx_runtime_1.jsx)(Header_1.default, { setSidebarOpen: setSidebarOpen, groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, showMenuButton: Sidebar != null, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic })), (0, jsx_runtime_1.jsxs)("main", __assign({ className: "flex-1 focus:outline-none" }, { children: [children, (0, jsx_runtime_1.jsx)(SiteMessages_1.default, {})] }))] })), (0, jsx_runtime_1.jsx)(ConfirmDialogue_1.default, {}), (0, jsx_runtime_1.jsx)("div", { id: "dashboard-modal-root", style: { zIndex: 9999 } }), !isInitial && ((0, jsx_runtime_1.jsx)(react_tooltip_1.default, { className: "tooltip-style", type: colorScheme, effect: "solid" }))] })));
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "relative flex" }, { children: [Sidebar !== false && ((0, jsx_runtime_1.jsx)(Sidebar_1.default, { groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, setSidebarOpen: setSidebarOpen, sidebarOpen: sidebarOpen, SidebarComp: typeof Sidebar !== 'boolean' ? Sidebar : undefined, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic, environmentBadge: environmentBadge })), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "flex flex-col w-0 flex-1 min-h-screen" }, { children: [Sidebar !== false && ((0, jsx_runtime_1.jsx)(Header_1.default, { setSidebarOpen: setSidebarOpen, groupedUserMenu: groupedUserMenu, searchText: displaySearchText, showSearch: showSearch, handleSearchChange: handleSearchChange, handleSearchDown: handleSearchDown, showMenuButton: Sidebar != null, userTitle: userTitle, userSubTitle: userSubTitle, userProfilePic: userProfilePic })), (0, jsx_runtime_1.jsxs)("main", __assign({ className: "flex-1 focus:outline-none" }, { children: [children, (0, jsx_runtime_1.jsx)(SiteMessages_1.default, {})] }))] })), (0, jsx_runtime_1.jsx)(ConfirmDialogue_1.default, {}), (0, jsx_runtime_1.jsx)("div", { id: "dashboard-modal-root", style: { zIndex: 9999 } }), !isInitial && ((0, jsx_runtime_1.jsx)(react_tooltip_1.default, { className: "tooltip-style", type: colorScheme, effect: "solid" }))] })));
 }
 exports.default = DashboardLayout;
