@@ -21,6 +21,7 @@
     "jsx": "react-jsx",
     "downlevelIteration": true,
     "strictNullChecks": true,
+    "preserveWatchOutput": true,
     "baseUrl": "src/",
   }
 }

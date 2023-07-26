@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useContext,
   useRef,
+  SetStateAction,
 } from 'react';
 import ConfigContext, { FullConfig } from './configContext';
 import logger from './logger';
@@ -39,6 +40,97 @@ LayoutContext.displayName = 'LayoutContext';
 
 let persistTimeout: number | null = null;
 
+export interface BaseTempState {
+  sidebarOpen: boolean;
+  hasHeader: boolean;
+}
+
+export interface TempState extends BaseTempState {
+  [key: string]: any;
+}
+
+const defaultTempState: BaseTempState = {
+  sidebarOpen: false,
+  hasHeader: true,
+};
+
+interface TempStateDispatch {
+  <V extends TempState[K], K extends keyof TempState = keyof TempState>(
+    key: K,
+    value: SetStateAction<V>,
+  ): void;
+}
+
+interface TempStateGetter {
+  <V extends TempState[K], K extends keyof TempState = keyof TempState>(
+    key: K,
+    defaultValue: V,
+  ): V;
+  <V extends TempState[K], K extends keyof TempState = keyof TempState>(
+    key: K,
+    defaultValue?: V,
+  ): TempState[K] extends undefined ? V | undefined : V;
+}
+
+export interface BasePersistentState {
+  compactSidebar: boolean;
+  colorScheme: 'light' | 'dark';
+}
+
+export interface PersistentState extends BasePersistentState {
+  [key: string]: any;
+}
+
+const defaultPersistentState: Omit<BasePersistentState, 'colorScheme'> = {
+  compactSidebar: false,
+};
+
+interface PersistentStateDispatch {
+  <
+    V extends PersistentState[K],
+    K extends keyof PersistentState = keyof PersistentState,
+  >(
+    key: K,
+    value: SetStateAction<V>,
+  ): void;
+}
+
+interface PersistentStateGetter {
+  <
+    V extends PersistentState[K],
+    K extends keyof PersistentState = keyof PersistentState,
+  >(
+    key: K,
+    defaultValue: V,
+  ): V;
+  <
+    V extends PersistentState[K],
+    K extends keyof PersistentState = keyof PersistentState,
+  >(
+    key: K,
+    defaultValue?: V,
+  ): PersistentState[K] extends undefined ? V | undefined : V;
+}
+
+const colorSchemeQuery =
+  typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined'
+    ? window.matchMedia('(prefers-color-scheme: dark)')
+    : null;
+
+function autoDetectTheme() {
+  if (colorSchemeQuery == null) {
+    return undefined;
+  }
+  return colorSchemeQuery.matches ? 'dark' : 'light';
+}
+
+function getDefaultColorScheme(config: FullConfig): 'light' | 'dark' {
+  if (config.autoDetectTheme) {
+    return autoDetectTheme() ?? config.defaultTheme;
+  }
+  return config.defaultTheme;
+}
+
 export function LayoutStateProvider({
   children,
 }: {
@@ -52,14 +144,11 @@ export function LayoutStateProvider({
   );
   useEffect(() => {
     if (!configCtx.autoDetectTheme) return undefined;
-    const colorSchemeQuery =
-      typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined'
-        ? window.matchMedia('(prefers-color-scheme: dark)')
-        : null;
     if (colorSchemeQuery == null) {
       return undefined;
     }
-    setDefaultColorScheme(colorSchemeQuery.matches ? 'dark' : 'light');
+    const detected = autoDetectTheme();
+    if (detected != null) setDefaultColorScheme(detected);
     const onChange = (ev: MediaQueryListEvent) => {
       setDefaultColorScheme(ev.matches ? 'dark' : 'light');
     };
@@ -75,10 +164,17 @@ export function LayoutStateProvider({
     }
   }, [configCtx.autoDetectTheme, configCtx.defaultTheme]);
 
-  const [persistentState, setPersistentState] = useState<Record<string, any>>(
-    {},
+  const [persistentState, setPersistentState] = useState(
+    (): PersistentState => ({
+      ...defaultPersistentState,
+      colorScheme: getDefaultColorScheme(configCtx),
+    }),
   );
-  const [tempState, setTempState] = useState<Record<string, any>>({});
+  const [tempState, setTempState] = useState<TempState>(
+    (): TempState => ({
+      ...defaultTempState,
+    }),
+  );
   const [modalActive, setModalActive] = useState(false);
   const persist = useCallback(() => {
     if (persistTimeout != null) return;
@@ -92,7 +188,7 @@ export function LayoutStateProvider({
         return state;
       });
     }, 100);
-  }, [setPersistentState]);
+  }, []);
   useEffect(() => {
     if (typeof window === undefined) return undefined;
     const refresh = () => {
@@ -108,7 +204,7 @@ export function LayoutStateProvider({
         if (obj == null || Array.isArray(obj)) {
           throw new Error('Preferences not a valid value');
         }
-        setPersistentState(obj);
+        setPersistentState(obj as PersistentState);
       } catch (err) {
         logger.error(err);
       }
@@ -125,8 +221,8 @@ export function LayoutStateProvider({
     return () => {
       window.removeEventListener('storage', storageListener);
     };
-  }, [setPersistentState]);
-  const getState = useCallback<<T>(key: string, defaultValue: T) => T>(
+  }, []);
+  const getState = useCallback<PersistentStateGetter>(
     (key, defaultValue) => {
       const val = persistentState[key];
       if (val == null) return defaultValue;
@@ -134,7 +230,7 @@ export function LayoutStateProvider({
     },
     [persistentState],
   );
-  const setState = useCallback<<T>(key: string, value: T) => void>(
+  const setState = useCallback<PersistentStateDispatch>(
     (key, val) => {
       setPersistentState((state) => {
         if (state[key] === val) return state;
@@ -145,9 +241,9 @@ export function LayoutStateProvider({
         };
       });
     },
-    [persist, setPersistentState],
+    [persist],
   );
-  const getTemp = useCallback<<T>(key: string, defaultValue: T) => T>(
+  const getTemp = useCallback<TempStateGetter>(
     (key, defaultValue) => {
       const val = tempState[key];
       if (val == null) return defaultValue;
@@ -155,18 +251,15 @@ export function LayoutStateProvider({
     },
     [tempState],
   );
-  const setTemp = useCallback<<T>(key: string, value: T) => void>(
-    (key, val) => {
-      setTempState((state) => {
-        if (state[key] === val) return state;
-        return {
-          ...state,
-          [key]: val,
-        };
-      });
-    },
-    [setTempState],
-  );
+  const setTemp = useCallback<TempStateDispatch>((key, val) => {
+    setTempState((state) => {
+      if (state[key] === val) return state;
+      return {
+        ...state,
+        [key]: val,
+      };
+    });
+  }, []);
   const ctx = useMemo(
     () => ({
       getState,
